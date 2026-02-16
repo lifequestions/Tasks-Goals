@@ -360,10 +360,18 @@ const DEFAULT_GOALS = {
 function loadGoals(){
   const s=localStorage.getItem('gt_goals_v2');
   if(s){
-    const g=JSON.parse(s);
-    // Ensure days array exists on weekly goals
-    g.weekly.forEach(w=>{ if(!w.days) w.days=[0,1,2,3,4,5,6]; });
-    return g;
+    try{
+      const g=JSON.parse(s);
+      if(!g||!Array.isArray(g.daily)||!Array.isArray(g.weekly)||!Array.isArray(g.monthly)){
+        localStorage.removeItem('gt_goals_v2');
+        return JSON.parse(JSON.stringify(DEFAULT_GOALS));
+      }
+      g.weekly.forEach(w=>{ if(!w.days) w.days=[0,1,2,3,4,5,6]; });
+      return g;
+    }catch(e){
+      localStorage.removeItem('gt_goals_v2');
+      return JSON.parse(JSON.stringify(DEFAULT_GOALS));
+    }
   }
   return JSON.parse(JSON.stringify(DEFAULT_GOALS));
 }
