@@ -1133,6 +1133,17 @@ function initSync(){
 
 function applyRemoteData(data){
   syncPaused=true;
+  // Guard: don't overwrite local goals with empty/default remote data
+  const remoteGoals=data.goals?JSON.parse(data.goals):null;
+  const localGoals=localStorage.getItem('gt_goals_v2');
+  const localHasGoals=localGoals&&JSON.parse(localGoals).daily&&JSON.parse(localGoals).daily.length>0;
+  const remoteHasGoals=remoteGoals&&remoteGoals.daily&&remoteGoals.daily.length>0;
+  if(localHasGoals&&!remoteHasGoals){
+    // Remote is empty but local has data — don't apply, push local instead
+    syncPaused=false;
+    pushToCloud();
+    return;
+  }
   if(data.goals) localStorage.setItem('gt_goals_v2',data.goals);
   if(data.log) localStorage.setItem('gt_log',data.log);
   if(data.tasks) localStorage.setItem('gt_tasks',data.tasks);
