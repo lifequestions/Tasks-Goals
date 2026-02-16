@@ -1131,17 +1131,19 @@ function initSync(){
   renderSyncUI();
 }
 
+function isValidGoalsData(str){
+  try{
+    const g=JSON.parse(str);
+    return g&&Array.isArray(g.daily)&&g.daily.length>0&&Array.isArray(g.weekly)&&Array.isArray(g.monthly);
+  }catch(e){return false}
+}
+
 function applyRemoteData(data){
   syncPaused=true;
-  // Guard: don't overwrite local goals with empty/default remote data
-  const remoteGoals=data.goals?JSON.parse(data.goals):null;
-  const localGoals=localStorage.getItem('gt_goals_v2');
-  const localHasGoals=localGoals&&JSON.parse(localGoals).daily&&JSON.parse(localGoals).daily.length>0;
-  const remoteHasGoals=remoteGoals&&remoteGoals.daily&&remoteGoals.daily.length>0;
-  if(localHasGoals&&!remoteHasGoals){
-    // Remote is empty but local has data — don't apply, push local instead
+  // Guard: never overwrite local data with empty/invalid remote goals
+  if(data.goals&&!isValidGoalsData(data.goals)){
+    // Remote goals are empty or malformed — skip this sync entirely
     syncPaused=false;
-    pushToCloud();
     return;
   }
   if(data.goals) localStorage.setItem('gt_goals_v2',data.goals);
@@ -1158,9 +1160,15 @@ function pushToCloud(){
   if(!path||syncPaused)return;
   const now=Date.now();
   if(now-lastSyncTime<1000)return;
+  // Never push empty/invalid goals to cloud
+  const goalsStr=localStorage.getItem('gt_goals_v2')||'{}';
+  if(!isValidGoalsData(goalsStr)){
+    console.warn('Sync push skipped: local goals empty or invalid');
+    return;
+  }
   lastSyncTime=now;
   const data={
-    goals:localStorage.getItem('gt_goals_v2')||'{}',
+    goals:goalsStr,
     log:localStorage.getItem('gt_log')||'{}',
     tasks:localStorage.getItem('gt_tasks')||'{}',
     completed:localStorage.getItem('gt_completed')||'{}',
@@ -1209,6 +1217,49 @@ function disconnectSync(){
   renderSyncUI();
 }
 
+function syncNowWithFeedback(){
+  const btn=document.getElementById('syncNowBtn');
+  if(!btn)return;
+  const path=getSyncPath();
+  if(!path){btn.textContent='Not configured';setTimeout(()=>{btn.textContent='Sync now'},2000);return;}
+  btn.textContent='Syncing...';btn.disabled=true;
+  // First pull, then push
+  fetch(path+'.json')
+    .then(r=>r.json())
+    .then(data=>{
+      if(data&&data.lastSync){
+        const localTime=parseInt(localStorage.getItem('gt_last_sync')||'0');
+        if(data.lastSync>localTime) applyRemoteData(data);
+      }
+      // Now push local data up
+      const goalsStr=localStorage.getItem('gt_goals_v2')||'{}';
+      if(!isValidGoalsData(goalsStr)){
+        btn.textContent='No data to sync';btn.disabled=false;
+        setTimeout(()=>{btn.textContent='Sync now'},2000);
+        return;
+      }
+      const now=Date.now();
+      const pushData={
+        goals:goalsStr,
+        log:localStorage.getItem('gt_log')||'{}',
+        tasks:localStorage.getItem('gt_tasks')||'{}',
+        completed:localStorage.getItem('gt_completed')||'{}',
+        lastSync:now
+      };
+      localStorage.setItem('gt_last_sync',String(now));
+      return fetch(path+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(pushData)});
+    })
+    .then(()=>{
+      btn.textContent='Synced!';btn.disabled=false;
+      setTimeout(()=>{btn.textContent='Sync now'},2000);
+    })
+    .catch(e=>{
+      console.error('Sync failed:',e);
+      btn.textContent='Sync failed';btn.disabled=false;
+      setTimeout(()=>{btn.textContent='Sync now'},2000);
+    });
+}
+
 function renderSyncUI(){
   const cfg=getSyncConfig();
   const el=document.getElementById('syncSection');
@@ -1221,7 +1272,7 @@ function renderSyncUI(){
         <p>Syncing with code: <code>${cfg.code}</code></p>
         <p style="font-size:0.72rem;color:var(--text-3)">Changes sync automatically between all devices using this code.</p>
         <div class="sync-row">
-          <button class="sync-btn sync-btn-primary" onclick="pushToCloud()">Sync now</button>
+          <button class="sync-btn sync-btn-primary" id="syncNowBtn" onclick="syncNowWithFeedback()">Sync now</button>
           <button class="sync-btn sync-btn-secondary" onclick="disconnectSync()">Disconnect</button>
         </div>
       </div>`;
