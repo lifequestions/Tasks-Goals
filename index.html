@@ -364,16 +364,23 @@ function loadGoals(){
       const g=JSON.parse(s);
       if(!g||!Array.isArray(g.daily)||!Array.isArray(g.weekly)||!Array.isArray(g.monthly)){
         localStorage.removeItem('gt_goals_v2');
-        return JSON.parse(JSON.stringify(DEFAULT_GOALS));
+        const def=JSON.parse(JSON.stringify(DEFAULT_GOALS));
+        saveGoals(def);
+        return def;
       }
       g.weekly.forEach(w=>{ if(!w.days) w.days=[0,1,2,3,4,5,6]; });
       return g;
     }catch(e){
       localStorage.removeItem('gt_goals_v2');
-      return JSON.parse(JSON.stringify(DEFAULT_GOALS));
+      const def=JSON.parse(JSON.stringify(DEFAULT_GOALS));
+      saveGoals(def);
+      return def;
     }
   }
-  return JSON.parse(JSON.stringify(DEFAULT_GOALS));
+  // First load — persist defaults so sync can push them
+  const def=JSON.parse(JSON.stringify(DEFAULT_GOALS));
+  localStorage.setItem('gt_goals_v2',JSON.stringify(def));
+  return def;
 }
 function saveGoals(g){localStorage.setItem('gt_goals_v2',JSON.stringify(g))}
 function loadLog(){const s=localStorage.getItem('gt_log');return s?JSON.parse(s):{}}
@@ -1133,7 +1140,7 @@ function initSync(){
           }
         })
         .catch(()=>{});
-    },30000);
+    },10000);
   }
 
   renderSyncUI();
