@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Goal Tracker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -13,21 +13,21 @@
   --green:#22c55e;--green-light:#dcfce7;--amber:#f59e0b;--amber-light:#fef3c7;
   --red:#ef4444;--red-light:#fee2e2;--gold:#eab308;
 }
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden;max-width:100vw}
 
-.app-header{max-width:960px;margin:0 auto;padding:2.5rem 2rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;box-sizing:border-box}
+.app-header{width:100%;max-width:960px;margin:0 auto;padding:2.5rem 2rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .app-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;flex-shrink:0}
 .app-header h1 span{background:linear-gradient(135deg,var(--accent),var(--accent-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .header-date{font-size:0.85rem;color:var(--text-3);font-weight:500}
 
-.nav-tabs{max-width:960px;margin:0 auto;padding:0 2rem;display:flex;gap:0.25rem;border-bottom:1.5px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+.nav-tabs{width:100%;max-width:960px;margin:0 auto;padding:0 2rem;display:flex;gap:0.25rem;border-bottom:1.5px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
 .nav-tabs::-webkit-scrollbar{display:none}
 .nav-tab{padding:0.7rem 1rem;font-family:inherit;font-size:0.85rem;font-weight:600;background:none;border:none;color:var(--text-3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:color 0.2s,border-color 0.2s;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .nav-tab:hover{color:var(--text-2)}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-.panel{display:none;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem;box-sizing:border-box}
+.panel{display:none;width:100%;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem}
 .panel.active{display:block}
 
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-bottom:1.2rem}
@@ -47,7 +47,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .badge-monthly{background:var(--green-light);color:#15803d}
 
 .habit-list{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem}
-.habit-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.8rem;cursor:pointer;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent;max-width:100%;box-sizing:border-box}
+.habit-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.8rem;cursor:pointer;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent;overflow:hidden}
 .habit-row:hover{border-color:#c4c0b8}
 .habit-row.checked{background:#f8fdf8;border-color:#bbf7d0}
 .habit-row.disabled{opacity:0.4;pointer-events:none;cursor:default}
@@ -137,7 +137,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .date-nav-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:0.9rem;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;flex-shrink:0}
 .date-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 .date-nav-btn:active{background:var(--accent-light)}
-.date-nav-label{font-size:0.85rem;font-weight:600;color:var(--text);text-align:center;cursor:pointer;padding:0.2rem 0.4rem;border-radius:8px;transition:background 0.2s;white-space:nowrap}
+.date-nav-label{font-size:0.85rem;font-weight:600;color:var(--text);text-align:center;cursor:pointer;padding:0.2rem 0.4rem;border-radius:8px;transition:background 0.2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex-shrink:1}
 .date-nav-label:hover{background:var(--bg)}
 .date-nav-today{font-size:0.65rem;font-weight:600;color:var(--accent);cursor:pointer;padding:0.2rem 0.6rem;border-radius:100px;border:1.5px solid var(--accent);background:var(--accent-light);transition:all 0.2s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
 .date-nav-today:hover{background:var(--accent);color:white}
@@ -163,7 +163,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fast-toggle-btn.active{background:var(--accent);color:white}
 .fast-toggle-btn:not(:last-child){border-right:1.5px solid var(--border)}
 
-.quick-add-wrap{display:flex;gap:0.6rem;margin-top:0.5rem;background:var(--accent);padding:0.5rem;border-radius:18px;box-shadow:0 4px 16px rgba(99,102,241,0.2);max-width:100%;box-sizing:border-box}
+.quick-add-wrap{display:flex;gap:0.6rem;margin-top:0.5rem;background:var(--accent);padding:0.5rem;border-radius:18px;box-shadow:0 4px 16px rgba(99,102,241,0.2);overflow:hidden}
 .quick-add-input{flex:1;min-width:0;padding:1rem 1.2rem;border:none;border-radius:14px;font-family:inherit;font-size:1rem;font-weight:600;background:var(--white);outline:none;transition:all 0.2s}
 .quick-add-input:focus{box-shadow:0 0 0 2px var(--accent-dark) inset}
 .quick-add-input::placeholder{color:var(--text-3);font-weight:500;font-size:0.95rem}
@@ -254,11 +254,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .day-chip.selected{background:var(--accent);color:white;border-color:var(--accent)}
 
 @media(max-width:700px){
-  .app-header{padding:1.5rem 0.75rem 0.6rem;gap:0.5rem}
+  .app-header{padding:1.5rem 0.75rem 0.6rem;padding-left:max(0.75rem,env(safe-area-inset-left));padding-right:max(0.75rem,env(safe-area-inset-right));gap:0.5rem}
   .app-header h1{font-size:1.2rem}
-  .nav-tabs{padding:0 0.5rem;gap:0}
+  .nav-tabs{padding:0 0.5rem;padding-left:max(0.5rem,env(safe-area-inset-left));padding-right:max(0.5rem,env(safe-area-inset-right));gap:0}
   .nav-tab{padding:0.6rem 0.7rem;font-size:0.78rem}
-  .panel{padding:1rem 0.75rem 3rem}
+  .panel{padding:1rem 0.75rem 3rem;padding-left:max(0.75rem,env(safe-area-inset-left));padding-right:max(0.75rem,env(safe-area-inset-right))}
   .week-header,.week-row{grid-template-columns:100px repeat(7,1fr) 30px}
   .week-row-name{font-size:0.72rem}
   .dash-grid{grid-template-columns:repeat(2,1fr)}
@@ -289,10 +289,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .dash-card-label{font-size:0.62rem}
   .dash-card-sub{font-size:0.65rem}
 }
+.app-wrap{width:100%;max-width:100vw;overflow-x:hidden}
 </style>
 </head>
 <body>
-
+<div class="app-wrap">
 <header class="app-header">
   <h1>Goal <span>Tracker</span></h1>
   <div class="date-nav" id="dateNav"></div>
@@ -1785,5 +1786,6 @@ renderSyncUI();
 
 render();
 </script>
+</div>
 </body>
 </html>
