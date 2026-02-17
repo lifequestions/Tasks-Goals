@@ -133,13 +133,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .month-star-cell.current{outline:2px solid var(--accent);outline-offset:1px}
 .month-star-cell .m-icon{font-size:0.75rem}
 
-.date-nav{display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-bottom:1.2rem}
-.date-nav-btn{width:36px;height:36px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:1rem;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;flex-shrink:0}
+.date-nav{display:flex;align-items:center;gap:0.5rem}
+.date-nav-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:0.9rem;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;flex-shrink:0}
 .date-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 .date-nav-btn:active{background:var(--accent-light)}
-.date-nav-label{font-size:0.9rem;font-weight:700;color:var(--text);text-align:center;min-width:160px;cursor:pointer;padding:0.3rem 0.6rem;border-radius:8px;transition:background 0.2s}
+.date-nav-label{font-size:0.85rem;font-weight:600;color:var(--text);text-align:center;cursor:pointer;padding:0.2rem 0.4rem;border-radius:8px;transition:background 0.2s;white-space:nowrap}
 .date-nav-label:hover{background:var(--bg)}
-.date-nav-today{font-size:0.7rem;font-weight:600;color:var(--accent);cursor:pointer;padding:0.25rem 0.7rem;border-radius:100px;border:1.5px solid var(--accent);background:var(--accent-light);transition:all 0.2s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
+.date-nav-today{font-size:0.65rem;font-weight:600;color:var(--accent);cursor:pointer;padding:0.2rem 0.6rem;border-radius:100px;border:1.5px solid var(--accent);background:var(--accent-light);transition:all 0.2s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
 .date-nav-today:hover{background:var(--accent);color:white}
 
 .quick-add-wrap{display:flex;gap:0.6rem;margin-top:0.5rem;background:var(--accent);padding:0.5rem;border-radius:18px;box-shadow:0 4px 16px rgba(99,102,241,0.2)}
@@ -241,7 +241,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <header class="app-header">
   <h1>Goal <span>Tracker</span></h1>
-  <div class="header-date" id="headerDate"></div>
+  <div class="date-nav" id="dateNav"></div>
 </header>
 
 <nav class="nav-tabs">
@@ -253,7 +253,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </nav>
 
 <div class="panel active" id="panel-today">
-  <div class="date-nav" id="dateNav"></div>
   <div class="dash-grid" id="todayDash"></div>
   <div class="quick-add-wrap" style="margin-bottom:1.5rem">
     <input type="text" id="quickAddInput" class="quick-add-input" placeholder="+ Add a task..." onkeydown="if(event.key==='Enter')addQuickTask()">
@@ -309,6 +308,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <button class="add-btn" onclick="openModal('monthly')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add monthly goal</button>
   <div class="section-title" style="margin-top:2rem">Cloud Sync <span class="badge" style="background:var(--accent-light);color:var(--accent)">Devices</span></div>
   <div id="syncSection"></div>
+
+  <div class="section-title" style="margin-top:2rem">Backup &amp; Restore <span class="badge" style="background:var(--green-light);color:#15803d">Data</span></div>
+  <div class="sync-card">
+    <div class="sync-card-title">Export / Import</div>
+    <p>Download a full backup of your goals, logs, and tasks as a JSON file. You can restore from a backup on any device.</p>
+    <div class="sync-row">
+      <button class="sync-btn sync-btn-primary" onclick="exportData()">Export backup</button>
+      <button class="sync-btn sync-btn-secondary" onclick="document.getElementById('importFile').click()">Import backup</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+  </div>
 
   <div class="section-title" style="margin-top:2rem;color:var(--red)">Danger Zone</div>
   <button class="add-btn" style="border-color:var(--red);color:var(--red)" onclick="if(confirm('Reset ALL data? This cannot be undone.')){localStorage.removeItem('gt_goals_v2');localStorage.removeItem('gt_log');localStorage.removeItem('gt_tasks');localStorage.removeItem('gt_completed');localStorage.removeItem('gt_sync_code');localStorage.removeItem('gt_firebase_url');location.reload()}">Reset all data</button>
@@ -653,14 +663,14 @@ function render(){
   const goals=loadGoals();const log=loadLog();
   const today=selectedDate;const todayKey=dateKey(today);const monday=getMonday(today);
 
-  document.getElementById('headerDate').textContent=TODAY.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-
-  // Date navigator
+  // Date navigator in header
   const isToday=isSelectedToday();
-  const dateLabel=isToday?'Today':today.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+  const dateLabel=isToday
+    ?today.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})
+    :today.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('dateNav').innerHTML=`
     <button class="date-nav-btn" onclick="navigateDate(-1)" aria-label="Previous day">‹</button>
-    <div class="date-nav-label" onclick="goToToday()">${dateLabel}${!isToday?' — '+today.toLocaleDateString('en-US',{weekday:'long'}):''}${isToday?', '+today.toLocaleDateString('en-US',{month:'short',day:'numeric'}):''}</div>
+    <div class="date-nav-label" onclick="goToToday()">${dateLabel}</div>
     <button class="date-nav-btn" onclick="navigateDate(1)" aria-label="Next day">›</button>
     ${!isToday?'<button class="date-nav-today" onclick="goToToday()">Today</button>':''}
   `;
@@ -1347,6 +1357,51 @@ function renderSyncUI(){
         </div>
       </div>`;
   }
+}
+
+// ========== EXPORT / IMPORT ==========
+function exportData(){
+  const data={
+    goals:localStorage.getItem('gt_goals_v2')||'{}',
+    log:localStorage.getItem('gt_log')||'{}',
+    tasks:localStorage.getItem('gt_tasks')||'{}',
+    completed:localStorage.getItem('gt_completed')||'{}',
+    exportedAt:new Date().toISOString(),
+    version:2
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='goal-tracker-backup-'+dateKey(new Date())+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importData(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!data.goals||!data.log){
+        alert('Invalid backup file. Missing goals or log data.');return;
+      }
+      if(!confirm('This will replace ALL your current data with the backup. Continue?'))return;
+      localStorage.setItem('gt_goals_v2',data.goals);
+      localStorage.setItem('gt_log',data.log);
+      if(data.tasks) localStorage.setItem('gt_tasks',data.tasks);
+      if(data.completed) localStorage.setItem('gt_completed',data.completed);
+      pushToCloud();
+      alert('Backup restored successfully!');
+      location.reload();
+    }catch(err){
+      alert('Could not read backup file: '+err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value='';
 }
 
 // Initialise sync on load
