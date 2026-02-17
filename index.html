@@ -187,10 +187,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .habit-row.fade-out{opacity:0;transform:translateX(20px);max-height:0;padding:0 1.2rem;margin:0;border-color:transparent;overflow:hidden;transition:all 0.35s ease}
 
 /* Drag reorder */
-.habit-list.drag-active{user-select:none;-webkit-user-select:none}
-.habit-row.dragging{opacity:0.9;transform:scale(1.03);box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:100;position:relative;background:var(--accent-light);border-color:var(--accent);transition:none}
-.habit-row.drag-placeholder{opacity:0;max-height:0;padding:0;margin:0;border:none;overflow:hidden;transition:none}
-.drag-indicator{height:3px;background:var(--accent);border-radius:3px;margin:0 0.5rem;transition:none}
+.habit-list.drag-active{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.habit-row.dragging{opacity:0.15;transition:none}
 
 /* Completed tasks log */
 .completed-toggle{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0;cursor:pointer;user-select:none;font-size:0.82rem;font-weight:600;color:var(--text-3);transition:color 0.2s}
@@ -1628,62 +1626,33 @@ renderSyncUI();
 
 // ========== DRAG REORDER (long-press) ==========
 (function(){
-  let dragRow=null,dragClone=null,longPressTimer=null,startY=0,startX=0,isDragging=false;
+  let dragRow=null,dragClone=null,longPressTimer=null,startY=0,startX=0,isDragging=false,rowHeight=0;
   const list=document.getElementById('combinedTasks');
   if(!list)return;
 
-  list.addEventListener('touchstart',function(e){
-    const row=e.target.closest('.habit-row');
-    if(!row||!row.dataset.taskId)return;
-    // Don't trigger drag on button taps (✕ remove button)
-    if(e.target.closest('button'))return;
+  function onDragMove(e){
     const touch=e.touches[0];
-    startY=touch.clientY;startX=touch.clientX;
-    dragRow=row;isDragging=false;
-
-    longPressTimer=setTimeout(function(){
-      isDragging=true;
-      if(navigator.vibrate)navigator.vibrate(30);
-      list.classList.add('drag-active');
-      dragRow.classList.add('dragging');
-
-      // Create floating clone
-      const rect=dragRow.getBoundingClientRect();
-      dragClone=dragRow.cloneNode(true);
-      dragClone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;z-index:200;opacity:0.9;transform:scale(1.03);box-shadow:0 8px 24px rgba(0,0,0,0.18);border-radius:12px;pointer-events:none;transition:none;background:var(--accent-light);border:1.5px solid var(--accent)`;
-      document.body.appendChild(dragClone);
-
-      // Hide original in place (keep space)
-      dragRow.style.opacity='0';
-    },400);
-  },{passive:true});
-
-  list.addEventListener('touchmove',function(e){
-    if(!dragRow)return;
-    const touch=e.touches[0];
-    const dx=Math.abs(touch.clientX-startX);
-    const dy=Math.abs(touch.clientY-startY);
-
-    // Cancel long-press if finger moves too much before drag starts
     if(!isDragging){
-      if(dx>10||dy>10){clearTimeout(longPressTimer);longPressTimer=null;dragRow=null;}
+      const dx=Math.abs(touch.clientX-startX);
+      const dy=Math.abs(touch.clientY-startY);
+      if(dx>8||dy>8){cancelLongPress();return;}
       return;
     }
-
     e.preventDefault();
+    e.stopPropagation();
 
-    // Move clone
+    // Move clone to follow finger
     if(dragClone){
-      const rect=dragRow.getBoundingClientRect();
-      dragClone.style.top=(touch.clientY-rect.height/2)+'px';
+      dragClone.style.top=(touch.clientY-rowHeight/2)+'px';
     }
 
-    // Find which row we're over and reorder
-    const rows=Array.from(list.querySelectorAll('.habit-row:not(.dragging)'));
-    rows.forEach(r=>r.style.borderTop='');rows.forEach(r=>r.style.borderBottom='');
+    // Find which row we're over and show indicator
+    const rows=Array.from(list.querySelectorAll('.habit-row'));
+    rows.forEach(r=>{r.style.borderTop='';r.style.borderBottom='';});
 
+    const otherRows=rows.filter(r=>r!==dragRow);
     let insertBefore=null;
-    for(const r of rows){
+    for(const r of otherRows){
       const rr=r.getBoundingClientRect();
       const mid=rr.top+rr.height/2;
       if(touch.clientY<mid){insertBefore=r;break;}
@@ -1691,40 +1660,90 @@ renderSyncUI();
 
     if(insertBefore){
       insertBefore.style.borderTop='3px solid var(--accent)';
-      if(insertBefore!==dragRow.nextElementSibling){
-        list.insertBefore(dragRow,insertBefore);
-      }
-    } else {
-      // Insert at end
-      const lastRow=rows[rows.length-1];
-      if(lastRow){lastRow.style.borderBottom='3px solid var(--accent)';}
-      if(dragRow!==list.lastElementChild){
-        list.appendChild(dragRow);
-      }
+    } else if(otherRows.length){
+      otherRows[otherRows.length-1].style.borderBottom='3px solid var(--accent)';
     }
-  },{passive:false});
+  }
 
-  function endDrag(){
+  function onDragEnd(e){
+    document.removeEventListener('touchmove',onDragMove,{capture:true});
+    document.removeEventListener('touchend',onDragEnd,{capture:true});
+    document.removeEventListener('touchcancel',onDragEnd,{capture:true});
+
     if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null;}
     if(!isDragging){dragRow=null;return;}
 
-    // Clean up visual state
+    // Get final finger position to determine drop location
+    const touch=(e.changedTouches&&e.changedTouches[0]);
+    if(touch&&dragRow){
+      const otherRows=Array.from(list.querySelectorAll('.habit-row')).filter(r=>r!==dragRow);
+      let insertBefore=null;
+      for(const r of otherRows){
+        const rr=r.getBoundingClientRect();
+        const mid=rr.top+rr.height/2;
+        if(touch.clientY<mid){insertBefore=r;break;}
+      }
+      if(insertBefore){
+        list.insertBefore(dragRow,insertBefore);
+      } else {
+        list.appendChild(dragRow);
+      }
+    }
+
+    // Clean up
     if(dragClone){dragClone.remove();dragClone=null;}
     if(dragRow){dragRow.classList.remove('dragging');dragRow.style.opacity='';}
     list.classList.remove('drag-active');
-
-    // Clear indicator borders
     list.querySelectorAll('.habit-row').forEach(r=>{r.style.borderTop='';r.style.borderBottom='';});
+    document.body.style.overflow='';
 
-    // Save new order from DOM
+    // Save new order
     const newOrder=Array.from(list.querySelectorAll('.habit-row[data-task-id]')).map(r=>r.dataset.taskId);
     saveTaskOrder(newOrder);
 
     isDragging=false;dragRow=null;
   }
 
-  list.addEventListener('touchend',endDrag);
-  list.addEventListener('touchcancel',endDrag);
+  function cancelLongPress(){
+    if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null;}
+    dragRow=null;
+    document.removeEventListener('touchmove',onDragMove,{capture:true});
+    document.removeEventListener('touchend',onDragEnd,{capture:true});
+    document.removeEventListener('touchcancel',onDragEnd,{capture:true});
+  }
+
+  function startDrag(){
+    isDragging=true;
+    if(navigator.vibrate)navigator.vibrate(30);
+    document.body.style.overflow='hidden'; // Prevent page scroll
+    list.classList.add('drag-active');
+    dragRow.classList.add('dragging');
+
+    const rect=dragRow.getBoundingClientRect();
+    rowHeight=rect.height;
+    dragClone=dragRow.cloneNode(true);
+    dragClone.className='habit-row';
+    dragClone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;z-index:200;opacity:0.92;transform:scale(1.04);box-shadow:0 8px 28px rgba(99,102,241,0.25);border-radius:12px;pointer-events:none;background:#ede9fe;border:2px solid var(--accent);display:flex;align-items:center;gap:0.6rem;padding:0.65rem 1rem;font-family:Inter,sans-serif`;
+    document.body.appendChild(dragClone);
+    dragRow.style.opacity='0.15';
+  }
+
+  list.addEventListener('touchstart',function(e){
+    const row=e.target.closest('.habit-row');
+    if(!row||!row.dataset.taskId)return;
+    if(e.target.closest('button'))return;
+
+    const touch=e.touches[0];
+    startY=touch.clientY;startX=touch.clientX;
+    dragRow=row;isDragging=false;
+
+    // Attach document-level listeners to capture all moves
+    document.addEventListener('touchmove',onDragMove,{passive:false,capture:true});
+    document.addEventListener('touchend',onDragEnd,{capture:true});
+    document.addEventListener('touchcancel',onDragEnd,{capture:true});
+
+    longPressTimer=setTimeout(startDrag,400);
+  },{passive:true});
 })();
 
 render();
