@@ -186,6 +186,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 /* Task fade-out animation */
 .habit-row.fade-out{opacity:0;transform:translateX(20px);max-height:0;padding:0 1.2rem;margin:0;border-color:transparent;overflow:hidden;transition:all 0.35s ease}
 
+/* Drag reorder */
+.habit-list.drag-active{user-select:none;-webkit-user-select:none}
+.habit-row.dragging{opacity:0.9;transform:scale(1.03);box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:100;position:relative;background:var(--accent-light);border-color:var(--accent);transition:none}
+.habit-row.drag-placeholder{opacity:0;max-height:0;padding:0;margin:0;border:none;overflow:hidden;transition:none}
+.drag-indicator{height:3px;background:var(--accent);border-radius:3px;margin:0 0.5rem;transition:none}
+
 /* Completed tasks log */
 .completed-toggle{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0;cursor:pointer;user-select:none;font-size:0.82rem;font-weight:600;color:var(--text-3);transition:color 0.2s}
 .completed-toggle:hover{color:var(--text-2)}
@@ -368,7 +374,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   </div>
 
   <div class="section-title" style="margin-top:2rem;color:var(--red)">Danger Zone</div>
-  <button class="add-btn" style="border-color:var(--red);color:var(--red)" onclick="if(confirm('Reset ALL data? This cannot be undone.')){localStorage.removeItem('gt_goals_v2');localStorage.removeItem('gt_log');localStorage.removeItem('gt_tasks');localStorage.removeItem('gt_completed');localStorage.removeItem('gt_counters');localStorage.removeItem('gt_sync_code');localStorage.removeItem('gt_firebase_url');location.reload()}">Reset all data</button>
+  <button class="add-btn" style="border-color:var(--red);color:var(--red)" onclick="if(confirm('Reset ALL data? This cannot be undone.')){localStorage.removeItem('gt_goals_v2');localStorage.removeItem('gt_log');localStorage.removeItem('gt_tasks');localStorage.removeItem('gt_completed');localStorage.removeItem('gt_counters');localStorage.removeItem('gt_task_order');localStorage.removeItem('gt_sync_code');localStorage.removeItem('gt_firebase_url');location.reload()}">Reset all data</button>
 </div>
 
 <div class="modal-overlay" id="modal">
@@ -505,6 +511,8 @@ function loadTasks(){const s=localStorage.getItem('gt_tasks');return s?JSON.pars
 function saveTasks(t){localStorage.setItem('gt_tasks',JSON.stringify(t))}
 function loadCompleted(){const s=localStorage.getItem('gt_completed');return s?JSON.parse(s):{}}
 function saveCompleted(c){localStorage.setItem('gt_completed',JSON.stringify(c))}
+function loadTaskOrder(){const s=localStorage.getItem('gt_task_order');return s?JSON.parse(s):[]}
+function saveTaskOrder(o){localStorage.setItem('gt_task_order',JSON.stringify(o))}
 
 // === Counters (fasting, yearly goals) ===
 function loadCounters(){const s=localStorage.getItem('gt_counters');return s?JSON.parse(s):{}}
@@ -541,27 +549,35 @@ let undoTimer=null;
 let undoData=null;
 let undoCountdown=null;
 
+function findTaskAcrossDates(taskId){
+  const tasks=loadTasks();
+  for(const dk of Object.keys(tasks)){
+    const idx=tasks[dk].findIndex(t=>t.id===taskId);
+    if(idx!==-1)return {tasks,dk,idx,task:tasks[dk][idx]};
+  }
+  return null;
+}
+
 function toggleTask(taskId){
-  const tasks=loadTasks();const key=dateKey(selectedDate);
-  if(!tasks[key])return;
-  const tIdx=tasks[key].findIndex(t=>t.id===taskId);
-  if(tIdx===-1)return;
-  const task=tasks[key][tIdx];
+  const found=findTaskAcrossDates(taskId);
+  if(!found)return;
+  const {tasks,dk,idx,task}=found;
 
   // Only auto-remove when checking off (not already done)
   if(!task.done){
     // Remove from active tasks
-    tasks[key].splice(tIdx,1);
+    tasks[dk].splice(idx,1);
     saveTasks(tasks);
 
-    // Add to completed log
+    // Add to completed log under today's date
+    const todayDk=dateKey(selectedDate);
     const completed=loadCompleted();
-    if(!completed[key])completed[key]=[];
-    completed[key].push({id:task.id,name:task.name,completedAt:new Date().toISOString()});
+    if(!completed[todayDk])completed[todayDk]=[];
+    completed[todayDk].push({id:task.id,name:task.name,completedAt:new Date().toISOString()});
     saveCompleted(completed);
 
     // Show undo toast
-    showUndoToast(task.name,{taskId:task.id,taskName:task.name,dateKey:key});
+    showUndoToast(task.name,{taskId:task.id,taskName:task.name,dateKey:dk});
     render();
   }
 }
@@ -657,10 +673,12 @@ function restoreTask(taskId){
 }
 
 function removeTask(taskId){
-  const tasks=loadTasks();const key=dateKey(selectedDate);
-  if(!tasks[key])return;
-  tasks[key]=tasks[key].filter(t=>t.id!==taskId);
-  saveTasks(tasks);render();
+  const tasks=loadTasks();
+  for(const dk of Object.keys(tasks)){
+    const before=tasks[dk].length;
+    tasks[dk]=tasks[dk].filter(t=>t.id!==taskId);
+    if(tasks[dk].length<before){saveTasks(tasks);render();return;}
+  }
 }
 
 let completedLogOpen=false;
@@ -763,10 +781,18 @@ function render(){
   const dailyDoneToday=dailyActive.filter(g=>isDone(g.id,today)).length;
   const weeklyAvailToday=weeklyActive.filter(g=>isAvailableDay(g,todayDow));
   const weeklyDoneToday=weeklyAvailToday.filter(g=>isDone(g.id,today)).length;
-  // Include quick tasks in today's progress count
-  const quickTasks=loadTasks();const quickDayTasks=quickTasks[todayKey]||[];
+  // Include quick tasks in today's progress count (carry forward uncompleted from past days)
+  const allQuickTasks=loadTasks();
+  const carryForwardTasks=[];
+  Object.keys(allQuickTasks).sort().forEach(dk=>{
+    if(dk<=todayKey){
+      allQuickTasks[dk].filter(t=>!t.done).forEach(t=>{
+        carryForwardTasks.push({...t,_fromDate:dk});
+      });
+    }
+  });
   const quickCompleted=loadCompleted();const quickDayCompleted=quickCompleted[todayKey]||[];
-  const totalQuickTasks=quickDayTasks.filter(t=>!t.done).length+quickDayCompleted.length;
+  const totalQuickTasks=carryForwardTasks.length+quickDayCompleted.length;
   const quickDoneCount=quickDayCompleted.length;
 
   const allTodayTasks=dailyActive.length+weeklyAvailToday.length+totalQuickTasks;
@@ -785,24 +811,39 @@ function render(){
   const dailyUndone=dailyActive.filter(g=>!isDone(g.id,today));
   const dailyDone=dailyActive.filter(g=>isDone(g.id,today));
 
-  // Today's quick tasks (only uncompleted ones)
-  const tasks=loadTasks();const dayTasks=(tasks[todayKey]||[]).filter(t=>!t.done);
+  // Today's quick tasks (carry forward uncompleted from all past days)
+  const dayTasks=carryForwardTasks;
 
-  // Combined daily habits + quick tasks in one seamless list
-  document.getElementById('combinedTasks').innerHTML=[
-    ...dailyUndone.map(g=>
-      `<div class="habit-row" onclick="toggleDaily('${g.id}','${todayKey}')">
+  // Build combined task items with unified shape: {id, type, html}
+  const combinedItems=[
+    ...dailyUndone.map(g=>({id:g.id,html:
+      `<div class="habit-row" data-task-id="${g.id}" onclick="toggleDaily('${g.id}','${todayKey}')">
         <div class="habit-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         <div class="habit-name">${g.name}</div><div class="habit-freq">Daily</div></div>`
-    ),
-    ...dayTasks.map(t=>
-      `<div class="habit-row" onclick="toggleTask('${t.id}')">
+    })),
+    ...dayTasks.map(t=>({id:t.id,html:
+      `<div class="habit-row" data-task-id="${t.id}" onclick="toggleTask('${t.id}')">
         <div class="habit-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         <div class="habit-name">${t.name}</div>
         <button onclick="event.stopPropagation();removeTask('${t.id}')" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:0.75rem;padding:4px 8px;border-radius:6px;transition:color 0.2s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-3)'">✕</button>
       </div>`
-    )
-  ].join('');
+    }))
+  ];
+
+  // Sort by saved order
+  const savedOrder=loadTaskOrder();
+  if(savedOrder.length>0){
+    combinedItems.sort((a,b)=>{
+      const ai=savedOrder.indexOf(a.id);
+      const bi=savedOrder.indexOf(b.id);
+      if(ai===-1&&bi===-1)return 0;
+      if(ai===-1)return 1;
+      if(bi===-1)return -1;
+      return ai-bi;
+    });
+  }
+
+  document.getElementById('combinedTasks').innerHTML=combinedItems.map(i=>i.html).join('');
 
   // Weekly habits — hide done ones on today view
   const weeklyDoneList=weeklyAvailToday.filter(g=>isDone(g.id,today));
@@ -1372,6 +1413,7 @@ function applyRemoteData(data){
   if(data.tasks) localStorage.setItem('gt_tasks',data.tasks);
   if(data.completed) localStorage.setItem('gt_completed',data.completed);
   if(data.counters) localStorage.setItem('gt_counters',data.counters);
+  if(data.taskOrder) localStorage.setItem('gt_task_order',data.taskOrder);
   localStorage.setItem('gt_last_sync',String(data.lastSync));
   render();
   setTimeout(()=>{syncPaused=false},500);
@@ -1395,6 +1437,7 @@ function pushToCloud(){
     tasks:localStorage.getItem('gt_tasks')||'{}',
     completed:localStorage.getItem('gt_completed')||'{}',
     counters:localStorage.getItem('gt_counters')||'{}',
+    taskOrder:localStorage.getItem('gt_task_order')||'[]',
     lastSync:now
   };
   localStorage.setItem('gt_last_sync',String(now));
@@ -1416,6 +1459,8 @@ const _origSaveCompleted=saveCompleted;
 saveCompleted=function(c){_origSaveCompleted(c);pushToCloud()};
 const _origSaveCounters=saveCounters;
 saveCounters=function(c){_origSaveCounters(c);pushToCloud()};
+const _origSaveTaskOrder=saveTaskOrder;
+saveTaskOrder=function(o){_origSaveTaskOrder(o);pushToCloud()};
 
 function connectSync(){
   const urlInput=document.getElementById('syncFirebaseUrl');
@@ -1470,6 +1515,7 @@ function syncNowWithFeedback(){
         tasks:localStorage.getItem('gt_tasks')||'{}',
         completed:localStorage.getItem('gt_completed')||'{}',
         counters:localStorage.getItem('gt_counters')||'{}',
+        taskOrder:localStorage.getItem('gt_task_order')||'[]',
         lastSync:now
       };
       localStorage.setItem('gt_last_sync',String(now));
@@ -1533,8 +1579,9 @@ function exportData(){
     tasks:localStorage.getItem('gt_tasks')||'{}',
     completed:localStorage.getItem('gt_completed')||'{}',
     counters:localStorage.getItem('gt_counters')||'{}',
+    taskOrder:localStorage.getItem('gt_task_order')||'[]',
     exportedAt:new Date().toISOString(),
-    version:3
+    version:4
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);
@@ -1561,6 +1608,7 @@ function importData(event){
       if(data.tasks) localStorage.setItem('gt_tasks',data.tasks);
       if(data.completed) localStorage.setItem('gt_completed',data.completed);
       if(data.counters) localStorage.setItem('gt_counters',data.counters);
+      if(data.taskOrder) localStorage.setItem('gt_task_order',data.taskOrder);
       // Backwards compat: import old fasting data too
       if(data.fasting) localStorage.setItem('gt_fasting',data.fasting);
       pushToCloud();
@@ -1577,6 +1625,107 @@ function importData(event){
 // Initialise sync on load
 initSync();
 renderSyncUI();
+
+// ========== DRAG REORDER (long-press) ==========
+(function(){
+  let dragRow=null,dragClone=null,longPressTimer=null,startY=0,startX=0,isDragging=false;
+  const list=document.getElementById('combinedTasks');
+  if(!list)return;
+
+  list.addEventListener('touchstart',function(e){
+    const row=e.target.closest('.habit-row');
+    if(!row||!row.dataset.taskId)return;
+    // Don't trigger drag on button taps (✕ remove button)
+    if(e.target.closest('button'))return;
+    const touch=e.touches[0];
+    startY=touch.clientY;startX=touch.clientX;
+    dragRow=row;isDragging=false;
+
+    longPressTimer=setTimeout(function(){
+      isDragging=true;
+      if(navigator.vibrate)navigator.vibrate(30);
+      list.classList.add('drag-active');
+      dragRow.classList.add('dragging');
+
+      // Create floating clone
+      const rect=dragRow.getBoundingClientRect();
+      dragClone=dragRow.cloneNode(true);
+      dragClone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;z-index:200;opacity:0.9;transform:scale(1.03);box-shadow:0 8px 24px rgba(0,0,0,0.18);border-radius:12px;pointer-events:none;transition:none;background:var(--accent-light);border:1.5px solid var(--accent)`;
+      document.body.appendChild(dragClone);
+
+      // Hide original in place (keep space)
+      dragRow.style.opacity='0';
+    },400);
+  },{passive:true});
+
+  list.addEventListener('touchmove',function(e){
+    if(!dragRow)return;
+    const touch=e.touches[0];
+    const dx=Math.abs(touch.clientX-startX);
+    const dy=Math.abs(touch.clientY-startY);
+
+    // Cancel long-press if finger moves too much before drag starts
+    if(!isDragging){
+      if(dx>10||dy>10){clearTimeout(longPressTimer);longPressTimer=null;dragRow=null;}
+      return;
+    }
+
+    e.preventDefault();
+
+    // Move clone
+    if(dragClone){
+      const rect=dragRow.getBoundingClientRect();
+      dragClone.style.top=(touch.clientY-rect.height/2)+'px';
+    }
+
+    // Find which row we're over and reorder
+    const rows=Array.from(list.querySelectorAll('.habit-row:not(.dragging)'));
+    rows.forEach(r=>r.style.borderTop='');rows.forEach(r=>r.style.borderBottom='');
+
+    let insertBefore=null;
+    for(const r of rows){
+      const rr=r.getBoundingClientRect();
+      const mid=rr.top+rr.height/2;
+      if(touch.clientY<mid){insertBefore=r;break;}
+    }
+
+    if(insertBefore){
+      insertBefore.style.borderTop='3px solid var(--accent)';
+      if(insertBefore!==dragRow.nextElementSibling){
+        list.insertBefore(dragRow,insertBefore);
+      }
+    } else {
+      // Insert at end
+      const lastRow=rows[rows.length-1];
+      if(lastRow){lastRow.style.borderBottom='3px solid var(--accent)';}
+      if(dragRow!==list.lastElementChild){
+        list.appendChild(dragRow);
+      }
+    }
+  },{passive:false});
+
+  function endDrag(){
+    if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null;}
+    if(!isDragging){dragRow=null;return;}
+
+    // Clean up visual state
+    if(dragClone){dragClone.remove();dragClone=null;}
+    if(dragRow){dragRow.classList.remove('dragging');dragRow.style.opacity='';}
+    list.classList.remove('drag-active');
+
+    // Clear indicator borders
+    list.querySelectorAll('.habit-row').forEach(r=>{r.style.borderTop='';r.style.borderBottom='';});
+
+    // Save new order from DOM
+    const newOrder=Array.from(list.querySelectorAll('.habit-row[data-task-id]')).map(r=>r.dataset.taskId);
+    saveTaskOrder(newOrder);
+
+    isDragging=false;dragRow=null;
+  }
+
+  list.addEventListener('touchend',endDrag);
+  list.addEventListener('touchcancel',endDrag);
+})();
 
 render();
 </script>
