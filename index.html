@@ -16,8 +16,8 @@
 html{scroll-behavior:smooth;overflow-x:hidden}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
-.app-header{max-width:960px;margin:0 auto;padding:2.5rem 2rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.app-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.03em}
+.app-header{max-width:960px;margin:0 auto;padding:2.5rem 2rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;box-sizing:border-box}
+.app-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;flex-shrink:0}
 .app-header h1 span{background:linear-gradient(135deg,var(--accent),var(--accent-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .header-date{font-size:0.85rem;color:var(--text-3);font-weight:500}
 
@@ -27,7 +27,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .nav-tab:hover{color:var(--text-2)}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-.panel{display:none;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem}
+.panel{display:none;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem;box-sizing:border-box}
 .panel.active{display:block}
 
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-bottom:1.2rem}
@@ -47,7 +47,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .badge-monthly{background:var(--green-light);color:#15803d}
 
 .habit-list{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem}
-.habit-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.8rem;cursor:pointer;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent}
+.habit-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.8rem;cursor:pointer;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent;max-width:100%;box-sizing:border-box}
 .habit-row:hover{border-color:#c4c0b8}
 .habit-row.checked{background:#f8fdf8;border-color:#bbf7d0}
 .habit-row.disabled{opacity:0.4;pointer-events:none;cursor:default}
@@ -133,7 +133,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .month-star-cell.current{outline:2px solid var(--accent);outline-offset:1px}
 .month-star-cell .m-icon{font-size:0.75rem}
 
-.date-nav{display:flex;align-items:center;gap:0.5rem}
+.date-nav{display:flex;align-items:center;gap:0.5rem;flex-shrink:1;min-width:0}
 .date-nav-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:0.9rem;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;flex-shrink:0}
 .date-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
 .date-nav-btn:active{background:var(--accent-light)}
@@ -163,8 +163,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fast-toggle-btn.active{background:var(--accent);color:white}
 .fast-toggle-btn:not(:last-child){border-right:1.5px solid var(--border)}
 
-.quick-add-wrap{display:flex;gap:0.6rem;margin-top:0.5rem;background:var(--accent);padding:0.5rem;border-radius:18px;box-shadow:0 4px 16px rgba(99,102,241,0.2)}
-.quick-add-input{flex:1;padding:1rem 1.2rem;border:none;border-radius:14px;font-family:inherit;font-size:1rem;font-weight:600;background:var(--white);outline:none;transition:all 0.2s}
+.quick-add-wrap{display:flex;gap:0.6rem;margin-top:0.5rem;background:var(--accent);padding:0.5rem;border-radius:18px;box-shadow:0 4px 16px rgba(99,102,241,0.2);max-width:100%;box-sizing:border-box}
+.quick-add-input{flex:1;min-width:0;padding:1rem 1.2rem;border:none;border-radius:14px;font-family:inherit;font-size:1rem;font-weight:600;background:var(--white);outline:none;transition:all 0.2s}
 .quick-add-input:focus{box-shadow:0 0 0 2px var(--accent-dark) inset}
 .quick-add-input::placeholder{color:var(--text-3);font-weight:500;font-size:0.95rem}
 .quick-add-btn{width:48px;height:48px;border-radius:14px;border:none;background:var(--white);font-size:1.5rem;font-weight:700;color:var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
@@ -188,7 +188,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* Drag reorder */
 .habit-list.drag-active{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-.habit-row.dragging{opacity:0.15;transition:none}
+.habit-list.drag-active .habit-row{transition:transform 0.2s ease,border-color 0.15s}
+.habit-row.dragging{opacity:0.15;transition:none !important}
+.habit-row.drag-above{transform:translateY(calc(100% + 0.4rem))}
+.habit-row.drag-below{transform:translateY(calc(-100% - 0.4rem))}
 
 /* Completed tasks log */
 .completed-toggle{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0;cursor:pointer;user-select:none;font-size:0.82rem;font-weight:600;color:var(--text-3);transition:color 0.2s}
@@ -251,36 +254,40 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .day-chip.selected{background:var(--accent);color:white;border-color:var(--accent)}
 
 @media(max-width:700px){
-  .app-header{padding:1.5rem 0.8rem 0.6rem}
-  .app-header h1{font-size:1.3rem}
+  .app-header{padding:1.5rem 0.75rem 0.6rem;gap:0.5rem}
+  .app-header h1{font-size:1.2rem}
   .nav-tabs{padding:0 0.5rem;gap:0}
   .nav-tab{padding:0.6rem 0.7rem;font-size:0.78rem}
-  .panel{padding:1rem 0.8rem 3rem}
+  .panel{padding:1rem 0.75rem 3rem}
   .week-header,.week-row{grid-template-columns:100px repeat(7,1fr) 30px}
   .week-row-name{font-size:0.72rem}
   .dash-grid{grid-template-columns:repeat(2,1fr)}
   .annual-grid{grid-template-columns:1fr}
-  .habit-row{padding:0.6rem 0.8rem;gap:0.6rem}
+  .habit-row{padding:0.6rem 0.7rem;gap:0.5rem}
   .habit-name{font-size:0.8rem}
   .habit-freq{font-size:0.62rem}
-  .monthly-goal{padding:0.8rem 0.9rem;gap:0.7rem}
-  .monthly-goal .habit-check{width:24px;height:24px}
+  .habit-check{width:20px;height:20px;border-radius:6px}
+  .habit-check svg{width:11px;height:11px}
+  .monthly-goal{padding:0.7rem 0.8rem;gap:0.6rem}
+  .monthly-goal .habit-check{width:22px;height:22px}
   .counter-goal{padding:0.7rem 0.8rem;gap:0.5rem;flex-wrap:wrap}
-  .counter-goal .habit-check{width:24px;height:24px}
+  .counter-goal .habit-check{width:22px;height:22px}
   .counter-goal .habit-name{font-size:0.8rem}
   .counter-badge{font-size:0.72rem;padding:2px 8px}
   .counter-minus{width:22px;height:22px;font-size:0.8rem}
   .fast-toggle-btn{padding:0.25rem 0.5rem;font-size:0.68rem}
-  .quick-add-wrap{padding:0.4rem;border-radius:14px;gap:0.4rem}
-  .quick-add-input{padding:0.8rem 1rem;font-size:0.9rem;border-radius:12px}
-  .quick-add-btn{width:42px;height:42px;border-radius:12px;font-size:1.3rem}
-  .date-nav{gap:0.3rem}
-  .date-nav-btn{width:26px;height:26px;font-size:0.8rem}
-  .date-nav-label{font-size:0.78rem;padding:0.15rem 0.3rem}
-  .date-nav-today{font-size:0.6rem;padding:0.15rem 0.5rem}
-  .section-title{font-size:0.9rem}
-  .dash-card{padding:0.9rem}
-  .dash-card-value{font-size:1.4rem}
+  .quick-add-wrap{padding:0.35rem;border-radius:14px;gap:0.35rem}
+  .quick-add-input{padding:0.75rem 0.9rem;font-size:0.88rem;border-radius:11px}
+  .quick-add-btn{width:38px;height:38px;border-radius:11px;font-size:1.2rem}
+  .date-nav{gap:0.25rem}
+  .date-nav-btn{width:26px;height:26px;font-size:0.8rem;border-radius:7px}
+  .date-nav-label{font-size:0.72rem;padding:0.1rem 0.2rem}
+  .date-nav-today{font-size:0.58rem;padding:0.1rem 0.4rem}
+  .section-title{font-size:0.88rem;margin:1rem 0 0.6rem}
+  .dash-card{padding:0.8rem}
+  .dash-card-value{font-size:1.3rem}
+  .dash-card-label{font-size:0.62rem}
+  .dash-card-sub{font-size:0.65rem}
 }
 </style>
 </head>
@@ -1626,9 +1633,44 @@ renderSyncUI();
 
 // ========== DRAG REORDER (long-press) ==========
 (function(){
-  let dragRow=null,dragClone=null,longPressTimer=null,startY=0,startX=0,isDragging=false,rowHeight=0;
+  let dragRow=null,dragClone=null,longPressTimer=null;
+  let startY=0,startX=0,isDragging=false;
+  let dragStartIdx=0,currentIdx=0,rowRects=[],allRows=[];
   const list=document.getElementById('combinedTasks');
   if(!list)return;
+
+  function getRowIndex(y){
+    for(let i=0;i<rowRects.length;i++){
+      if(y<rowRects[i].mid)return i;
+    }
+    return rowRects.length-1;
+  }
+
+  function updateVisuals(){
+    // Shift other rows to make room for dragged item
+    allRows.forEach((r,i)=>{
+      if(r===dragRow)return;
+      r.classList.remove('drag-above','drag-below');
+      r.style.transform='';
+    });
+
+    allRows.forEach((r,i)=>{
+      if(r===dragRow)return;
+      const origIdx=allRows.indexOf(r);
+      // If this row needs to shift to make room
+      if(dragStartIdx<currentIdx){
+        // Dragged down: rows between start+1..current shift up
+        if(origIdx>dragStartIdx&&origIdx<=currentIdx){
+          r.style.transform=`translateY(${-rowRects[dragStartIdx].h-4}px)`;
+        }
+      } else if(dragStartIdx>currentIdx){
+        // Dragged up: rows between current..start-1 shift down
+        if(origIdx>=currentIdx&&origIdx<dragStartIdx){
+          r.style.transform=`translateY(${rowRects[dragStartIdx].h+4}px)`;
+        }
+      }
+    });
+  }
 
   function onDragMove(e){
     const touch=e.touches[0];
@@ -1641,27 +1683,17 @@ renderSyncUI();
     e.preventDefault();
     e.stopPropagation();
 
-    // Move clone to follow finger
+    // Move clone with GPU-accelerated transform
     if(dragClone){
-      dragClone.style.top=(touch.clientY-rowHeight/2)+'px';
+      const dy=touch.clientY-startY;
+      dragClone.style.transform=`translateY(${dy}px) scale(1.03)`;
     }
 
-    // Find which row we're over and show indicator
-    const rows=Array.from(list.querySelectorAll('.habit-row'));
-    rows.forEach(r=>{r.style.borderTop='';r.style.borderBottom='';});
-
-    const otherRows=rows.filter(r=>r!==dragRow);
-    let insertBefore=null;
-    for(const r of otherRows){
-      const rr=r.getBoundingClientRect();
-      const mid=rr.top+rr.height/2;
-      if(touch.clientY<mid){insertBefore=r;break;}
-    }
-
-    if(insertBefore){
-      insertBefore.style.borderTop='3px solid var(--accent)';
-    } else if(otherRows.length){
-      otherRows[otherRows.length-1].style.borderBottom='3px solid var(--accent)';
+    // Determine new index
+    const newIdx=getRowIndex(touch.clientY);
+    if(newIdx!==currentIdx){
+      currentIdx=newIdx;
+      updateVisuals();
     }
   }
 
@@ -1673,35 +1705,31 @@ renderSyncUI();
     if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null;}
     if(!isDragging){dragRow=null;return;}
 
-    // Get final finger position to determine drop location
-    const touch=(e.changedTouches&&e.changedTouches[0]);
-    if(touch&&dragRow){
-      const otherRows=Array.from(list.querySelectorAll('.habit-row')).filter(r=>r!==dragRow);
-      let insertBefore=null;
-      for(const r of otherRows){
-        const rr=r.getBoundingClientRect();
-        const mid=rr.top+rr.height/2;
-        if(touch.clientY<mid){insertBefore=r;break;}
-      }
-      if(insertBefore){
-        list.insertBefore(dragRow,insertBefore);
+    // Reorder DOM based on final position
+    if(currentIdx!==dragStartIdx){
+      const rows=Array.from(list.querySelectorAll('.habit-row'));
+      const target=rows[currentIdx];
+      if(currentIdx>dragStartIdx){
+        target.after(dragRow);
       } else {
-        list.appendChild(dragRow);
+        list.insertBefore(dragRow,target);
       }
     }
 
-    // Clean up
+    // Clean up all transforms and classes
     if(dragClone){dragClone.remove();dragClone=null;}
-    if(dragRow){dragRow.classList.remove('dragging');dragRow.style.opacity='';}
+    list.querySelectorAll('.habit-row').forEach(r=>{
+      r.classList.remove('dragging','drag-above','drag-below');
+      r.style.transform='';r.style.opacity='';
+    });
     list.classList.remove('drag-active');
-    list.querySelectorAll('.habit-row').forEach(r=>{r.style.borderTop='';r.style.borderBottom='';});
     document.body.style.overflow='';
 
     // Save new order
     const newOrder=Array.from(list.querySelectorAll('.habit-row[data-task-id]')).map(r=>r.dataset.taskId);
     saveTaskOrder(newOrder);
 
-    isDragging=false;dragRow=null;
+    isDragging=false;dragRow=null;allRows=[];rowRects=[];
   }
 
   function cancelLongPress(){
@@ -1715,17 +1743,27 @@ renderSyncUI();
   function startDrag(){
     isDragging=true;
     if(navigator.vibrate)navigator.vibrate(30);
-    document.body.style.overflow='hidden'; // Prevent page scroll
+    document.body.style.overflow='hidden';
     list.classList.add('drag-active');
+
+    // Snapshot all row positions before any visual changes
+    allRows=Array.from(list.querySelectorAll('.habit-row'));
+    dragStartIdx=allRows.indexOf(dragRow);
+    currentIdx=dragStartIdx;
+    rowRects=allRows.map(r=>{
+      const rect=r.getBoundingClientRect();
+      return {top:rect.top,mid:rect.top+rect.height/2,h:rect.height,left:rect.left,w:rect.width};
+    });
+
     dragRow.classList.add('dragging');
 
-    const rect=dragRow.getBoundingClientRect();
-    rowHeight=rect.height;
+    // Create floating clone positioned exactly over original
+    const rect=rowRects[dragStartIdx];
     dragClone=dragRow.cloneNode(true);
-    dragClone.className='habit-row';
-    dragClone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;z-index:200;opacity:0.92;transform:scale(1.04);box-shadow:0 8px 28px rgba(99,102,241,0.25);border-radius:12px;pointer-events:none;background:#ede9fe;border:2px solid var(--accent);display:flex;align-items:center;gap:0.6rem;padding:0.65rem 1rem;font-family:Inter,sans-serif`;
+    dragClone.classList.remove('dragging');
+    dragClone.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.w}px;height:${rect.h}px;z-index:200;opacity:0.92;box-shadow:0 8px 28px rgba(99,102,241,0.3);border-radius:12px;pointer-events:none;background:#ede9fe;border:2px solid var(--accent);transition:transform 0.02s linear;will-change:transform;display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.7rem;font-family:Inter,sans-serif`;
     document.body.appendChild(dragClone);
-    dragRow.style.opacity='0.15';
+    dragRow.style.opacity='0';
   }
 
   list.addEventListener('touchstart',function(e){
@@ -1737,7 +1775,6 @@ renderSyncUI();
     startY=touch.clientY;startX=touch.clientX;
     dragRow=row;isDragging=false;
 
-    // Attach document-level listeners to capture all moves
     document.addEventListener('touchmove',onDragMove,{passive:false,capture:true});
     document.addEventListener('touchend',onDragEnd,{capture:true});
     document.addEventListener('touchcancel',onDragEnd,{capture:true});
