@@ -387,6 +387,8 @@ const DEFAULT_GOALS = {
     {id:'w1',name:'Portuguese',freq:5,days:[0,1,2,3,4],active:true},
     {id:'w2',name:'Gym',freq:3,days:[0,1,2,3,4,5,6],active:true},
     {id:'w3',name:'Running',freq:2,days:[0,1,2,3,4,5,6],active:true},
+    {id:'w4',name:'Yoga',freq:2,days:[0,1,2,3,4,5,6],active:true},
+    {id:'w5',name:'Meal Prep',freq:2,days:[0,1,2,3,4,5,6],active:true},
   ],
   monthly:[
     {id:'m1',name:'Complete a fast',active:true},
@@ -406,6 +408,13 @@ function loadGoals(){
         return def;
       }
       g.weekly.forEach(w=>{ if(!w.days) w.days=[0,1,2,3,4,5,6]; });
+      // Migrate: add Yoga and Meal Prep if not present
+      if(!g.weekly.find(w=>w.id==='w4')){
+        g.weekly.push({id:'w4',name:'Yoga',freq:2,days:[0,1,2,3,4,5,6],active:true});
+      }
+      if(!g.weekly.find(w=>w.id==='w5')){
+        g.weekly.push({id:'w5',name:'Meal Prep',freq:2,days:[0,1,2,3,4,5,6],active:true});
+      }
       return g;
     }catch(e){
       localStorage.removeItem('gt_goals_v2');
