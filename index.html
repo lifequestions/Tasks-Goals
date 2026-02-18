@@ -166,20 +166,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fast-toggle-btn.active{background:var(--accent);color:white}
 .fast-toggle-btn:not(:last-child){border-right:1.5px solid var(--border)}
 
-.quick-add-wrap{display:flex;gap:0.5rem;margin-top:0.5rem;padding:0;border-radius:12px;transition:all 0.2s}
-.quick-add-wrap.expanded{background:var(--white);border:1.5px solid var(--border);padding:0.5rem;border-radius:14px}
-.quick-add-wrap.expanded:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
-.quick-add-input{flex:1;min-width:0;padding:0.7rem 0.8rem;border:none;border-radius:10px;font-family:inherit;font-size:0.9rem;font-weight:500;background:transparent;outline:none;transition:all 0.2s}
+.quick-add-wrap{display:flex;gap:0.5rem;margin-top:0.5rem;align-items:center;background:var(--white);border:1.5px solid var(--border);padding:0.35rem 0.35rem 0.35rem 0.7rem;border-radius:14px;transition:all 0.2s}
+.quick-add-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+.quick-add-input{flex:1;min-width:0;padding:0.55rem 0.4rem;border:none;border-radius:10px;font-family:inherit;font-size:0.9rem;font-weight:500;background:transparent;outline:none;transition:all 0.2s}
 .quick-add-input::placeholder{color:var(--text-3);font-weight:500;font-size:0.88rem}
 .quick-add-btn{width:36px;height:36px;border-radius:10px;border:none;background:var(--accent);font-size:1.2rem;font-weight:700;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
 .quick-add-btn:hover{background:var(--accent-dark)}
 .quick-add-btn:active{transform:scale(0.95)}
-.quick-add-trigger{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.2rem;cursor:pointer;font-size:0.85rem;font-weight:600;color:var(--accent);transition:all 0.15s;-webkit-tap-highlight-color:transparent}
-.quick-add-trigger:hover{color:var(--accent-dark)}
-.quick-add-trigger svg{width:18px;height:18px;border-radius:50%;background:var(--accent);color:white;padding:2px;flex-shrink:0}
-.quick-add-expanded-wrap{display:none;flex:1;gap:0.5rem;align-items:center}
-.quick-add-wrap.expanded .quick-add-trigger{display:none}
-.quick-add-wrap.expanded .quick-add-expanded-wrap{display:flex}
 
 .add-btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.2rem;background:var(--white);border:1.5px dashed var(--border);border-radius:12px;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.2s;margin-top:0.5rem}
 .add-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -202,6 +195,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .habit-row.dragging{opacity:0.15;transition:none !important}
 #combinedTasks .habit-row{cursor:grab}
 #combinedTasks .habit-row:active{cursor:grabbing}
+
+/* Inline edit mode */
+.habit-name-edit{flex:1;min-width:0;padding:0.3rem 0.5rem;border:1.5px solid var(--accent);border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:600;background:var(--white);outline:none;box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+.habit-row.editing{border-color:var(--accent);background:var(--accent-light);cursor:default}
 .habit-row.drag-above{transform:translateY(calc(100% + 0.4rem))}
 .habit-row.drag-below{transform:translateY(calc(-100% - 0.4rem))}
 
@@ -289,8 +286,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .counter-badge{font-size:0.7rem;padding:2px 7px}
   .counter-minus{width:20px;height:20px;font-size:0.75rem}
   .fast-toggle-btn{padding:0.2rem 0.35rem;font-size:0.62rem}
-  .quick-add-wrap.expanded{padding:0.4rem}
-  .quick-add-input{padding:0.55rem 0.6rem;font-size:0.85rem}
+  .quick-add-wrap{padding:0.3rem 0.3rem 0.3rem 0.6rem}
+  .quick-add-input{padding:0.45rem 0.3rem;font-size:0.85rem}
   .quick-add-btn{width:32px;height:32px;border-radius:8px;font-size:1rem}
   .date-nav{gap:0.2rem;min-width:0;flex-shrink:1}
   .date-nav-btn{width:24px;height:24px;font-size:0.75rem;border-radius:6px}
@@ -371,15 +368,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 <div class="panel active" id="panel-today">
   <div class="dash-grid" id="todayDash"></div>
-  <div class="quick-add-wrap" id="quickAddWrap" style="margin-bottom:1rem">
-    <div class="quick-add-trigger" onclick="expandQuickAdd()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Add task
-    </div>
-    <div class="quick-add-expanded-wrap">
-      <input type="text" id="quickAddInput" class="quick-add-input" placeholder="Task name..." onkeydown="if(event.key==='Enter')addQuickTask();if(event.key==='Escape')collapseQuickAdd();" onblur="setTimeout(collapseQuickAdd,150)" oninput="updateQuickAddHint()">
-      <button class="quick-add-btn" onclick="addQuickTask()">+</button>
-    </div>
+  <div class="quick-add-wrap" id="quickAddWrap" style="margin-bottom:0.5rem">
+    <input type="text" id="quickAddInput" class="quick-add-input" placeholder="+ Add a task...  (#shopping, #expenses)" onkeydown="if(event.key==='Enter')addQuickTask();" oninput="updateQuickAddHint()">
+    <button class="quick-add-btn" onclick="addQuickTask()">+</button>
   </div>
   <div class="quick-add-hint" id="quickAddHint"></div>
   <div class="section-title">Daily Tasks <span class="badge badge-daily">Every day</span></div>
@@ -663,18 +654,6 @@ function updateQuickAddHint(){
   hint.classList.remove('show');
 }
 
-function expandQuickAdd(){
-  const wrap=document.getElementById('quickAddWrap');
-  wrap.classList.add('expanded');
-  setTimeout(()=>document.getElementById('quickAddInput').focus(),50);
-}
-function collapseQuickAdd(){
-  const input=document.getElementById('quickAddInput');
-  if(input.value.trim())return; // Don't collapse if there's text
-  const wrap=document.getElementById('quickAddWrap');
-  wrap.classList.remove('expanded');
-}
-
 function addQuickTask(){
   const input=document.getElementById('quickAddInput');
   const name=input.value.trim();if(!name)return;
@@ -687,7 +666,6 @@ function addQuickTask(){
     addToList(listName,itemName);
     input.value='';
     activeList=hashResult.tag;
-    collapseQuickAdd();
     return;
   }
 
@@ -700,7 +678,6 @@ function addQuickTask(){
       openExpenseModal();
     }
     input.value='';
-    collapseQuickAdd();
     return;
   }
 
@@ -710,7 +687,6 @@ function addQuickTask(){
     if(parsed){
       openExpenseModal(parsed.amount,parsed.desc);
       input.value='';
-      collapseQuickAdd();
       return;
     }
   }
@@ -720,7 +696,6 @@ function addQuickTask(){
   if(!tasks[key])tasks[key]=[];
   tasks[key].push({id:'t'+Date.now(),name,done:false});
   saveTasks(tasks);input.value='';
-  collapseQuickAdd();
   render();
 }
 
@@ -896,7 +871,7 @@ function renderLists(){
     undone.forEach(item=>{
       html+=`<div class="list-item">
         <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name">${item.name}</div>
+        <div class="habit-name" onclick="startEditListItem('${key}','${item.id}',${JSON.stringify(item.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${item.name}</div>
         <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
       </div>`;
     });
@@ -906,7 +881,7 @@ function renderLists(){
       done.forEach(item=>{
         html+=`<div class="list-item checked">
           <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')" style="background:var(--green);border-color:var(--green)"><svg viewBox="0 0 24 24" style="opacity:1"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="habit-name">${item.name}</div>
+          <div class="habit-name" onclick="startEditListItem('${key}','${item.id}',${JSON.stringify(item.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${item.name}</div>
           <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
         </div>`;
       });
@@ -1117,6 +1092,109 @@ function removeTask(taskId){
   }
 }
 
+// ========== INLINE EDIT ==========
+let editingTaskId=null;
+
+function startEditTask(taskId,currentName,el){
+  editingTaskId=taskId;
+  const row=el.closest('.habit-row');
+  if(!row)return;
+  row.classList.add('editing');
+
+  // Replace the name span with an input
+  const nameEl=row.querySelector('.habit-name');
+  if(!nameEl)return;
+  const input=document.createElement('input');
+  input.type='text';
+  input.className='habit-name-edit';
+  input.value=currentName;
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      finishEditTask(taskId,input.value.trim());
+    }
+    if(e.key==='Escape'){
+      e.preventDefault();
+      cancelEditTask();
+    }
+  });
+  input.addEventListener('blur',function(){
+    // Small delay to allow click on other elements
+    setTimeout(()=>{
+      if(editingTaskId===taskId){
+        finishEditTask(taskId,input.value.trim());
+      }
+    },150);
+  });
+  nameEl.replaceWith(input);
+  input.focus();
+  input.select();
+}
+
+function finishEditTask(taskId,newName){
+  editingTaskId=null;
+  if(!newName){
+    render();return; // Don't save empty names, just re-render
+  }
+  // Try quick tasks first
+  const tasks=loadTasks();
+  let found=false;
+  for(const dk of Object.keys(tasks)){
+    const task=tasks[dk].find(t=>t.id===taskId);
+    if(task){task.name=newName;found=true;break;}
+  }
+  if(found){
+    saveTasks(tasks);render();return;
+  }
+  // Try daily goals
+  const goals=loadGoals();
+  const daily=goals.daily.find(g=>g.id===taskId);
+  if(daily){daily.name=newName;saveGoals(goals);render();return;}
+  render();
+}
+
+function cancelEditTask(){
+  editingTaskId=null;
+  render();
+}
+
+function startEditListItem(listKey,itemId,currentName,el){
+  const row=el.closest('.list-item');
+  if(!row)return;
+  const nameEl=row.querySelector('.habit-name');
+  if(!nameEl)return;
+  const input=document.createElement('input');
+  input.type='text';
+  input.className='habit-name-edit';
+  input.value=currentName;
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      finishEditListItem(listKey,itemId,input.value.trim());
+    }
+    if(e.key==='Escape'){
+      e.preventDefault();
+      render();
+    }
+  });
+  input.addEventListener('blur',function(){
+    setTimeout(()=>finishEditListItem(listKey,itemId,input.value.trim()),150);
+  });
+  nameEl.replaceWith(input);
+  input.focus();
+  input.select();
+}
+
+function finishEditListItem(listKey,itemId,newName){
+  if(!newName){render();return;}
+  const lists=loadLists();
+  if(!lists[listKey]){render();return;}
+  const item=lists[listKey].find(i=>i.id===itemId);
+  if(item){item.name=newName;}
+  saveLists(lists);
+  render();
+}
+
 let completedLogOpen=false;
 function toggleCompletedLog(){
   completedLogOpen=!completedLogOpen;
@@ -1255,12 +1333,12 @@ function render(){
     ...dailyUndone.map(g=>({id:g.id,html:
       `<div class="habit-row" data-task-id="${g.id}">
         <div class="habit-check" onclick="toggleDaily('${g.id}','${todayKey}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name">${g.name} ${goalEmoji(g.name)}</div><div class="habit-freq">Daily</div></div>`
+        <div class="habit-name" onclick="startEditTask('${g.id}',${JSON.stringify(g.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${g.name} ${goalEmoji(g.name)}</div><div class="habit-freq">Daily</div></div>`
     })),
     ...dayTasks.map(t=>({id:t.id,html:
       `<div class="habit-row" data-task-id="${t.id}">
         <div class="habit-check" onclick="toggleTask('${t.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name">${t.name}</div>
+        <div class="habit-name" onclick="startEditTask('${t.id}',${JSON.stringify(t.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${t.name}</div>
         <button onclick="event.stopPropagation();removeTask('${t.id}')" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:0.75rem;padding:4px 8px;border-radius:6px;transition:color 0.2s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-3)'">✕</button>
       </div>`
     }))
