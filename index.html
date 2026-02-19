@@ -632,8 +632,12 @@ let fastingMode='1day'; // '1day' or '3day'
 function setFastingMode(mode){fastingMode=mode;render();}
 
 // ========== LINK TITLES ==========
-// Cache fetched page titles in localStorage
-function loadLinkTitles(){const s=localStorage.getItem('gt_link_titles');return s?JSON.parse(s):{}}
+// Cache fetched page titles in localStorage (v2 = using codetabs proxy)
+function loadLinkTitles(){
+  const v=localStorage.getItem('gt_link_titles_v');
+  if(v!=='2'){localStorage.removeItem('gt_link_titles');localStorage.setItem('gt_link_titles_v','2');}
+  const s=localStorage.getItem('gt_link_titles');return s?JSON.parse(s):{}
+}
 function saveLinkTitles(t){localStorage.setItem('gt_link_titles',JSON.stringify(t))}
 
 // Extract a friendly domain name from a URL (e.g. "bbc.co.uk")
@@ -644,6 +648,13 @@ function friendlyDomain(url){
   }catch(e){return url}
 }
 
+// Decode HTML entities in title strings
+function decodeHTMLEntities(str){
+  const el=document.createElement('textarea');
+  el.innerHTML=str;
+  return el.value;
+}
+
 // Fetch the page title for a URL and cache it, then re-render
 function fetchLinkTitle(url){
   const titles=loadLinkTitles();
@@ -651,27 +662,52 @@ function fetchLinkTitle(url){
   titles[url]='_loading';
   saveLinkTitles(titles);
 
-  // Use a CORS proxy to fetch the page — try allorigins
-  const proxyUrl='https://api.allorigins.win/raw?url='+encodeURIComponent(url);
-  fetch(proxyUrl,{signal:AbortSignal.timeout(5000)})
-    .then(r=>{if(!r.ok)throw new Error('fetch failed');return r.text()})
-    .then(html=>{
-      const match=html.match(/<title[^>]*>([^<]+)<\/title>/i);
-      const titles2=loadLinkTitles();
-      if(match&&match[1]){
-        titles2[url]=match[1].trim().substring(0,80);
-      } else {
-        titles2[url]=friendlyDomain(url);
-      }
-      saveLinkTitles(titles2);
-      render();
-    })
-    .catch(()=>{
+  // Try multiple CORS proxies in order of reliability
+  const proxies=[
+    'https://api.codetabs.com/v1/proxy/?quest='+encodeURIComponent(url),
+    'https://api.allorigins.win/raw?url='+encodeURIComponent(url),
+    'https://corsproxy.io/?'+encodeURIComponent(url)
+  ];
+
+  function tryProxy(i){
+    if(i>=proxies.length){
+      // All proxies failed — use domain name
       const titles2=loadLinkTitles();
       titles2[url]=friendlyDomain(url);
       saveLinkTitles(titles2);
       render();
-    });
+      return;
+    }
+    fetch(proxies[i],{signal:AbortSignal.timeout(6000)})
+      .then(r=>{if(!r.ok)throw new Error('fail');return r.text()})
+      .then(html=>{
+        const titles2=loadLinkTitles();
+        // Try og:title first (usually the best description)
+        const ogMatch=html.match(/<meta[^>]*property=["']og:title["'][^>]*content=["']([^"']+)["']/i)
+          ||html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:title["']/i);
+        if(ogMatch&&ogMatch[1]){
+          titles2[url]=decodeHTMLEntities(ogMatch[1].trim().substring(0,80));
+          saveLinkTitles(titles2);
+          render();
+          return;
+        }
+        // Fall back to <title> tag
+        const titleMatch=html.match(/<title[^>]*>([^<]+)<\/title>/i);
+        if(titleMatch&&titleMatch[1]){
+          titles2[url]=decodeHTMLEntities(titleMatch[1].trim().substring(0,80));
+          saveLinkTitles(titles2);
+          render();
+          return;
+        }
+        // No title found — use domain
+        titles2[url]=friendlyDomain(url);
+        saveLinkTitles(titles2);
+        render();
+      })
+      .catch(()=>tryProxy(i+1));
+  }
+
+  tryProxy(0);
 }
 
 // Convert URLs in text to clickable links with fetched titles
@@ -690,11 +726,13 @@ function linkify(text){
       display=friendlyDomain(href);
       if(!cached){
         // Schedule fetch (don't block rendering)
-        setTimeout(()=>fetchLinkTitle(href),10);
+        setTimeout(function(){fetchLinkTitle(href)},10);
       }
     }
 
-    return '<a href="'+href+'" target="_blank" rel="noopener" class="task-link" onclick="event.stopPropagation()" title="'+href.replace(/"/g,'&quot;')+'"><span class="link-icon">\uD83D\uDD17</span> '+display+'</a>';
+    const safeHref=href.replace(/"/g,'&amp;quot;');
+    const safeDisplay=display.replace(/</g,'&lt;');
+    return '<a href="'+safeHref+'" target="_blank" rel="noopener" class="task-link" onclick="event.stopPropagation()" title="'+safeHref+'"><span class="link-icon">\uD83D\uDD17</span> '+safeDisplay+'</a>';
   });
 }
 
