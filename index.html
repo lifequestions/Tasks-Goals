@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Goal Tracker</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -58,7 +58,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .habit-row.checked .habit-check svg{opacity:1}
 .habit-name{font-size:0.85rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .habit-row.checked .habit-name{color:var(--text-3);text-decoration:line-through}
-.habit-freq{font-size:0.7rem;color:var(--accent);font-weight:700;flex-shrink:0;white-space:nowrap;background:var(--accent-light);padding:2px 8px;border-radius:100px}
+.habit-freq{font-size:0.7rem;color:var(--text-3);font-weight:600;flex-shrink:0;white-space:nowrap;padding:0;border-radius:0;background:none}
 
 .week-grid{margin-bottom:2rem}
 .week-header{display:grid;grid-template-columns:140px repeat(7,1fr) 36px;gap:0;margin-bottom:0.3rem;padding:0 0.5rem}
@@ -279,7 +279,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .annual-grid{grid-template-columns:1fr}
   .habit-row{padding:0.55rem 0.5rem;gap:0.4rem;max-width:100%}
   .habit-name{font-size:0.78rem}
-  .habit-freq{font-size:0.6rem;padding:2px 6px}
+  .habit-freq{font-size:0.6rem;padding:0}
   .habit-check{width:20px;height:20px;border-radius:6px}
   .habit-check svg{width:11px;height:11px}
   .monthly-goal{padding:0.6rem 0.5rem;gap:0.5rem}
@@ -291,7 +291,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .counter-badge{font-size:0.7rem;padding:2px 7px}
   .counter-minus{width:20px;height:20px;font-size:0.75rem}
   .fast-toggle-btn{padding:0.2rem 0.35rem;font-size:0.62rem}
-  .quick-add-input{padding:0.6rem 0.7rem;font-size:0.85rem}
+  .quick-add-input{padding:0.6rem 0.7rem;font-size:16px}
   .quick-add-btn{padding:0.5rem 0.8rem;font-size:0.82rem;border-radius:8px}
   .date-nav{gap:0.2rem;min-width:0;flex-shrink:1}
   .date-nav-btn{width:24px;height:24px;font-size:0.75rem;border-radius:6px}
