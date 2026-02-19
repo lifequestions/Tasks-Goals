@@ -196,9 +196,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 #combinedTasks .habit-row{cursor:grab}
 #combinedTasks .habit-row:active{cursor:grabbing}
 
-/* Task links */
-.task-link{color:var(--accent);text-decoration:underline;text-decoration-color:rgba(99,102,241,0.3);font-weight:inherit;transition:text-decoration-color 0.2s}
-.task-link:hover{text-decoration-color:var(--accent)}
+/* Task links (Todoist-style link chip) */
+.task-link{display:inline-flex;align-items:center;gap:0.2rem;color:var(--accent);text-decoration:none;font-size:0.78rem;font-weight:600;background:var(--accent-light);padding:2px 8px;border-radius:6px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle;transition:all 0.15s}
+.task-link:hover{background:var(--accent);color:white}
+.link-icon{font-size:0.7rem;flex-shrink:0}
 
 /* Inline edit mode */
 .habit-name-edit{flex:1;min-width:0;padding:0.3rem 0.5rem;border:1.5px solid var(--accent);border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:600;background:var(--white);outline:none;box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
@@ -630,15 +631,70 @@ function toggleYearlyGoal(key){
 let fastingMode='1day'; // '1day' or '3day'
 function setFastingMode(mode){fastingMode=mode;render();}
 
-// Convert URLs in text to clickable links
+// ========== LINK TITLES ==========
+// Cache fetched page titles in localStorage
+function loadLinkTitles(){const s=localStorage.getItem('gt_link_titles');return s?JSON.parse(s):{}}
+function saveLinkTitles(t){localStorage.setItem('gt_link_titles',JSON.stringify(t))}
+
+// Extract a friendly domain name from a URL (e.g. "bbc.co.uk")
+function friendlyDomain(url){
+  try{
+    const host=new URL(url).hostname.replace(/^www\./,'');
+    return host;
+  }catch(e){return url}
+}
+
+// Fetch the page title for a URL and cache it, then re-render
+function fetchLinkTitle(url){
+  const titles=loadLinkTitles();
+  if(titles[url])return; // already cached or in progress
+  titles[url]='_loading';
+  saveLinkTitles(titles);
+
+  // Use a CORS proxy to fetch the page — try allorigins
+  const proxyUrl='https://api.allorigins.win/raw?url='+encodeURIComponent(url);
+  fetch(proxyUrl,{signal:AbortSignal.timeout(5000)})
+    .then(r=>{if(!r.ok)throw new Error('fetch failed');return r.text()})
+    .then(html=>{
+      const match=html.match(/<title[^>]*>([^<]+)<\/title>/i);
+      const titles2=loadLinkTitles();
+      if(match&&match[1]){
+        titles2[url]=match[1].trim().substring(0,80);
+      } else {
+        titles2[url]=friendlyDomain(url);
+      }
+      saveLinkTitles(titles2);
+      render();
+    })
+    .catch(()=>{
+      const titles2=loadLinkTitles();
+      titles2[url]=friendlyDomain(url);
+      saveLinkTitles(titles2);
+      render();
+    });
+}
+
+// Convert URLs in text to clickable links with fetched titles
 function linkify(text){
   const urlPattern=/((https?:\/\/|www\.)[^\s<]+)/gi;
+  const titles=loadLinkTitles();
   return text.replace(urlPattern,function(url){
     const href=url.startsWith('http')?url:'https://'+url;
-    // Truncate display text for long URLs
-    let display=url;
-    if(display.length>40) display=display.substring(0,37)+'...';
-    return '<a href="'+href+'" target="_blank" rel="noopener" class="task-link" onclick="event.stopPropagation()">'+display+'</a>';
+
+    // Get cached title or start fetching
+    let display;
+    const cached=titles[href];
+    if(cached&&cached!=='_loading'){
+      display=cached;
+    } else {
+      display=friendlyDomain(href);
+      if(!cached){
+        // Schedule fetch (don't block rendering)
+        setTimeout(()=>fetchLinkTitle(href),10);
+      }
+    }
+
+    return '<a href="'+href+'" target="_blank" rel="noopener" class="task-link" onclick="event.stopPropagation()" title="'+href.replace(/"/g,'&quot;')+'"><span class="link-icon">\uD83D\uDD17</span> '+display+'</a>';
   });
 }
 
