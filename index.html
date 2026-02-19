@@ -27,7 +27,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .nav-tab:hover{color:var(--text-2)}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-.panel{display:none;width:100%;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem;min-width:0}
+.panel{display:none;width:100%;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem;min-width:0;overflow-x:hidden}
 .panel.active{display:block}
 
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-bottom:1.2rem}
@@ -46,7 +46,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .badge-weekly{background:var(--amber-light);color:#b45309}
 .badge-monthly{background:var(--green-light);color:#15803d}
 
-.habit-list{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem}
+.habit-list{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem;max-width:100%}
 .habit-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.8rem;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent}
 .habit-row:hover{border-color:#c4c0b8}
 .habit-row.checked{background:#f8fdf8;border-color:#bbf7d0}
@@ -56,7 +56,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .habit-row.checked .habit-check{background:var(--green);border-color:var(--green)}
 .habit-check svg{width:13px;height:13px;stroke:white;stroke-width:2.5;fill:none;opacity:0;transition:opacity 0.2s}
 .habit-row.checked .habit-check svg{opacity:1}
-.habit-name{font-size:0.85rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.habit-name{font-size:0.85rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .habit-row.checked .habit-name{color:var(--text-3);text-decoration:line-through}
 .habit-freq{font-size:0.68rem;color:var(--text-3);font-weight:500;flex-shrink:0;white-space:nowrap}
 
@@ -166,11 +166,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fast-toggle-btn.active{background:var(--accent);color:white}
 .fast-toggle-btn:not(:last-child){border-right:1.5px solid var(--border)}
 
-.quick-add-wrap{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem}
-.quick-add-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:0.9rem;font-weight:500;background:var(--white);outline:none;transition:all 0.2s}
+.quick-add-wrap{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;max-width:100%}
+.quick-add-input{width:100%;max-width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:0.9rem;font-weight:500;background:var(--white);outline:none;transition:border-color 0.2s,box-shadow 0.2s}
 .quick-add-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
 .quick-add-input::placeholder{color:var(--text-3);font-weight:500;font-size:0.88rem}
-.quick-add-btn{width:100%;padding:0.55rem 1rem;border-radius:10px;border:none;background:var(--accent);font-family:inherit;font-size:0.85rem;font-weight:600;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.quick-add-btn{width:100%;max-width:100%;padding:0.55rem 1rem;border-radius:10px;border:none;background:var(--accent);font-family:inherit;font-size:0.85rem;font-weight:600;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
 .quick-add-btn:hover{background:var(--accent-dark)}
 .quick-add-btn:active{transform:scale(0.98)}
 
@@ -197,7 +197,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 #combinedTasks .habit-row:active{cursor:grabbing}
 
 /* Task links (Todoist-style link chip) */
-.task-link{display:inline;align-items:center;gap:0.2rem;color:var(--accent);text-decoration:none;font-size:0.78rem;font-weight:600;background:var(--accent-light);padding:2px 8px;border-radius:6px;vertical-align:middle;transition:all 0.15s}
+.task-link{display:inline;color:var(--accent);text-decoration:none;font-size:0.78rem;font-weight:600;background:var(--accent-light);padding:2px 8px;border-radius:6px;vertical-align:middle;transition:all 0.15s;word-break:break-all}
+.habit-name:has(.task-link){white-space:normal;overflow:visible;text-overflow:unset}
 .task-link:hover{background:var(--accent);color:white}
 .link-icon{font-size:0.7rem;flex-shrink:0}
 
@@ -272,7 +273,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .app-header h1{font-size:1.1rem;white-space:nowrap;flex-shrink:1;overflow:hidden;text-overflow:ellipsis}
   .nav-tabs{padding:0 2vw;gap:0}
   .nav-tab{padding:0.5rem 0.55rem;font-size:0.75rem}
-  .panel{padding:0.8rem 3vw 3rem}
+  .panel{padding:0.8rem 4vw 3rem;max-width:100vw}
+  .panel>*{max-width:100%}
   .week-header,.week-row{grid-template-columns:80px repeat(7,1fr) 28px}
   .week-row-name{font-size:0.72rem}
   .dash-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem}
@@ -352,7 +354,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .cat-chip:hover{border-color:var(--accent)}
 .cat-chip.selected{background:var(--accent);color:white;border-color:var(--accent)}
 
-.app-wrap{width:100%;max-width:100%;overflow-x:hidden}
+.app-wrap{width:100%;max-width:100vw;overflow-x:hidden}
 </style>
 </head>
 <body>
