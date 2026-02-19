@@ -196,6 +196,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 #combinedTasks .habit-row{cursor:grab}
 #combinedTasks .habit-row:active{cursor:grabbing}
 
+/* Task links */
+.task-link{color:var(--accent);text-decoration:underline;text-decoration-color:rgba(99,102,241,0.3);font-weight:inherit;transition:text-decoration-color 0.2s}
+.task-link:hover{text-decoration-color:var(--accent)}
+
 /* Inline edit mode */
 .habit-name-edit{flex:1;min-width:0;padding:0.3rem 0.5rem;border:1.5px solid var(--accent);border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:600;background:var(--white);outline:none;box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
 .habit-row.editing{border-color:var(--accent);background:var(--accent-light);cursor:default}
@@ -626,6 +630,18 @@ function toggleYearlyGoal(key){
 let fastingMode='1day'; // '1day' or '3day'
 function setFastingMode(mode){fastingMode=mode;render();}
 
+// Convert URLs in text to clickable links
+function linkify(text){
+  const urlPattern=/((https?:\/\/|www\.)[^\s<]+)/gi;
+  return text.replace(urlPattern,function(url){
+    const href=url.startsWith('http')?url:'https://'+url;
+    // Truncate display text for long URLs
+    let display=url;
+    if(display.length>40) display=display.substring(0,37)+'...';
+    return '<a href="'+href+'" target="_blank" rel="noopener" class="task-link" onclick="event.stopPropagation()">'+display+'</a>';
+  });
+}
+
 function updateQuickAddHint(){
   const input=document.getElementById('quickAddInput');
   const hint=document.getElementById('quickAddHint');
@@ -878,7 +894,7 @@ function renderLists(){
       const esc=item.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
       html+=`<div class="list-item">
         <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${item.name}</div>
+        <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${linkify(item.name)}</div>
         <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
       </div>`;
     });
@@ -889,7 +905,7 @@ function renderLists(){
         const esc=item.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
         html+=`<div class="list-item checked">
           <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')" style="background:var(--green);border-color:var(--green)"><svg viewBox="0 0 24 24" style="opacity:1"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${item.name}</div>
+          <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${linkify(item.name)}</div>
           <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
         </div>`;
       });
@@ -1102,6 +1118,8 @@ let editingTaskId=null;
 
 // Delegated click handler for editing task names
 document.addEventListener('click',function(e){
+  // Don't trigger edit when clicking a link inside the task name
+  if(e.target.closest('a'))return;
   const nameEl=e.target.closest('[data-edit-id]');
   if(!nameEl)return;
   const taskId=nameEl.dataset.editId;
@@ -1345,14 +1363,14 @@ function render(){
       return {id:g.id,html:
       `<div class="habit-row" data-task-id="${g.id}">
         <div class="habit-check" onclick="toggleDaily('${g.id}','${todayKey}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name" data-edit-id="${g.id}" data-edit-name="${esc}" data-edit-type="goal" style="cursor:text">${g.name} ${goalEmoji(g.name)}</div><div class="habit-freq">Daily</div></div>`};
+        <div class="habit-name" data-edit-id="${g.id}" data-edit-name="${esc}" data-edit-type="goal" style="cursor:text">${linkify(g.name)} ${goalEmoji(g.name)}</div><div class="habit-freq">Daily</div></div>`};
     }),
     ...dayTasks.map(t=>{
       const esc=t.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
       return {id:t.id,html:
       `<div class="habit-row" data-task-id="${t.id}">
         <div class="habit-check" onclick="toggleTask('${t.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name" data-edit-id="${t.id}" data-edit-name="${esc}" data-edit-type="task" style="cursor:text">${t.name}</div>
+        <div class="habit-name" data-edit-id="${t.id}" data-edit-name="${esc}" data-edit-type="task" style="cursor:text">${linkify(t.name)}</div>
         <button onclick="event.stopPropagation();removeTask('${t.id}')" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:0.75rem;padding:4px 8px;border-radius:6px;transition:color 0.2s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-3)'">✕</button>
       </div>`};
     })
@@ -1507,7 +1525,7 @@ function render(){
             <div class="habit-check" onclick="${restoreFn}" title="Restore task">
               <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <div class="habit-name">${c.name}</div>
+            <div class="habit-name">${linkify(c.name)}</div>
             <div class="completed-time">${c.label}</div>
           </div>`;
         }).join('')}
