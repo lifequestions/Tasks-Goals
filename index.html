@@ -166,13 +166,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .fast-toggle-btn.active{background:var(--accent);color:white}
 .fast-toggle-btn:not(:last-child){border-right:1.5px solid var(--border)}
 
-.quick-add-wrap{display:flex;gap:0.5rem;margin-top:0.5rem;align-items:center;background:var(--white);border:1.5px solid var(--border);padding:0.35rem 0.35rem 0.35rem 0.7rem;border-radius:14px;transition:all 0.2s}
-.quick-add-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
-.quick-add-input{flex:1;min-width:0;padding:0.55rem 0.4rem;border:none;border-radius:10px;font-family:inherit;font-size:0.9rem;font-weight:500;background:transparent;outline:none;transition:all 0.2s}
+.quick-add-wrap{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem}
+.quick-add-input{width:100%;padding:0.7rem 0.9rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:0.9rem;font-weight:500;background:var(--white);outline:none;transition:all 0.2s}
+.quick-add-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
 .quick-add-input::placeholder{color:var(--text-3);font-weight:500;font-size:0.88rem}
-.quick-add-btn{width:36px;height:36px;border-radius:10px;border:none;background:var(--accent);font-size:1.2rem;font-weight:700;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.quick-add-btn{width:100%;padding:0.55rem 1rem;border-radius:10px;border:none;background:var(--accent);font-family:inherit;font-size:0.85rem;font-weight:600;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.4rem;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
 .quick-add-btn:hover{background:var(--accent-dark)}
-.quick-add-btn:active{transform:scale(0.95)}
+.quick-add-btn:active{transform:scale(0.98)}
 
 .add-btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.2rem;background:var(--white);border:1.5px dashed var(--border);border-radius:12px;font-family:inherit;font-size:0.82rem;font-weight:600;color:var(--text-3);cursor:pointer;transition:all 0.2s;margin-top:0.5rem}
 .add-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -291,9 +291,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .counter-badge{font-size:0.7rem;padding:2px 7px}
   .counter-minus{width:20px;height:20px;font-size:0.75rem}
   .fast-toggle-btn{padding:0.2rem 0.35rem;font-size:0.62rem}
-  .quick-add-wrap{padding:0.3rem 0.3rem 0.3rem 0.6rem}
-  .quick-add-input{padding:0.45rem 0.3rem;font-size:0.85rem}
-  .quick-add-btn{width:32px;height:32px;border-radius:8px;font-size:1rem}
+  .quick-add-input{padding:0.6rem 0.7rem;font-size:0.85rem}
+  .quick-add-btn{padding:0.5rem 0.8rem;font-size:0.82rem;border-radius:8px}
   .date-nav{gap:0.2rem;min-width:0;flex-shrink:1}
   .date-nav-btn{width:24px;height:24px;font-size:0.75rem;border-radius:6px}
   .date-nav-label{font-size:0.7rem;padding:0.1rem 0.15rem}
@@ -374,8 +373,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="panel active" id="panel-today">
   <div class="dash-grid" id="todayDash"></div>
   <div class="quick-add-wrap" id="quickAddWrap" style="margin-bottom:0.5rem">
-    <input type="text" id="quickAddInput" class="quick-add-input" placeholder="+ Add a task...  (#shopping, #expenses)" onkeydown="if(event.key==='Enter')addQuickTask();" oninput="updateQuickAddHint()">
-    <button class="quick-add-btn" onclick="addQuickTask()">+</button>
+    <input type="text" id="quickAddInput" class="quick-add-input" placeholder="Task name...  (#shopping, #expenses)" onkeydown="if(event.key==='Enter')addQuickTask();" oninput="updateQuickAddHint()">
+    <button class="quick-add-btn" onclick="addQuickTask()">Add task</button>
   </div>
   <div class="quick-add-hint" id="quickAddHint"></div>
   <div class="section-title">Daily Tasks <span class="badge badge-daily">Every day</span></div>
