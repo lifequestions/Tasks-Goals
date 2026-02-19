@@ -630,10 +630,10 @@ let fastingMode='1day'; // '1day' or '3day'
 function setFastingMode(mode){fastingMode=mode;render();}
 
 // ========== LINK TITLES ==========
-// Cache fetched page titles in localStorage (v2 = using codetabs proxy)
+// Cache fetched page titles in localStorage (v3 = smart social titles + stale fix)
 function loadLinkTitles(){
   const v=localStorage.getItem('gt_link_titles_v');
-  if(v!=='2'){localStorage.removeItem('gt_link_titles');localStorage.setItem('gt_link_titles_v','2');}
+  if(v!=='3'){localStorage.removeItem('gt_link_titles');localStorage.setItem('gt_link_titles_v','3');}
   const s=localStorage.getItem('gt_link_titles');return s?JSON.parse(s):{}
 }
 function saveLinkTitles(t){localStorage.setItem('gt_link_titles',JSON.stringify(t))}
@@ -646,6 +646,48 @@ function friendlyDomain(url){
   }catch(e){return url}
 }
 
+// Generate a smart display name for known social media URLs
+function smartUrlTitle(url){
+  try{
+    const u=new URL(url);
+    const host=u.hostname.replace(/^www\./,'');
+    const path=u.pathname.replace(/\/$/,'');
+    const parts=path.split('/').filter(Boolean);
+    // X.com / Twitter
+    if(host==='x.com'||host==='twitter.com'){
+      if(parts.length>=2&&parts[1]==='status') return '@'+parts[0]+' post on X';
+      if(parts.length>=1) return '@'+parts[0]+' on X';
+      return 'X (Twitter)';
+    }
+    // YouTube
+    if(host==='youtube.com'||host==='youtu.be'||host==='m.youtube.com'){
+      if(host==='youtu.be') return 'YouTube video';
+      if(parts[0]==='watch') return 'YouTube video';
+      if(parts[0]==='shorts') return 'YouTube Short';
+      if(parts[0]==='@'||parts[0]?.startsWith('@')) return parts[0]+' on YouTube';
+      return 'YouTube';
+    }
+    // Instagram
+    if(host==='instagram.com'){
+      if(parts[0]==='p') return 'Instagram post';
+      if(parts[0]==='reel') return 'Instagram reel';
+      if(parts.length>=1) return '@'+parts[0]+' on Instagram';
+      return 'Instagram';
+    }
+    // Reddit
+    if(host.endsWith('reddit.com')){
+      if(parts[0]==='r'&&parts[1]) return 'r/'+parts[1]+' on Reddit';
+      return 'Reddit';
+    }
+    // TikTok
+    if(host.endsWith('tiktok.com')){
+      if(parts[0]?.startsWith('@')) return parts[0]+' on TikTok';
+      return 'TikTok';
+    }
+    return null; // not a known social site
+  }catch(e){return null}
+}
+
 // Decode HTML entities in title strings
 function decodeHTMLEntities(str){
   const el=document.createElement('textarea');
@@ -656,8 +698,27 @@ function decodeHTMLEntities(str){
 // Fetch the page title for a URL and cache it, then re-render
 function fetchLinkTitle(url){
   const titles=loadLinkTitles();
-  if(titles[url])return; // already cached or in progress
+  // Clear stale _loading entries (older than 30s)
+  if(titles[url]==='_loading'){
+    const loadingTs=titles[url+'_ts']||0;
+    if(Date.now()-loadingTs<30000) return; // still fetching
+    // Stale — allow retry
+    delete titles[url];
+    delete titles[url+'_ts'];
+  }
+  if(titles[url])return; // already cached
+
+  // For known social media sites, use smart title without fetching
+  const smart=smartUrlTitle(url);
+  if(smart){
+    titles[url]=smart;
+    saveLinkTitles(titles);
+    render();
+    return;
+  }
+
   titles[url]='_loading';
+  titles[url+'_ts']=Date.now();
   saveLinkTitles(titles);
 
   // Try multiple CORS proxies in order of reliability
@@ -672,6 +733,7 @@ function fetchLinkTitle(url){
       // All proxies failed — use domain name
       const titles2=loadLinkTitles();
       titles2[url]=friendlyDomain(url);
+      delete titles2[url+'_ts'];
       saveLinkTitles(titles2);
       render();
       return;
@@ -685,6 +747,7 @@ function fetchLinkTitle(url){
           ||html.match(/<meta[^>]*content=["']([^"']+)["'][^>]*property=["']og:title["']/i);
         if(ogMatch&&ogMatch[1]){
           titles2[url]=decodeHTMLEntities(ogMatch[1].trim().substring(0,80));
+          delete titles2[url+'_ts'];
           saveLinkTitles(titles2);
           render();
           return;
@@ -693,12 +756,14 @@ function fetchLinkTitle(url){
         const titleMatch=html.match(/<title[^>]*>([^<]+)<\/title>/i);
         if(titleMatch&&titleMatch[1]){
           titles2[url]=decodeHTMLEntities(titleMatch[1].trim().substring(0,80));
+          delete titles2[url+'_ts'];
           saveLinkTitles(titles2);
           render();
           return;
         }
         // No title found — use domain
         titles2[url]=friendlyDomain(url);
+        delete titles2[url+'_ts'];
         saveLinkTitles(titles2);
         render();
       })
@@ -721,14 +786,15 @@ function linkify(text){
     if(cached&&cached!=='_loading'){
       display=cached;
     } else {
-      display=friendlyDomain(href);
-      if(!cached){
+      // Use smart title for social sites, else domain name
+      display=smartUrlTitle(href)||friendlyDomain(href);
+      if(!cached||(cached==='_loading')){
         // Schedule fetch (don't block rendering)
         setTimeout(function(){fetchLinkTitle(href)},10);
       }
     }
 
-    const safeHref=href.replace(/"/g,'&amp;quot;');
+    const safeHref=href.replace(/"/g,'&quot;');
     const safeDisplay=display.replace(/</g,'&lt;');
     return '<a href="'+safeHref+'" target="_blank" rel="noopener" class="task-link" onclick="event.stopPropagation()" title="'+safeHref+'"><span class="link-icon">\uD83D\uDD17</span> '+safeDisplay+'</a>';
   });
