@@ -179,12 +179,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .add-btn svg{width:16px;height:16px}
 
 /* Undo toast */
-.undo-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:0.8rem 1.2rem;border-radius:14px;display:flex;align-items:center;gap:1rem;font-size:0.88rem;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,0.2);z-index:200;transition:transform 0.35s cubic-bezier(0.16,1,0.3,1),opacity 0.35s;opacity:0;pointer-events:none}
+.undo-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:0.5rem 0.7rem 0.5rem 1rem;border-radius:100px;display:flex;align-items:center;gap:0.6rem;font-size:0.8rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:200;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s;opacity:0;pointer-events:none}
 .undo-toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
-.undo-toast-btn{background:var(--accent);color:white;border:none;padding:0.4rem 1rem;border-radius:8px;font-family:inherit;font-size:0.82rem;font-weight:700;cursor:pointer;transition:background 0.2s}
-.undo-toast-btn:hover{background:var(--accent-dark)}
-.undo-toast-timer{width:40px;height:4px;background:rgba(255,255,255,0.2);border-radius:100px;overflow:hidden;flex-shrink:0}
-.undo-toast-timer-fill{height:100%;background:white;border-radius:100px;transition:width 0.1s linear}
+.undo-toast-btn{background:rgba(255,255,255,0.2);color:white;border:none;padding:0.3rem 0.8rem;border-radius:100px;font-family:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;transition:background 0.2s}
+.undo-toast-btn:hover{background:rgba(255,255,255,0.35)}
 
 /* Task fade-out animation */
 .habit-row.fade-out{opacity:0;transform:translateX(20px);max-height:0;padding:0 1.2rem;margin:0;border-color:transparent;overflow:hidden;transition:all 0.35s ease}
@@ -305,7 +303,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .dash-card-label{font-size:0.6rem}
   .dash-card-sub{font-size:0.62rem}
   .progress-row{padding:0.7rem 0.8rem}
-  .undo-toast{padding:0.6rem 0.8rem;font-size:0.8rem;gap:0.6rem;max-width:94vw}
+  .undo-toast{padding:0.45rem 0.6rem 0.45rem 0.9rem;font-size:0.75rem}
 }
 /* List tabs (Shopping, Expenses, etc.) */
 .list-tabs{display:flex;gap:0.3rem;margin-bottom:0.8rem;flex-wrap:wrap}
@@ -393,8 +391,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </div>
 
 <div class="undo-toast" id="undoToast">
-  <span id="undoToastText">Task completed</span>
-  <div class="undo-toast-timer"><div class="undo-toast-timer-fill" id="undoTimerFill"></div></div>
+  <span>Done ✓</span>
   <button class="undo-toast-btn" onclick="undoComplete()">Undo</button>
 </div>
 
@@ -1081,7 +1078,6 @@ function renderExpensesView(expenses){
 
 let undoTimer=null;
 let undoData=null;
-let undoCountdown=null;
 
 function findTaskAcrossDates(taskId){
   const tasks=loadTasks();
@@ -1119,30 +1115,15 @@ function toggleTask(taskId){
 function showUndoToast(taskName,data){
   // Clear any existing undo timer
   if(undoTimer)clearTimeout(undoTimer);
-  if(undoCountdown)clearInterval(undoCountdown);
 
   undoData=data;
   const toast=document.getElementById('undoToast');
-  const fill=document.getElementById('undoTimerFill');
-  document.getElementById('undoToastText').textContent=`"${taskName}" completed`;
-
-  fill.style.width='100%';
   toast.classList.add('show');
-
-  let remaining=5000;
-  const startTime=Date.now();
-  undoCountdown=setInterval(()=>{
-    const elapsed=Date.now()-startTime;
-    const pct=Math.max(0,((5000-elapsed)/5000)*100);
-    fill.style.width=pct+'%';
-    if(pct<=0)clearInterval(undoCountdown);
-  },50);
 
   undoTimer=setTimeout(()=>{
     toast.classList.remove('show');
     undoData=null;
-    clearInterval(undoCountdown);
-  },5000);
+  },4000);
 }
 
 function undoComplete(){
@@ -1171,7 +1152,6 @@ function undoComplete(){
 
   // Hide toast
   if(undoTimer)clearTimeout(undoTimer);
-  if(undoCountdown)clearInterval(undoCountdown);
   document.getElementById('undoToast').classList.remove('show');
   undoData=null;
   render();
