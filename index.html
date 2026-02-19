@@ -1001,11 +1001,10 @@ function renderLists(){
     if(done.length>0){
       html+=`<div style="margin-top:0.4rem;opacity:0.6">`;
       done.forEach(item=>{
-        const esc=item.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-        html+=`<div class="list-item checked">
-          <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')" style="background:var(--green);border-color:var(--green)"><svg viewBox="0 0 24 24" style="opacity:1"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${linkify(item.name)}</div>
-          <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
+        html+=`<div class="list-item checked" onclick="toggleListItem('${key}','${item.id}')" style="cursor:pointer">
+          <div class="habit-check" style="background:var(--green);border-color:var(--green)"><svg viewBox="0 0 24 24" style="opacity:1"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="habit-name" style="pointer-events:none">${linkify(item.name)}</div>
+          <button class="list-item-remove" onclick="event.stopPropagation();removeListItem('${key}','${item.id}')">✕</button>
         </div>`;
       });
       html+=`</div>`;
