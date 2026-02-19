@@ -632,21 +632,20 @@ function updateQuickAddHint(){
   if(!input||!hint)return;
   const val=input.value.trim();
 
-  if(val.startsWith('#')){
-    const tag=val.match(/#(\w*)/);
-    if(tag&&tag[1]){
-      if(tag[1].toLowerCase()==='expenses'){
-        hint.innerHTML='Will add to <code>#expenses</code> tracker';
-      } else {
-        hint.innerHTML=`Will add to <code>#${tag[1]}</code> list`;
-      }
-      hint.classList.add('show');
-      return;
+  // Check for hashtag anywhere in text
+  const tagMatch=val.match(/#(\w+)/);
+  if(tagMatch){
+    if(tagMatch[1].toLowerCase()==='expenses'){
+      hint.innerHTML='Will add to <code>#expenses</code> tracker';
+    } else {
+      hint.innerHTML='Will add to <code>#'+tagMatch[1]+'</code> list';
     }
+    hint.classList.add('show');
+    return;
   }
 
   if(isExpenseInput(val)&&val.length>0){
-    hint.innerHTML='Looks like an expense — will open expense tracker';
+    hint.innerHTML='Looks like an expense \u2014 press Enter to add to expenses';
     hint.classList.add('show');
     return;
   }
@@ -656,37 +655,39 @@ function updateQuickAddHint(){
 
 function addQuickTask(){
   const input=document.getElementById('quickAddInput');
+  const hint=document.getElementById('quickAddHint');
   const name=input.value.trim();if(!name)return;
 
-  // Check for hashtag lists (e.g. #shopping milk)
+  // ALWAYS check for hashtag first (anywhere in text)
   const hashResult=parseHashtag(name);
-  if(hashResult&&hashResult.tag!=='expenses'){
-    const listName=hashResult.tag.charAt(0).toUpperCase()+hashResult.tag.slice(1);
-    const itemName=hashResult.cleanText||listName+' item';
-    addToList(listName,itemName);
-    input.value='';
-    activeList=hashResult.tag;
-    return;
-  }
-
-  // Check for #expenses tag
-  if(hashResult&&hashResult.tag==='expenses'){
-    const parsed=parseExpenseFromInput(hashResult.cleanText);
-    if(parsed){
-      openExpenseModal(parsed.amount,parsed.desc);
+  if(hashResult){
+    if(hashResult.tag==='expenses'){
+      // #expenses — open expense modal, try to parse amount from remaining text
+      const parsed=parseExpenseFromInput(hashResult.cleanText);
+      if(parsed){
+        openExpenseModal(parsed.amount,parsed.desc);
+      } else {
+        openExpenseModal();
+      }
     } else {
-      openExpenseModal();
+      // Any other hashtag — add to that list
+      const listName=hashResult.tag.charAt(0).toUpperCase()+hashResult.tag.slice(1);
+      const itemName=hashResult.cleanText||listName+' item';
+      addToList(listName,itemName);
+      activeList=hashResult.tag;
     }
     input.value='';
+    if(hint)hint.classList.remove('show');
     return;
   }
 
-  // Check if it looks like an expense (starts with a number)
+  // Check if it looks like an expense (pure number or number + text, no hashtag)
   if(isExpenseInput(name)){
     const parsed=parseExpenseFromInput(name);
     if(parsed){
       openExpenseModal(parsed.amount,parsed.desc);
       input.value='';
+      if(hint)hint.classList.remove('show');
       return;
     }
   }
@@ -696,6 +697,7 @@ function addQuickTask(){
   if(!tasks[key])tasks[key]=[];
   tasks[key].push({id:'t'+Date.now(),name,done:false});
   saveTasks(tasks);input.value='';
+  if(hint)hint.classList.remove('show');
   render();
 }
 
@@ -732,8 +734,11 @@ function parseHashtag(text){
 }
 
 function isExpenseInput(text){
-  // Check if starts with a number (likely an expense)
+  // Only trigger for pure numbers like "30" or "12.50"
+  // or number + description like "30 coffee"
+  // but NOT if there's a hashtag anywhere (user is typing a list tag)
   const trimmed=text.trim();
+  if(trimmed.includes('#'))return false;
   return /^\d+(\.\d{0,2})?$/.test(trimmed) || /^\d+(\.\d{0,2})?\s+/.test(trimmed);
 }
 
@@ -854,8 +859,9 @@ function renderLists(){
   });
   if(hasExpenses||activeList==='expenses'){
     const thisMonthExpenses=expenses.filter(e=>e.date&&e.date.startsWith(monthKey(selectedDate)));
-    const total=thisMonthExpenses.reduce((s,e)=>s+e.amount,0);
-    html+=`<button class="list-tab ${activeList==='expenses'?'active':''}" onclick="setActiveList('expenses')">Expenses${total?' <span class="tab-count">(£${total.toFixed(0)})</span>':''}</button>`;
+    const expTotal=thisMonthExpenses.reduce((s,e)=>s+e.amount,0);
+    const expTotalStr=expTotal?(' <span class="tab-count">(\u00A3'+expTotal.toFixed(0)+')</span>'):'';
+    html+=`<button class="list-tab ${activeList==='expenses'?'active':''}" onclick="setActiveList('expenses')">Expenses`+expTotalStr+`</button>`;
   }
   html+='</div>';
 
@@ -869,9 +875,10 @@ function renderLists(){
     const done=items.filter(i=>i.done);
 
     undone.forEach(item=>{
+      const esc=item.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
       html+=`<div class="list-item">
         <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name" onclick="startEditListItem('${key}','${item.id}',${JSON.stringify(item.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${item.name}</div>
+        <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${item.name}</div>
         <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
       </div>`;
     });
@@ -879,9 +886,10 @@ function renderLists(){
     if(done.length>0){
       html+=`<div style="margin-top:0.4rem;opacity:0.6">`;
       done.forEach(item=>{
+        const esc=item.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
         html+=`<div class="list-item checked">
           <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')" style="background:var(--green);border-color:var(--green)"><svg viewBox="0 0 24 24" style="opacity:1"><polyline points="20 6 9 17 4 12"/></svg></div>
-          <div class="habit-name" onclick="startEditListItem('${key}','${item.id}',${JSON.stringify(item.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${item.name}</div>
+          <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${item.name}</div>
           <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
         </div>`;
       });
@@ -906,7 +914,7 @@ function renderExpensesView(expenses){
   // Total card
   html+=`<div class="expense-total">
     <div class="expense-total-label">${MONTHS[selectedDate.getMonth()]} Total</div>
-    <div class="expense-total-value">£${total.toFixed(2)}</div>
+    <div class="expense-total-value">\u00A3${total.toFixed(2)}</div>
   </div>`;
 
   // Category breakdown
@@ -924,7 +932,7 @@ function renderExpensesView(expenses){
       if(val>0){
         html+=`<div class="expense-cat-card">
           <div class="expense-cat-card-label">${c}</div>
-          <div class="expense-cat-card-value" style="color:${EXPENSE_CAT_COLORS[key]||'var(--text)'}">£${val.toFixed(2)}</div>
+          <div class="expense-cat-card-value" style="color:${EXPENSE_CAT_COLORS[key]||'var(--text)'}">\u00A3${val.toFixed(2)}</div>
         </div>`;
       }
     });
@@ -932,17 +940,14 @@ function renderExpensesView(expenses){
   }
 
   // Add expense button
-  html+=`<div class="quick-add-trigger" onclick="openExpenseModal()" style="margin-bottom:0.8rem">
-    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    Add expense
-  </div>`;
+  html+=`<button class="add-btn" onclick="openExpenseModal()" style="margin-bottom:0.8rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add expense</button>`;
 
   // Expense items (most recent first)
   const sorted=[...thisMonthExpenses].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   sorted.forEach(e=>{
     const catClass=(e.category||'Other').toLowerCase();
     html+=`<div class="expense-item">
-      <div class="expense-amount">£${e.amount.toFixed(2)}</div>
+      <div class="expense-amount">\u00A3${e.amount.toFixed(2)}</div>
       <div class="expense-desc">${e.desc}</div>
       <span class="expense-cat ${catClass}">${e.category||'Other'}</span>
       <button class="expense-remove" onclick="removeExpense('${e.id}')">✕</button>
@@ -1095,15 +1100,25 @@ function removeTask(taskId){
 // ========== INLINE EDIT ==========
 let editingTaskId=null;
 
+// Delegated click handler for editing task names
+document.addEventListener('click',function(e){
+  const nameEl=e.target.closest('[data-edit-id]');
+  if(!nameEl)return;
+  const taskId=nameEl.dataset.editId;
+  const currentName=nameEl.dataset.editName;
+  const editType=nameEl.dataset.editType;
+  if(editType==='list'){
+    startEditListItem(nameEl.dataset.editListkey,taskId,currentName,nameEl);
+  } else {
+    startEditTask(taskId,currentName,nameEl);
+  }
+});
+
 function startEditTask(taskId,currentName,el){
   editingTaskId=taskId;
   const row=el.closest('.habit-row');
-  if(!row)return;
-  row.classList.add('editing');
+  if(row)row.classList.add('editing');
 
-  // Replace the name span with an input
-  const nameEl=row.querySelector('.habit-name');
-  if(!nameEl)return;
   const input=document.createElement('input');
   input.type='text';
   input.className='habit-name-edit';
@@ -1119,14 +1134,13 @@ function startEditTask(taskId,currentName,el){
     }
   });
   input.addEventListener('blur',function(){
-    // Small delay to allow click on other elements
     setTimeout(()=>{
       if(editingTaskId===taskId){
         finishEditTask(taskId,input.value.trim());
       }
     },150);
   });
-  nameEl.replaceWith(input);
+  el.replaceWith(input);
   input.focus();
   input.select();
 }
@@ -1159,10 +1173,6 @@ function cancelEditTask(){
 }
 
 function startEditListItem(listKey,itemId,currentName,el){
-  const row=el.closest('.list-item');
-  if(!row)return;
-  const nameEl=row.querySelector('.habit-name');
-  if(!nameEl)return;
   const input=document.createElement('input');
   input.type='text';
   input.className='habit-name-edit';
@@ -1180,7 +1190,7 @@ function startEditListItem(listKey,itemId,currentName,el){
   input.addEventListener('blur',function(){
     setTimeout(()=>finishEditListItem(listKey,itemId,input.value.trim()),150);
   });
-  nameEl.replaceWith(input);
+  el.replaceWith(input);
   input.focus();
   input.select();
 }
@@ -1330,18 +1340,22 @@ function render(){
 
   // Build combined task items with unified shape: {id, type, html}
   const combinedItems=[
-    ...dailyUndone.map(g=>({id:g.id,html:
+    ...dailyUndone.map(g=>{
+      const esc=g.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      return {id:g.id,html:
       `<div class="habit-row" data-task-id="${g.id}">
         <div class="habit-check" onclick="toggleDaily('${g.id}','${todayKey}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name" onclick="startEditTask('${g.id}',${JSON.stringify(g.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${g.name} ${goalEmoji(g.name)}</div><div class="habit-freq">Daily</div></div>`
-    })),
-    ...dayTasks.map(t=>({id:t.id,html:
+        <div class="habit-name" data-edit-id="${g.id}" data-edit-name="${esc}" data-edit-type="goal" style="cursor:text">${g.name} ${goalEmoji(g.name)}</div><div class="habit-freq">Daily</div></div>`};
+    }),
+    ...dayTasks.map(t=>{
+      const esc=t.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      return {id:t.id,html:
       `<div class="habit-row" data-task-id="${t.id}">
         <div class="habit-check" onclick="toggleTask('${t.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-        <div class="habit-name" onclick="startEditTask('${t.id}',${JSON.stringify(t.name).replace(/'/g,"\\&#39;")},this)" style="cursor:text">${t.name}</div>
+        <div class="habit-name" data-edit-id="${t.id}" data-edit-name="${esc}" data-edit-type="task" style="cursor:text">${t.name}</div>
         <button onclick="event.stopPropagation();removeTask('${t.id}')" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:0.75rem;padding:4px 8px;border-radius:6px;transition:color 0.2s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-3)'">✕</button>
-      </div>`
-    }))
+      </div>`};
+    })
   ];
 
   // Sort by saved order
