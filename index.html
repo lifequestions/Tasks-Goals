@@ -58,7 +58,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .habit-row.checked .habit-check svg{opacity:1}
 .habit-name{font-size:0.85rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .habit-row.checked .habit-name{color:var(--text-3);text-decoration:line-through}
-.habit-freq{font-size:0.68rem;color:var(--text-3);font-weight:500;flex-shrink:0;white-space:nowrap}
+.habit-freq{font-size:0.7rem;color:var(--accent);font-weight:700;flex-shrink:0;white-space:nowrap;background:var(--accent-light);padding:2px 8px;border-radius:100px}
 
 .week-grid{margin-bottom:2rem}
 .week-header{display:grid;grid-template-columns:140px repeat(7,1fr) 36px;gap:0;margin-bottom:0.3rem;padding:0 0.5rem}
@@ -279,7 +279,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .annual-grid{grid-template-columns:1fr}
   .habit-row{padding:0.55rem 0.5rem;gap:0.4rem;max-width:100%}
   .habit-name{font-size:0.78rem}
-  .habit-freq{font-size:0.6rem}
+  .habit-freq{font-size:0.6rem;padding:2px 6px}
   .habit-check{width:20px;height:20px;border-radius:6px}
   .habit-check svg{width:11px;height:11px}
   .monthly-goal{padding:0.6rem 0.5rem;gap:0.5rem}
@@ -380,9 +380,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div class="section-title">Daily Tasks <span class="badge badge-daily">Every day</span></div>
   <div class="habit-list" id="combinedTasks"></div>
   <div id="completedSection" style="margin-top:0.5rem"></div>
-  <div id="listsSection"></div>
   <div class="section-title">Weekly Goals <span class="badge badge-weekly">This week</span></div>
   <div class="habit-list" id="weeklyHabitsToday"></div>
+  <div id="listsSection"></div>
   <div class="section-title">Monthly Goals <span class="badge badge-monthly">This month</span></div>
   <div class="habit-list" id="monthlyGoalsToday"></div>
   <div id="fastingCounters"></div>
