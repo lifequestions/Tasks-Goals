@@ -889,11 +889,15 @@ function saveExpenses(e){localStorage.setItem('gt_expenses',JSON.stringify(e))}
 function getListNames(){
   const lists=loadLists();
   const names=new Set();
-  Object.values(lists).forEach(items=>{
-    items.forEach(i=>{ if(i.list) names.add(i.list); });
+  // Only include lists that actually have items
+  Object.keys(lists).forEach(key=>{
+    if(lists[key]&&lists[key].length>0){
+      // Use the stored list name from items, or capitalise the key
+      const listItems=lists[key];
+      const listName=listItems[0]&&listItems[0].list?listItems[0].list:key.charAt(0).toUpperCase()+key.slice(1);
+      names.add(listName);
+    }
   });
-  // Always include Shopping as default
-  names.add('Shopping');
   return Array.from(names).sort();
 }
 
@@ -1027,7 +1031,7 @@ function renderLists(){
   // If activeList doesn't match any real list, default to first one
   const allListKeys=listNames.map(n=>n.toLowerCase());
   if(activeList!=='expenses'&&!allListKeys.includes(activeList)){
-    activeList=allListKeys[0]||'shopping';
+    activeList=hasExpenses?'expenses':(allListKeys[0]||'');
   }
 
   listNames.forEach(name=>{
