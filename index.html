@@ -815,7 +815,7 @@ function addQuickTask(){
 const EXPENSE_CATEGORIES=['Dining','Groceries','Household','Pets','Other'];
 const EXPENSE_CAT_COLORS={dining:'#f59e0b',groceries:'#22c55e',household:'#6366f1',pets:'#ef4444',other:'#888'};
 let selectedExpenseCat='Other';
-let activeList='all'; // 'all', 'shopping', etc.
+let activeList='shopping'; // active list tab
 
 function loadLists(){const s=localStorage.getItem('gt_lists');return s?JSON.parse(s):{}}
 function saveLists(l){localStorage.setItem('gt_lists',JSON.stringify(l))}
@@ -960,12 +960,19 @@ function renderLists(){
 
   // Tab pills
   html+='<div class="list-tabs">';
+  // If activeList doesn't match any real list, default to first one
+  const allListKeys=listNames.map(n=>n.toLowerCase());
+  if(activeList!=='expenses'&&!allListKeys.includes(activeList)){
+    activeList=allListKeys[0]||'shopping';
+  }
+
   listNames.forEach(name=>{
     const key=name.toLowerCase();
     const items=lists[key]||[];
     const undoneCount=items.filter(i=>!i.done).length;
     const isActive=activeList===key;
-    html+=`<button class="list-tab ${isActive?'active':''}" onclick="setActiveList('${key}')">${name}${undoneCount?' <span class="tab-count">(${undoneCount})</span>':''}</button>`;
+    const countStr=undoneCount?' <span class="tab-count">('+undoneCount+')</span>':'';
+    html+='<button class="list-tab '+(isActive?'active':'')+'" onclick="setActiveList(\''+key+'\')">'+name+countStr+'</button>';
   });
   if(hasExpenses||activeList==='expenses'){
     const thisMonthExpenses=expenses.filter(e=>e.date&&e.date.startsWith(monthKey(selectedDate)));
