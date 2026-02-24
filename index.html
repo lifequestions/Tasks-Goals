@@ -305,7 +305,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   .progress-row{padding:0.7rem 0.8rem}
   .undo-toast{padding:0.45rem 0.6rem 0.45rem 0.9rem;font-size:0.75rem}
 }
-/* List tabs (Shopping, Expenses, etc.) */
+/* List tabs */
 .list-tabs{display:flex;gap:0.3rem;margin-bottom:0.8rem;flex-wrap:wrap}
 .list-tab{padding:0.4rem 0.9rem;border-radius:100px;font-family:inherit;font-size:0.78rem;font-weight:600;border:1.5px solid var(--border);background:var(--white);color:var(--text-2);cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
 .list-tab:hover{border-color:var(--accent);color:var(--accent)}
@@ -325,32 +325,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .quick-add-hint.show{display:block}
 .quick-add-hint code{background:var(--accent-light);color:var(--accent);padding:1px 6px;border-radius:4px;font-family:inherit;font-weight:600;font-size:0.7rem}
 
-/* Expense styles */
-.expense-item{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.7rem 1rem;display:flex;align-items:center;gap:0.8rem;margin-bottom:0.4rem;transition:all 0.2s}
-.expense-item:hover{border-color:#c4c0b8}
-.expense-amount{font-size:0.95rem;font-weight:800;color:var(--accent);flex-shrink:0;min-width:60px}
-.expense-desc{font-size:0.85rem;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.expense-cat{font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:0.04em;flex-shrink:0}
-.expense-cat.dining{background:#fef3c7;color:#b45309}
-.expense-cat.groceries{background:#dcfce7;color:#15803d}
-.expense-cat.household{background:#ede9fe;color:#6366f1}
-.expense-cat.pets{background:#fee2e2;color:#ef4444}
-.expense-cat.other{background:var(--bg);color:var(--text-3)}
-.expense-remove{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:0.75rem;padding:4px 8px;border-radius:6px;transition:color 0.2s}
-.expense-remove:hover{color:var(--red)}
-.expense-total{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:0.8rem;display:flex;align-items:center;justify-content:space-between}
-.expense-total-label{font-size:0.82rem;font-weight:600;color:var(--text-2)}
-.expense-total-value{font-size:1.2rem;font-weight:800;color:var(--accent)}
-.expense-breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0.5rem;margin-bottom:1rem}
-.expense-cat-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.7rem 0.9rem;text-align:center}
-.expense-cat-card-label{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-3);margin-bottom:0.2rem}
-.expense-cat-card-value{font-size:1rem;font-weight:800}
-
-/* Expense category picker modal */
-.cat-picker{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.8rem}
-.cat-chip{padding:0.45rem 0.9rem;border-radius:100px;font-family:inherit;font-size:0.78rem;font-weight:600;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all 0.15s;user-select:none}
-.cat-chip:hover{border-color:var(--accent)}
-.cat-chip.selected{background:var(--accent);color:white;border-color:var(--accent)}
 
 .app-wrap{width:100%;max-width:100vw;overflow-x:hidden}
 </style>
@@ -373,7 +347,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="panel active" id="panel-today">
   <div class="dash-grid" id="todayDash"></div>
   <div class="quick-add-wrap" id="quickAddWrap" style="margin-bottom:0.5rem">
-    <input type="text" id="quickAddInput" class="quick-add-input" placeholder="Task name...  (#shopping, #expenses)" onkeydown="if(event.key==='Enter')addQuickTask();" oninput="updateQuickAddHint()">
+    <input type="text" id="quickAddInput" class="quick-add-input" placeholder="Task name...  (#shopping, #errands)" onkeydown="if(event.key==='Enter')addQuickTask();" oninput="updateQuickAddHint()">
     <button class="quick-add-btn" onclick="addQuickTask()">Add task</button>
   </div>
   <div class="quick-add-hint" id="quickAddHint"></div>
@@ -391,7 +365,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </div>
 
 <div class="undo-toast" id="undoToast">
-  <span>Done ✓</span>
+  <span id="undoText">Done ✓</span>
   <button class="undo-toast-btn" onclick="undoComplete()">Undo</button>
 </div>
 
@@ -447,21 +421,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <button class="add-btn" style="border-color:var(--red);color:var(--red)" onclick="if(confirm('Reset ALL data? This cannot be undone.')){localStorage.removeItem('gt_goals_v2');localStorage.removeItem('gt_log');localStorage.removeItem('gt_tasks');localStorage.removeItem('gt_completed');localStorage.removeItem('gt_counters');localStorage.removeItem('gt_task_order');localStorage.removeItem('gt_lists');localStorage.removeItem('gt_expenses');localStorage.removeItem('gt_sync_code');localStorage.removeItem('gt_firebase_url');location.reload()}">Reset all data</button>
 </div>
 
-<div class="modal-overlay" id="expenseModal">
-  <div class="modal">
-    <h3>Add Expense</h3>
-    <label>Amount</label>
-    <input type="number" id="expenseAmount" placeholder="0.00" step="0.01" min="0">
-    <label>Description</label>
-    <input type="text" id="expenseDesc" placeholder="e.g. Coffee, Groceries...">
-    <label>Category</label>
-    <div class="cat-picker" id="catPicker"></div>
-    <div class="modal-btns">
-      <button class="modal-btn secondary" onclick="closeExpenseModal()">Cancel</button>
-      <button class="modal-btn primary" onclick="saveExpense()">Add Expense</button>
-    </div>
-  </div>
-</div>
 
 <div class="modal-overlay" id="modal">
   <div class="modal">
@@ -517,7 +476,7 @@ function monthKey(d){
 function dayOfWeekMon(d){ const day=d.getDay(); return day===0?6:day-1; }
 
 const GOAL_EMOJI={
-  'Journal':'📝','Read':'📖','Take Psyllium Husk':'💊',
+  'Journal':'📝','Read':'📖','Reads':'📖','Take Psyllium Husk':'💊',
   'Portuguese':'🇵🇹','Gym':'🏋️','Running':'🏃','Yoga':'🧘','Meal Prep':'🍱',
   'Finish a book':'📚'
 };
@@ -591,7 +550,9 @@ function toggleDaily(goalId,dateStr){
     const allGoals=[...goals.daily,...goals.weekly];
     const g=allGoals.find(g=>g.id===goalId);
     const name=g?g.name:goalId;
-    showUndoToast(name,{type:'daily',goalId,dateStr});
+    const streak=calcHabitStreak(goalId,log);
+    const total=calcHabitTotal(goalId,log);
+    showUndoToast(name,{type:'daily',goalId,dateStr},streak,total);
   }
   render();
 }
@@ -809,17 +770,13 @@ function updateQuickAddHint(){
   // Check for hashtag anywhere in text
   const tagMatch=val.match(/#(\w+)/);
   if(tagMatch){
-    if(tagMatch[1].toLowerCase()==='expenses'){
-      hint.innerHTML='Will add to <code>#expenses</code> tracker';
-    } else {
-      hint.innerHTML='Will add to <code>#'+tagMatch[1]+'</code> list';
+    const tag=tagMatch[1].toLowerCase();
+    if(tag==='expense'||tag==='expenses'){
+      hint.innerHTML='Use <a href="expenses.html" style="color:var(--accent);font-weight:600">Expense Tracker</a> for expenses';
+      hint.classList.add('show');
+      return;
     }
-    hint.classList.add('show');
-    return;
-  }
-
-  if(isExpenseInput(val)&&val.length>0){
-    hint.innerHTML='Looks like an expense \u2014 press Enter to add to expenses';
+    hint.innerHTML='Will add to <code>#'+tagMatch[1]+'</code> list';
     hint.classList.add('show');
     return;
   }
@@ -835,35 +792,21 @@ function addQuickTask(){
   // ALWAYS check for hashtag first (anywhere in text)
   const hashResult=parseHashtag(name);
   if(hashResult){
-    if(hashResult.tag==='expenses'){
-      // #expenses — open expense modal, try to parse amount from remaining text
-      const parsed=parseExpenseFromInput(hashResult.cleanText);
-      if(parsed){
-        openExpenseModal(parsed.amount,parsed.desc);
-      } else {
-        openExpenseModal();
-      }
-    } else {
-      // Any other hashtag — add to that list
-      const listName=hashResult.tag.charAt(0).toUpperCase()+hashResult.tag.slice(1);
-      const itemName=hashResult.cleanText||listName+' item';
-      addToList(listName,itemName);
-      activeList=hashResult.tag;
-    }
-    input.value='';
-    if(hint)hint.classList.remove('show');
-    return;
-  }
-
-  // Check if it looks like an expense (pure number or number + text, no hashtag)
-  if(isExpenseInput(name)){
-    const parsed=parseExpenseFromInput(name);
-    if(parsed){
-      openExpenseModal(parsed.amount,parsed.desc);
+    // Block #expense — redirect to expense tracker
+    if(hashResult.tag==='expense'||hashResult.tag==='expenses'){
+      if(confirm('Use the Expense Tracker for expenses?\n\nTap OK to open it.'))
+        window.location.href='expenses.html';
       input.value='';
       if(hint)hint.classList.remove('show');
       return;
     }
+    const listName=hashResult.tag.charAt(0).toUpperCase()+hashResult.tag.slice(1);
+    const itemName=hashResult.cleanText||listName+' item';
+    addToList(listName,itemName);
+    activeList=hashResult.tag;
+    input.value='';
+    if(hint)hint.classList.remove('show');
+    return;
   }
 
   // Default: add as a regular quick task
@@ -875,10 +818,7 @@ function addQuickTask(){
   render();
 }
 
-// ========== HASHTAG LISTS & EXPENSES ==========
-const EXPENSE_CATEGORIES=['Dining','Groceries','Household','Pets','Other'];
-const EXPENSE_CAT_COLORS={dining:'#f59e0b',groceries:'#22c55e',household:'#6366f1',pets:'#ef4444',other:'#888'};
-let selectedExpenseCat='Other';
+// ========== HASHTAG LISTS ==========
 let activeList='shopping'; // active list tab
 
 function loadLists(){const s=localStorage.getItem('gt_lists');return s?JSON.parse(s):{}}
@@ -911,23 +851,6 @@ function parseHashtag(text){
   return null;
 }
 
-function isExpenseInput(text){
-  // Only trigger for pure numbers like "30" or "12.50"
-  // or number + description like "30 coffee"
-  // but NOT if there's a hashtag anywhere (user is typing a list tag)
-  const trimmed=text.trim();
-  if(trimmed.includes('#'))return false;
-  return /^\d+(\.\d{0,2})?$/.test(trimmed) || /^\d+(\.\d{0,2})?\s+/.test(trimmed);
-}
-
-function parseExpenseFromInput(text){
-  const trimmed=text.trim();
-  const match=trimmed.match(/^(\d+(?:\.\d{0,2})?)\s*(.*)/);
-  if(match){
-    return {amount:parseFloat(match[1]),desc:match[2].trim()};
-  }
-  return null;
-}
 
 function addToList(listName,itemName){
   const lists=loadLists();
@@ -955,53 +878,6 @@ function removeListItem(listKey,itemId){
   render();
 }
 
-function openExpenseModal(prefillAmount,prefillDesc){
-  selectedExpenseCat='Other';
-  document.getElementById('expenseModal').classList.add('show');
-  document.getElementById('expenseAmount').value=prefillAmount||'';
-  document.getElementById('expenseDesc').value=prefillDesc||'';
-  renderCatPicker();
-  if(prefillAmount){
-    document.getElementById('expenseDesc').focus();
-  } else {
-    document.getElementById('expenseAmount').focus();
-  }
-}
-
-function closeExpenseModal(){
-  document.getElementById('expenseModal').classList.remove('show');
-}
-
-function renderCatPicker(){
-  document.getElementById('catPicker').innerHTML=EXPENSE_CATEGORIES.map(c=>
-    `<div class="cat-chip ${selectedExpenseCat===c?'selected':''}" onclick="selectedExpenseCat='${c}';renderCatPicker()">${c}</div>`
-  ).join('');
-}
-
-function saveExpense(){
-  const amount=parseFloat(document.getElementById('expenseAmount').value);
-  const desc=document.getElementById('expenseDesc').value.trim();
-  if(!amount||amount<=0){alert('Please enter a valid amount');return;}
-  const expenses=loadExpenses();
-  expenses.push({
-    id:'e'+Date.now(),
-    amount,
-    desc:desc||'Expense',
-    category:selectedExpenseCat,
-    date:dateKey(selectedDate),
-    createdAt:new Date().toISOString()
-  });
-  saveExpenses(expenses);
-  closeExpenseModal();
-  activeList='expenses';
-  render();
-}
-
-function removeExpense(expId){
-  const expenses=loadExpenses();
-  saveExpenses(expenses.filter(e=>e.id!==expId));
-  render();
-}
 
 function setActiveList(name){
   activeList=name;
@@ -1013,13 +889,11 @@ function renderLists(){
   if(!section)return;
 
   const lists=loadLists();
-  const expenses=loadExpenses();
   const listNames=getListNames();
-  const hasExpenses=expenses.length>0;
   const hasLists=Object.values(lists).some(items=>items.length>0);
 
-  // Don't show section if no lists and no expenses
-  if(!hasLists&&!hasExpenses){
+  // Don't show section if no lists
+  if(!hasLists){
     section.innerHTML='';
     return;
   }
@@ -1028,10 +902,9 @@ function renderLists(){
 
   // Tab pills
   html+='<div class="list-tabs">';
-  // If activeList doesn't match any real list, default to first one
   const allListKeys=listNames.map(n=>n.toLowerCase());
-  if(activeList!=='expenses'&&!allListKeys.includes(activeList)){
-    activeList=hasExpenses?'expenses':(allListKeys[0]||'');
+  if(!allListKeys.includes(activeList)){
+    activeList=allListKeys[0]||'';
   }
 
   listNames.forEach(name=>{
@@ -1042,18 +915,10 @@ function renderLists(){
     const countStr=undoneCount?' <span class="tab-count">('+undoneCount+')</span>':'';
     html+='<button class="list-tab '+(isActive?'active':'')+'" onclick="setActiveList(\''+key+'\')">'+name+countStr+'</button>';
   });
-  if(hasExpenses||activeList==='expenses'){
-    const thisMonthExpenses=expenses.filter(e=>e.date&&e.date.startsWith(monthKey(selectedDate)));
-    const expTotal=thisMonthExpenses.reduce((s,e)=>s+e.amount,0);
-    const expTotalStr=expTotal?(' <span class="tab-count">(\u00A3'+expTotal.toFixed(0)+')</span>'):'';
-    html+=`<button class="list-tab ${activeList==='expenses'?'active':''}" onclick="setActiveList('expenses')">Expenses`+expTotalStr+`</button>`;
-  }
   html+='</div>';
 
   // Render active list content
-  if(activeList==='expenses'){
-    html+=renderExpensesView(expenses);
-  } else {
+  {
     const key=activeList;
     const items=lists[key]||[];
     const undone=items.filter(i=>!i.done);
@@ -1086,63 +951,6 @@ function renderLists(){
   }
 
   section.innerHTML=html;
-}
-
-function renderExpensesView(expenses){
-  const thisMonth=monthKey(selectedDate);
-  const thisMonthExpenses=expenses.filter(e=>e.date&&e.date.startsWith(thisMonth));
-  const total=thisMonthExpenses.reduce((s,e)=>s+e.amount,0);
-
-  let html='';
-
-  // Total card
-  html+=`<div class="expense-total">
-    <div class="expense-total-label">${MONTHS[selectedDate.getMonth()]} Total</div>
-    <div class="expense-total-value">\u00A3${total.toFixed(2)}</div>
-  </div>`;
-
-  // Category breakdown
-  const byCat={};
-  thisMonthExpenses.forEach(e=>{
-    const cat=(e.category||'Other').toLowerCase();
-    byCat[cat]=(byCat[cat]||0)+e.amount;
-  });
-
-  if(Object.keys(byCat).length>0){
-    html+=`<div class="expense-breakdown">`;
-    EXPENSE_CATEGORIES.forEach(c=>{
-      const key=c.toLowerCase();
-      const val=byCat[key]||0;
-      if(val>0){
-        html+=`<div class="expense-cat-card">
-          <div class="expense-cat-card-label">${c}</div>
-          <div class="expense-cat-card-value" style="color:${EXPENSE_CAT_COLORS[key]||'var(--text)'}">\u00A3${val.toFixed(2)}</div>
-        </div>`;
-      }
-    });
-    html+=`</div>`;
-  }
-
-  // Add expense button
-  html+=`<button class="add-btn" onclick="openExpenseModal()" style="margin-bottom:0.8rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add expense</button>`;
-
-  // Expense items (most recent first)
-  const sorted=[...thisMonthExpenses].sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
-  sorted.forEach(e=>{
-    const catClass=(e.category||'Other').toLowerCase();
-    html+=`<div class="expense-item">
-      <div class="expense-amount">\u00A3${e.amount.toFixed(2)}</div>
-      <div class="expense-desc">${e.desc}</div>
-      <span class="expense-cat ${catClass}">${e.category||'Other'}</span>
-      <button class="expense-remove" onclick="removeExpense('${e.id}')">✕</button>
-    </div>`;
-  });
-
-  if(thisMonthExpenses.length===0){
-    html+=`<div style="padding:1rem 0;text-align:center;color:var(--text-3);font-size:0.82rem;font-weight:500">No expenses this month. Type a number in the task input or click "Add expense" above.</div>`;
-  }
-
-  return html;
 }
 
 let undoTimer=null;
@@ -1181,12 +989,32 @@ function toggleTask(taskId){
   }
 }
 
-function showUndoToast(taskName,data){
+function showUndoToast(taskName,data,streak,total){
   // Clear any existing undo timer
   if(undoTimer)clearTimeout(undoTimer);
 
   undoData=data;
   const toast=document.getElementById('undoToast');
+  const textEl=document.getElementById('undoText');
+
+  // Build toast message
+  let msg=taskName+' ✓';
+  if(streak>0||total>0){
+    const parts=[];
+    if(streak>0)parts.push('🔥'+streak+' day streak');
+    if(total>0){
+      const suffix=total===1?'st':total===2?'nd':total===3?'rd':'th';
+      parts.push(total+suffix+' time');
+    }
+    msg+=' — '+parts.join(' · ');
+    // Milestone celebration
+    const streakMilestones=[7,14,21,30,50,100,200,365];
+    const totalMilestones=[10,25,50,100,200,500,1000];
+    if(streakMilestones.includes(streak))msg='🎉 '+msg+'!';
+    else if(totalMilestones.includes(total))msg='🎉 '+msg+'!';
+  }
+  textEl.textContent=msg;
+
   toast.classList.add('show');
 
   undoTimer=setTimeout(()=>{
@@ -1414,6 +1242,27 @@ function calcStreak(goals,log){
     streak++;d.setDate(d.getDate()-1);
   }
   return streak;
+}
+
+function calcHabitStreak(goalId,log){
+  let streak=0;let d=new Date(TODAY);
+  const k0=dateKey(d);
+  const todayDone=log[k0]&&log[k0][goalId];
+  if(!todayDone)d.setDate(d.getDate()-1);
+  while(true){
+    const k=dateKey(d);
+    if(!log[k]||!log[k][goalId])break;
+    streak++;d.setDate(d.getDate()-1);
+  }
+  return streak;
+}
+
+function calcHabitTotal(goalId,log){
+  let total=0;
+  Object.keys(log).forEach(k=>{
+    if(k.length===10&&log[k]&&log[k][goalId])total++;
+  });
+  return total;
 }
 
 function getWeeksOfYear(year){
@@ -1684,7 +1533,7 @@ function render(){
   }
   compSection.innerHTML=compHtml;
 
-  // ===== LISTS & EXPENSES =====
+  // ===== LISTS =====
   renderLists();
 
   // ===== WEEK =====
@@ -2013,9 +1862,6 @@ document.querySelectorAll('.nav-tab').forEach(tab=>{
 document.getElementById('modal').addEventListener('click',e=>{
   if(e.target===document.getElementById('modal'))closeModal();
 });
-document.getElementById('expenseModal').addEventListener('click',e=>{
-  if(e.target===document.getElementById('expenseModal'))closeExpenseModal();
-});
 
 // ========== CLOUD SYNC (REST API) ==========
 let syncPaused=false;
@@ -2176,8 +2022,6 @@ const _origSaveTaskOrder=saveTaskOrder;
 saveTaskOrder=function(o){_origSaveTaskOrder(o);pushToCloud()};
 const _origSaveLists=saveLists;
 saveLists=function(l){_origSaveLists(l);pushToCloud()};
-const _origSaveExpenses=saveExpenses;
-saveExpenses=function(e){_origSaveExpenses(e);pushToCloud()};
 
 function connectSync(){
   const urlInput=document.getElementById('syncFirebaseUrl');
