@@ -13,21 +13,22 @@
   --green:#22c55e;--green-light:#dcfce7;--amber:#f59e0b;--amber-light:#fef3c7;
   --red:#ef4444;--red-light:#fee2e2;--gold:#eab308;
 }
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+input,textarea,select,[contenteditable]{-webkit-user-select:text;user-select:text}
 
-.app-header{width:100%;max-width:960px;margin:0 auto;padding:2.5rem 2rem 1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:1rem}
-.app-header h1{font-size:1.6rem;font-weight:800;letter-spacing:-0.03em;flex-shrink:0;white-space:nowrap}
+.app-header{width:100%;margin:0 auto;padding:0.8rem 1.2rem 0.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:0.8rem;position:sticky;top:0;z-index:50;background:var(--bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.app-header h1{font-size:1.35rem;font-weight:800;letter-spacing:-0.03em;flex-shrink:0;white-space:nowrap}
 .app-header h1 span{background:linear-gradient(135deg,var(--accent),var(--accent-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .header-date{font-size:0.85rem;color:var(--text-3);font-weight:500}
 
-.nav-tabs{width:100%;max-width:960px;margin:0 auto;padding:0 2rem;display:flex;gap:0.25rem;border-bottom:1.5px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+.nav-tabs{width:100%;margin:0 auto;padding:0 1.2rem;display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none;position:sticky;top:calc(env(safe-area-inset-top) + 44px);z-index:49;background:var(--bg)}
+.nav-tabs-inner{display:flex;background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;width:100%}
 .nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{padding:0.7rem 1rem;font-family:inherit;font-size:0.85rem;font-weight:600;background:none;border:none;color:var(--text-3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:color 0.2s,border-color 0.2s;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-.nav-tab:hover{color:var(--text-2)}
-.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.nav-tab{flex:1;padding:0.5rem 0.5rem;font-family:inherit;font-size:0.8rem;font-weight:600;background:none;border:none;color:var(--text-3);cursor:pointer;transition:all 0.2s;white-space:nowrap;text-align:center;-webkit-tap-highlight-color:transparent;touch-action:manipulation;border-radius:10px;margin:3px}
+.nav-tab.active{color:white;background:var(--accent)}
 
-.panel{display:none;width:100%;max-width:960px;margin:0 auto;padding:1.5rem 2rem 3rem;min-width:0;overflow-x:hidden}
+.panel{display:none;width:100%;margin:0 auto;padding:1rem 1.2rem 5rem;min-width:0;overflow-x:hidden}
 .panel.active{display:block}
 
 .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.8rem;margin-bottom:1.2rem}
@@ -47,16 +48,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .badge-monthly{background:var(--green-light);color:#15803d}
 
 .habit-list{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.2rem;max-width:100%}
-.habit-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:0.65rem 1rem;display:flex;align-items:center;gap:0.8rem;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent}
+.habit-row{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:0.85rem 1.1rem;display:flex;align-items:center;gap:0.8rem;transition:all 0.2s;user-select:none;-webkit-tap-highlight-color:transparent}
 .habit-row:hover{border-color:#c4c0b8}
 .habit-row.checked{background:#f8fdf8;border-color:#bbf7d0}
 .habit-row.disabled{opacity:0.4;pointer-events:none;cursor:default}
-.habit-check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;cursor:pointer}
+.habit-check{width:26px;height:26px;border-radius:8px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;cursor:pointer}
 .habit-check:hover{border-color:var(--accent);background:var(--accent-light)}
 .habit-row.checked .habit-check{background:var(--green);border-color:var(--green)}
 .habit-check svg{width:13px;height:13px;stroke:white;stroke-width:2.5;fill:none;opacity:0;transition:opacity 0.2s}
 .habit-row.checked .habit-check svg{opacity:1}
-.habit-name{font-size:0.85rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.habit-name{font-size:0.92rem;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
 .habit-row.checked .habit-name{color:var(--text-3);text-decoration:line-through}
 .habit-freq{font-size:0.7rem;color:var(--text-3);font-weight:600;flex-shrink:0;white-space:nowrap;padding:0;border-radius:0;background:none}
 
@@ -108,27 +109,27 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .monthly-goal{cursor:default}
 
 /* Annual week-by-week star grid */
-.annual-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:1.2rem}
+.annual-grid{display:grid;grid-template-columns:1fr;gap:1.2rem}
 .annual-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.4rem}
 .annual-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem}
-.annual-card-title{font-size:0.95rem;font-weight:700}
-.annual-card-stat{font-size:0.8rem;font-weight:700;padding:3px 10px;border-radius:100px}
-.annual-card-desc{font-size:0.75rem;color:var(--text-3);margin-bottom:1rem}
-.star-grid{display:flex;flex-wrap:wrap;gap:3px}
-.star-cell{width:16px;height:16px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:0.5rem;position:relative}
+.annual-card-title{font-size:1.05rem;font-weight:700}
+.annual-card-stat{font-size:0.88rem;font-weight:700;padding:4px 12px;border-radius:100px}
+.annual-card-desc{font-size:0.85rem;color:var(--text-3);margin-bottom:1rem}
+.star-grid{display:flex;flex-wrap:wrap;gap:4px}
+.star-cell{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;position:relative}
 .star-cell.success{background:var(--gold);color:white}
 .star-cell.fail{background:#f0ece4}
 .star-cell.future{background:var(--bg);opacity:0.4}
 .star-cell.current{outline:2px solid var(--accent);outline-offset:1px}
-.star-cell .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--text);color:white;font-size:0.6rem;padding:3px 8px;border-radius:6px;white-space:nowrap;z-index:10}
+.star-cell .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--text);color:white;font-size:0.65rem;padding:3px 8px;border-radius:6px;white-space:nowrap;z-index:10}
 .star-cell:hover .tip{display:block}
-.star-legend{display:flex;gap:1rem;margin-top:0.8rem;font-size:0.65rem;color:var(--text-3);font-weight:500}
+.star-legend{display:flex;gap:1rem;margin-top:0.8rem;font-size:0.75rem;color:var(--text-3);font-weight:500}
 .star-legend-item{display:flex;align-items:center;gap:4px}
-.star-legend-dot{width:10px;height:10px;border-radius:2px}
+.star-legend-dot{width:12px;height:12px;border-radius:3px}
 
 /* Monthly star row for annual view */
 .month-star-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.6rem}
-.month-star-cell{width:40px;height:36px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;text-transform:uppercase;color:var(--text-3);gap:1px}
+.month-star-cell{width:48px;height:42px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.6rem;font-weight:700;text-transform:uppercase;color:var(--text-3);gap:2px}
 .month-star-cell.success{background:var(--green-light);color:var(--green)}
 .month-star-cell.fail{background:#f5f0ea;color:var(--text-3)}
 .month-star-cell.future{background:var(--bg);opacity:0.4}
@@ -179,7 +180,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .add-btn svg{width:16px;height:16px}
 
 /* Undo toast */
-.undo-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:0.5rem 0.7rem 0.5rem 1rem;border-radius:100px;display:flex;align-items:center;gap:0.6rem;font-size:0.8rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:200;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s;opacity:0;pointer-events:none}
+.undo-toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:0.5rem 0.7rem 0.5rem 1rem;border-radius:100px;display:flex;align-items:center;gap:0.6rem;font-size:0.8rem;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.2);z-index:200;transition:transform 0.3s cubic-bezier(0.16,1,0.3,1),opacity 0.3s;opacity:0;pointer-events:none}
 .undo-toast.show{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:auto}
 .undo-toast-btn{background:rgba(255,255,255,0.2);color:white;border:none;padding:0.3rem 0.8rem;border-radius:100px;font-family:inherit;font-size:0.78rem;font-weight:700;cursor:pointer;transition:background 0.2s}
 .undo-toast-btn:hover{background:rgba(255,255,255,0.35)}
@@ -267,43 +268,42 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .day-chip.selected{background:var(--accent);color:white;border-color:var(--accent)}
 
 @media(max-width:700px){
-  .app-header{padding:1.2rem 3vw 0.5rem;gap:0.4rem}
-  .app-header h1{font-size:1.1rem;white-space:nowrap;flex-shrink:1;overflow:hidden;text-overflow:ellipsis}
-  .nav-tabs{padding:0 2vw;gap:0}
-  .nav-tab{padding:0.5rem 0.55rem;font-size:0.75rem}
-  .panel{padding:0.8rem 4vw 3rem;max-width:100vw}
+  .app-header{padding:0.6rem 1rem 0.4rem;gap:0.4rem}
+  .app-header h1{font-size:1.2rem;white-space:nowrap;flex-shrink:1;overflow:hidden;text-overflow:ellipsis}
+  .nav-tabs{padding:0 0.8rem;gap:0}
+  .nav-tab{padding:0.45rem 0.3rem;font-size:0.75rem;margin:2px}
+  .panel{padding:0.8rem 1rem 5rem;max-width:100vw}
   .panel>*{max-width:100%}
   .week-header,.week-row{grid-template-columns:80px repeat(7,1fr) 28px}
   .week-row-name{font-size:0.72rem}
   .dash-grid{grid-template-columns:repeat(2,1fr);gap:0.5rem}
-  .annual-grid{grid-template-columns:1fr}
-  .habit-row{padding:0.55rem 0.5rem;gap:0.4rem;max-width:100%}
-  .habit-name{font-size:0.78rem}
-  .habit-freq{font-size:0.6rem;padding:0}
-  .habit-check{width:20px;height:20px;border-radius:6px}
-  .habit-check svg{width:11px;height:11px}
-  .monthly-goal{padding:0.6rem 0.5rem;gap:0.5rem}
-  .monthly-goal .habit-check{width:22px;height:22px}
-  .counter-goal{padding:0.6rem 0.5rem;gap:0.4rem}
-  .counter-goal .habit-check{width:22px;height:22px}
-  .counter-goal .habit-name{font-size:0.78rem}
-  .counter-controls{gap:0.25rem}
-  .counter-badge{font-size:0.7rem;padding:2px 7px}
-  .counter-minus{width:20px;height:20px;font-size:0.75rem}
-  .fast-toggle-btn{padding:0.2rem 0.35rem;font-size:0.62rem}
-  .quick-add-input{padding:0.6rem 0.7rem;font-size:16px}
-  .quick-add-btn{padding:0.5rem 0.8rem;font-size:0.82rem;border-radius:8px}
-  .date-nav{gap:0.2rem;min-width:0;flex-shrink:1}
-  .date-nav-btn{width:24px;height:24px;font-size:0.75rem;border-radius:6px}
-  .date-nav-label{font-size:0.7rem;padding:0.1rem 0.15rem}
-  .date-nav-today{font-size:0.55rem;padding:0.1rem 0.35rem}
-  .section-title{font-size:0.85rem;margin:0.8rem 0 0.5rem}
-  .dash-card{padding:0.7rem}
-  .dash-card-value{font-size:1.2rem}
-  .dash-card-label{font-size:0.6rem}
-  .dash-card-sub{font-size:0.62rem}
-  .progress-row{padding:0.7rem 0.8rem}
-  .undo-toast{padding:0.45rem 0.6rem 0.45rem 0.9rem;font-size:0.75rem}
+  .habit-row{padding:0.8rem 0.85rem;gap:0.6rem;max-width:100%}
+  .habit-name{font-size:0.88rem}
+  .habit-freq{font-size:0.65rem;padding:0}
+  .habit-check{width:24px;height:24px;border-radius:7px}
+  .habit-check svg{width:13px;height:13px}
+  .monthly-goal{padding:0.7rem 0.7rem;gap:0.5rem}
+  .monthly-goal .habit-check{width:24px;height:24px}
+  .counter-goal{padding:0.7rem 0.7rem;gap:0.5rem}
+  .counter-goal .habit-check{width:24px;height:24px}
+  .counter-goal .habit-name{font-size:0.82rem}
+  .counter-controls{gap:0.3rem}
+  .counter-badge{font-size:0.72rem;padding:2px 8px}
+  .counter-minus{width:22px;height:22px;font-size:0.8rem}
+  .fast-toggle-btn{padding:0.25rem 0.45rem;font-size:0.65rem}
+  .quick-add-input{padding:0.7rem 0.9rem;font-size:16px}
+  .quick-add-btn{padding:0.6rem 1rem;font-size:0.85rem;border-radius:10px}
+  .date-nav{gap:0.3rem;min-width:0;flex-shrink:1}
+  .date-nav-btn{width:28px;height:28px;font-size:0.8rem;border-radius:7px}
+  .date-nav-label{font-size:0.75rem;padding:0.15rem 0.25rem}
+  .date-nav-today{font-size:0.6rem;padding:0.15rem 0.45rem}
+  .section-title{font-size:0.88rem;margin:0.8rem 0 0.5rem}
+  .dash-card{padding:0.8rem}
+  .dash-card-value{font-size:1.3rem}
+  .dash-card-label{font-size:0.65rem}
+  .dash-card-sub{font-size:0.65rem}
+  .progress-row{padding:0.8rem 0.9rem}
+  .undo-toast{bottom:calc(5rem + env(safe-area-inset-bottom));padding:0.5rem 0.7rem 0.5rem 1rem;font-size:0.78rem}
 }
 /* List tabs */
 .list-tabs{display:flex;gap:0.3rem;margin-bottom:0.8rem;flex-wrap:wrap}
@@ -326,6 +326,29 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .quick-add-hint code{background:var(--accent-light);color:var(--accent);padding:1px 6px;border-radius:4px;font-family:inherit;font-weight:600;font-size:0.7rem}
 
 
+/* Bottom navigation bar */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1.5px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0.4rem 0.5rem calc(0.4rem + env(safe-area-inset-bottom));z-index:100;gap:0}
+.bottom-nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--text-3);font-family:inherit;font-size:0.65rem;font-weight:600;cursor:pointer;padding:0.3rem 1.2rem;border-radius:10px;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.bottom-nav-btn.active{color:var(--accent)}
+.bottom-nav-btn.active svg{stroke:var(--accent)}
+.bottom-nav-fab{width:46px;height:46px;border-radius:50%;background:var(--accent);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 3px 12px rgba(99,102,241,0.3);transition:all 0.2s;-webkit-tap-highlight-color:transparent;margin-top:-8px}
+.bottom-nav-fab:hover{background:var(--accent-dark);transform:scale(1.05)}
+.bottom-nav-fab:active{transform:scale(0.95)}
+
+/* Lists panel styles */
+.list-row{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1rem 1.2rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.8rem;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.list-row:hover{border-color:#c4c0b8}
+.list-row:active{background:var(--bg)}
+.list-row-icon{font-size:1.1rem;color:var(--accent);font-weight:700;width:28px;text-align:center;flex-shrink:0}
+.list-row-name{font-size:0.92rem;font-weight:600;flex:1}
+.list-row-count{font-size:0.82rem;font-weight:700;color:var(--text-3);padding:3px 10px;border-radius:100px;background:var(--bg)}
+
+/* List detail view */
+.list-back-btn{display:flex;align-items:center;gap:0.4rem;background:none;border:none;color:var(--accent);font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;padding:0.4rem 0;margin-bottom:0.6rem;-webkit-tap-highlight-color:transparent}
+.list-detail-title{font-size:1.1rem;font-weight:700;margin-bottom:0.8rem;display:flex;align-items:center;gap:0.5rem}
+.list-add-input{width:100%;padding:0.75rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;font-size:0.9rem;font-weight:500;background:var(--white);outline:none;transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:0.8rem}
+.list-add-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+
 .app-wrap{width:100%;max-width:100vw;overflow-x:hidden}
 </style>
 </head>
@@ -337,11 +360,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </header>
 
 <nav class="nav-tabs">
-  <button class="nav-tab active" data-tab="today">Today</button>
-  <button class="nav-tab" data-tab="week">This Week</button>
-  <button class="nav-tab" data-tab="month">This Month</button>
-  <button class="nav-tab" data-tab="year">This Year</button>
-  <button class="nav-tab" data-tab="settings">Settings</button>
+  <div class="nav-tabs-inner">
+    <button class="nav-tab active" data-tab="today">Today</button>
+    <button class="nav-tab" data-tab="week">Week</button>
+    <button class="nav-tab" data-tab="month">Month</button>
+    <button class="nav-tab" data-tab="year">Year</button>
+  </div>
 </nav>
 
 <div class="panel active" id="panel-today">
@@ -356,7 +380,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div id="completedSection" style="margin-top:0.5rem"></div>
   <div class="section-title">Weekly Goals <span class="badge badge-weekly">This week</span></div>
   <div class="habit-list" id="weeklyHabitsToday"></div>
-  <div id="listsSection"></div>
   <div class="section-title">Monthly Goals <span class="badge badge-monthly">This month</span></div>
   <div class="habit-list" id="monthlyGoalsToday"></div>
   <div id="fastingCounters"></div>
@@ -421,6 +444,29 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <button class="add-btn" style="border-color:var(--red);color:var(--red)" onclick="if(confirm('Reset ALL data? This cannot be undone.')){localStorage.removeItem('gt_goals_v2');localStorage.removeItem('gt_log');localStorage.removeItem('gt_tasks');localStorage.removeItem('gt_completed');localStorage.removeItem('gt_counters');localStorage.removeItem('gt_task_order');localStorage.removeItem('gt_lists');localStorage.removeItem('gt_expenses');localStorage.removeItem('gt_sync_code');localStorage.removeItem('gt_firebase_url');location.reload()}">Reset all data</button>
 </div>
 
+
+<div class="panel" id="panel-lists">
+  <div class="section-title">My Lists <span class="badge" style="background:var(--accent-light);color:var(--accent)">Hashtag</span></div>
+  <div id="listsPanel"></div>
+</div>
+
+<div class="bottom-nav" id="bottomNav">
+  <button class="bottom-nav-btn active" data-btab="today" onclick="switchBottomTab('today')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+    <span>Today</span>
+  </button>
+  <button class="bottom-nav-btn" data-btab="lists" onclick="switchBottomTab('lists')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    <span>Lists</span>
+  </button>
+  <button class="bottom-nav-fab" onclick="openQuickAddFromFab()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+  <button class="bottom-nav-btn" data-btab="settings" onclick="switchBottomTab('settings')">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    <span>Settings</span>
+  </button>
+</div>
 
 <div class="modal-overlay" id="modal">
   <div class="modal">
@@ -951,6 +997,142 @@ function renderLists(){
   }
 
   section.innerHTML=html;
+}
+
+// ========== BOTTOM NAV & LISTS PANEL ==========
+let currentBottomTab='today';
+let viewingList=null; // null = list overview, string = viewing specific list
+
+function switchBottomTab(tab){
+  currentBottomTab=tab;
+  viewingList=null;
+
+  // Update bottom nav active state
+  document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.querySelector(`.bottom-nav-btn[data-btab="${tab}"]`);
+  if(activeBtn)activeBtn.classList.add('active');
+
+  // Show/hide the right panel
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+
+  if(tab==='lists'){
+    document.getElementById('panel-lists').classList.add('active');
+  } else if(tab==='settings'){
+    document.getElementById('panel-settings').classList.add('active');
+  } else {
+    // Today
+    document.getElementById('panel-today').classList.add('active');
+    document.querySelector('.nav-tab[data-tab="today"]').classList.add('active');
+  }
+  window.scrollTo(0,0);
+  render();
+}
+
+function openQuickAddFromFab(){
+  // Switch to today tab and focus the input
+  if(currentBottomTab!=='today'){
+    switchBottomTab('today');
+  }
+  setTimeout(()=>{
+    const inp=document.getElementById('quickAddInput');
+    if(inp){inp.focus();inp.scrollIntoView({behavior:'smooth',block:'center'});}
+  },100);
+}
+
+function openListDetail(listKey){
+  viewingList=listKey;
+  activeList=listKey;
+  render();
+}
+
+function backToListOverview(){
+  viewingList=null;
+  render();
+}
+
+function addListItemFromDetail(listKey){
+  const input=document.getElementById('listDetailInput');
+  if(!input)return;
+  const name=input.value.trim();
+  if(!name)return;
+  const listName=listKey.charAt(0).toUpperCase()+listKey.slice(1);
+  addToList(listName,name);
+  input.value='';
+  viewingList=listKey; // stay on detail view
+}
+
+function renderListsPanel(){
+  const panel=document.getElementById('listsPanel');
+  if(!panel)return;
+
+  const lists=loadLists();
+  const listNames=getListNames();
+
+  if(viewingList){
+    // Detail view for a specific list
+    const key=viewingList;
+    const items=lists[key]||[];
+    const undone=items.filter(i=>!i.done);
+    const done=items.filter(i=>i.done);
+    const displayName=key.charAt(0).toUpperCase()+key.slice(1);
+
+    let html=`<button class="list-back-btn" onclick="backToListOverview()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      All Lists
+    </button>`;
+    html+=`<div class="list-detail-title"><span style="color:var(--accent);font-weight:800">#</span> ${displayName} <span style="font-size:0.8rem;color:var(--text-3);font-weight:500">${items.length} items</span></div>`;
+    html+=`<input type="text" class="list-add-input" id="listDetailInput" placeholder="Add item to ${displayName}..." onkeydown="if(event.key==='Enter')addListItemFromDetail('${key}')">`;
+
+    undone.forEach(item=>{
+      const esc=item.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      html+=`<div class="list-item">
+        <div class="habit-check" onclick="toggleListItem('${key}','${item.id}')"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="habit-name" data-edit-id="${item.id}" data-edit-name="${esc}" data-edit-type="list" data-edit-listkey="${key}" style="cursor:text">${linkify(item.name)}</div>
+        <button class="list-item-remove" onclick="removeListItem('${key}','${item.id}')">✕</button>
+      </div>`;
+    });
+
+    if(done.length>0){
+      html+=`<div style="margin-top:0.6rem;opacity:0.6">`;
+      done.forEach(item=>{
+        html+=`<div class="list-item checked" onclick="toggleListItem('${key}','${item.id}')" style="cursor:pointer">
+          <div class="habit-check" style="background:var(--green);border-color:var(--green)"><svg viewBox="0 0 24 24" style="opacity:1"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="habit-name" style="pointer-events:none">${linkify(item.name)}</div>
+          <button class="list-item-remove" onclick="event.stopPropagation();removeListItem('${key}','${item.id}')">✕</button>
+        </div>`;
+      });
+      html+=`</div>`;
+    }
+
+    if(undone.length===0&&done.length===0){
+      html+=`<div style="padding:2rem 0;text-align:center;color:var(--text-3);font-size:0.88rem;font-weight:500">No items yet. Add one above.</div>`;
+    }
+
+    panel.innerHTML=html;
+    return;
+  }
+
+  // Overview: show all lists
+  if(listNames.length===0){
+    panel.innerHTML=`<div style="padding:2rem 0;text-align:center;color:var(--text-3);font-size:0.88rem;font-weight:500">No lists yet.<br><span style="font-size:0.8rem">Type <code style="background:var(--accent-light);color:var(--accent);padding:1px 6px;border-radius:4px;font-family:inherit;font-weight:600">#listname item</code> in the task input to create one.</span></div>`;
+    return;
+  }
+
+  let html='';
+  listNames.forEach(name=>{
+    const key=name.toLowerCase();
+    const items=lists[key]||[];
+    const undoneCount=items.filter(i=>!i.done).length;
+    const totalCount=items.length;
+    html+=`<div class="list-row" onclick="openListDetail('${key}')">
+      <div class="list-row-icon">#</div>
+      <div class="list-row-name">${name}</div>
+      <div class="list-row-count">${undoneCount}</div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>`;
+  });
+  panel.innerHTML=html;
 }
 
 let undoTimer=null;
@@ -1534,7 +1716,7 @@ function render(){
   compSection.innerHTML=compHtml;
 
   // ===== LISTS =====
-  renderLists();
+  renderListsPanel();
 
   // ===== WEEK =====
   const realToday=TODAY;const realTodayKey=dateKey(realToday);const realMonday=getMonday(realToday);
@@ -1856,6 +2038,15 @@ document.querySelectorAll('.nav-tab').forEach(tab=>{
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     tab.classList.add('active');
     document.getElementById('panel-'+tab.dataset.tab).classList.add('active');
+    // Update bottom nav — highlight Today for today, clear otherwise
+    currentBottomTab=tab.dataset.tab==='today'?'today':'';
+    viewingList=null;
+    document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+    if(tab.dataset.tab==='today'){
+      const btn=document.querySelector('.bottom-nav-btn[data-btab="today"]');
+      if(btn)btn.classList.add('active');
+    }
+    window.scrollTo(0,0);
   });
 });
 

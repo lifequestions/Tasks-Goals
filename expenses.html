@@ -13,16 +13,16 @@
   --green:#22c55e;--green-light:#dcfce7;--amber:#f59e0b;--amber-light:#fef3c7;
   --red:#ef4444;--red-light:#fee2e2;--gold:#eab308;
 }
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+html{scroll-behavior:smooth;overflow-x:hidden;overscroll-behavior:none;-webkit-overflow-scrolling:touch}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;overflow-x:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+input,textarea,select,[contenteditable]{-webkit-user-select:text;user-select:text}
 
 .app-wrap{width:100%;max-width:100vw;overflow-x:hidden}
 
-.app-header{width:100%;max-width:960px;margin:0 auto;padding:1.5rem 2rem 0.8rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:0.8rem}
-.app-header h1{font-size:1.5rem;font-weight:800;letter-spacing:-0.03em;flex-shrink:0;white-space:nowrap}
+.app-header{width:100%;margin:0 auto;padding:0.8rem 1.2rem 0.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:0.8rem;position:sticky;top:0;z-index:50;background:var(--bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.app-header h1{font-size:1.35rem;font-weight:800;letter-spacing:-0.03em;flex-shrink:0;white-space:nowrap}
 .app-header h1 span{background:linear-gradient(135deg,var(--accent),var(--accent-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.back-link{font-size:0.75rem;font-weight:600;color:var(--text-3);text-decoration:none;padding:0.3rem 0.7rem;border-radius:100px;border:1.5px solid var(--border);background:var(--white);transition:all 0.2s;white-space:nowrap;flex-shrink:0}
-.back-link:hover{border-color:var(--accent);color:var(--accent)}
+.back-link{display:none}
 
 .date-nav{display:flex;align-items:center;gap:0.5rem;flex-shrink:1;min-width:0;overflow:hidden}
 .date-nav-btn{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:0.9rem;color:var(--text-2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation;flex-shrink:0}
@@ -33,7 +33,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .date-nav-today{font-size:0.65rem;font-weight:600;color:var(--accent);cursor:pointer;padding:0.2rem 0.6rem;border-radius:100px;border:1.5px solid var(--accent);background:var(--accent-light);transition:all 0.2s;-webkit-tap-highlight-color:transparent;white-space:nowrap}
 .date-nav-today:hover{background:var(--accent);color:white}
 
-.main{width:100%;max-width:960px;margin:0 auto;padding:0.8rem 2rem 3rem}
+.main{width:100%;margin:0 auto;padding:0.8rem 1.2rem 3rem}
 
 .section-title{font-size:0.82rem;font-weight:700;color:var(--text-2);margin:1rem 0 0.5rem;text-transform:uppercase;letter-spacing:0.04em}
 
@@ -64,12 +64,42 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .desc-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
 .desc-input::placeholder{color:var(--text-3);font-weight:500}
 
-/* Description chips */
-.desc-chips{display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.5rem}
-.desc-chip{padding:0.4rem 0.8rem;border-radius:100px;font-family:inherit;font-size:0.78rem;font-weight:600;border:1.5px solid var(--border);background:var(--white);color:var(--text-2);cursor:pointer;transition:all 0.15s;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+/* Description chips - large, prominent by default */
+.desc-chips{display:grid;grid-template-columns:repeat(3,1fr);gap:0.4rem;margin-bottom:0.5rem}
+.desc-chip{padding:0.7rem 0.5rem;border-radius:12px;font-family:inherit;font-size:0.88rem;font-weight:600;border:1.5px solid var(--border);background:var(--white);color:var(--text);cursor:pointer;transition:all 0.15s;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation;text-align:center;position:relative}
 .desc-chip:hover{border-color:var(--accent);color:var(--accent)}
 .desc-chip:active{transform:scale(0.97)}
 .desc-chip.selected{background:var(--accent);color:white;border-color:var(--accent)}
+.desc-chip .chip-cat-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:3px;vertical-align:middle}
+.desc-chip .chip-count{font-size:0.6rem;font-weight:500;color:var(--text-3);display:block;margin-top:1px}
+.desc-chip.selected .chip-count{color:rgba(255,255,255,0.7)}
+
+/* Long-press quick-add popup */
+.quick-add-popup{position:fixed;z-index:300;background:var(--white);border:1.5px solid var(--border);border-radius:16px;padding:0.6rem;box-shadow:0 8px 32px rgba(0,0,0,0.18);display:none;flex-direction:column;gap:0.3rem;min-width:200px;max-width:280px}
+.quick-add-popup.show{display:flex}
+.quick-add-popup-title{font-size:0.78rem;font-weight:700;color:var(--text);text-align:center;padding:0.2rem 0 0.4rem;border-bottom:1px solid var(--border);margin-bottom:0.2rem}
+.quick-add-popup-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.3rem}
+.quick-add-amt{padding:0.6rem 0.3rem;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-family:inherit;font-size:0.85rem;font-weight:700;color:var(--text);cursor:pointer;transition:all 0.15s;text-align:center;-webkit-tap-highlight-color:transparent}
+.quick-add-amt:hover{border-color:var(--accent);color:var(--accent)}
+.quick-add-amt:active{background:var(--accent);color:white;border-color:var(--accent)}
+
+/* Amount minimized state */
+.amount-minimized{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;padding:0.5rem 0}
+.amount-minimized-value{font-size:1.1rem;font-weight:800;color:var(--accent);background:var(--accent-light);padding:0.4rem 0.9rem;border-radius:10px}
+.amount-minimized-change{font-size:0.78rem;font-weight:600;color:var(--text-3);cursor:pointer;padding:0.3rem 0.6rem;border-radius:8px;border:1px solid var(--border);background:var(--white);transition:all 0.2s;-webkit-tap-highlight-color:transparent}
+.amount-minimized-change:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Quick-add widget */
+.quick-widget{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:0.8rem;margin-bottom:1rem}
+.quick-widget-title{font-size:0.72rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem}
+.quick-widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.4rem}
+.quick-widget-item{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 0.8rem;border-radius:12px;border:1.5px solid var(--border);background:var(--bg);cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.quick-widget-item:active{transform:scale(0.97);border-color:var(--accent)}
+.quick-widget-item-name{font-size:0.82rem;font-weight:600;color:var(--text)}
+.quick-widget-item-amounts{display:flex;gap:0.25rem}
+.quick-widget-item-amt{font-size:0.7rem;font-weight:700;color:var(--accent);background:var(--accent-light);padding:0.15rem 0.4rem;border-radius:6px;cursor:pointer;transition:all 0.15s;-webkit-tap-highlight-color:transparent}
+.quick-widget-item-amt:hover{background:var(--accent);color:white}
+.quick-widget-item-amt:active{background:var(--accent-dark);color:white}
 
 /* Shop input */
 .shop-wrap{margin-bottom:0.8rem}
@@ -84,10 +114,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .currency-label{font-size:0.72rem;font-weight:600;color:var(--text-3)}
 .display-currency-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.6rem;flex-wrap:wrap}
 .display-currency-label{font-size:0.72rem;font-weight:500;color:var(--text-3)}
-
-/* Location hint */
-.location-hint{background:var(--accent-light);border:1px solid rgba(99,102,241,0.15);border-radius:10px;padding:0.5rem 0.8rem;font-size:0.78rem;font-weight:600;color:var(--accent);margin-bottom:0.8rem;display:none;align-items:center;gap:0.4rem}
-.location-hint.show{display:flex}
 
 /* Add button */
 .add-expense-btn{width:100%;padding:0.9rem;border-radius:12px;border:none;background:var(--accent);color:white;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;transition:all 0.2s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
@@ -192,27 +218,30 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .settings-content.open{max-height:2000px}
 
 @media(max-width:700px){
-  .app-header{padding:1rem 3vw 0.5rem;gap:0.4rem}
-  .app-header h1{font-size:1.1rem}
-  .main{padding:0.6rem 4vw 3rem}
-  .date-nav{gap:0.2rem}
-  .date-nav-btn{width:24px;height:24px;font-size:0.75rem;border-radius:6px}
-  .date-nav-label{font-size:0.7rem;padding:0.1rem 0.15rem}
-  .date-nav-today{font-size:0.55rem;padding:0.1rem 0.35rem}
-  .section-title{font-size:0.72rem;margin:0.7rem 0 0.4rem}
-  .amount-btn{padding:0.8rem 0.3rem;font-size:1rem;border-radius:10px}
+  .app-header{padding:0.6rem 1rem 0.4rem;gap:0.4rem}
+  .app-header h1{font-size:1.2rem}
+  .main{padding:0.6rem 1rem 3rem}
+  .date-nav{gap:0.3rem}
+  .date-nav-btn{width:28px;height:28px;font-size:0.8rem;border-radius:7px}
+  .date-nav-label{font-size:0.75rem;padding:0.15rem 0.25rem}
+  .date-nav-today{font-size:0.6rem;padding:0.15rem 0.45rem}
+  .section-title{font-size:0.78rem;margin:0.7rem 0 0.4rem}
+  .amount-btn{padding:0.9rem 0.4rem;font-size:1.05rem;border-radius:10px}
   .cat-picker{grid-template-columns:repeat(3,1fr)}
-  .cat-chip{padding:0.55rem 0.3rem;font-size:0.82rem}
-  .total-value{font-size:1.2rem}
-  .expense-item{padding:0.6rem 0.7rem;gap:0.4rem}
-  .expense-amount{font-size:0.85rem;min-width:48px}
-  .expense-desc{font-size:0.78rem}
-  .bar-label{font-size:0.65rem;min-width:62px}
-  .bar-value{font-size:0.65rem;min-width:48px}
-  .undo-toast{padding:0.45rem 0.6rem 0.45rem 0.9rem;font-size:0.75rem}
-  .expense-edit-form{padding:0.5rem 0.6rem;gap:0.4rem}
+  .cat-chip{padding:0.6rem 0.4rem;font-size:0.82rem}
+  .total-value{font-size:1.3rem}
+  .expense-item{padding:0.7rem 0.8rem;gap:0.5rem}
+  .expense-amount{font-size:0.9rem;min-width:50px}
+  .expense-desc{font-size:0.82rem}
+  .bar-label{font-size:0.68rem;min-width:62px}
+  .bar-value{font-size:0.68rem;min-width:50px}
+  .undo-toast{bottom:calc(1.5rem + env(safe-area-inset-bottom));padding:0.5rem 0.7rem 0.5rem 1rem;font-size:0.78rem}
+  .expense-edit-form{padding:0.6rem 0.7rem;gap:0.4rem}
   .expense-edit-actions{margin-left:0;width:100%}
   .expense-edit-save,.expense-edit-cancel{flex:1}
+  .desc-chips{grid-template-columns:repeat(3,1fr)}
+  .desc-chip{padding:0.65rem 0.4rem;font-size:0.82rem}
+  .quick-widget-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -228,22 +257,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 </header>
 
 <div class="main">
-  <!-- Location hint -->
-  <div class="location-hint" id="locationHint"></div>
+  <!-- Quick Widget for frequent items -->
+  <div class="quick-widget" id="quickWidget"></div>
 
   <!-- Quick Add -->
-  <div style="display:flex;align-items:center;justify-content:space-between">
-    <div class="section-title" style="margin:0">Amount</div>
-    <div class="currency-row" style="margin:0">
-      <select class="currency-select" id="currencySelect" onchange="onCurrencyChange()"></select>
-    </div>
-  </div>
-  <div style="margin-bottom:0.5rem"></div>
-  <div class="amount-grid" id="amountGrid"></div>
-  <div class="custom-amount-wrap">
-    <input type="number" id="customAmount" class="custom-amount" inputmode="decimal" step="0.01" min="0" placeholder="Custom amount..." onfocus="clearPresetAmount()" oninput="onCustomAmountInput()">
-    <span class="custom-amount-symbol" id="currencySymbol">&euro;</span>
-  </div>
+  <div id="amountSection"></div>
 
   <div class="section-title">Category</div>
   <div class="cat-picker" id="catPicker"></div>
@@ -254,10 +272,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div class="section-title">Description</div>
   <div class="desc-chips" id="descChips"></div>
   <div class="desc-wrap">
-    <input type="text" id="descInput" class="desc-input" placeholder="Or type custom..." oninput="onDescInput()">
+    <input type="text" id="descInput" class="desc-input" placeholder="Type custom description..." oninput="onDescInput()">
   </div>
 
   <button class="add-expense-btn" id="addBtn" onclick="addExpense()" disabled>Add Expense</button>
+
+  <!-- Long-press quick-add popup -->
+  <div class="quick-add-popup" id="quickAddPopup">
+    <div class="quick-add-popup-title" id="quickAddTitle">Quick Add</div>
+    <div class="quick-add-popup-grid" id="quickAddGrid"></div>
+  </div>
 
   <!-- Dashboard -->
   <div class="divider"></div>
@@ -396,7 +420,8 @@ const COMMON_ITEMS=[
   {desc:'ATM withdrawal',category:'Other'},
 ];
 
-const PRESET_AMOUNTS=[5,10,15,20,25,30,40,45,50];
+const PRESET_AMOUNTS=[5,10,15,20,25,30,35,40];
+const QUICK_ADD_AMOUNTS=[5,10,15,20,25,30,35,40];
 
 // Currencies — most common at top
 const CURRENCIES=[
@@ -422,8 +447,8 @@ let selectedCurrency=localStorage.getItem('gt_exp_currency')||'EUR';
 let selectedDesc='';
 let undoTimer=null;
 let undoExpenseId=null;
-let userLocation=null;
-let locationMatch=null;
+let amountMinimized=false;
+let longPressTimer=null;
 let exchangeRates={}; // cached rates keyed by date: {'2026-02-20':{USD:1.05,GBP:0.85,...}}
 
 // ========== DATE UTILITIES ==========
@@ -446,13 +471,11 @@ function getCurrencySymbol(code){
 function renderCurrencySelects(){
   const opts=CURRENCIES.map(c=>`<option value="${c.code}">${c.symbol} ${c.code}</option>`).join('');
   const sel=document.getElementById('currencySelect');
-  sel.innerHTML=opts;
-  sel.value=selectedCurrency;
+  if(sel){sel.innerHTML=opts;sel.value=selectedCurrency;}
   const dSel=document.getElementById('displayCurrencySelect');
-  dSel.innerHTML=opts;
-  dSel.value=displayCurrency;
-  // Update symbol next to custom amount
-  document.getElementById('currencySymbol').textContent=getCurrencySymbol(selectedCurrency);
+  if(dSel){dSel.innerHTML=opts;dSel.value=displayCurrency;}
+  const symEl=document.getElementById('currencySymbol');
+  if(symEl)symEl.textContent=getCurrencySymbol(selectedCurrency);
 }
 
 function onCurrencyChange(){
@@ -535,8 +558,6 @@ async function prefetchRatesForMonth(monthExpenses){
 // ========== DATA ACCESS ==========
 function loadExpenses(){const s=localStorage.getItem('gt_expenses');return s?JSON.parse(s):[]}
 function saveExpenses(e){localStorage.setItem('gt_expenses',JSON.stringify(e));pushToCloud()}
-function loadLocations(){const s=localStorage.getItem('gt_expense_locations');return s?JSON.parse(s):[]}
-function saveLocations(l){localStorage.setItem('gt_expense_locations',JSON.stringify(l))}
 
 // ========== DATE NAVIGATION ==========
 function renderDateNav(){
@@ -565,15 +586,56 @@ function goToThisMonth(){
 
 // ========== AMOUNT SELECTION ==========
 function renderAmountGrid(){
+  const section=document.getElementById('amountSection');
+  if(amountMinimized&&selectedAmount){
+    const sym=getCurrencySymbol(selectedCurrency);
+    section.innerHTML=`
+      <div class="amount-minimized">
+        <span class="amount-minimized-value">${sym}${selectedAmount%1===0?selectedAmount:selectedAmount.toFixed(2)}</span>
+        <button class="amount-minimized-change" onclick="expandAmount()">Change</button>
+        <div class="currency-row" style="margin:0;margin-left:auto">
+          <select class="currency-select" id="currencySelect" onchange="onCurrencyChange()"></select>
+        </div>
+      </div>`;
+    // Re-populate currency select
+    const opts=CURRENCIES.map(c=>`<option value="${c.code}">${c.symbol} ${c.code}</option>`).join('');
+    const sel=document.getElementById('currencySelect');
+    if(sel){sel.innerHTML=opts;sel.value=selectedCurrency;}
+    return;
+  }
+  // Full expanded view
+  section.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div class="section-title" style="margin:0">Amount</div>
+      <div class="currency-row" style="margin:0">
+        <select class="currency-select" id="currencySelect" onchange="onCurrencyChange()"></select>
+      </div>
+    </div>
+    <div style="margin-bottom:0.5rem"></div>
+    <div class="amount-grid" id="amountGrid"></div>
+    <div class="custom-amount-wrap">
+      <input type="number" id="customAmount" class="custom-amount" inputmode="decimal" step="0.01" min="0" placeholder="Custom amount..." onfocus="clearPresetAmount()" oninput="onCustomAmountInput()">
+      <span class="custom-amount-symbol" id="currencySymbol">${getCurrencySymbol(selectedCurrency)}</span>
+    </div>`;
   const grid=document.getElementById('amountGrid');
   const sym=getCurrencySymbol(selectedCurrency);
   grid.innerHTML=PRESET_AMOUNTS.map(a=>
     `<button class="amount-btn ${selectedAmount===a?'selected':''}" onclick="selectAmount(${a})">${sym}${a}</button>`
   ).join('');
+  // Re-populate currency select
+  const opts=CURRENCIES.map(c=>`<option value="${c.code}">${c.symbol} ${c.code}</option>`).join('');
+  const sel=document.getElementById('currencySelect');
+  if(sel){sel.innerHTML=opts;sel.value=selectedCurrency;}
+}
+
+function expandAmount(){
+  amountMinimized=false;
+  renderAmountGrid();
 }
 
 function selectAmount(amount){
   selectedAmount=amount;
+  amountMinimized=true;
   document.getElementById('customAmount').value='';
   renderAmountGrid();
   updateAddBtn();
@@ -587,7 +649,7 @@ function clearPresetAmount(){
 function onCustomAmountInput(){
   const val=parseFloat(document.getElementById('customAmount').value);
   selectedAmount=val>0?val:null;
-  renderAmountGrid();
+  // Don't minimize for custom — user is still typing
   updateAddBtn();
 }
 
@@ -623,31 +685,64 @@ function onCustomCatInput(){
 }
 
 // ========== DESCRIPTION INPUT ==========
+function getItemPopularity(){
+  const expenses=loadExpenses();
+  const counts=new Map();
+  expenses.forEach(e=>{
+    if(!e.desc)return;
+    counts.set(e.desc,(counts.get(e.desc)||0)+1);
+  });
+  return counts;
+}
+
 function buildSuggestions(){
   const container=document.getElementById('descChips');
   const cat=selectedCategory?selectedCategory.toLowerCase():'';
-  if(!cat){container.innerHTML='';return;}
+  const popularity=getItemPopularity();
 
-  // Filter hardcoded items by selected category
-  const hardcoded=COMMON_ITEMS.filter(i=>i.category.toLowerCase()===cat).map(i=>i.desc);
-  const knownSet=new Set(hardcoded);
+  // Get items: if category selected, filter; otherwise show all
+  let hardcoded;
+  if(cat){
+    hardcoded=COMMON_ITEMS.filter(i=>i.category.toLowerCase()===cat);
+  } else {
+    hardcoded=[...COMMON_ITEMS];
+  }
 
-  // Learn from expense history, filtered by category if one is selected
-  const expenses=loadExpenses();
-  const learned=new Map();
-  expenses.forEach(e=>{
-    if(!e.desc)return;
-    if(cat&&(e.category||'other').toLowerCase()!==cat)return;
-    if(knownSet.has(e.desc))return;
-    if(!learned.has(e.desc))learned.set(e.desc,0);
-    learned.set(e.desc,learned.get(e.desc)+1);
+  // Deduplicate by desc (some items appear in multiple categories)
+  const seen=new Set();
+  const uniqueHardcoded=[];
+  hardcoded.forEach(i=>{
+    if(!seen.has(i.desc)){seen.add(i.desc);uniqueHardcoded.push(i);}
   });
-  const learnedSorted=[...learned.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
 
-  const allItems=[...hardcoded,...learnedSorted];
-  container.innerHTML=allItems.map(d=>{
+  // Add learned items from history
+  const expenses=loadExpenses();
+  const learnedMap=new Map();
+  expenses.forEach(e=>{
+    if(!e.desc||seen.has(e.desc))return;
+    if(cat&&(e.category||'other').toLowerCase()!==cat)return;
+    if(!learnedMap.has(e.desc))learnedMap.set(e.desc,{desc:e.desc,category:e.category||'Other'});
+  });
+  const learnedItems=[...learnedMap.values()];
+
+  // Combine and sort by popularity (most used first)
+  const allItems=[...uniqueHardcoded.map(i=>({desc:i.desc,category:i.category})),...learnedItems];
+  allItems.sort((a,b)=>(popularity.get(b.desc)||0)-(popularity.get(a.desc)||0));
+
+  container.innerHTML=allItems.map(item=>{
+    const d=item.desc;
     const esc=d.replace(/'/g,"\\'");
-    return `<button class="desc-chip ${selectedDesc===d?'selected':''}" onclick="selectDesc('${esc}')">${d}</button>`;
+    const catKey=(item.category||'other').toLowerCase();
+    const catColor=EXPENSE_CAT_COLORS[catKey]||'#888';
+    const count=popularity.get(d)||0;
+    const countHtml=count>0?`<span class="chip-count">${count}x</span>`:'';
+    return `<button class="desc-chip ${selectedDesc===d?'selected':''}"
+      onclick="selectDesc('${esc}')"
+      ontouchstart="startLongPress(event,'${esc}','${item.category.replace(/'/g,"\\'")}')"
+      ontouchend="cancelLongPress()"
+      ontouchmove="cancelLongPress()"
+      oncontextmenu="return false"
+    ><span class="chip-cat-dot" style="background:${catColor}"></span>${d}${countHtml}</button>`;
   }).join('');
 }
 
@@ -712,22 +807,6 @@ function addExpense(){
     createdAt:new Date().toISOString()
   };
 
-  // Add shop from location if available
-  if(locationMatch){
-    expense.shop=locationMatch.name;
-  }
-
-  // Auto-learn location: if we have GPS and a description, save for next time
-  if(userLocation&&desc!=='Expense'){
-    const existing=findNearbyShop(userLocation.lat,userLocation.lng);
-    if(!existing){
-      const locations=loadLocations();
-      locations.push({name:desc,lat:userLocation.lat,lng:userLocation.lng,radius:150,category:category});
-      saveLocations(locations);
-    }
-    expense.shop=expense.shop||desc;
-  }
-
   const expenses=loadExpenses();
   expenses.push(expense);
   saveExpenses(expenses);
@@ -739,7 +818,9 @@ function addExpense(){
   selectedAmount=null;
   selectedCategory='';
   selectedDesc='';
-  document.getElementById('customAmount').value='';
+  amountMinimized=false;
+  const customAmountEl=document.getElementById('customAmount');
+  if(customAmountEl)customAmountEl.value='';
   document.getElementById('descInput').value='';
   document.getElementById('customCatInput').value='';
   document.getElementById('customCatWrap').style.display='none';
@@ -747,6 +828,7 @@ function addExpense(){
   renderCatPicker();
   updateAddBtn();
   buildSuggestions();
+  renderQuickWidget();
 
   // Try haptic feedback
   if(navigator.vibrate)navigator.vibrate(10);
@@ -1005,73 +1087,138 @@ function exportAllCSV(){
   downloadCSV(csv,'expenses-all.csv');
 }
 
-// ========== GEOLOCATION ==========
-function haversineDistance(lat1,lng1,lat2,lng2){
-  const R=6371e3;
-  const toRad=x=>x*Math.PI/180;
-  const dLat=toRad(lat2-lat1);
-  const dLng=toRad(lng2-lng1);
-  const a=Math.sin(dLat/2)*Math.sin(dLat/2)+
-    Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
-    Math.sin(dLng/2)*Math.sin(dLng/2);
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+// ========== LONG PRESS QUICK ADD ==========
+function startLongPress(evt,desc,category){
+  cancelLongPress();
+  const touch=evt.touches?evt.touches[0]:evt;
+  longPressTimer=setTimeout(()=>{
+    evt.preventDefault();
+    showQuickAddPopup(touch.clientX,touch.clientY,desc,category);
+    if(navigator.vibrate)navigator.vibrate(15);
+  },500);
 }
 
-function findNearbyShop(lat,lng){
-  const locations=loadLocations();
-  for(const loc of locations){
-    const d=haversineDistance(lat,lng,loc.lat,loc.lng);
-    if(d<=(loc.radius||150))return loc;
-  }
-  return null;
+function cancelLongPress(){
+  if(longPressTimer){clearTimeout(longPressTimer);longPressTimer=null;}
 }
 
-function requestLocation(){
-  if(!navigator.geolocation)return;
-  navigator.geolocation.getCurrentPosition(
-    pos=>{
-      userLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
-      const match=findNearbyShop(userLocation.lat,userLocation.lng);
-      if(match){
-        locationMatch=match;
-        const hint=document.getElementById('locationHint');
-        hint.innerHTML='\uD83D\uDCCD Near <strong>'+match.name+'</strong>';
-        hint.classList.add('show');
-        // Auto-fill
-        if(match.category)selectCategory(match.category);
-        if(match.name)document.getElementById('descInput').value=match.name;
-      }
-    },
-    ()=>{/* permission denied or error - silently degrade */},
-    {enableHighAccuracy:false,timeout:8000,maximumAge:300000}
-  );
+function showQuickAddPopup(x,y,desc,category){
+  const popup=document.getElementById('quickAddPopup');
+  const grid=document.getElementById('quickAddGrid');
+  const title=document.getElementById('quickAddTitle');
+  title.textContent=desc;
+  const sym=getCurrencySymbol(selectedCurrency);
+  grid.innerHTML=QUICK_ADD_AMOUNTS.map(a=>
+    `<button class="quick-add-amt" onclick="quickAddExpense(${a},'${desc.replace(/'/g,"\\'")}','${category.replace(/'/g,"\\'")}')">${sym}${a}</button>`
+  ).join('')+`<button class="quick-add-amt" style="grid-column:1/-1;font-size:0.78rem;color:var(--accent);border-color:var(--accent-light);background:var(--accent-light)" onclick="goToCustomAmount('${desc.replace(/'/g,"\\'")}','${category.replace(/'/g,"\\'")}')">Custom...</button>`;
+
+  // Position popup near the touch point
+  popup.style.left='50%';
+  popup.style.transform='translateX(-50%)';
+  popup.style.top=Math.max(10,y-180)+'px';
+  popup.classList.add('show');
+
+  // Close on outside tap
+  setTimeout(()=>{
+    document.addEventListener('touchstart',closeQuickAddPopup,{once:true});
+    document.addEventListener('click',closeQuickAddPopup,{once:true});
+  },100);
 }
 
-function saveCurrentLocation(){
-  if(!userLocation)return;
-  const desc=document.getElementById('descInput').value.trim();
-  if(!desc){alert('Enter a description first to save this location.');return;}
-  const locations=loadLocations();
-  // Check if already saved nearby
-  const existing=findNearbyShop(userLocation.lat,userLocation.lng);
-  if(existing){
-    if(!confirm('Update "'+existing.name+'" to "'+desc+'"?'))return;
-    const idx=locations.findIndex(l=>l.name===existing.name);
-    if(idx>=0)locations[idx]={...locations[idx],name:desc,category:selectedCategory||'Other'};
-  } else {
-    locations.push({
-      name:desc,
-      lat:userLocation.lat,
-      lng:userLocation.lng,
-      radius:150,
-      category:selectedCategory||'Other'
+function closeQuickAddPopup(evt){
+  const popup=document.getElementById('quickAddPopup');
+  if(popup.contains(evt?.target))return;
+  popup.classList.remove('show');
+}
+
+function goToCustomAmount(desc,category){
+  document.getElementById('quickAddPopup').classList.remove('show');
+  // Pre-select the description and category
+  selectedDesc=desc;
+  selectedCategory=category;
+  amountMinimized=false;
+  selectedAmount=null;
+  renderAmountGrid();
+  renderCatPicker();
+  buildSuggestions();
+  updateAddBtn();
+  // Scroll to and focus the custom amount input
+  setTimeout(()=>{
+    const input=document.getElementById('customAmount');
+    if(input){input.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>input.focus(),300);}
+  },100);
+}
+
+function quickAddExpense(amount,desc,category){
+  const expense={
+    id:'e'+Date.now(),
+    amount:amount,
+    currency:selectedCurrency,
+    desc:desc,
+    category:category,
+    date:dateKey(new Date()),
+    createdAt:new Date().toISOString()
+  };
+  const expenses=loadExpenses();
+  expenses.push(expense);
+  saveExpenses(expenses);
+  showUndo(expense.id,amount,desc,selectedCurrency);
+  if(navigator.vibrate)navigator.vibrate(10);
+  document.getElementById('quickAddPopup').classList.remove('show');
+  renderDashboard();
+  renderQuickWidget();
+}
+
+// ========== QUICK WIDGET ==========
+function renderQuickWidget(){
+  const el=document.getElementById('quickWidget');
+  const popularity=getItemPopularity();
+  // Get top 6 most used items
+  const topItems=[...popularity.entries()]
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,6);
+  if(topItems.length===0){el.style.display='none';return;}
+  el.style.display='block';
+  const sym=getCurrencySymbol(selectedCurrency);
+  // For each top item, find its category
+  const itemCats=new Map();
+  const expenses=loadExpenses();
+  expenses.forEach(e=>{
+    if(e.desc&&!itemCats.has(e.desc)){
+      itemCats.set(e.desc,e.category||'Other');
+    }
+  });
+  // Also check COMMON_ITEMS
+  COMMON_ITEMS.forEach(i=>{
+    if(!itemCats.has(i.desc))itemCats.set(i.desc,i.category);
+  });
+
+  let html='<div class="quick-widget-title">Quick Add</div><div class="quick-widget-grid">';
+  topItems.forEach(([desc,count])=>{
+    const cat=itemCats.get(desc)||'Other';
+    const catColor=EXPENSE_CAT_COLORS[cat.toLowerCase()]||'#888';
+    const esc=desc.replace(/'/g,"\\'");
+    const catEsc=cat.replace(/'/g,"\\'");
+    // Show 3 most common amounts for this item
+    const itemExpenses=expenses.filter(e=>e.desc===desc);
+    const amountCounts=new Map();
+    itemExpenses.forEach(e=>{
+      const a=e.amount;
+      amountCounts.set(a,(amountCounts.get(a)||0)+1);
     });
-  }
-  saveLocations(locations);
-  const hint=document.getElementById('locationHint');
-  hint.innerHTML='\uD83D\uDCCD Location saved: <strong>'+desc+'</strong>';
-  hint.classList.add('show');
-  setTimeout(()=>{if(!locationMatch)hint.classList.remove('show')},3000);
+    const topAmounts=[...amountCounts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+    // If no amounts from history, use defaults
+    const amounts=topAmounts.length>0?topAmounts:[10,20,30];
+
+    html+=`<div class="quick-widget-item">
+      <span class="quick-widget-item-name"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${catColor};margin-right:4px;vertical-align:middle"></span>${desc}</span>
+      <span class="quick-widget-item-amounts">${amounts.map(a=>
+        `<span class="quick-widget-item-amt" onclick="quickAddExpense(${a},'${esc}','${catEsc}')">${sym}${a%1===0?a:a.toFixed(2)}</span>`
+      ).join('')}<span class="quick-widget-item-amt" onclick="goToCustomAmount('${esc}','${catEsc}')" style="font-size:0.6rem">...</span></span>
+    </div>`;
+  });
+  html+='</div>';
+  el.innerHTML=html;
 }
 
 // ========== SETTINGS TOGGLE ==========
@@ -1162,9 +1309,9 @@ function initSync(){
 function applyRemoteData(data){
   syncPaused=true;
   if(data.expenses)localStorage.setItem('gt_expenses',data.expenses);
-  if(data.locations)localStorage.setItem('gt_expense_locations',data.locations);
   localStorage.setItem('gt_exp_last_sync',String(data.lastSync));
   renderDashboard();
+  renderQuickWidget();
   setTimeout(()=>{syncPaused=false},500);
 }
 
@@ -1176,7 +1323,6 @@ function pushToCloud(){
   lastSyncTime=now;
   const data={
     expenses:localStorage.getItem('gt_expenses')||'[]',
-    locations:localStorage.getItem('gt_expense_locations')||'[]',
     lastSync:now
   };
   localStorage.setItem('gt_exp_last_sync',String(now));
@@ -1228,7 +1374,6 @@ function syncNowWithFeedback(){
       const now=Date.now();
       const pushData={
         expenses:localStorage.getItem('gt_expenses')||'[]',
-        locations:localStorage.getItem('gt_expense_locations')||'[]',
         lastSync:now
       };
       localStorage.setItem('gt_exp_last_sync',String(now));
@@ -1286,19 +1431,25 @@ function renderSyncUI(){
 // ========== RENDER ==========
 function render(){
   renderDateNav();
-  renderCurrencySelects();
   renderAmountGrid();
   renderCatPicker();
   buildSuggestions();
   updateAddBtn();
   renderDashboard();
   renderSyncUI();
+  renderQuickWidget();
+  // Render display currency select
+  const dSel=document.getElementById('displayCurrencySelect');
+  if(dSel){
+    const opts=CURRENCIES.map(c=>`<option value="${c.code}">${c.symbol} ${c.code}</option>`).join('');
+    dSel.innerHTML=opts;
+    dSel.value=displayCurrency;
+  }
 }
 
 // ========== INIT ==========
 render();
 initSync();
-requestLocation();
 </script>
 </body>
 </html>
