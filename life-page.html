@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="A life told in her own voice — portrait, dates, and the highlights of a life.">
+<title>Margaret Ellen Doyle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap">
+
+<style>
+:root{
+  --bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+  --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--shadow:rgba(30,26,22,.16);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+    --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+  --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:2px}
+.in{max-width:1080px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.6rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(2.4rem,7vw,5.4rem) 0 clamp(2rem,5vw,3.4rem)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:clamp(1.8rem,5vw,4rem);align-items:center}
+@media (max-width:760px){.hero-grid{grid-template-columns:1fr;gap:1.8rem}}
+.portrait{position:relative;aspect-ratio:4/5;background:var(--surf2);border:1px solid var(--line);overflow:hidden;box-shadow:0 26px 50px -34px var(--shadow)}
+.portrait img{width:100%;height:100%;object-fit:cover}
+.portrait .mono{position:absolute;inset:0;display:grid;place-content:center;gap:.5rem;text-align:center;background:linear-gradient(155deg,var(--surf2),var(--accSoft))}
+.portrait .mono span:first-child{font-family:"Newsreader",Georgia,serif;font-size:3.6rem;color:var(--acc);letter-spacing:.04em}
+.portrait .mono span:last-child{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
+.portrait img.dead{display:none}
+.hero-copy{display:flex;flex-direction:column;gap:1.15rem}
+.hero h1{font-size:clamp(2.6rem,7vw,4.4rem);line-height:1}
+.dob{display:flex;flex-wrap:wrap;gap:.35rem .9rem;align-items:baseline;font-family:"IBM Plex Mono",monospace;font-size:.82rem;letter-spacing:.04em;color:var(--ink2)}
+.dob .sep{color:var(--line)}
+.bio{font-size:1.08rem;color:var(--ink2);max-width:48ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.35rem}
+.btn{display:inline-flex;align-items:center;gap:.55rem;background:var(--acc);color:var(--bg);border:1px solid var(--acc);border-radius:2px;padding:.6rem 1.05rem;font-size:.9rem;font-weight:600;transition:.18s}
+.btn:hover{filter:brightness(1.12)}
+.btn .tri{width:0;height:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink2);filter:none}
+
+/* ---------- facts ---------- */
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.5rem 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.4rem}
+.fact{display:flex;flex-direction:column;gap:.22rem}
+.fact .k{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3)}
+.fact .v{font-family:"Newsreader",Georgia,serif;font-size:1.15rem;line-height:1.25}
+.fact .s{font-size:.78rem;color:var(--ink3)}
+
+/* ---------- sections ---------- */
+section{padding:clamp(2.6rem,6vw,4.6rem) 0}
+.sec-hd{display:flex;flex-direction:column;gap:.55rem;margin-bottom:clamp(1.6rem,3.5vw,2.6rem);max-width:58ch}
+.sec-hd h2{font-size:clamp(1.6rem,3.4vw,2.2rem);line-height:1.14}
+.sec-hd p{color:var(--ink2);font-size:.98rem}
+
+/* ---------- highlights ---------- */
+.hl{display:flex;flex-direction:column;gap:clamp(2rem,4.5vw,3.4rem)}
+.hlx{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(1.4rem,3.5vw,2.8rem);align-items:center;text-align:left;background:none;border:0;padding:0;color:inherit;width:100%}
+.hlx:nth-child(even) .still{order:2}
+@media (max-width:760px){.hlx{grid-template-columns:1fr;gap:1.1rem}.hlx:nth-child(even) .still{order:0}}
+.still{position:relative;aspect-ratio:16/9;background:var(--surf2);border:1px solid var(--line);overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.still img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease}
+.hlx:hover .still{border-color:var(--acc);box-shadow:0 22px 44px -30px var(--shadow)}
+.hlx:hover .still img{transform:scale(1.03)}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(18,18,16,.55);backdrop-filter:blur(2px);display:grid;place-content:center;transition:background .2s}
+.play::after{content:"";width:0;height:0;border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.hlx:hover .play{background:var(--acc)}
+.len{position:absolute;right:8px;bottom:8px;font-family:"IBM Plex Mono",monospace;font-size:.62rem;background:rgba(18,18,16,.72);color:#fff;padding:.1rem .4rem}
+.hlt{display:flex;flex-direction:column;gap:.62rem}
+.hlt .kick{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+.hlt h3{font-size:clamp(1.4rem,2.8vw,1.9rem);line-height:1.16}
+.hlt .desc{color:var(--ink2);font-size:.97rem;max-width:46ch}
+.hlt .q{font-family:"Newsreader",Georgia,serif;font-style:italic;color:var(--ink2);font-size:1.02rem;border-left:2px solid var(--line);padding-left:.9rem;max-width:44ch}
+.hlt .meta{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);display:flex;flex-wrap:wrap;gap:.3rem .9rem}
+
+/* ---------- everything else ---------- */
+.more{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.1rem}
+.card{text-align:left;background:var(--surf);border:1px solid var(--line);padding:9px 9px 8px;display:flex;flex-direction:column;gap:8px;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
+.card:hover{transform:translateY(-2px);border-color:var(--acc);box-shadow:0 14px 28px -22px var(--shadow)}
+.card .still{aspect-ratio:16/10;border:0}
+.card .play{width:34px;height:34px}
+.card .play::after{border-left-width:10px;border-top-width:6px;border-bottom-width:6px;margin-left:2px}
+.card .cq{font-size:.92rem;line-height:1.34;min-height:3.4em}
+.card .cm{display:flex;justify-content:space-between;gap:.5rem;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);border-top:1px solid var(--line);padding-top:6px}
+.card .cm .x{color:var(--acc)}
+.sealed{position:absolute;inset:0;display:grid;place-content:center;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);border:1px dashed var(--line)}
+
+/* ---------- places and things ---------- */
+.things{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:1.1rem}
+.thing{border:1px solid var(--line);background:var(--surf);padding:.7rem;display:flex;gap:.8rem;align-items:center}
+.thing svg{width:70px;height:48px;flex:none;border:1px solid var(--line)}
+.thing .ph{width:70px;height:48px;flex:none;display:grid;place-content:center;border:1px solid var(--line);background:var(--surf2);color:var(--ink3);font-size:1.2rem}
+.thing .tl{font-size:.84rem;line-height:1.35}
+.thing .td{display:block;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.05em;color:var(--ink3);margin-top:3px}
+
+footer{border-top:1px solid var(--line);padding:2.4rem 0 3.6rem;display:flex;flex-wrap:wrap;gap:1rem 2.4rem;justify-content:space-between;color:var(--ink3);font-size:.84rem}
+
+/* ---------- player ---------- */
+.scrim{position:fixed;inset:0;background:rgba(12,12,10,.86);display:none;align-items:center;justify-content:center;padding:clamp(.7rem,3vw,2rem);z-index:60;backdrop-filter:blur(4px)}
+.scrim.on{display:flex}
+.proj{background:var(--surf);border:1px solid var(--line);width:min(840px,100%);max-height:94vh;overflow-y:auto}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line)}
+.xb{background:none;border:1px solid var(--line);padding:.32rem .7rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.xb:hover{color:var(--ink);border-color:var(--ink2)}
+.screen{aspect-ratio:16/9;background:#000;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{position:absolute;inset:0;display:grid;place-content:center;gap:.6rem;text-align:center;padding:2rem;background:var(--surf2);color:var(--ink2)}
+.pbody{padding:1.2rem 1.1rem 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.pbody h2{font-size:clamp(1.25rem,2.6vw,1.65rem);line-height:1.18}
+.src{font-family:"IBM Plex Mono",monospace;font-size:.62rem;line-height:1.7;color:var(--ink3);border-left:2px solid var(--acc);padding-left:.8rem}
+.src a{color:var(--acc)}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.42rem}
+.prompts li{display:flex;gap:.6rem;color:var(--ink2);font-size:.93rem}
+.prompts li::before{content:"\2192";color:var(--acc)}
+.pfoot{display:flex;flex-wrap:wrap;gap:.45rem 1.2rem;padding-top:.9rem;border-top:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+.pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.8rem 1.1rem;border-top:1px solid var(--line);background:var(--surf2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="in">
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="portrait">
+        <span class="mono"><span>MD</span><span>Her photograph goes here</span></span>
+        <img src="https://i.ytimg.com/vi/WNfvuJr9164/hqdefault.jpg" alt="Margaret Ellen Doyle" onerror="this.className='dead'">
+      </div>
+      <div class="hero-copy">
+        <p class="mo">Her life, in her own voice</p>
+        <h1>Margaret Ellen Doyle</h1>
+        <p class="dob">
+          <span>Born 17 March 1938, Ballina, Co. Mayo</span>
+          <span class="sep">&mdash;</span>
+          <span>Died 8 November 2024, Coventry</span>
+        </p>
+        <p class="bio">She came over at seventeen with two cardigans in a case, nursed nights in Coventry for forty years, married Frank in 1961 and raised Anne, Tom and Aoife. In 2022 her children sat her down with a phone and started asking questions.</p>
+        <div class="hero-cta">
+          <button class="btn" data-i="0"><span class="tri"></span> Play her introduction</button>
+          <button class="btn ghost" id="jumpAll">See all 14 recordings</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="facts">
+    <div class="fact"><span class="k">Born</span><span class="v">17 March 1938</span><span class="s">Ballina, Co. Mayo</span></div>
+    <div class="fact"><span class="k">Came to England</span><span class="v">1956</span><span class="s">aged seventeen</span></div>
+    <div class="fact"><span class="k">Married</span><span class="v">Frank, 1961</span><span class="s">sixty-one years</span></div>
+    <div class="fact"><span class="k">Children</span><span class="v">Three</span><span class="s">Anne, Tom, Aoife</span></div>
+    <div class="fact"><span class="k">Work</span><span class="v">Nursing</span><span class="s">forty years of nights</span></div>
+    <div class="fact"><span class="k">Recorded</span><span class="v">2022&ndash;2024</span><span class="s">1 h 34 m in all</span></div>
+  </div>
+
+  <section>
+    <div class="sec-hd">
+      <p class="mo">The highlights</p>
+      <h2>Six moments she wanted remembered</h2>
+      <p>Chosen from everything she recorded. Each one plays in her own voice &mdash; the rest of the answers are underneath.</p>
+    </div>
+    <div class="hl" id="hl"></div>
+  </section>
+
+  <section id="all">
+    <div class="sec-hd">
+      <p class="mo">Everything she recorded</p>
+      <h2>All fourteen questions</h2>
+      <p>Twelve answered, two she never got to. The unanswered ones stay here rather than being quietly removed.</p>
+    </div>
+    <div class="more" id="more"></div>
+  </section>
+
+  <section>
+    <div class="sec-hd">
+      <p class="mo">Places and things</p>
+      <h2>What the family added</h2>
+      <p>Optional &mdash; a page works with none of these. Hers has a map of the town she was born in, the house on Bury Street, Frank the year they met, and her nursing certificate.</p>
+    </div>
+    <div class="things" id="things"></div>
+  </section>
+
+  <footer>
+    <p>Recorded at the kitchen table in Wyken by Anne, Tom and Aoife.<br>Private page &mdash; the videos are unlisted and only people with this link can watch them.</p>
+    <p>Margaret Ellen Doyle &nbsp;·&nbsp; 1938&ndash;2024</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="pq">
+  <div class="proj">
+    <div class="proj-top">
+      <p class="mo" id="pkick">Moment</p>
+      <button class="xb" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <div class="pbody">
+      <h2 id="pq">Question</h2>
+      <p class="src" id="psrc"></p>
+      <ul class="prompts" id="pprompts"></ul>
+      <div class="pfoot" id="pfoot"></div>
+    </div>
+    <div class="pnav">
+      <button class="xb" id="prevBtn">&larr; Previous</button>
+      <button class="xb" id="nextBtn">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function still(v){
+  return '<img src="https://i.ytimg.com/vi/' + v + '/hqdefault.jpg" alt="" loading="lazy" onerror="this.style.display=\'none\'">' +
+         '<span class="play"></span>';
+}
+
+/* Placeholder clips: real oral-history interviews standing in for her recordings. */
+var W = [
+  { hl:true, kick:"Where she started", head:"The house in Ballina",
+    q:"Tell me about the house you grew up in.",
+    desc:"Nine of them and one range, in a house where the good room was only opened for funerals.",
+    quote:"You didn't go into the good room unless somebody had died.",
+    len:"6:12", on:"14 May 2022", v:"3Uz6uZC9hik", src:"Grandma tells our story",
+    p:["Walk me through the front door.","Which room did everyone end up in?","What could you hear from your bed?"],
+    x:[{t:"map",l:"Ballina, Co. Mayo",d:"54.1150° N, 9.1533° W"},{t:"photo",l:"The house on Bury Street",d:"family photograph, undated"}] },
+
+  { hl:true, kick:"Leaving", head:"The boat to Holyhead",
+    q:"The day you left home.",
+    desc:"Seventeen years old, a case with two cardigans in it, and nobody at the other end.",
+    quote:"I cried from Dublin to Wales and then I stopped, because what was the use.",
+    len:"7:18", on:"4 Jun 2022", v:"nVu__vyps9Q", src:"100-year-old WWII veteran — full interview",
+    p:["Who took you to the boat?","What did you think England was going to be?","When did you know you weren't going back?"] },
+
+  { hl:true, kick:"Frank", head:"The dance where she met him",
+    q:"Tell me about the night you met Frank.",
+    desc:"He asked her twice and got turned down twice, then sent a friend over to ask on his behalf.",
+    quote:"I thought it was very poor form. I married him anyway.",
+    len:"6:55", on:"25 Jun 2022", v:"WNfvuJr9164", src:"Danny & Annie — StoryCorps",
+    p:["What was he wearing?","What did he say?","When did you decide?"],
+    x:[{t:"photo",l:"Frank, the year they met",d:"1959"}] },
+
+  { hl:true, kick:"The three of them", head:"Three children in nine years",
+    q:"The day each of us was born.",
+    desc:"Anne in 1963, Tom in 1966, Aoife on the kitchen floor in 1971 before the ambulance arrived.",
+    quote:"That's the whole three of you, that is.",
+    len:"9:24", on:"9 Jul 2022", v:"abyMCAS4vEI", src:"A StoryCorps conversation with grandfather",
+    p:["Tell me about each one.","What frightened you?","Who did we look like?"],
+    x:[{t:"photo",l:"Anne, three days old",d:"March 1963"},{t:"photo",l:"All three, Wyken Croft",d:"summer 1972"}] },
+
+  { hl:true, kick:"The work", head:"Forty years of nights",
+    q:"Forty years of nights. Why nights?",
+    desc:"She took the night shift in 1959 because it paid more, and then never came off it.",
+    quote:"You get to know people at four in the morning in a way you never do at four in the afternoon.",
+    len:"7:02", on:"6 Aug 2022", v:"QzQhtsTdHhM", src:"Life lessons from 100-year-old Americans — Business Insider",
+    p:["What did a normal shift look like?","How did you sleep?","What did it cost you at home?"],
+    x:[{t:"doc",l:"Her SRN certificate",d:"scanned document"}] },
+
+  { hl:true, kick:"What she left us", head:"What to do on her birthday",
+    q:"What do you want us to do on your birthday?",
+    desc:"The last thing she recorded, eight months before she died, and the one the family plays most.",
+    quote:"Don't be standing in a graveyard in the cold. Go and have your dinner and talk about something else.",
+    len:"3:11", on:"3 Feb 2024", v:"aJ_RVsf90xg", src:"Living to 100 — interviews with centenarians, TV Eye 1986",
+    p:["Where should we be?","Who should be there?","What shouldn't we do?"] },
+
+  { kick:"Her parents", head:"Her mother and father",
+    q:"Who were your mother and father, really?",
+    len:"8:40", on:"14 May 2022", v:"BjQqDWj1LQw", src:"An interview with Grandma",
+    p:["What did they want before the children came?","What did they never talk about?"] },
+  { kick:"Coventry", head:"The first room and the first wage",
+    q:"Your first room, and your first wage.",
+    len:"5:44", on:"11 Jun 2022", v:"x3fphutRYso", src:"Albert Siewers — WWII veteran interview",
+    p:["What did it cost?","Who was the landlady?"],
+    x:[{t:"map",l:"Hillfields, Coventry",d:"52.4084° N, 1.4998° W"},{t:"photo",l:"Her first car — a Morris Minor",d:"1962"}] },
+  { kick:"The hospital", head:"Her first day on the ward",
+    q:"Starting at the hospital.",
+    len:"6:30", on:"11 Jun 2022", v:"KGCD1XR0WPk", src:"An Introduction to StoryCorps — Dave Isay",
+    p:["What was the first thing they had you do?","When did you stop being frightened?"] },
+  { kick:"1961", head:"The wedding day",
+    q:"The wedding day, honestly.",
+    len:"5:10", on:"9 Jul 2022", v:"SUhWjJfLWXE", src:"StoryCorps Shorts: Danny and Annie — PBS POV",
+    p:["Who came over from home?","What went wrong?"] },
+  { kick:"The ward", head:"The patient she never forgot",
+    q:"The patient you never forgot.",
+    len:"8:15", on:"6 Aug 2022", v:"rZAv7uoE25Q", src:"110-year-old's words of wisdom",
+    p:["Tell me what happened.","Do you still think about them?"] },
+  { kick:"The hard year", head:"When Frank got ill",
+    q:"The year Frank got ill.",
+    len:"9:51", on:"17 Sep 2022", v:"Is6WvYAM3gg", src:"100-year-olds' guide to living your best life — Allure",
+    p:["When did you know?","Who turned up, and who didn't?"] },
+  { kick:"Never recorded", head:"Was she homesick?",
+    q:"Were you homesick? Properly homesick?",
+    len:"", on:"", v:null,
+    p:["What set it off?","What did you do about it?"] },
+  { kick:"Never recorded", head:"What being a parent taught her",
+    q:"What did being a parent teach you?",
+    len:"", on:"", v:null,
+    p:["What kept you awake?","What do you think you got wrong?"] }
+];
+
+/* ---------- highlights ---------- */
+var hl = document.getElementById("hl");
+W.forEach(function(w, i){
+  if(!w.hl){ return; }
+  var b = document.createElement("button");
+  b.className = "hlx";
+  b.setAttribute("data-i", i);
+  b.setAttribute("aria-label", "Play: " + w.head);
+  b.innerHTML =
+    '<span class="still">' + still(w.v) + '<span class="len">' + w.len + '</span></span>' +
+    '<span class="hlt">' +
+      '<span class="kick">' + esc(w.kick) + '</span>' +
+      '<h3>' + esc(w.head) + '</h3>' +
+      '<span class="desc">' + esc(w.desc) + '</span>' +
+      '<span class="q">&ldquo;' + esc(w.quote) + '&rdquo;</span>' +
+      '<span class="meta"><span>' + w.len + '</span><span>recorded ' + w.on + '</span>' +
+      (w.x ? '<span>+ ' + w.x.length + (w.x.length === 1 ? " photo or map" : " photos and maps") + '</span>' : '') +
+      '</span>' +
+    '</span>';
+  hl.appendChild(b);
+});
+
+/* ---------- all recordings ---------- */
+var more = document.getElementById("more");
+W.forEach(function(w, i){
+  var lit = Boolean(w.v);
+  var b = document.createElement("button");
+  b.className = "card";
+  b.setAttribute("data-i", i);
+  b.setAttribute("aria-label", (lit ? "Play: " : "Not recorded: ") + w.head);
+  b.innerHTML =
+    '<span class="still">' + (lit ? still(w.v) : '<span class="sealed">Never recorded</span>') + '</span>' +
+    '<span class="cq">' + esc(w.q) + '</span>' +
+    '<span class="cm"><span>' + (lit ? w.len : "&mdash;") + '</span>' +
+    '<span class="x">' + (w.x ? "+" + w.x.length : "") + '</span></span>';
+  more.appendChild(b);
+});
+
+/* ---------- places and things ---------- */
+var things = document.getElementById("things");
+W.forEach(function(w){
+  if(!w.x){ return; }
+  w.x.forEach(function(x){
+    var d = document.createElement("div");
+    d.className = "thing";
+    var art = (x.t === "map")
+      ? '<svg viewBox="0 0 120 80" aria-hidden="true">' +
+          '<rect width="120" height="80" fill="var(--surf2)"/>' +
+          '<path d="M0 54 L34 44 L62 58 L92 40 L120 50" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+          '<path d="M18 0 L30 30 L14 52 L26 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+          '<path d="M78 0 L70 26 L88 46 L82 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+          '<circle cx="60" cy="36" r="13" fill="none" stroke="var(--acc)" stroke-width="1" opacity=".5"/>' +
+          '<circle cx="60" cy="36" r="5" fill="var(--acc)"/></svg>'
+      : '<span class="ph">' + (x.t === "doc" ? "&#9776;" : "&#9635;") + '</span>';
+    d.innerHTML = art + '<span class="tl">' + esc(x.l) + '<span class="td">' + esc(x.d) + '</span></span>';
+    things.appendChild(d);
+  });
+});
+
+/* ---------- player ---------- */
+var scrim = document.getElementById("scrim"), screen = document.getElementById("screen");
+var current = 0, lastFocus = null;
+
+function openWindow(i){
+  var w = W[i];
+  current = i;
+  if(!scrim.classList.contains("on")){ lastFocus = document.activeElement; }
+
+  document.getElementById("pkick").textContent = w.kick;
+  document.getElementById("pq").textContent = w.q;
+
+  var list = document.getElementById("pprompts");
+  list.innerHTML = "";
+  w.p.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; list.appendChild(li); });
+
+  var s = document.getElementById("psrc");
+  if(w.v){
+    s.innerHTML = "Placeholder clip: " + esc(w.src) +
+      ' &nbsp;·&nbsp; <a href="https://www.youtube.com/watch?v=' + w.v + '" target="_blank" rel="noopener">watch on YouTube &#8599;</a>' +
+      "<br>On the live page this is her own recording.";
+    s.style.display = "";
+  } else { s.style.display = "none"; }
+
+  var foot = document.getElementById("pfoot");
+  foot.innerHTML = "";
+  (w.v ? ["Recorded " + w.on, w.len, "Asked by Anne"] : ["Never recorded"]).forEach(function(t){
+    var e = document.createElement("span"); e.textContent = t; foot.appendChild(e);
+  });
+
+  screen.innerHTML = "";
+  if(w.v){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + w.v + "?rel=0&modestbranding=1";
+    f.title = w.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    screen.appendChild(f);
+  } else {
+    var e2 = document.createElement("div");
+    e2.className = "screen-empty";
+    var a = document.createElement("p"); a.className = "mo"; a.textContent = "She never got to this one";
+    var b2 = document.createElement("p"); b2.textContent = "The question stays on the page. It would open the day someone adds a recording.";
+    e2.appendChild(a); e2.appendChild(b2); screen.appendChild(e2);
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+function closeWindow(){
+  scrim.classList.remove("on"); screen.innerHTML = "";
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+function step(n){ openWindow((current + n + W.length) % W.length); }
+
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-i]");
+  if(t){ openWindow(Number(t.getAttribute("data-i"))); }
+});
+document.getElementById("jumpAll").addEventListener("click", function(e){
+  e.stopPropagation();
+  document.getElementById("all").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("closeBtn").addEventListener("click", closeWindow);
+document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeWindow(); } });
+document.addEventListener("keydown", function(e){
+  if(!scrim.classList.contains("on")){ return; }
+  if(e.key === "Escape"){ closeWindow(); }
+  if(e.key === "ArrowRight"){ step(1); }
+  if(e.key === "ArrowLeft"){ step(-1); }
+});
+</script>
+
+</html>
