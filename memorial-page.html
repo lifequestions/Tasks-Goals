@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="One life in thirty video windows — a private memorial page of recorded answers.">
+<title>Margaret Doyle's Windows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#E7E6E0; --card:#FAF9F6; --card-2:#F0EEE8;
+  --ink:#191D23; --ink-2:#5B6470; --ink-3:#8A929C;
+  --rule:#CDCBC3; --rule-2:#DEDCD5;
+  --lamp:#C07C22; --lamp-soft:#EBCB92; --teal:#1E4340;
+  --shadow:rgba(25,29,35,.14); --scrim:rgba(20,23,26,.74); --sealed:#DCDCD6;
+  --bar:rgba(231,230,224,.88);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131619; --card:#1C2025; --card-2:#23272D;
+    --ink:#EDEBE5; --ink-2:#9AA3AE; --ink-3:#79828D;
+    --rule:#2F353C; --rule-2:#272C32;
+    --lamp:#E5A74B; --lamp-soft:#7A5A24; --teal:#89B7AF;
+    --shadow:rgba(0,0,0,.5); --scrim:rgba(8,10,12,.84); --sealed:#262B31;
+    --bar:rgba(19,22,25,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131619; --card:#1C2025; --card-2:#23272D;
+  --ink:#EDEBE5; --ink-2:#9AA3AE; --ink-3:#79828D;
+  --rule:#2F353C; --rule-2:#272C32;
+  --lamp:#E5A74B; --lamp-soft:#7A5A24; --teal:#89B7AF;
+  --shadow:rgba(0,0,0,.5); --scrim:rgba(8,10,12,.84); --sealed:#262B31;
+  --bar:rgba(19,22,25,.9);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Karla",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.5rem)}
+h1,h2,h3{font-family:"Fraunces","Iowan Old Style",Georgia,serif;font-weight:600;text-wrap:balance;margin:0;letter-spacing:-.012em}
+p{margin:0}
+button{font:inherit;color:inherit}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.eyebrow{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:0}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px;border-radius:2px}
+
+/* ---------- top bar ---------- */
+.bar{
+  position:sticky;top:0;z-index:40;
+  background:var(--bar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+.bar-in{
+  max-width:1180px;margin:0 auto;padding:.65rem clamp(1.1rem,4vw,2.5rem);
+  display:flex;align-items:center;gap:1rem;justify-content:space-between;
+}
+.bar-id{display:flex;align-items:baseline;gap:.6rem;min-width:0}
+.bar-id .nm{font-family:"Fraunces",Georgia,serif;font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-id .dt{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--ink-3);white-space:nowrap}
+.bar-tools{display:flex;align-items:center;gap:.5rem}
+.ghost{
+  background:none;border:1px solid var(--rule);border-radius:2px;
+  padding:.34rem .72rem;font-family:"IBM Plex Mono",monospace;
+  font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;
+  transition:border-color .2s,color .2s;white-space:nowrap;
+}
+.ghost:hover{border-color:var(--ink);color:var(--ink)}
+@media (max-width:640px){.bar-id .dt{display:none}}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(2.4rem,6vw,4.6rem) 0 clamp(1.8rem,4vw,3rem)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(1.8rem,5vw,3.6rem);align-items:center}
+@media (max-width:840px){.hero-grid{grid-template-columns:1fr}}
+.hero-copy{display:flex;flex-direction:column;gap:1.1rem}
+.hero h1{font-size:clamp(2.5rem,6vw,3.9rem);line-height:1.03;font-variation-settings:"opsz" 120}
+.hero .dates{font-family:"IBM Plex Mono",monospace;font-size:.86rem;letter-spacing:.1em;color:var(--ink-2)}
+.dedication{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.12rem;line-height:1.5;color:var(--ink-2);max-width:44ch}
+.hero-meta{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+.titlecard{
+  background:var(--card);border:1px solid var(--rule);padding:14px 14px 10px;
+  box-shadow:0 22px 46px -30px var(--shadow);cursor:pointer;width:100%;text-align:left;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.titlecard:hover{transform:translateY(-3px);box-shadow:0 28px 52px -28px var(--shadow)}
+.titlecard-glass{
+  aspect-ratio:16/10;display:grid;place-content:center;gap:.9rem;justify-items:center;
+  border:1px solid var(--rule);
+  background:radial-gradient(ellipse 88% 78% at 50% 48%, var(--lamp-soft) 0%, transparent 72%), var(--card-2);
+  transition:background .25s ease;
+}
+.titlecard:hover .titlecard-glass{background:radial-gradient(ellipse 104% 92% at 50% 48%, var(--lamp-soft) 0%, transparent 80%), var(--card-2)}
+.bigplay{width:0;height:0;border-left:30px solid var(--lamp);border-top:19px solid transparent;border-bottom:19px solid transparent;margin-left:7px}
+.titlecard:hover .bigplay{border-left-color:var(--ink)}
+.titlecard-glass .cap{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)}
+.titlecard-foot{display:flex;justify-content:space-between;gap:1rem;padding-top:10px;font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+/* progress */
+.progress{display:flex;flex-direction:column;gap:.55rem;max-width:30rem}
+.pbar{height:5px;background:var(--sealed);border:1px solid var(--rule);display:flex}
+.pbar i{display:block;background:var(--lamp)}
+.ptext{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.08em;color:var(--ink-2)}
+
+/* ---------- controls ---------- */
+.controls{
+  position:sticky;top:52px;z-index:30;
+  background:var(--bar);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:.7rem 0;margin-bottom:clamp(1.8rem,4vw,2.6rem);
+}
+.controls-in{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap}
+.search{
+  flex:1 1 220px;min-width:0;
+  background:var(--card);border:1px solid var(--rule);border-radius:2px;
+  padding:.44rem .7rem;font-family:"Karla",sans-serif;font-size:.9rem;color:var(--ink);
+}
+.search::placeholder{color:var(--ink-3)}
+.chips{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{
+  background:none;border:1px solid var(--rule);border-radius:2px;cursor:pointer;
+  padding:.36rem .7rem;font-family:"IBM Plex Mono",monospace;font-size:.66rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap;
+  transition:.2s border-color,.2s color,.2s background;
+}
+.chip:hover{color:var(--ink);border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* ---------- wall ---------- */
+.reel{margin-bottom:clamp(2.2rem,4vw,3.2rem)}
+.reel-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.1rem}
+.reel-head h2{font-size:1.28rem}
+.reel-head .yr{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.12em;color:var(--ink-3);white-space:nowrap}
+.reel-head .line{flex:1;height:1px;background:var(--rule)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:1.25rem}
+
+.mount{
+  text-align:left;cursor:pointer;background:var(--card);
+  border:1px solid var(--rule);border-radius:2px;padding:10px 10px 8px;
+  display:flex;flex-direction:column;gap:9px;
+  box-shadow:0 10px 24px -20px var(--shadow);
+  transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.mount:hover{transform:translateY(-3px);box-shadow:0 20px 34px -22px var(--shadow);border-color:var(--ink-3)}
+.glass{aspect-ratio:3/2;border:1px solid var(--rule);display:grid;place-content:center;background:var(--card-2);transition:background .25s ease}
+.mount.open .glass{background:radial-gradient(ellipse 84% 74% at 50% 50%, var(--lamp-soft) 0%, transparent 70%), var(--card-2)}
+.mount.open:hover .glass{background:radial-gradient(ellipse 100% 90% at 50% 50%, var(--lamp-soft) 0%, transparent 78%), var(--card-2)}
+.play{width:0;height:0;border-left:18px solid var(--lamp);border-top:11px solid transparent;border-bottom:11px solid transparent;margin-left:4px}
+.mount.open:hover .play{border-left-color:var(--ink)}
+.seal{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);border:1px dashed var(--rule);padding:.38rem .65rem;text-align:center;line-height:1.5}
+.mount .q{font-size:.95rem;line-height:1.34;font-weight:500;min-height:3.7em}
+.mount .asked{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.06em;color:var(--teal);margin-top:-4px}
+.mount .meta{
+  display:flex;justify-content:space-between;gap:.5rem;align-items:center;
+  font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);border-top:1px solid var(--rule-2);padding-top:7px;
+}
+.mount.open .meta .st{color:var(--lamp)}
+.empty{padding:3rem 0;color:var(--ink-2);font-size:.95rem}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--rule);margin-top:1rem;padding:2.4rem 0 3.4rem;display:flex;flex-wrap:wrap;gap:1.2rem 2.4rem;justify-content:space-between;color:var(--ink-3);font-size:.84rem}
+footer .brand{font-family:"Fraunces",Georgia,serif;color:var(--ink-2)}
+
+/* ---------- player ---------- */
+.scrim{position:fixed;inset:0;background:var(--scrim);display:none;align-items:center;justify-content:center;padding:clamp(.7rem,3vw,2rem);z-index:60;backdrop-filter:blur(3px)}
+.scrim.on{display:flex}
+.projector{background:var(--card);border:1px solid var(--rule);width:min(820px,100%);max-height:94vh;overflow-y:auto;box-shadow:0 34px 80px -34px rgba(0,0,0,.62)}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.85rem 1.15rem;border-bottom:1px solid var(--rule)}
+.screen{aspect-ratio:16/9;background:#0C0E10;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{position:absolute;inset:0;display:grid;place-content:center;gap:.7rem;text-align:center;padding:2rem;background:repeating-linear-gradient(-45deg,var(--card-2) 0 12px,transparent 12px 24px),var(--card)}
+.screen-empty p{color:var(--ink-2);font-size:.92rem;max-width:40ch;margin:0 auto}
+.caption{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.08em;color:var(--ink-3);padding:.5rem 1.15rem;border-bottom:1px solid var(--rule-2)}
+.proj-body{padding:1.3rem 1.15rem 1.5rem;display:flex;flex-direction:column;gap:1.05rem}
+.proj-body h2{font-size:clamp(1.3rem,2.6vw,1.65rem)}
+.quote{
+  border-left:2px solid var(--lamp);padding:.15rem 0 .15rem 1rem;
+  font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.02rem;line-height:1.55;color:var(--ink-2);
+}
+.quote .src{display:block;font-family:"IBM Plex Mono",monospace;font-style:normal;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-top:.5rem}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.45rem}
+.prompts li{display:flex;gap:.65rem;color:var(--ink-2);font-size:.93rem}
+.prompts li::before{content:"\2192";color:var(--lamp);flex:none}
+.proj-foot{display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;padding-top:.9rem;border-top:1px solid var(--rule-2);font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.proj-nav{display:flex;justify-content:space-between;gap:.6rem;padding:.85rem 1.15rem;border-top:1px solid var(--rule);background:var(--card-2)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="bar">
+  <div class="bar-in">
+    <div class="bar-id">
+      <span class="nm">Margaret Ellen Doyle</span>
+      <span class="dt">1938 &mdash; 2024</span>
+    </div>
+    <div class="bar-tools">
+      <button class="ghost" id="shuffleBtn">Shuffle</button>
+      <button class="ghost" id="topBtn">Contents</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Thirty windows &nbsp;·&nbsp; recorded 2022&ndash;2024</p>
+        <h1>Margaret Ellen Doyle</h1>
+        <p class="dates">17 March 1938 &nbsp;&mdash;&nbsp; 8 November 2024 &nbsp;·&nbsp; Ballina, Co. Mayo &rarr; Coventry</p>
+        <p class="dedication">&ldquo;Ask me the questions and I'll answer them, but I'm not putting on a good blouse for it.&rdquo;</p>
+        <div class="progress">
+          <div class="pbar"><i style="width:80%"></i></div>
+          <p class="ptext" id="ptext">24 of 30 windows open &nbsp;·&nbsp; 2 h 24 m recorded</p>
+        </div>
+        <div class="hero-meta">
+          <span>Recorded by Anne, Tom &amp; Aoife</span>
+          <span>Private page &mdash; link only</span>
+        </div>
+      </div>
+      <button class="titlecard" id="titleCard">
+        <div class="titlecard-glass">
+          <span class="bigplay"></span>
+          <span class="cap">Play the title card</span>
+        </div>
+        <div class="titlecard-foot"><span>Reel 00 &nbsp;·&nbsp; &ldquo;Right. Where do you want me to start?&rdquo;</span><span>0:52</span></div>
+      </button>
+    </div>
+  </header>
+
+  <div class="controls">
+    <div class="wrap controls-in">
+      <input class="search" id="search" type="search" placeholder="Search the questions &mdash; boat, nights, Christmas&hellip;" aria-label="Search questions">
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+
+  <main id="wall"></main>
+
+  <footer>
+    <p>Recorded on a phone at the kitchen table in Wyken, 2022&ndash;2024.<br>Videos are unlisted &mdash; only people with this link can watch them.</p>
+    <p class="brand">Sixty Windows</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="projQ">
+  <div class="projector">
+    <div class="proj-top">
+      <p class="eyebrow" id="projReel">Reel</p>
+      <button class="ghost" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <p class="caption" id="caption"></p>
+    <div class="proj-body">
+      <h2 id="projQ">Question</h2>
+      <div id="quoteSlot"></div>
+      <ul class="prompts" id="projPrompts"></ul>
+      <div class="proj-foot" id="projFoot"></div>
+    </div>
+    <div class="proj-nav">
+      <button class="ghost" id="prevBtn">&larr; Previous window</button>
+      <button class="ghost" id="nextBtn">Next window &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mock-up stand-in: Blender Foundation's openly licensed film.
+// On a live page each of these is that answer's unlisted YouTube ID.
+var V = "aqz-KE-bpKQ";
+
+var REELS = [
+  { name:"Ballina",              years:"1938 – 1956" },
+  { name:"Coming over",          years:"1956 – 1963" },
+  { name:"Frank, and the three of us", years:"1963 – 1981" },
+  { name:"Forty years of nights", years:"1959 – 1999" },
+  { name:"On her own",           years:"2009 – 2019" },
+  { name:"What she'd tell you",  years:"recorded last" },
+  { name:"For later",            years:"sealed" }
+];
+
+var W = [
+  { r:0, q:"Tell me about the house in Ballina.", len:"6:12", on:"14 May 2022", v:V,
+    quote:"There were nine of us and one range, so the kitchen was the whole house really. You didn't go into the good room unless somebody had died.",
+    p:["Walk me through the front door.","Which room did everyone end up in?","What could you hear from your bed?"] },
+  { r:0, q:"Who were your mother and father, really?", len:"8:40", on:"14 May 2022", v:V,
+    quote:"My father talked to the dog more than he talked to us, and the dog got the better of it.",
+    p:["What did they want before the children came?","What did they never talk about?","What of them do you catch yourself doing?"] },
+  { r:0, q:"What did you do after school, before you were old enough to work?", len:"4:55", on:"21 May 2022", v:V, ask:"asked by Tom, aged 9",
+    p:["Where did you go when nobody knew where you were?","Who were your two best friends?"] },
+  { r:0, q:"The winter the river froze.", len:"3:20", on:"21 May 2022", v:V,
+    p:["How old were you?","Who went out on it first?"] },
+  { r:0, q:"A Sunday, start to finish.", len:"5:05", on:"4 June 2022", v:V,
+    quote:"Mass, then bacon, then my mother would sit down for the first time since Friday.",
+    p:["What time did the day start?","What was on the table?","When did it stop being like that?"] },
+
+  { r:1, q:"The boat to Holyhead.", len:"7:18", on:"4 June 2022", v:V,
+    quote:"I was seventeen and I had a case with two cardigans in it. I cried from Dublin to Wales and then I stopped, because what was the use.",
+    p:["Who took you to the boat?","What did you think England was going to be?","When did you know you weren't going back?"] },
+  { r:1, q:"Your first room in Coventry.", len:"5:44", on:"11 June 2022", v:V,
+    p:["What did it cost?","Who was the landlady?","What did you eat that first week?"] },
+  { r:1, q:"Starting at the hospital.", len:"6:30", on:"11 June 2022", v:V,
+    p:["What was the first thing they had you do?","Who was kind to you?","When did you stop being frightened of it?"] },
+  { r:1, q:"Were you homesick? Properly homesick?", len:"", on:"", v:null,
+    p:["What set it off?","What did you do about it?"] },
+  { r:1, q:"The money you sent home every week.", len:"4:02", on:"25 June 2022", v:V,
+    p:["How much of it went?","Did they ever say thank you?","Did you resent it?"] },
+
+  { r:2, q:"The dance where you met Dad.", len:"6:55", on:"25 June 2022", v:V,
+    quote:"He asked me twice and I said no twice, and then he got somebody else to ask me for him, which I thought was very poor form. I married him anyway.",
+    p:["What was he wearing?","What did he say?","When did you decide?"] },
+  { r:2, q:"The wedding day, honestly.", len:"5:10", on:"9 July 2022", v:V,
+    p:["Who came over from home?","What went wrong?","What do you remember about the evening?"] },
+  { r:2, q:"The day each of us was born.", len:"9:24", on:"9 July 2022", v:V,
+    quote:"Anne came fast, Tom came slow, and Aoife came on the kitchen floor before the ambulance did. That's the whole three of you, that is.",
+    p:["Tell me about each one.","What frightened you?","Who did we look like?"] },
+  { r:2, q:"The house on Wyken Croft.", len:"5:38", on:"23 July 2022", v:V, ask:"asked by Aoife",
+    p:["Why that house?","What did you change first?","What do you miss about it?"] },
+  { r:2, q:"What frightened you most as a mother?", len:"", on:"", v:null,
+    p:["What kept you awake?","What do you think you got wrong?"] },
+  { r:2, q:"Christmases.", len:"6:44", on:"23 July 2022", v:V,
+    p:["Who was in the house?","What was the job you always did?","Which one do you think about?"] },
+
+  { r:3, q:"Forty years of nights. Why nights?", len:"7:02", on:"6 Aug 2022", v:V,
+    quote:"You get to know people at four in the morning in a way you never do at four in the afternoon.",
+    p:["What did a normal shift look like?","How did you sleep?","What did it cost you at home?"] },
+  { r:3, q:"The patient you never forgot.", len:"8:15", on:"6 Aug 2022", v:V,
+    p:["Tell me what happened.","What did you do?","Do you still think about them?"] },
+  { r:3, q:"What was the ward like in 1974?", len:"5:26", on:"20 Aug 2022", v:V,
+    p:["Who ran it, really?","What would horrify people now?","What was better then?"] },
+  { r:3, q:"Being made sister.", len:"4:48", on:"20 Aug 2022", v:V,
+    p:["Who told you?","Did you want it?","What changed the next morning?"] },
+  { r:3, q:"The last shift.", len:"", on:"", v:null,
+    p:["Who was on with you?","What did you do afterwards?"] },
+
+  { r:4, q:"The year Dad got ill.", len:"9:51", on:"17 Sep 2022", v:V,
+    quote:"I nursed strangers for forty years and I still didn't know how to do it for him. You don't, with your own.",
+    p:["When did you know?","What was the hardest part of the days?","Who turned up, and who didn't?"] },
+  { r:4, q:"How did you get through it?", len:"6:37", on:"17 Sep 2022", v:V,
+    p:["What got you out of bed?","Where did you put it all?","What would you say now to yourself that year?"] },
+  { r:4, q:"Learning to be on your own.", len:"5:03", on:"8 Oct 2022", v:V,
+    p:["What was the first thing you did differently?","What's the worst hour of the day?","What did you find you liked?"] },
+  { r:4, q:"Is there anything you'd have done differently?", len:"", on:"", v:null,
+    p:["About the leaving?","About the work?","About us?"] },
+
+  { r:5, q:"What have you changed your mind about?", len:"4:29", on:"3 Feb 2024", v:V,
+    quote:"Nearly everything the Church told me, and nothing my mother did.",
+    p:["What did you believe at thirty that you don't now?","What changed it?","What are you still not sure about?"] },
+  { r:5, q:"The best advice you were ever given.", len:"3:47", on:"3 Feb 2024", v:V,
+    p:["Who gave it to you?","Did you take it?","Who have you passed it to?"] },
+  { r:5, q:"What do you want us to do on your birthday?", len:"3:11", on:"3 Feb 2024", v:V,
+    quote:"Don't be standing in a graveyard in the cold. Go and have your dinner and talk about something else.",
+    p:["Where should we be?","Who should be there?","What shouldn't we do?"] },
+
+  { r:6, q:"For Aoife, on her wedding day.", len:"", on:"", v:null, opens:"Opens 14 June 2031",
+    p:["Sealed at her request."] },
+  { r:6, q:"For whoever opens this window in fifty years.", len:"", on:"", v:null, opens:"Opens 8 November 2074",
+    p:["Sealed by Margaret, February 2024."] }
+];
+
+var TITLE = { r:-1, q:"Right. Where do you want me to start?", len:"0:52", on:"14 May 2022", v:V,
+  quote:"Put that thing down where it isn't looking straight up my nose and I'll tell you anything you want.",
+  p:["The title card, recorded before the first proper question."] };
+
+var wall = document.getElementById("wall"),
+    chips = document.getElementById("chips"),
+    scrim = document.getElementById("scrim"),
+    screen = document.getElementById("screen"),
+    caption = document.getElementById("caption"),
+    search = document.getElementById("search");
+var current = -1, lastFocus = null, filterReel = null;
+
+function el(tag, cls, text){
+  var n = document.createElement(tag);
+  if(cls){ n.className = cls; }
+  if(text !== undefined){ n.textContent = text; }
+  return n;
+}
+
+/* chapter chips */
+var allChip = el("button","chip","All");
+allChip.setAttribute("aria-pressed","true");
+allChip.addEventListener("click", function(){ setReel(null); });
+chips.appendChild(allChip);
+REELS.forEach(function(r, i){
+  var c = el("button","chip", r.name);
+  c.setAttribute("aria-pressed","false");
+  c.addEventListener("click", function(){ setReel(i); });
+  chips.appendChild(c);
+});
+
+function setReel(i){
+  filterReel = i;
+  Array.prototype.forEach.call(chips.children, function(c, idx){
+    c.setAttribute("aria-pressed", String(idx - 1 === i || (i === null && idx === 0)));
+  });
+  render();
+}
+
+function render(){
+  var term = search.value.trim().toLowerCase();
+  wall.innerHTML = "";
+  var shown = 0;
+
+  REELS.forEach(function(reel, ri){
+    if(filterReel !== null && filterReel !== ri){ return; }
+
+    var items = [];
+    W.forEach(function(w, i){
+      if(w.r !== ri){ return; }
+      if(term && (w.q + " " + (w.quote || "") + " " + w.p.join(" ")).toLowerCase().indexOf(term) === -1){ return; }
+      items.push(i);
+    });
+    if(!items.length){ return; }
+    shown += items.length;
+
+    var block = el("div","reel");
+    var head = el("div","reel-head");
+    head.appendChild(el("h2", null, reel.name));
+    head.appendChild(el("span","yr", reel.years));
+    head.appendChild(el("span","line"));
+    block.appendChild(head);
+
+    var grid = el("div","grid");
+    items.forEach(function(i){
+      grid.appendChild(card(i));
+    });
+    block.appendChild(grid);
+    wall.appendChild(block);
+  });
+
+  if(!shown){
+    wall.appendChild(el("p","empty","No windows match that. Try a name, a place, or a year."));
+  }
+}
+
+function card(i){
+  var w = W[i], open = Boolean(w.v);
+  var btn = el("button","mount" + (open ? " open" : ""));
+  btn.setAttribute("aria-label", (open ? "Play: " : "Not yet recorded: ") + w.q);
+  btn.addEventListener("click", function(){ openWindow(i); });
+
+  var glass = el("div","glass");
+  if(open){
+    glass.appendChild(el("span","play"));
+  } else {
+    glass.appendChild(el("span","seal", w.opens ? w.opens : "Not yet recorded"));
+  }
+  btn.appendChild(glass);
+  btn.appendChild(el("p","q", w.q));
+  if(w.ask){ btn.appendChild(el("p","asked", w.ask)); }
+
+  var meta = el("p","meta");
+  meta.appendChild(el("span", null, open ? w.on : (w.opens ? "Sealed" : "—")));
+  meta.appendChild(el("span","st", open ? w.len : (w.opens ? "Locked" : "To record")));
+  btn.appendChild(meta);
+  return btn;
+}
+
+function openWindow(i){
+  var w = (i === -1) ? TITLE : W[i];
+  current = i;
+  if(!scrim.classList.contains("on")){ lastFocus = document.activeElement; }
+
+  document.getElementById("projReel").textContent =
+    (i === -1) ? "Reel 00 · Title card" : REELS[w.r].name + " · " + REELS[w.r].years;
+  document.getElementById("projQ").textContent = w.q;
+
+  var qs = document.getElementById("quoteSlot");
+  qs.innerHTML = "";
+  if(w.quote){
+    var bq = el("blockquote","quote", "“" + w.quote + "”");
+    bq.appendChild(el("span","src","From the transcript · auto-captioned"));
+    qs.appendChild(bq);
+  }
+
+  var list = document.getElementById("projPrompts");
+  list.innerHTML = "";
+  w.p.forEach(function(p){ list.appendChild(el("li", null, p)); });
+
+  var foot = document.getElementById("projFoot");
+  foot.innerHTML = "";
+  var bits = w.v ? ["Recorded " + w.on, "Running time " + w.len, w.ask ? w.ask : "Asked by Anne"]
+                 : (w.opens ? [w.opens, "Sealed by Margaret"] : ["Not yet recorded", "Question still on the wall"]);
+  bits.forEach(function(t){ foot.appendChild(el("span", null, t)); });
+
+  screen.innerHTML = "";
+  if(w.v){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + w.v + "?rel=0&modestbranding=1";
+    f.title = w.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    screen.appendChild(f);
+    caption.textContent = "Mock-up stand-in clip — the live page plays her answer here";
+    caption.style.display = "";
+  } else {
+    var e = el("div","screen-empty");
+    e.appendChild(el("p","eyebrow", w.opens ? "Sealed until then" : "Window still closed"));
+    e.appendChild(el("p", null, w.opens
+      ? "She recorded this one and asked for it to stay shut until the date. Nobody has seen it, including her family."
+      : "This question was on her list but never got recorded. It stays on the wall."));
+    screen.appendChild(e);
+    caption.style.display = "none";
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+
+function closeWindow(){
+  scrim.classList.remove("on");
+  screen.innerHTML = "";
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+
+function step(d){
+  if(current === -1){ openWindow(d > 0 ? 0 : W.length - 1); return; }
+  var i = (current + d + W.length) % W.length;
+  openWindow(i);
+}
+
+document.getElementById("titleCard").addEventListener("click", function(){ openWindow(-1); });
+document.getElementById("closeBtn").addEventListener("click", closeWindow);
+document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
+document.getElementById("topBtn").addEventListener("click", function(){
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+document.getElementById("shuffleBtn").addEventListener("click", function(){
+  var open = [];
+  W.forEach(function(w, i){ if(w.v){ open.push(i); } });
+  openWindow(open[Math.floor(Math.random() * open.length)]);
+});
+search.addEventListener("input", render);
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeWindow(); } });
+document.addEventListener("keydown", function(e){
+  if(!scrim.classList.contains("on")){ return; }
+  if(e.key === "Escape"){ closeWindow(); }
+  if(e.key === "ArrowRight"){ step(1); }
+  if(e.key === "ArrowLeft"){ step(-1); }
+});
+
+render();
+</script>
+
+</html>
