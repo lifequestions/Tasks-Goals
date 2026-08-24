@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="A memorial-calendar concept: sixty questions about one life, each window opening onto a recorded video answer.">
+<title>Sixty Windows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Karla:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --paper:#E7E6E0;
+  --card:#FAF9F6;
+  --card-2:#F0EEE8;
+  --ink:#191D23;
+  --ink-2:#5B6470;
+  --ink-3:#8A929C;
+  --rule:#CDCBC3;
+  --lamp:#C07C22;
+  --lamp-soft:#EBCB92;
+  --teal:#1E4340;
+  --shadow:rgba(25,29,35,.14);
+  --scrim:rgba(20,23,26,.72);
+  --sealed:#DCDCD6;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#131619;
+    --card:#1C2025;
+    --card-2:#23272D;
+    --ink:#EDEBE5;
+    --ink-2:#9AA3AE;
+    --ink-3:#79828D;
+    --rule:#2F353C;
+    --lamp:#E5A74B;
+    --lamp-soft:#7A5A24;
+    --teal:#89B7AF;
+    --shadow:rgba(0,0,0,.5);
+    --scrim:rgba(8,10,12,.82);
+    --sealed:#262B31;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131619;
+  --card:#1C2025;
+  --card-2:#23272D;
+  --ink:#EDEBE5;
+  --ink-2:#9AA3AE;
+  --ink-3:#79828D;
+  --rule:#2F353C;
+  --lamp:#E5A74B;
+  --lamp-soft:#7A5A24;
+  --teal:#89B7AF;
+  --shadow:rgba(0,0,0,.5);
+  --scrim:rgba(8,10,12,.82);
+  --sealed:#262B31;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Karla",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:17px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.5rem)}
+h1,h2,h3{font-family:"Fraunces","Iowan Old Style",Georgia,serif;font-weight:600;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(2.4rem,6.4vw,4.1rem);line-height:1.02;font-variation-settings:"opsz" 128}
+h2{font-size:clamp(1.5rem,3vw,2rem);line-height:1.12}
+h3{font-size:1.12rem;line-height:1.25}
+p{margin:0}
+a{color:inherit}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin:0;
+}
+.lede{font-size:clamp(1.05rem,1.7vw,1.22rem);color:var(--ink-2);max-width:60ch}
+:focus-visible{outline:2px solid var(--lamp);outline-offset:3px;border-radius:2px}
+
+/* ---------- hero ---------- */
+header.hero{padding:clamp(3rem,9vw,6rem) 0 clamp(2rem,5vw,3.5rem)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(2rem,5vw,4rem);align-items:end}
+@media (max-width:820px){.hero-grid{grid-template-columns:1fr;align-items:start}}
+.hero-copy{display:flex;flex-direction:column;gap:1.4rem}
+.hero h1 em{font-style:normal;color:var(--lamp)}
+
+/* the big lit slide */
+.lantern{
+  background:var(--card);
+  border:1px solid var(--rule);
+  padding:14px 14px 10px;
+  box-shadow:0 18px 40px -28px var(--shadow);
+}
+.lantern-glass{
+  aspect-ratio:4/3;
+  display:grid;place-content:center;
+  text-align:center;gap:.5rem;padding:1.5rem;
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 45%, var(--lamp-soft) 0%, transparent 72%),
+    var(--card-2);
+  border:1px solid var(--rule);
+}
+.lantern-glass .n{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.5rem,3.4vw,2.1rem);line-height:1.1}
+.lantern-glass .d{font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.14em;color:var(--ink-2)}
+.lantern-foot{display:flex;justify-content:space-between;gap:1rem;padding-top:10px;font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+
+.counter{display:flex;flex-direction:column;gap:.6rem;max-width:34rem}
+.counter-bar{height:6px;background:var(--sealed);border:1px solid var(--rule);display:flex}
+.counter-bar i{display:block;background:var(--lamp);width:16.6%}
+.counter-text{font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.08em;color:var(--ink-2)}
+
+.note{
+  border-left:2px solid var(--teal);
+  padding:.15rem 0 .15rem 1rem;
+  color:var(--ink-2);font-size:.92rem;max-width:62ch;
+}
+
+/* ---------- sections ---------- */
+section{padding:clamp(2.6rem,6vw,4.5rem) 0;border-top:1px solid var(--rule)}
+.sec-head{display:flex;flex-direction:column;gap:.7rem;margin-bottom:clamp(1.8rem,4vw,2.8rem);max-width:64ch}
+
+/* how it works */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1.6rem}
+.step{display:flex;flex-direction:column;gap:.5rem}
+.step .num{
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.14em;
+  color:var(--lamp);border-bottom:1px solid var(--rule);padding-bottom:.5rem;margin-bottom:.2rem;
+}
+.step p{color:var(--ink-2);font-size:.95rem}
+
+/* ---------- the wall ---------- */
+.reel{margin-bottom:clamp(2rem,4vw,3rem)}
+.reel-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.1rem}
+.reel-head .eyebrow{white-space:nowrap}
+.reel-head .line{flex:1;height:1px;background:var(--rule)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:1.3rem}
+
+.mount{
+  font:inherit;text-align:left;cursor:pointer;
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:2px;
+  padding:11px 11px 9px;
+  display:flex;flex-direction:column;gap:10px;
+  box-shadow:0 10px 24px -20px var(--shadow);
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.mount:hover{transform:translateY(-3px);box-shadow:0 20px 34px -22px var(--shadow);border-color:var(--ink-3)}
+.glass{
+  aspect-ratio:3/2;
+  border:1px solid var(--rule);
+  display:grid;place-content:center;
+  background:var(--card-2);
+  position:relative;
+  transition:background .25s ease;
+}
+.mount.open .glass{
+  background:radial-gradient(ellipse 85% 75% at 50% 50%, var(--lamp-soft) 0%, transparent 70%), var(--card-2);
+}
+.mount.open:hover .glass{
+  background:radial-gradient(ellipse 100% 90% at 50% 50%, var(--lamp-soft) 0%, transparent 78%), var(--card-2);
+}
+.play{width:0;height:0;border-left:19px solid var(--lamp);border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:4px}
+.mount.open:hover .play{border-left-color:var(--ink)}
+.seal{
+  font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);
+  border:1px dashed var(--rule);padding:.4rem .7rem;
+}
+.mount .q{font-size:.97rem;line-height:1.35;font-weight:500;min-height:3.9em}
+.mount .meta{
+  display:flex;justify-content:space-between;gap:.6rem;
+  font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);
+  border-top:1px solid var(--rule);padding-top:8px;
+}
+.mount.open .meta .st{color:var(--lamp)}
+
+/* ---------- ideas ---------- */
+.ideas{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:1.5rem 2.4rem}
+.idea{display:flex;flex-direction:column;gap:.35rem;padding-top:1rem;border-top:1px solid var(--rule)}
+.idea h3{font-size:1.02rem}
+.idea p{color:var(--ink-2);font-size:.93rem}
+
+/* ---------- build notes ---------- */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem 2.4rem}
+.notes li{color:var(--ink-2);font-size:.93rem;margin-bottom:.7rem}
+.notes ul{margin:0;padding-left:1.1rem}
+.notes ul::marker{color:var(--lamp)}
+code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--card-2);border:1px solid var(--rule);padding:.08em .35em}
+.codeblock{overflow-x:auto;background:var(--card);border:1px solid var(--rule);padding:1rem 1.1rem;margin:0}
+.codeblock code{background:none;border:0;padding:0;font-size:.78rem;line-height:1.7;white-space:pre;color:var(--ink-2)}
+
+footer{border-top:1px solid var(--rule);padding:2.5rem 0 3.5rem;color:var(--ink-3);font-size:.85rem}
+
+/* ---------- projector (modal) ---------- */
+.scrim{
+  position:fixed;inset:0;background:var(--scrim);
+  display:none;align-items:center;justify-content:center;
+  padding:clamp(.8rem,3vw,2rem);z-index:50;
+  backdrop-filter:blur(3px);
+}
+.scrim.on{display:flex}
+.projector{
+  background:var(--card);border:1px solid var(--rule);
+  width:min(760px,100%);max-height:92vh;overflow-y:auto;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.6);
+}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem 1.2rem;border-bottom:1px solid var(--rule)}
+.proj-top .eyebrow{color:var(--ink-2)}
+.x{
+  font:inherit;font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;
+  background:none;border:1px solid var(--rule);color:var(--ink-2);
+  padding:.32rem .7rem;cursor:pointer;border-radius:2px;
+}
+.x:hover{border-color:var(--ink);color:var(--ink)}
+.screen{aspect-ratio:16/9;background:#0C0E10;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{
+  position:absolute;inset:0;display:grid;place-content:center;gap:.7rem;text-align:center;padding:2rem;
+  background:repeating-linear-gradient(-45deg,var(--card-2) 0 12px,transparent 12px 24px),var(--card);
+}
+.screen-empty .eyebrow{color:var(--ink-2)}
+.screen-empty p{color:var(--ink-2);font-size:.92rem;max-width:38ch;margin:0 auto}
+.proj-body{padding:1.4rem 1.2rem 1.6rem;display:flex;flex-direction:column;gap:1.1rem}
+.proj-body h2{font-size:clamp(1.35rem,2.6vw,1.7rem)}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.55rem}
+.prompts li{display:flex;gap:.7rem;color:var(--ink-2);font-size:.95rem}
+.prompts li::before{content:"→";color:var(--lamp);flex:none}
+.proj-foot{
+  display:flex;flex-wrap:wrap;gap:.6rem 1.4rem;padding-top:1rem;border-top:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+}
+.caption{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.08em;color:var(--ink-3);padding:.55rem 1.2rem;border-bottom:1px solid var(--rule)}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Concept · a life told in recorded answers</p>
+        <h1>Sixty questions.<br>Sixty <em>windows</em>.<br>One life behind them.</h1>
+        <p class="lede">A wall of small closed windows, like an advent calendar. Each one holds a question about a person's life. They record the answer to camera, and the window opens onto their face, telling it in their own voice. Sealed windows stay shut until there's a video behind them &mdash; so the wall fills up slowly, and finishing it becomes something to do together.</p>
+        <div class="counter">
+          <div class="counter-bar"><i></i></div>
+          <p class="counter-text">10 of 60 windows open &nbsp;·&nbsp; 4 recorded so far</p>
+        </div>
+      </div>
+      <div class="lantern">
+        <div class="lantern-glass">
+          <p class="n">Your person's<br>name here</p>
+          <p class="d">1938 &mdash; </p>
+        </div>
+        <div class="lantern-foot"><span>Reel 00 · Title card</span><span>0:38</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">How it works</p>
+      <h2>Four steps, no film crew</h2>
+      <p class="lede">The whole thing is one web page and a private YouTube channel. Nothing to install, nothing to pay for, and it keeps working after everyone involved has stopped touching it.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <p class="num">01</p>
+        <h3>Pick the questions</h3>
+        <p>Sixty is a good number &mdash; roughly one a week for a year. Family can submit their own, so a grandchild's question sits on the wall next to yours.</p>
+      </div>
+      <div class="step">
+        <p class="num">02</p>
+        <h3>Record the answers</h3>
+        <p>Phone on a stack of books, someone off camera asking. Two to six minutes each. The off-camera voice matters &mdash; people talk better to a person than to a lens.</p>
+      </div>
+      <div class="step">
+        <p class="num">03</p>
+        <h3>Upload as unlisted</h3>
+        <p>Unlisted YouTube videos don't appear in search or on the channel. Only someone with the link &mdash; or this page &mdash; can watch them.</p>
+      </div>
+      <div class="step">
+        <p class="num">04</p>
+        <h3>Paste in the ID</h3>
+        <p>Drop the eleven-character video ID into the question's entry. The window unseals itself and lights up. That's the entire publishing workflow.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">The wall · ten example questions</p>
+      <h2>Open a window</h2>
+      <p class="lede">Ten questions grouped into reels, running roughly chronologically through a life. Four are lit &mdash; click one to see the player. Six are still sealed, which is what an unrecorded question looks like to a visitor.</p>
+      <p class="note">The lit windows here play a stand-in clip so you can see the mechanism working. On the real site that frame holds your person.</p>
+    </div>
+    <div id="wall"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Ways to shape it</p>
+      <h2>Twelve ideas worth stealing</h2>
+    </div>
+    <div class="ideas">
+      <div class="idea"><h3>Release on a schedule</h3><p>Windows can unseal on a date rather than the moment they're uploaded. One a week for a year, or all sixty at once on a birthday, or the last window only after they've gone.</p></div>
+      <div class="idea"><h3>A sealed final window</h3><p>Record one message meant to be opened later &mdash; a specific date, a wedding, a fiftieth birthday. Everyone can see the window is there. Nobody can open it yet.</p></div>
+      <div class="idea"><h3>Let the family ask</h3><p>A form that adds a question to the wall, credited: "asked by Tom, aged 9." Turns a solo project into something the whole family is building.</p></div>
+      <div class="idea"><h3>Print the question cards</h3><p>One question per card, posted through the door a week apart. They think about it before the camera is on, which is where the good answers come from.</p></div>
+      <div class="idea"><h3>Audio-only windows</h3><p>Some people freeze on camera. A photograph and a voice track over it is just as good &mdash; often better, because they forget they're being recorded.</p></div>
+      <div class="idea"><h3>Shuffle</h3><p>One button that opens a random lit window. Rummaging through a shoebox of photos, not working through a syllabus.</p></div>
+      <div class="idea"><h3>Searchable transcripts</h3><p>YouTube auto-captions can be pulled into the page. Then "Dad, what did he say about the boat?" is a search, not an hour of scrubbing.</p></div>
+      <div class="idea"><h3>A QR code on the order of service</h3><p>The most quietly powerful use. People go home from the funeral and open the wall that night, and he's still talking.</p></div>
+      <div class="idea"><h3>Guestbook windows</h3><p>A second wall where other people record their memories of them. Same mechanism, reversed: everyone else answering questions about one person.</p></div>
+      <div class="idea"><h3>Objects, not just questions</h3><p>Some windows are a thing rather than a topic &mdash; the watch, the recipe, the scar. Hold it up to the camera and explain it.</p></div>
+      <div class="idea"><h3>Show the progress</h3><p>"34 of 60 recorded" is a nudge while they're still here. Once it's a memorial, swap the counter for the dates.</p></div>
+      <div class="idea"><h3>Chapters as reels</h3><p>Grouping by era gives the wall a shape and stops sixty windows feeling like a quiz. Roots, becoming, the middle years, what you learned.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <p class="eyebrow">Build notes</p>
+      <h2>What this is made of</h2>
+    </div>
+    <div class="notes">
+      <div>
+        <ul>
+          <li>One HTML file. The questions live in a single array &mdash; adding a window is adding an object to it.</li>
+          <li>The iframe is only created when a window is opened, so sixty players never load at once.</li>
+          <li>Embeds use <code>youtube-nocookie.com</code>, which doesn't set tracking cookies until playback starts.</li>
+          <li>Unlisted videos are hidden from search and the channel page, but anyone with the link can watch &mdash; fine for family, not a password.</li>
+          <li>Free hosting on GitHub Pages, and the videos live on YouTube's storage rather than yours.</li>
+        </ul>
+      </div>
+      <div>
+        <pre class="codeblock"><code>{
+  reel:  "Roots",
+  n:     "01",
+  q:     "Tell me about the house
+          you grew up in.",
+  prompts: [
+    "Which room did everyone end up in?",
+    "What could you hear at night?"
+  ],
+  len:   "5 min",
+  video: "aBcDeFgHiJk"   // unseals it
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Sixty Windows &mdash; a working concept sketch. Replace the name, the dates and the video IDs, and it's theirs.</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="projQ">
+  <div class="projector">
+    <div class="proj-top">
+      <p class="eyebrow" id="projReel">Reel</p>
+      <button class="x" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <p class="caption" id="caption"></p>
+    <div class="proj-body">
+      <h2 id="projQ">Question</h2>
+      <ul class="prompts" id="projPrompts"></ul>
+      <div class="proj-foot" id="projFoot"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Stand-in clip: Blender Foundation's Big Buck Bunny, an openly licensed film.
+// Swap each of these for the real recording's YouTube ID.
+var SAMPLE = "aqz-KE-bpKQ";
+
+var WINDOWS = [
+  { reel:"Reel one · Roots", n:"01", len:"5 min", video:SAMPLE,
+    q:"Tell me about the house you grew up in.",
+    prompts:["Walk me through the front door — what's the first thing I'd see?",
+             "Which room did everyone end up in?",
+             "What could you hear from your bed at night?"] },
+
+  { reel:"Reel one · Roots", n:"02", len:"6 min", video:null,
+    q:"Who were your parents, really — not as parents, but as people?",
+    prompts:["What did they want for themselves before you came along?",
+             "What did they never talk about?",
+             "What of them do you catch yourself doing?"] },
+
+  { reel:"Reel two · Becoming", n:"03", len:"4 min", video:SAMPLE,
+    q:"What did you want to be at fifteen, and what happened to that plan?",
+    prompts:["Who was the first person who took you seriously?",
+             "When did you know it wasn't going to happen — and how did that feel?",
+             "Do you still think about it?"] },
+
+  { reel:"Reel two · Becoming", n:"04", len:"4 min", video:null,
+    q:"The first time you fell in love.",
+    prompts:["Where were you standing when you realised?",
+             "What did you do about it?",
+             "How did it end?"] },
+
+  { reel:"Reel three · The middle years", n:"05", len:"6 min", video:null,
+    q:"How did you know they were the one?",
+    prompts:["What was the first thing you noticed?",
+             "What did your family make of them?",
+             "What's the thing about them that only you know?"] },
+
+  { reel:"Reel three · The middle years", n:"06", len:"5 min", video:SAMPLE,
+    q:"Tell me about the work you did — and the thing you made that you're proudest of.",
+    prompts:["What did a normal Tuesday actually look like?",
+             "Who taught you to do it properly?",
+             "Is any of it still standing, still running, still being used?"] },
+
+  { reel:"Reel three · The middle years", n:"07", len:"7 min", video:null,
+    q:"What was the hardest year of your life, and how did you get through it?",
+    prompts:["Who turned up for you, and who didn't?",
+             "What got you out of bed?",
+             "What would you say now to yourself in that year?"] },
+
+  { reel:"Reel four · What you learned", n:"08", len:"5 min", video:null,
+    q:"What did becoming a parent teach you that nothing else could have?",
+    prompts:["What frightened you most in the first month?",
+             "What do you think you got wrong?",
+             "What did you get right that nobody noticed?"] },
+
+  { reel:"Reel four · What you learned", n:"09", len:"4 min", video:SAMPLE,
+    q:"What have you changed your mind about?",
+    prompts:["What did you believe firmly at thirty that you don't now?",
+             "What changed it — a person, an event, or just time?",
+             "What are you still not sure about?"] },
+
+  { reel:"Reel four · What you learned", n:"10", len:"3 min", video:null,
+    q:"What would you say to whoever opens this window in fifty years?",
+    prompts:["Who do you imagine is watching?",
+             "What do you want them to know about you that isn't in any of the other windows?",
+             "What do you want them to do on your birthday?"] }
+];
+
+var wall = document.getElementById("wall");
+var reels = [];
+WINDOWS.forEach(function(w){
+  if(reels.indexOf(w.reel) === -1){ reels.push(w.reel); }
+});
+
+reels.forEach(function(reelName){
+  var block = document.createElement("div");
+  block.className = "reel";
+
+  var head = document.createElement("div");
+  head.className = "reel-head";
+  var label = document.createElement("p");
+  label.className = "eyebrow";
+  label.textContent = reelName;
+  var line = document.createElement("span");
+  line.className = "line";
+  head.appendChild(label);
+  head.appendChild(line);
+
+  var grid = document.createElement("div");
+  grid.className = "grid";
+
+  WINDOWS.forEach(function(w, i){
+    if(w.reel !== reelName){ return; }
+    var open = Boolean(w.video);
+
+    var btn = document.createElement("button");
+    btn.className = "mount" + (open ? " open" : "");
+    btn.setAttribute("aria-label", (open ? "Open window " : "Sealed window ") + w.n + ": " + w.q);
+    btn.addEventListener("click", function(){ openWindow(i); });
+
+    var glass = document.createElement("div");
+    glass.className = "glass";
+    if(open){
+      var play = document.createElement("span");
+      play.className = "play";
+      glass.appendChild(play);
+    } else {
+      var seal = document.createElement("span");
+      seal.className = "seal";
+      seal.textContent = "Sealed";
+      glass.appendChild(seal);
+    }
+
+    var q = document.createElement("p");
+    q.className = "q";
+    q.textContent = w.q;
+
+    var meta = document.createElement("p");
+    meta.className = "meta";
+    var num = document.createElement("span");
+    num.textContent = "No. " + w.n;
+    var st = document.createElement("span");
+    st.className = "st";
+    st.textContent = open ? w.len : "Not yet recorded";
+    meta.appendChild(num);
+    meta.appendChild(st);
+
+    btn.appendChild(glass);
+    btn.appendChild(q);
+    btn.appendChild(meta);
+    grid.appendChild(btn);
+  });
+
+  block.appendChild(head);
+  block.appendChild(grid);
+  wall.appendChild(block);
+});
+
+var scrim = document.getElementById("scrim");
+var screen = document.getElementById("screen");
+var caption = document.getElementById("caption");
+var lastFocus = null;
+
+function openWindow(i){
+  var w = WINDOWS[i];
+  lastFocus = document.activeElement;
+
+  document.getElementById("projReel").textContent = w.reel + " · No. " + w.n;
+  document.getElementById("projQ").textContent = w.q;
+
+  var list = document.getElementById("projPrompts");
+  list.innerHTML = "";
+  w.prompts.forEach(function(p){
+    var li = document.createElement("li");
+    li.textContent = p;
+    list.appendChild(li);
+  });
+
+  var foot = document.getElementById("projFoot");
+  foot.innerHTML = "";
+  [w.video ? "Recorded" : "Not yet recorded",
+   "Suggested length " + w.len,
+   "Ask off camera"].forEach(function(t){
+    var s = document.createElement("span");
+    s.textContent = t;
+    foot.appendChild(s);
+  });
+
+  screen.innerHTML = "";
+  if(w.video){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + w.video + "?rel=0&modestbranding=1";
+    f.title = w.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen", "");
+    screen.appendChild(f);
+    caption.textContent = "Stand-in clip — replace with this question's recording";
+    caption.style.display = "";
+  } else {
+    var e = document.createElement("div");
+    e.className = "screen-empty";
+    var lbl = document.createElement("p");
+    lbl.className = "eyebrow";
+    lbl.textContent = "Window still sealed";
+    var msg = document.createElement("p");
+    msg.textContent = "No recording behind this one yet. The question stays on the wall, and the window opens itself the day a video ID is added.";
+    e.appendChild(lbl);
+    e.appendChild(msg);
+    screen.appendChild(e);
+    caption.style.display = "none";
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+
+function closeWindow(){
+  scrim.classList.remove("on");
+  screen.innerHTML = "";           // stops playback
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+
+document.getElementById("closeBtn").addEventListener("click", closeWindow);
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeWindow(); } });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && scrim.classList.contains("on")){ closeWindow(); }
+});
+</script>
+
+</html>
