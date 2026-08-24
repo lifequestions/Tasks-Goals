@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Life Stages, Ten Ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=DM+Serif+Display&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Instrument+Serif&family=Libre+Baskerville:wght@400;700&family=Space+Grotesk:wght@400;500;700&display=swap">
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#0E0F11;font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.chrome{position:sticky;top:0;z-index:80;background:#0E0F11;border-bottom:1px solid #24262A;color:#E9E9E7}
+.chrome-in{max-width:1400px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.chrome-lbl{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;white-space:nowrap}
+.tabs{display:flex;gap:.28rem;overflow-x:auto;scrollbar-width:none;flex:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:1px solid #2C2F34;color:#9AA0A8;border-radius:2px;padding:.3rem .58rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;transition:.18s}
+.tab:hover{color:#FFF;border-color:#565B62}
+.tab[aria-pressed="true"]{background:#F2F2F0;color:#0E0F11;border-color:#F2F2F0}
+.blurb{max-width:1400px;margin:0 auto;padding:.45rem 1rem .6rem;font-family:"IBM Plex Mono",monospace;font-size:.66rem;line-height:1.6;color:#868C94;border-top:1px solid #1B1D20}
+.blurb b{color:#E9E9E7;font-weight:500}
+.scrim{position:fixed;inset:0;background:rgba(8,9,11,.86);display:none;align-items:center;justify-content:center;padding:clamp(.6rem,3vw,2rem);z-index:90;backdrop-filter:blur(4px)}
+.scrim.on{display:flex}
+.proj{background:var(--pSurf,#fff);color:var(--pInk,#111);border:1px solid var(--pLine,#ddd);border-radius:var(--pRad,2px);width:min(840px,100%);max-height:94vh;overflow-y:auto;font-family:var(--pBody,"Archivo",sans-serif)}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.75rem 1.05rem;border-bottom:1px solid var(--pLine,#ddd)}
+.proj-top .mo{color:var(--pInk2,#666)}
+.xb{background:none;border:1px solid var(--pLine,#ddd);border-radius:2px;padding:.3rem .65rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pInk2,#666)}
+.xb:hover{color:var(--pInk,#111);border-color:var(--pInk,#111)}
+.screen{aspect-ratio:16/9;background:#000;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{position:absolute;inset:0;display:grid;place-content:center;gap:.6rem;text-align:center;padding:2rem;background:var(--pSurf2,#f2f2f2);color:var(--pInk2,#666)}
+.pbody{padding:1.15rem 1.05rem 1.4rem;display:flex;flex-direction:column;gap:.95rem}
+.pbody h2{font-family:var(--pDisp,Georgia,serif);font-size:clamp(1.2rem,2.5vw,1.6rem);line-height:1.2;margin:0;color:var(--pInk,#111)}
+.src{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.05em;line-height:1.7;color:var(--pInk2,#666);border-left:2px solid var(--pAcc,#333);padding-left:.75rem;margin:0}
+.src a{color:var(--pAcc,#333)}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.prompts li{display:flex;gap:.6rem;color:var(--pInk2,#666);font-size:.9rem}
+.prompts li::before{content:"\2192";color:var(--pAcc,#333)}
+.pfoot{display:flex;flex-wrap:wrap;gap:.45rem 1.2rem;padding-top:.85rem;border-top:1px solid var(--pLine,#ddd);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--pInk2,#666)}
+.pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.75rem 1.05rem;border-top:1px solid var(--pLine,#ddd);background:var(--pSurf2,#f2f2f2)}
+.th{width:100%;height:100%;object-fit:cover;display:block}
+.th.dead{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* optional extras */
+.xwrap{display:flex;flex-direction:column;gap:.6rem}
+.xhd{color:var(--pInk2,#666);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin:0}
+.xrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem}
+.xc{display:flex;gap:.65rem;align-items:center;border:1px solid var(--pLine,#ddd);border-radius:var(--pRad,2px);padding:.45rem;background:var(--pSurf2,#f4f4f4)}
+.xc svg{width:58px;height:38px;flex:none;border:1px solid var(--pLine,#ddd)}
+.xph{width:58px;height:38px;flex:none;display:grid;place-content:center;border:1px solid var(--pLine,#ddd);background:var(--pSurf,#fff);color:var(--pInk2,#888);font-size:1.05rem}
+.xl{font-size:.76rem;line-height:1.35;color:var(--pInk,#111)}
+.xd{display:block;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.04em;color:var(--pInk2,#666);margin-top:2px}
+.xbadge{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.08em;border:1px solid currentColor;border-radius:999px;padding:0 .34rem;opacity:.75}
+/* ============ life-stages family ============ */
+.stage{
+  --bg:#F7F8FA;--surf:#FFFFFF;--surf2:#EBEEF2;--ink:#12161C;--ink2:#5D6673;--line:#E0E5EB;
+  --acc:#2C5AA8;--rad:6px;--fd:"Space Grotesk",sans-serif;--fb:"Archivo",sans-serif;
+  background:var(--bg);color:var(--ink);font-family:var(--fb);padding-bottom:6rem;min-height:70vh;
+}
+.stage h1,.stage h2,.stage h3{font-family:var(--fd);margin:0;text-wrap:balance;letter-spacing:-.02em}
+.stage p{margin:0}
+.in{max-width:1080px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.4rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.hd{padding:clamp(2.6rem,7vw,5rem) 0 clamp(1.6rem,4vw,2.6rem);display:flex;flex-direction:column;gap:.9rem}
+.hd h1{font-size:clamp(2.1rem,5vw,3.2rem);line-height:1.06}
+.hd .sub{color:var(--ink2);max-width:56ch;line-height:1.6;font-size:.96rem}
+.st{margin-bottom:2rem;position:relative}
+.st-hd{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;margin-bottom:.9rem}
+.st-hd h2{font-size:1.22rem}
+.st-when{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.06em;color:var(--ink2)}
+.flag{font-family:"IBM Plex Mono",monospace;font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:.12rem .5rem;color:var(--ink2)}
+.flag.open{border-color:var(--acc);color:var(--acc)}
+.flag.skip{border-style:dashed}
+.wins{display:grid;grid-template-columns:repeat(auto-fill,minmax(222px,1fr));gap:1rem}
+.win{text-align:left;background:var(--surf);border:1px solid var(--line);border-radius:var(--rad);padding:9px 9px 8px;display:flex;flex-direction:column;gap:8px;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s}
+.win:hover{transform:translateY(-2px);border-color:var(--acc);box-shadow:0 12px 26px -18px rgba(10,20,40,.5)}
+.tw{position:relative;aspect-ratio:16/10;background:var(--surf2);border-radius:calc(var(--rad) - 3px);overflow:hidden;display:block}
+.pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:rgba(10,12,16,.6);display:grid;place-content:center}
+.pl::after{content:"";width:0;height:0;border-left:11px solid #fff;border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
+.win:hover .pl{background:var(--acc)}
+.sealed{position:absolute;inset:0;display:grid;place-content:center;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.wq{font-size:.92rem;line-height:1.34;font-weight:500;min-height:3.5em}
+.wm{display:flex;justify-content:space-between;gap:.5rem;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink2);border-top:1px solid var(--line);padding-top:6px}
+.wx{color:var(--acc)}
+.mt{font-size:.85rem;color:var(--ink2);font-style:italic}
+.tail{display:flex;align-items:center;gap:.7rem;padding:1.4rem 0 0;color:var(--ink2)}
+.tail .dash{flex:1;height:0;border-top:2px dashed var(--line)}
+
+/* ---- 01 left spine ---- */
+[data-v="1"] .body{position:relative;padding-left:clamp(46px,6vw,74px)}
+[data-v="1"] .body::before{content:"";position:absolute;left:clamp(14px,2.4vw,26px);top:8px;bottom:70px;width:2px;background:var(--line)}
+[data-v="1"] .st-hd::before{content:"";position:absolute;left:calc(-1 * clamp(46px,6vw,74px) + clamp(9px,2.4vw,21px));width:12px;height:12px;border-radius:50%;background:var(--acc);border:3px solid var(--bg)}
+[data-v="1"] .st-hd{position:relative}
+[data-v="1"] .st.skip .st-hd::before{background:var(--bg);border:2px dashed var(--line)}
+
+/* ---- 02 centre alternating ---- */
+[data-v="2"]{--bg:#FAF9F7;--surf:#fff;--surf2:#EEEBE6;--ink:#191713;--ink2:#6D675E;--line:#E2DDD4;--acc:#8A5B2C;--fd:"Fraunces",Georgia,serif;--rad:3px}
+[data-v="2"] .body{position:relative}
+[data-v="2"] .body::before{content:"";position:absolute;left:50%;top:0;bottom:60px;width:1px;background:var(--line)}
+[data-v="2"] .st{width:calc(50% - 2.2rem);margin-bottom:2.6rem}
+[data-v="2"] .st:nth-child(even){margin-left:calc(50% + 2.2rem)}
+[data-v="2"] .st-hd::after{content:"";position:absolute;top:.45rem;right:-2.65rem;width:9px;height:9px;border-radius:50%;background:var(--acc)}
+[data-v="2"] .st:nth-child(even) .st-hd::after{right:auto;left:-2.65rem}
+[data-v="2"] .st-hd{position:relative}
+[data-v="2"] .wins{grid-template-columns:1fr}
+@media (max-width:760px){
+  [data-v="2"] .body::before{left:8px}
+  [data-v="2"] .st,[data-v="2"] .st:nth-child(even){width:auto;margin-left:2rem}
+  [data-v="2"] .st-hd::after,[data-v="2"] .st:nth-child(even) .st-hd::after{right:auto;left:-2.3rem}
+}
+
+/* ---- 03 stacked bands ---- */
+[data-v="3"]{--bg:#101418;--surf:#191E24;--surf2:#222831;--ink:#E9ECEF;--ink2:#93A0AC;--line:#262E37;--acc:#5EA9C9;--rad:4px}
+[data-v="3"] .st{border-top:1px solid var(--line);padding-top:1.6rem;margin-bottom:2.6rem}
+[data-v="3"] .st-hd h2{font-size:1.9rem}
+[data-v="3"] .st-n{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--acc);margin-right:.4rem}
+
+/* ---- 04 horizontal track ---- */
+[data-v="4"]{--bg:#F4F6F5;--surf:#fff;--surf2:#E7EBE9;--ink:#121A17;--ink2:#5B6862;--line:#DDE3E0;--acc:#1E7A5A;--rad:8px}
+[data-v="4"] .body{display:flex;gap:1.4rem;overflow-x:auto;padding-bottom:1.4rem;scroll-snap-type:x mandatory}
+[data-v="4"] .st{flex:0 0 min(320px,80vw);scroll-snap-align:start;border-left:2px solid var(--line);padding-left:1.1rem;margin-bottom:0}
+[data-v="4"] .st.open{border-left-color:var(--acc)}
+[data-v="4"] .wins{grid-template-columns:1fr}
+
+/* ---- 05 chip ribbon ---- */
+[data-v="5"]{--bg:#FFFFFF;--surf:#FFFFFF;--surf2:#F0F1F3;--ink:#0F1216;--ink2:#666D76;--line:#E4E6EA;--acc:#C0392B;--rad:2px;--fd:"Archivo",sans-serif}
+[data-v="5"] .ribbon{display:flex;gap:.4rem;overflow-x:auto;padding:.9rem 0 1.4rem;border-bottom:1px solid var(--line);margin-bottom:2rem;scrollbar-width:none}
+[data-v="5"] .ribbon a{white-space:nowrap;text-decoration:none;color:var(--ink2);border:1px solid var(--line);padding:.3rem .7rem;font-size:.76rem}
+[data-v="5"] .ribbon a:hover{border-color:var(--acc);color:var(--acc)}
+[data-v="5"] .st{margin-bottom:2.8rem}
+[data-v="5"] .st-hd h2{font-size:1.06rem;letter-spacing:.02em;text-transform:uppercase}
+
+/* ---- 06 stepped ---- */
+[data-v="6"]{--bg:#F6F3EE;--surf:#FFFDF9;--surf2:#EAE4DA;--ink:#1D1A15;--ink2:#6F675B;--line:#DED6C8;--acc:#2F6E4F;--rad:2px;--fd:"Libre Baskerville",Georgia,serif;--fb:"Libre Baskerville",Georgia,serif}
+[data-v="6"] .st{padding-left:calc(var(--i) * clamp(0px,1.4vw,22px));border-left:1px solid var(--line);padding-top:.2rem;padding-bottom:1.4rem}
+[data-v="6"] .st-hd h2{font-size:1.12rem}
+[data-v="6"] .wq{font-size:.88rem}
+
+/* ---- 07 sticky index ---- */
+[data-v="7"]{--bg:#FBFBFC;--surf:#fff;--surf2:#EFF1F4;--ink:#101317;--ink2:#606874;--line:#E3E6EA;--acc:#3B4EA0;--rad:10px;--fd:"Inter",system-ui,sans-serif;--fb:"Inter",system-ui,sans-serif}
+[data-v="7"] .body{display:grid;grid-template-columns:190px minmax(0,1fr);gap:2.4rem;align-items:start}
+[data-v="7"] .idx{position:sticky;top:104px;display:flex;flex-direction:column;gap:.1rem;font-size:.84rem}
+[data-v="7"] .idx a{display:flex;justify-content:space-between;gap:.5rem;text-decoration:none;color:var(--ink2);padding:.4rem .55rem;border-radius:7px}
+[data-v="7"] .idx a:hover{background:var(--surf2);color:var(--ink)}
+[data-v="7"] .idx .dot{width:7px;height:7px;border-radius:50%;background:var(--line);align-self:center}
+[data-v="7"] .idx .dot.on{background:var(--acc)}
+@media (max-width:800px){[data-v="7"] .body{grid-template-columns:1fr}[data-v="7"] .idx{display:none}}
+
+/* ---- 08 meander ---- */
+[data-v="8"]{--bg:#F2F5F7;--surf:#fff;--surf2:#E4EAEE;--ink:#101A21;--ink2:#5A6B77;--line:#DAE2E8;--acc:#0E6E8C;--rad:14px}
+[data-v="8"] .body{position:relative;padding-left:26px}
+[data-v="8"] .body::before{content:"";position:absolute;left:8px;top:0;bottom:60px;width:2px;background:linear-gradient(180deg,var(--acc),var(--line))}
+[data-v="8"] .st{margin-left:calc(var(--i) * 14px);margin-bottom:2.2rem;position:relative}
+[data-v="8"] .st::before{content:"";position:absolute;left:calc(-18px - var(--i) * 14px);top:.6rem;width:10px;height:10px;border-radius:50%;background:var(--surf);border:2px solid var(--acc)}
+[data-v="8"] .win{border-radius:var(--rad)}
+
+/* ---- 09 tinted blocks ---- */
+[data-v="9"]{--bg:#0F1012;--surf:rgba(255,255,255,.06);--surf2:rgba(255,255,255,.1);--ink:#F2F1EE;--ink2:#A5A29C;--line:rgba(255,255,255,.14);--acc:#E0B15E;--rad:5px;--fd:"Instrument Serif",Georgia,serif}
+[data-v="9"] .st{padding:1.6rem clamp(1rem,3vw,2rem);border-radius:10px;margin-bottom:1rem;background:hsl(calc(var(--i) * 34) 26% 16%)}
+[data-v="9"] .st-hd h2{font-size:1.7rem;font-weight:400}
+[data-v="9"] .win{backdrop-filter:blur(2px)}
+
+/* ---- 10 concertina ---- */
+[data-v="10"]{--bg:#FAFAF8;--surf:#fff;--surf2:#EFEFEC;--ink:#141413;--ink2:#67665F;--line:#E3E3DE;--acc:#7A4E2D;--rad:3px;--fd:"DM Serif Display",Georgia,serif}
+[data-v="10"] .st{border-bottom:1px solid var(--line);margin-bottom:0}
+[data-v="10"] .st-hd{cursor:pointer;padding:1.05rem 0;margin-bottom:0;user-select:none}
+[data-v="10"] .st-hd h2{font-size:1.4rem}
+[data-v="10"] .st-hd .caret{margin-left:auto;font-family:"IBM Plex Mono",monospace;color:var(--ink2)}
+[data-v="10"] .wins{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;padding:0}
+[data-v="10"] .st.on .wins{max-height:2200px;padding:0 0 1.4rem}
+[data-v="10"] .st.on .caret{color:var(--acc)}
+</style>
+
+<div class="chrome">
+  <div class="chrome-in">
+    <span class="chrome-lbl" id="famlbl">Variations</span>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <p class="blurb" id="blurb"></p>
+</div>
+<div class="stage" id="stage" data-v="1"></div>
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="pq">
+  <div class="proj" id="proj">
+    <div class="proj-top">
+      <p class="mo" id="pchap">Stage</p>
+      <button class="xb" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <div class="pbody">
+      <h2 id="pq">Question</h2>
+      <p class="src" id="psrc"></p>
+      <ul class="prompts" id="pprompts"></ul>
+      <div id="pextras"></div>
+      <div class="pfoot" id="pfoot"></div>
+    </div>
+    <div class="pnav">
+      <button class="xb" id="prevBtn">&larr; Previous</button>
+      <button class="xb" id="nextBtn">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- shared: one person, fourteen windows, life stages not dates ---------- */
+var STAGES = [
+  { n:"Childhood",          w:"Ballina, the 1940s",       s:"done" },
+  { n:"Leaving home",       w:"date not recorded",        s:"vague" },
+  { n:"First job",          w:"Coventry, from 1956",      s:"done" },
+  { n:"Falling in love",    w:"a dance, mid-fifties",     s:"done" },
+  { n:"Marriage",           w:"1961",                     s:"done" },
+  { n:"Becoming a parent",  w:"1963, 1966, 1971",         s:"done" },
+  { n:"Working life",       w:"forty years of nights",    s:"done" },
+  { n:"The hard years",     w:"date not recorded",        s:"vague" },
+  { n:"Retirement",         w:"she never really did",     s:"skipped" },
+  { n:"Where she is now",   w:"still recording",          s:"open" }
+];
+
+var W = [
+  { st:0, q:"Tell me about the house you grew up in.", len:"6:12", on:"14 May 2022",
+    v:"3Uz6uZC9hik", src:"Grandma tells our story",
+    p:["Walk me through the front door.","Which room did everyone end up in?","What could you hear from your bed?"],
+    x:[{t:"map",  l:"Ballina, Co. Mayo", d:"54.1150° N, 9.1533° W"},
+       {t:"photo",l:"The house on Bury Street", d:"family photograph, undated"}] },
+  { st:0, q:"Who were your mother and father, really?", len:"8:40", on:"14 May 2022",
+    v:"BjQqDWj1LQw", src:"An interview with Grandma",
+    p:["What did they want before the children came?","What did they never talk about?","What of them do you catch yourself doing?"] },
+  { st:1, q:"The day you left home.", len:"7:18", on:"4 Jun 2022",
+    v:"nVu__vyps9Q", src:"100-year-old WWII veteran — full interview",
+    p:["Who took you to the boat?","What did you think it was going to be?","When did you know you weren't going back?"] },
+  { st:1, q:"What did you want to be at fifteen?", len:"", on:"", v:null,
+    p:["Who took you seriously?","When did you know it wasn't going to happen?"] },
+  { st:2, q:"Your first room, and your first wage.", len:"5:44", on:"11 Jun 2022",
+    v:"x3fphutRYso", src:"Albert Siewers — WWII veteran interview",
+    p:["What did it cost?","Who was the landlady?","What did you eat that first week?"],
+    x:[{t:"map",  l:"Hillfields, Coventry", d:"52.4084° N, 1.4998° W"},
+       {t:"photo",l:"Her first car — a Morris Minor", d:"1962"}] },
+  { st:2, q:"Starting at the hospital.", len:"6:30", on:"11 Jun 2022",
+    v:"KGCD1XR0WPk", src:"An Introduction to StoryCorps — Dave Isay",
+    p:["What was the first thing they had you do?","Who was kind to you?","When did you stop being frightened?"] },
+  { st:3, q:"The dance where you met Frank.", len:"6:55", on:"25 Jun 2022",
+    v:"WNfvuJr9164", src:"Danny & Annie — StoryCorps",
+    p:["What was he wearing?","What did he say?","When did you decide?"],
+    x:[{t:"photo",l:"Frank, the year they met", d:"1959"}] },
+  { st:4, q:"The wedding day, honestly.", len:"5:10", on:"9 Jul 2022",
+    v:"SUhWjJfLWXE", src:"StoryCorps Shorts: Danny and Annie — PBS POV",
+    p:["Who came over from home?","What went wrong?","What do you remember about the evening?"] },
+  { st:5, q:"The day each of us was born.", len:"9:24", on:"9 Jul 2022",
+    v:"abyMCAS4vEI", src:"A StoryCorps conversation with grandfather",
+    p:["Tell me about each one.","What frightened you?","Who did we look like?"],
+    x:[{t:"photo",l:"Anne, three days old", d:"March 1963"},
+       {t:"photo",l:"All three, Wyken Croft", d:"summer 1972"}] },
+  { st:5, q:"What did being a parent teach you?", len:"", on:"", v:null,
+    p:["What kept you awake?","What do you think you got wrong?"] },
+  { st:6, q:"Forty years of nights. Why nights?", len:"7:02", on:"6 Aug 2022",
+    v:"QzQhtsTdHhM", src:"Life lessons from 100-year-old Americans — Business Insider",
+    p:["What did a normal shift look like?","How did you sleep?","What did it cost you at home?"],
+    x:[{t:"doc",  l:"Her SRN certificate", d:"scanned document"}] },
+  { st:6, q:"The patient you never forgot.", len:"8:15", on:"6 Aug 2022",
+    v:"rZAv7uoE25Q", src:"110-year-old's words of wisdom",
+    p:["Tell me what happened.","What did you do?","Do you still think about them?"] },
+  { st:7, q:"The year Frank got ill.", len:"9:51", on:"17 Sep 2022",
+    v:"Is6WvYAM3gg", src:"100-year-olds' guide to living your best life — Allure",
+    p:["When did you know?","Who turned up, and who didn't?","What got you out of bed?"] },
+  { st:9, q:"What do you want us to do on your birthday?", len:"3:11", on:"3 Feb 2024",
+    v:"aJ_RVsf90xg", src:"Living to 100 — interviews with centenarians, TV Eye 1986",
+    p:["Where should we be?","Who should be there?","What shouldn't we do?"] }
+];
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function stageItems(si){ var a=[]; W.forEach(function(w,i){ if(w.st===si){ a.push(i); } }); return a; }
+function thumb(v){
+  return '<img class="th" src="https://i.ytimg.com/vi/' + v + '/mqdefault.jpg" alt="" loading="lazy" ' +
+         'onerror="this.className+=\' dead\'">';
+}
+
+/* ---------- optional extras: maps, photos, documents ---------- */
+function extraCard(x){
+  if(x.t === "map"){
+    return '<span class="xc xmap">' +
+      '<svg viewBox="0 0 120 80" aria-hidden="true">' +
+        '<rect width="120" height="80" fill="var(--surf2)"/>' +
+        '<path d="M0 54 L34 44 L62 58 L92 40 L120 50" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<path d="M18 0 L30 30 L14 52 L26 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<path d="M78 0 L70 26 L88 46 L82 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<circle cx="60" cy="36" r="14" fill="none" stroke="var(--acc)" stroke-width="1" opacity=".45"/>' +
+        '<circle cx="60" cy="36" r="5" fill="var(--acc)"/>' +
+      '</svg>' +
+      '<span class="xl">' + esc(x.l) + '<span class="xd">' + esc(x.d) + '</span></span></span>';
+  }
+  var glyph = x.t === "doc" ? "&#9776;" : "&#9635;";
+  return '<span class="xc"><span class="xph">' + glyph + '</span>' +
+    '<span class="xl">' + esc(x.l) + '<span class="xd">' + esc(x.d) + '</span></span></span>';
+}
+function extrasHTML(w){
+  if(!w.x || !w.x.length){ return ""; }
+  return '<div class="xwrap"><p class="mo xhd">Also in this window</p><div class="xrow">' +
+    w.x.map(extraCard).join("") + '</div></div>';
+}
+function extraCount(w){ return w.x ? w.x.length : 0; }
+var FAMILY = "Life stages · ten variations";
+var VARIANTS = [
+  { lay:"spine", name:"Left spine",    note:"Rail down the left, one node per stage. Dates optional — the node is the stage, not the year." },
+  { lay:"alt", name:"Alternating",   note:"Classic centre spine, stages zig-zagging either side. Warm paper, serif headings." },
+  { lay:"bands", name:"Stacked bands", note:"No rail at all. Numbered stages as full-width dark bands — works when stages are few and deep." },
+  { lay:"track", name:"Horizontal",    note:"Stages scroll sideways, windows stack beneath each. A life you push through left to right." },
+  { lay:"ribbon", name:"Ribbon",        note:"Stage chips across the top as jump links, plain sections below. Fastest to navigate." },
+  { lay:"stepped", name:"Stepped",       note:"Each stage indents a little further, so the page walks forward as you read down it." },
+  { lay:"index", name:"Sticky index",  note:"Documentation layout: stage list pinned left, windows right, dots marking what's recorded." },
+  { lay:"meander", name:"Meander",       note:"The rail drifts sideways as it descends — a life that wandered rather than progressed." },
+  { lay:"tint", name:"Tinted blocks", note:"Each stage its own tinted panel, hue shifting as the life moves. Dark, cinematic." },
+  { lay:"concertina", name:"Concertina",    note:"Stages collapsed by default, one open at a time. Best when there are twenty stages, not ten." }
+];
+
+function flagFor(s){
+  if(s.s === "open")   { return '<span class="flag open">still going</span>'; }
+  if(s.s === "skipped"){ return '<span class="flag skip">didn\'t happen</span>'; }
+  if(s.s === "vague")  { return '<span class="flag">date unknown</span>'; }
+  return "";
+}
+
+function winHTML(i){
+  var w = W[i], lit = Boolean(w.v), n = extraCount(w);
+  var inner = lit ? thumb(w.v) + '<span class="pl"></span>'
+                  : '<span class="sealed">Not yet recorded</span>';
+  return '<button class="win" data-i="' + i + '" aria-label="' + esc(w.q) + '">' +
+    '<span class="tw">' + inner + '</span>' +
+    '<span class="wq">' + esc(w.q) + '</span>' +
+    '<span class="wm"><span>' + (lit ? w.len : "To record") + '</span>' +
+    '<span class="wx">' + (n ? "+" + n + " item" + (n === 1 ? "" : "s") : "") + '</span></span>' +
+  '</button>';
+}
+
+function stageBlock(s, si, v){
+  var items = stageItems(si);
+  var cls = "st" + (s.s === "skipped" ? " skip" : "") + (s.s === "open" ? " open" : "") +
+            (v.lay === "concertina" && si === 0 ? " on" : "");
+  var num = v.lay === "bands" ? '<span class="st-n">' + ("0" + (si + 1)).slice(-2) + '</span>' : "";
+  var caret = v.lay === "concertina" ? '<span class="caret">' + (si === 0 ? "&minus;" : "+") + '</span>' : "";
+
+  var out = '<section class="' + cls + '" id="s' + si + '" style="--i:' + si + '">' +
+    '<div class="st-hd">' + num + '<h2>' + esc(s.n) + '</h2>' +
+    '<span class="st-when">' + esc(s.w) + '</span>' + flagFor(s) + caret + '</div>';
+
+  if(items.length){
+    out += '<div class="wins">';
+    items.forEach(function(i){ out += winHTML(i); });
+    out += '</div>';
+  } else if(v.lay !== "concertina"){
+    out += '<p class="mt">' + (s.s === "skipped"
+      ? "She never retired, so this stage stays empty — stages you skip simply don't fill."
+      : "No questions recorded for this stage yet.") + '</p>';
+  } else {
+    out += '<div class="wins"><p class="mt">Nothing recorded here yet.</p></div>';
+  }
+  return out + '</section>';
+}
+
+function pageHTML(v){
+  var head = '<header class="hd">' +
+    '<p class="mo">Margaret Ellen Doyle &nbsp;·&nbsp; fourteen windows &nbsp;·&nbsp; twelve recorded</p>' +
+    '<h1>Her life, by stage</h1>' +
+    '<p class="sub">Ordered by what happened rather than when. Some stages carry no date, one never happened at all, ' +
+    'and the last one is still open &mdash; the page never claims a life is finished.</p></header>';
+
+  var blocks = "";
+  STAGES.forEach(function(s, si){ blocks += stageBlock(s, si, v); });
+
+  var tail = '<div class="tail"><span class="dash"></span><span class="mo">still recording</span></div>';
+
+  if(v.lay === "ribbon"){
+    var chips = '<nav class="ribbon">';
+    STAGES.forEach(function(s, si){ chips += '<a href="#s' + si + '">' + esc(s.n) + '</a>'; });
+    chips += '</nav>';
+    return '<div class="in">' + head + chips + '<div class="body">' + blocks + tail + '</div></div>';
+  }
+
+  if(v.lay === "index"){
+    var idx = '<nav class="idx">';
+    STAGES.forEach(function(s, si){
+      idx += '<a href="#s' + si + '"><span>' + esc(s.n) + '</span>' +
+             '<span class="dot' + (stageItems(si).length ? " on" : "") + '"></span></a>';
+    });
+    idx += '</nav>';
+    return '<div class="in">' + head + '<div class="body">' + idx + '<div>' + blocks + tail + '</div></div></div>';
+  }
+
+  return '<div class="in">' + head + '<div class="body">' + blocks + (v.lay === "track" ? "" : tail) + '</div></div>';
+}
+
+/* concertina behaviour, only bound when that variant is on screen */
+document.addEventListener("click", function(e){
+  var hd = e.target.closest(".st-hd");
+  if(!hd || document.getElementById("stage").getAttribute("data-v") !== "10"){ return; }
+  var sec = hd.parentNode;
+  var open = sec.classList.contains("on");
+  Array.prototype.forEach.call(sec.parentNode.children, function(c){
+    if(c.classList){ c.classList.remove("on"); }
+    var k = c.querySelector ? c.querySelector(".caret") : null;
+    if(k){ k.innerHTML = "+"; }
+  });
+  if(!open){
+    sec.classList.add("on");
+    var c2 = sec.querySelector(".caret");
+    if(c2){ c2.innerHTML = "&minus;"; }
+  }
+});
+/* ---------- variant switcher ---------- */
+var stage = document.getElementById("stage"),
+    tabs = document.getElementById("tabs"),
+    blurb = document.getElementById("blurb");
+var active = 1;
+
+function setVariant(n){
+  active = n;
+  var v = VARIANTS[n - 1];
+  stage.setAttribute("data-v", String(n));
+  stage.innerHTML = pageHTML(v);
+  blurb.innerHTML = '<b>' + ("0" + n).slice(-2) + " · " + esc(v.name) + '</b> &nbsp;&mdash;&nbsp; ' + esc(v.note);
+  Array.prototype.forEach.call(tabs.children, function(t, i){
+    t.setAttribute("aria-pressed", String(i + 1 === n));
+  });
+}
+VARIANTS.forEach(function(v, i){
+  var b = document.createElement("button");
+  b.className = "tab";
+  b.textContent = ("0" + (i + 1)).slice(-2) + " " + v.name;
+  b.addEventListener("click", function(){ setVariant(i + 1); window.scrollTo({top:0,behavior:"smooth"}); });
+  tabs.appendChild(b);
+});
+document.getElementById("famlbl").textContent = FAMILY;
+setVariant(1);
+/* ---------- shared player ---------- */
+var scrim = document.getElementById("scrim"), screen = document.getElementById("screen");
+var current = 0, lastFocus = null;
+
+function openWindow(i){
+  var w = W[i];
+  current = i;
+  if(!scrim.classList.contains("on")){ lastFocus = document.activeElement; }
+
+  var cs = getComputedStyle(document.getElementById("stage"));
+  var proj = document.getElementById("proj");
+  [["--surf","--pSurf"],["--surf2","--pSurf2"],["--ink","--pInk"],["--ink2","--pInk2"],
+   ["--line","--pLine"],["--acc","--pAcc"],["--rad","--pRad"],["--fd","--pDisp"],["--fb","--pBody"]]
+   .forEach(function(p){ proj.style.setProperty(p[1], cs.getPropertyValue(p[0])); });
+
+  document.getElementById("pchap").textContent = STAGES[w.st].n + " · " + STAGES[w.st].w;
+  document.getElementById("pq").textContent = w.q;
+
+  var list = document.getElementById("pprompts");
+  list.innerHTML = "";
+  w.p.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; list.appendChild(li); });
+
+  document.getElementById("pextras").innerHTML = extrasHTML(w);
+
+  var srcEl = document.getElementById("psrc");
+  if(w.v){
+    srcEl.innerHTML = "Placeholder clip: " + esc(w.src) +
+      ' &nbsp;·&nbsp; <a href="https://www.youtube.com/watch?v=' + w.v + '" target="_blank" rel="noopener">watch on YouTube &#8599;</a>' +
+      "<br>On the live page this is their own recording &mdash; swap the video ID.";
+    srcEl.style.display = "";
+  } else { srcEl.style.display = "none"; }
+
+  var foot = document.getElementById("pfoot");
+  foot.innerHTML = "";
+  (w.v ? ["Recorded " + w.on, "Running time " + w.len, "Asked by Anne"]
+       : ["Not yet recorded", "Question stays on the wall"]).forEach(function(t){
+    var s = document.createElement("span"); s.textContent = t; foot.appendChild(s);
+  });
+
+  screen.innerHTML = "";
+  if(w.v){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + w.v + "?rel=0&modestbranding=1";
+    f.title = w.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    screen.appendChild(f);
+  } else {
+    var e = document.createElement("div");
+    e.className = "screen-empty";
+    var a = document.createElement("p"); a.className = "mo"; a.textContent = "Window still closed";
+    var b = document.createElement("p"); b.textContent = "No recording behind this one yet. The question stays on the wall and the window opens itself the day a video ID is added.";
+    e.appendChild(a); e.appendChild(b); screen.appendChild(e);
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+function closeWindow(){
+  scrim.classList.remove("on"); screen.innerHTML = "";
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+function step(n){ openWindow((current + n + W.length) % W.length); }
+document.getElementById("stage").addEventListener("click", function(e){
+  var t = e.target.closest("[data-i]");
+  if(t){ openWindow(Number(t.getAttribute("data-i"))); }
+});
+document.getElementById("closeBtn").addEventListener("click", closeWindow);
+document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeWindow(); } });
+document.addEventListener("keydown", function(e){
+  if(scrim.classList.contains("on")){
+    if(e.key === "Escape"){ closeWindow(); }
+    if(e.key === "ArrowRight"){ step(1); }
+    if(e.key === "ArrowLeft"){ step(-1); }
+    return;
+  }
+  if(e.key === "[" ){ setVariant(Math.max(1, active - 1)); }
+  if(e.key === "]" ){ setVariant(Math.min(VARIANTS.length, active + 1)); }
+});
+</script>
+
+</html>

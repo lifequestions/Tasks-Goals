@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Museum Label, Ten Ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#0E0F11;font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.chrome{position:sticky;top:0;z-index:80;background:#0E0F11;border-bottom:1px solid #24262A;color:#E9E9E7}
+.chrome-in{max-width:1400px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.chrome-lbl{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;white-space:nowrap}
+.tabs{display:flex;gap:.28rem;overflow-x:auto;scrollbar-width:none;flex:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:1px solid #2C2F34;color:#9AA0A8;border-radius:2px;padding:.3rem .58rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;transition:.18s}
+.tab:hover{color:#FFF;border-color:#565B62}
+.tab[aria-pressed="true"]{background:#F2F2F0;color:#0E0F11;border-color:#F2F2F0}
+.blurb{max-width:1400px;margin:0 auto;padding:.45rem 1rem .6rem;font-family:"IBM Plex Mono",monospace;font-size:.66rem;line-height:1.6;color:#868C94;border-top:1px solid #1B1D20}
+.blurb b{color:#E9E9E7;font-weight:500}
+.scrim{position:fixed;inset:0;background:rgba(8,9,11,.86);display:none;align-items:center;justify-content:center;padding:clamp(.6rem,3vw,2rem);z-index:90;backdrop-filter:blur(4px)}
+.scrim.on{display:flex}
+.proj{background:var(--pSurf,#fff);color:var(--pInk,#111);border:1px solid var(--pLine,#ddd);border-radius:var(--pRad,2px);width:min(840px,100%);max-height:94vh;overflow-y:auto;font-family:var(--pBody,"Archivo",sans-serif)}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.75rem 1.05rem;border-bottom:1px solid var(--pLine,#ddd)}
+.proj-top .mo{color:var(--pInk2,#666)}
+.xb{background:none;border:1px solid var(--pLine,#ddd);border-radius:2px;padding:.3rem .65rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pInk2,#666)}
+.xb:hover{color:var(--pInk,#111);border-color:var(--pInk,#111)}
+.screen{aspect-ratio:16/9;background:#000;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{position:absolute;inset:0;display:grid;place-content:center;gap:.6rem;text-align:center;padding:2rem;background:var(--pSurf2,#f2f2f2);color:var(--pInk2,#666)}
+.pbody{padding:1.15rem 1.05rem 1.4rem;display:flex;flex-direction:column;gap:.95rem}
+.pbody h2{font-family:var(--pDisp,Georgia,serif);font-size:clamp(1.2rem,2.5vw,1.6rem);line-height:1.2;margin:0;color:var(--pInk,#111)}
+.src{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.05em;line-height:1.7;color:var(--pInk2,#666);border-left:2px solid var(--pAcc,#333);padding-left:.75rem;margin:0}
+.src a{color:var(--pAcc,#333)}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.prompts li{display:flex;gap:.6rem;color:var(--pInk2,#666);font-size:.9rem}
+.prompts li::before{content:"\2192";color:var(--pAcc,#333)}
+.pfoot{display:flex;flex-wrap:wrap;gap:.45rem 1.2rem;padding-top:.85rem;border-top:1px solid var(--pLine,#ddd);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--pInk2,#666)}
+.pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.75rem 1.05rem;border-top:1px solid var(--pLine,#ddd);background:var(--pSurf2,#f2f2f2)}
+.th{width:100%;height:100%;object-fit:cover;display:block}
+.th.dead{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* optional extras */
+.xwrap{display:flex;flex-direction:column;gap:.6rem}
+.xhd{color:var(--pInk2,#666);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin:0}
+.xrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem}
+.xc{display:flex;gap:.65rem;align-items:center;border:1px solid var(--pLine,#ddd);border-radius:var(--pRad,2px);padding:.45rem;background:var(--pSurf2,#f4f4f4)}
+.xc svg{width:58px;height:38px;flex:none;border:1px solid var(--pLine,#ddd)}
+.xph{width:58px;height:38px;flex:none;display:grid;place-content:center;border:1px solid var(--pLine,#ddd);background:var(--pSurf,#fff);color:var(--pInk2,#888);font-size:1.05rem}
+.xl{font-size:.76rem;line-height:1.35;color:var(--pInk,#111)}
+.xd{display:block;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.04em;color:var(--pInk2,#666);margin-top:2px}
+.xbadge{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.08em;border:1px solid currentColor;border-radius:999px;padding:0 .34rem;opacity:.75}
+/* ============ museum-label family ============ */
+.stage{
+  --bg:#fff;--surf:#fff;--surf2:#F0F0F0;--ink:#111;--ink2:#767676;--line:#DCDCDC;
+  --acc:#B02A22;--rad:0;--fd:"Cormorant Garamond",Georgia,serif;--fb:"Archivo",sans-serif;
+  background:var(--bg);color:var(--ink);font-family:var(--fb);padding-bottom:6rem;min-height:70vh;
+}
+.stage h1,.stage h2{font-family:var(--fd);margin:0;font-weight:400;text-wrap:balance}
+.stage p{margin:0}
+.in{max-width:1180px;margin:0 auto;padding:0 clamp(1.1rem,4vw,2.4rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2)}
+.hd{padding:clamp(3.4rem,9vw,7rem) 0 clamp(2.4rem,5vw,4rem);max-width:40ch;display:flex;flex-direction:column;gap:1rem}
+.hd h1{font-size:clamp(2.4rem,5.6vw,4rem);line-height:1.04;letter-spacing:-.02em}
+.hd .sub{color:var(--ink2);font-size:.95rem;line-height:1.6;max-width:44ch}
+.room{margin-bottom:clamp(2.6rem,5vw,4.2rem)}
+.room-hd{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.4rem;flex-wrap:wrap}
+.room-hd h2{font-family:var(--fb);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+.room-hd .w{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.08em;color:var(--ink2)}
+.room-hd .line{flex:1;height:1px;background:var(--line);min-width:20px}
+.works{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:clamp(1.6rem,3.4vw,2.8rem)}
+.work{background:none;border:0;padding:0;text-align:left;display:flex;flex-direction:column;gap:.8rem;color:inherit}
+.frame{position:relative;aspect-ratio:4/3;background:var(--surf2);border:1px solid var(--line);display:block;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.work:hover .frame{border-color:var(--acc)}
+.pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;background:rgba(12,12,12,.62);display:grid;place-content:center;transition:background .2s}
+.pl::after{content:"";width:0;height:0;border-left:12px solid #fff;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:3px}
+.work:hover .pl{background:var(--acc)}
+.sealed{position:absolute;inset:0;display:grid;place-content:center;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.label{display:flex;flex-direction:column;gap:.32rem}
+.lst{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
+.lq{font-family:var(--fd);font-size:1.22rem;line-height:1.22}
+.lm{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.06em;color:var(--ink2);line-height:1.7}
+.lx{display:inline-block;margin-left:.4rem;border:1px solid var(--line);padding:0 .3rem;color:var(--acc)}
+.mtroom{font-size:.82rem;color:var(--ink2);font-style:italic;border-left:1px solid var(--line);padding-left:.9rem}
+
+/* 01 gallery white */
+[data-v="1"]{}
+/* 02 plaster */
+[data-v="2"]{--bg:#F4F1EB;--surf:#F4F1EB;--surf2:#E8E3D9;--ink:#1E1B16;--ink2:#7A7266;--line:#D9D2C5;--acc:#8A6A2F}
+[data-v="2"] .works{grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:clamp(2.4rem,5vw,4rem)}
+[data-v="2"] .lq{font-size:1.5rem}
+/* 03 slate — night viewing */
+[data-v="3"]{--bg:#141517;--surf:#1B1D20;--surf2:#212428;--ink:#EDEDEA;--ink2:#8F938F;--line:#2B2F33;--acc:#C9B37E}
+[data-v="3"] .works{grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:1.5rem}
+[data-v="3"] .lq{font-size:1.06rem}
+/* 04 vitrine — mat board */
+[data-v="4"]{--bg:#EDEDEB;--surf:#fff;--surf2:#fff;--ink:#15171A;--ink2:#71757B;--line:#C9CBCE;--acc:#3D4A57}
+[data-v="4"] .frame{padding:14px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1)}
+[data-v="4"] .frame .th{border:1px solid var(--line)}
+[data-v="4"] .label{text-align:center;align-items:center}
+[data-v="4"] .lm{text-align:center}
+/* 05 catalogue — label beside */
+[data-v="5"]{--bg:#FBFBF9;--surf:#FBFBF9;--surf2:#EFEFEA;--ink:#131313;--ink2:#6E6E68;--line:#DBDBD4;--acc:#1F4D3D}
+[data-v="5"] .works{grid-template-columns:1fr;gap:0}
+[data-v="5"] .work{flex-direction:row;gap:1.6rem;align-items:flex-start;border-bottom:1px solid var(--line);padding:1.5rem 0}
+[data-v="5"] .frame{flex:0 0 clamp(150px,26%,290px)}
+[data-v="5"] .label{flex:1;gap:.5rem}
+[data-v="5"] .lq{font-size:1.6rem}
+/* 06 flush grid */
+[data-v="6"]{--bg:#FFFFFF;--surf:#fff;--surf2:#E9E9E9;--ink:#0D0D0D;--ink2:#6B6B6B;--line:#111;--acc:#D62828;--fd:"Archivo",sans-serif}
+[data-v="6"] .works{gap:0;border-left:1px solid var(--line);border-top:1px solid var(--line);grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+[data-v="6"] .work{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:0;gap:0}
+[data-v="6"] .frame{aspect-ratio:1;border:0;border-bottom:1px solid var(--line)}
+[data-v="6"] .label{padding:.9rem 1rem 1.1rem}
+[data-v="6"] .lq{font-size:1rem;font-weight:600;letter-spacing:-.01em;line-height:1.3}
+[data-v="6"] .work:hover{background:var(--acc)}
+[data-v="6"] .work:hover .lq,[data-v="6"] .work:hover .lm,[data-v="6"] .work:hover .lst{color:#fff}
+/* 07 print room */
+[data-v="7"]{--bg:#F7F4EC;--surf:#F7F4EC;--surf2:#EBE6D9;--ink:#1A1712;--ink2:#736C5D;--line:#D5CDBA;--acc:#6B2B1E;--fd:"Bodoni Moda",Georgia,serif}
+[data-v="7"] .in{max-width:960px}
+[data-v="7"] .works{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:3rem 2.4rem}
+[data-v="7"] .frame{aspect-ratio:5/4}
+[data-v="7"] .lq{font-size:1.16rem;font-weight:600}
+[data-v="7"] .lm{font-family:var(--fd);font-style:italic;font-size:.82rem;letter-spacing:0;text-transform:none}
+/* 08 concrete */
+[data-v="8"]{--bg:#D9D9D6;--surf:#CFCFCB;--surf2:#C2C2BE;--ink:#131313;--ink2:#5A5A56;--line:#131313;--acc:#B03A1A;--fd:"IBM Plex Mono",monospace;--fb:"IBM Plex Mono",monospace}
+[data-v="8"] .frame{border-width:2px}
+[data-v="8"] .lq{font-size:.94rem;line-height:1.4;letter-spacing:-.01em}
+[data-v="8"] .hd h1{letter-spacing:-.04em;font-size:clamp(2rem,5vw,3.2rem)}
+/* 09 salon hang */
+[data-v="9"]{--bg:#EFEAE2;--surf:#EFEAE2;--surf2:#DED7CB;--ink:#191713;--ink2:#777063;--line:#C8C0B1;--acc:#7A3B2E}
+[data-v="9"] .works{grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:1.1rem;align-items:end}
+[data-v="9"] .work:nth-child(5n+1){grid-column:span 2}
+[data-v="9"] .work:nth-child(5n+1) .frame{aspect-ratio:16/9}
+[data-v="9"] .work:nth-child(3n) .frame{aspect-ratio:3/4}
+[data-v="9"] .lq{font-size:1rem}
+[data-v="9"] .lm{font-size:.56rem}
+/* 10 aubergine */
+[data-v="10"]{--bg:#241A26;--surf:#2E2231;--surf2:#372839;--ink:#F0E7E4;--ink2:#A1909F;--line:#433246;--acc:#D6A85C}
+[data-v="10"] .hd h1{font-style:italic}
+[data-v="10"] .works{grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:2.6rem}
+[data-v="10"] .frame{box-shadow:0 18px 40px -26px #000}
+[data-v="10"] .lq{font-size:1.34rem}
+</style>
+
+<div class="chrome">
+  <div class="chrome-in">
+    <span class="chrome-lbl" id="famlbl">Variations</span>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <p class="blurb" id="blurb"></p>
+</div>
+<div class="stage" id="stage" data-v="1"></div>
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="pq">
+  <div class="proj" id="proj">
+    <div class="proj-top">
+      <p class="mo" id="pchap">Stage</p>
+      <button class="xb" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <div class="pbody">
+      <h2 id="pq">Question</h2>
+      <p class="src" id="psrc"></p>
+      <ul class="prompts" id="pprompts"></ul>
+      <div id="pextras"></div>
+      <div class="pfoot" id="pfoot"></div>
+    </div>
+    <div class="pnav">
+      <button class="xb" id="prevBtn">&larr; Previous</button>
+      <button class="xb" id="nextBtn">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- shared: one person, fourteen windows, life stages not dates ---------- */
+var STAGES = [
+  { n:"Childhood",          w:"Ballina, the 1940s",       s:"done" },
+  { n:"Leaving home",       w:"date not recorded",        s:"vague" },
+  { n:"First job",          w:"Coventry, from 1956",      s:"done" },
+  { n:"Falling in love",    w:"a dance, mid-fifties",     s:"done" },
+  { n:"Marriage",           w:"1961",                     s:"done" },
+  { n:"Becoming a parent",  w:"1963, 1966, 1971",         s:"done" },
+  { n:"Working life",       w:"forty years of nights",    s:"done" },
+  { n:"The hard years",     w:"date not recorded",        s:"vague" },
+  { n:"Retirement",         w:"she never really did",     s:"skipped" },
+  { n:"Where she is now",   w:"still recording",          s:"open" }
+];
+
+var W = [
+  { st:0, q:"Tell me about the house you grew up in.", len:"6:12", on:"14 May 2022",
+    v:"3Uz6uZC9hik", src:"Grandma tells our story",
+    p:["Walk me through the front door.","Which room did everyone end up in?","What could you hear from your bed?"],
+    x:[{t:"map",  l:"Ballina, Co. Mayo", d:"54.1150° N, 9.1533° W"},
+       {t:"photo",l:"The house on Bury Street", d:"family photograph, undated"}] },
+  { st:0, q:"Who were your mother and father, really?", len:"8:40", on:"14 May 2022",
+    v:"BjQqDWj1LQw", src:"An interview with Grandma",
+    p:["What did they want before the children came?","What did they never talk about?","What of them do you catch yourself doing?"] },
+  { st:1, q:"The day you left home.", len:"7:18", on:"4 Jun 2022",
+    v:"nVu__vyps9Q", src:"100-year-old WWII veteran — full interview",
+    p:["Who took you to the boat?","What did you think it was going to be?","When did you know you weren't going back?"] },
+  { st:1, q:"What did you want to be at fifteen?", len:"", on:"", v:null,
+    p:["Who took you seriously?","When did you know it wasn't going to happen?"] },
+  { st:2, q:"Your first room, and your first wage.", len:"5:44", on:"11 Jun 2022",
+    v:"x3fphutRYso", src:"Albert Siewers — WWII veteran interview",
+    p:["What did it cost?","Who was the landlady?","What did you eat that first week?"],
+    x:[{t:"map",  l:"Hillfields, Coventry", d:"52.4084° N, 1.4998° W"},
+       {t:"photo",l:"Her first car — a Morris Minor", d:"1962"}] },
+  { st:2, q:"Starting at the hospital.", len:"6:30", on:"11 Jun 2022",
+    v:"KGCD1XR0WPk", src:"An Introduction to StoryCorps — Dave Isay",
+    p:["What was the first thing they had you do?","Who was kind to you?","When did you stop being frightened?"] },
+  { st:3, q:"The dance where you met Frank.", len:"6:55", on:"25 Jun 2022",
+    v:"WNfvuJr9164", src:"Danny & Annie — StoryCorps",
+    p:["What was he wearing?","What did he say?","When did you decide?"],
+    x:[{t:"photo",l:"Frank, the year they met", d:"1959"}] },
+  { st:4, q:"The wedding day, honestly.", len:"5:10", on:"9 Jul 2022",
+    v:"SUhWjJfLWXE", src:"StoryCorps Shorts: Danny and Annie — PBS POV",
+    p:["Who came over from home?","What went wrong?","What do you remember about the evening?"] },
+  { st:5, q:"The day each of us was born.", len:"9:24", on:"9 Jul 2022",
+    v:"abyMCAS4vEI", src:"A StoryCorps conversation with grandfather",
+    p:["Tell me about each one.","What frightened you?","Who did we look like?"],
+    x:[{t:"photo",l:"Anne, three days old", d:"March 1963"},
+       {t:"photo",l:"All three, Wyken Croft", d:"summer 1972"}] },
+  { st:5, q:"What did being a parent teach you?", len:"", on:"", v:null,
+    p:["What kept you awake?","What do you think you got wrong?"] },
+  { st:6, q:"Forty years of nights. Why nights?", len:"7:02", on:"6 Aug 2022",
+    v:"QzQhtsTdHhM", src:"Life lessons from 100-year-old Americans — Business Insider",
+    p:["What did a normal shift look like?","How did you sleep?","What did it cost you at home?"],
+    x:[{t:"doc",  l:"Her SRN certificate", d:"scanned document"}] },
+  { st:6, q:"The patient you never forgot.", len:"8:15", on:"6 Aug 2022",
+    v:"rZAv7uoE25Q", src:"110-year-old's words of wisdom",
+    p:["Tell me what happened.","What did you do?","Do you still think about them?"] },
+  { st:7, q:"The year Frank got ill.", len:"9:51", on:"17 Sep 2022",
+    v:"Is6WvYAM3gg", src:"100-year-olds' guide to living your best life — Allure",
+    p:["When did you know?","Who turned up, and who didn't?","What got you out of bed?"] },
+  { st:9, q:"What do you want us to do on your birthday?", len:"3:11", on:"3 Feb 2024",
+    v:"aJ_RVsf90xg", src:"Living to 100 — interviews with centenarians, TV Eye 1986",
+    p:["Where should we be?","Who should be there?","What shouldn't we do?"] }
+];
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function stageItems(si){ var a=[]; W.forEach(function(w,i){ if(w.st===si){ a.push(i); } }); return a; }
+function thumb(v){
+  return '<img class="th" src="https://i.ytimg.com/vi/' + v + '/mqdefault.jpg" alt="" loading="lazy" ' +
+         'onerror="this.className+=\' dead\'">';
+}
+
+/* ---------- optional extras: maps, photos, documents ---------- */
+function extraCard(x){
+  if(x.t === "map"){
+    return '<span class="xc xmap">' +
+      '<svg viewBox="0 0 120 80" aria-hidden="true">' +
+        '<rect width="120" height="80" fill="var(--surf2)"/>' +
+        '<path d="M0 54 L34 44 L62 58 L92 40 L120 50" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<path d="M18 0 L30 30 L14 52 L26 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<path d="M78 0 L70 26 L88 46 L82 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<circle cx="60" cy="36" r="14" fill="none" stroke="var(--acc)" stroke-width="1" opacity=".45"/>' +
+        '<circle cx="60" cy="36" r="5" fill="var(--acc)"/>' +
+      '</svg>' +
+      '<span class="xl">' + esc(x.l) + '<span class="xd">' + esc(x.d) + '</span></span></span>';
+  }
+  var glyph = x.t === "doc" ? "&#9776;" : "&#9635;";
+  return '<span class="xc"><span class="xph">' + glyph + '</span>' +
+    '<span class="xl">' + esc(x.l) + '<span class="xd">' + esc(x.d) + '</span></span></span>';
+}
+function extrasHTML(w){
+  if(!w.x || !w.x.length){ return ""; }
+  return '<div class="xwrap"><p class="mo xhd">Also in this window</p><div class="xrow">' +
+    w.x.map(extraCard).join("") + '</div></div>';
+}
+function extraCount(w){ return w.x ? w.x.length : 0; }
+var FAMILY = "Museum label · ten variations";
+var VARIANTS = [
+  { name:"Gallery white", note:"The original: pure white, hairline frames, wall-label captions beneath each window." },
+  { name:"Plaster",       note:"Warm plaster ground, brass accent, two-up at a larger size. Fewer, bigger, calmer." },
+  { name:"Slate",         note:"Night viewing — charcoal walls, gold accent, four-up. Video reads brighter on dark." },
+  { name:"Vitrine",       note:"Each still mounted on white board inside a cased frame, captions centred beneath." },
+  { name:"Catalogue",     note:"Label set beside the frame rather than under it, one per row. Reads like a printed catalogue." },
+  { name:"Flush grid",    note:"No gutters — a hard black rule grid, heavy sans, whole cell turns red on hover." },
+  { name:"Print room",    note:"Bodoni captions in italic, cream stock, narrower measure. Engraving-collection feel." },
+  { name:"Concrete",      note:"Monospace throughout, 2px borders, grey board. Institutional and unsentimental." },
+  { name:"Salon hang",    note:"Mixed frame sizes packed tight, the way pictures were hung before white walls." },
+  { name:"Aubergine",     note:"Deep plum walls with gold labels and italic display. The most funereal of the ten." }
+];
+
+function workHTML(i){
+  var w = W[i], lit = Boolean(w.v), n = extraCount(w);
+  var inner = lit
+    ? thumb(w.v) + '<span class="pl"></span>'
+    : '<span class="sealed">Not yet recorded</span>';
+  return '<button class="work" data-i="' + i + '" aria-label="' + esc(w.q) + '">' +
+    '<span class="frame">' + inner + '</span>' +
+    '<span class="label">' +
+      '<span class="lst">' + esc(STAGES[w.st].n) + '</span>' +
+      '<span class="lq">' + esc(w.q) + '</span>' +
+      '<span class="lm">' + (lit ? "Video, " + w.len + " &nbsp;·&nbsp; recorded " + w.on : "Question hung, no recording yet") +
+        (n ? '<span class="lx">+' + n + (n === 1 ? " item" : " items") + '</span>' : "") +
+      '</span>' +
+    '</span>' +
+  '</button>';
+}
+
+function pageHTML(v){
+  var out = '<div class="in"><header class="hd">' +
+    '<p class="mo">Doyle, Margaret Ellen &nbsp;·&nbsp; b. 1938</p>' +
+    '<h1>A life in fourteen windows</h1>' +
+    '<p class="sub">Rooms follow the stages of her life rather than dates — she could not always put a year on things, and some stages are still open.</p>' +
+    '</header>';
+
+  STAGES.forEach(function(s, si){
+    var items = stageItems(si);
+    out += '<section class="room"><div class="room-hd"><h2>' + esc(s.n) + '</h2>' +
+           '<span class="w">' + esc(s.w) + '</span><span class="line"></span></div>';
+    if(items.length){
+      out += '<div class="works">';
+      items.forEach(function(i){ out += workHTML(i); });
+      out += '</div>';
+    } else {
+      out += '<p class="mtroom">' + (s.s === "skipped"
+        ? "Nothing here — this stage never happened for her, so the room stays empty."
+        : "No windows in this room yet.") + '</p>';
+    }
+    out += '</section>';
+  });
+
+  return out + '</div>';
+}
+/* ---------- variant switcher ---------- */
+var stage = document.getElementById("stage"),
+    tabs = document.getElementById("tabs"),
+    blurb = document.getElementById("blurb");
+var active = 1;
+
+function setVariant(n){
+  active = n;
+  var v = VARIANTS[n - 1];
+  stage.setAttribute("data-v", String(n));
+  stage.innerHTML = pageHTML(v);
+  blurb.innerHTML = '<b>' + ("0" + n).slice(-2) + " · " + esc(v.name) + '</b> &nbsp;&mdash;&nbsp; ' + esc(v.note);
+  Array.prototype.forEach.call(tabs.children, function(t, i){
+    t.setAttribute("aria-pressed", String(i + 1 === n));
+  });
+}
+VARIANTS.forEach(function(v, i){
+  var b = document.createElement("button");
+  b.className = "tab";
+  b.textContent = ("0" + (i + 1)).slice(-2) + " " + v.name;
+  b.addEventListener("click", function(){ setVariant(i + 1); window.scrollTo({top:0,behavior:"smooth"}); });
+  tabs.appendChild(b);
+});
+document.getElementById("famlbl").textContent = FAMILY;
+setVariant(1);
+/* ---------- shared player ---------- */
+var scrim = document.getElementById("scrim"), screen = document.getElementById("screen");
+var current = 0, lastFocus = null;
+
+function openWindow(i){
+  var w = W[i];
+  current = i;
+  if(!scrim.classList.contains("on")){ lastFocus = document.activeElement; }
+
+  var cs = getComputedStyle(document.getElementById("stage"));
+  var proj = document.getElementById("proj");
+  [["--surf","--pSurf"],["--surf2","--pSurf2"],["--ink","--pInk"],["--ink2","--pInk2"],
+   ["--line","--pLine"],["--acc","--pAcc"],["--rad","--pRad"],["--fd","--pDisp"],["--fb","--pBody"]]
+   .forEach(function(p){ proj.style.setProperty(p[1], cs.getPropertyValue(p[0])); });
+
+  document.getElementById("pchap").textContent = STAGES[w.st].n + " · " + STAGES[w.st].w;
+  document.getElementById("pq").textContent = w.q;
+
+  var list = document.getElementById("pprompts");
+  list.innerHTML = "";
+  w.p.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; list.appendChild(li); });
+
+  document.getElementById("pextras").innerHTML = extrasHTML(w);
+
+  var srcEl = document.getElementById("psrc");
+  if(w.v){
+    srcEl.innerHTML = "Placeholder clip: " + esc(w.src) +
+      ' &nbsp;·&nbsp; <a href="https://www.youtube.com/watch?v=' + w.v + '" target="_blank" rel="noopener">watch on YouTube &#8599;</a>' +
+      "<br>On the live page this is their own recording &mdash; swap the video ID.";
+    srcEl.style.display = "";
+  } else { srcEl.style.display = "none"; }
+
+  var foot = document.getElementById("pfoot");
+  foot.innerHTML = "";
+  (w.v ? ["Recorded " + w.on, "Running time " + w.len, "Asked by Anne"]
+       : ["Not yet recorded", "Question stays on the wall"]).forEach(function(t){
+    var s = document.createElement("span"); s.textContent = t; foot.appendChild(s);
+  });
+
+  screen.innerHTML = "";
+  if(w.v){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + w.v + "?rel=0&modestbranding=1";
+    f.title = w.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    screen.appendChild(f);
+  } else {
+    var e = document.createElement("div");
+    e.className = "screen-empty";
+    var a = document.createElement("p"); a.className = "mo"; a.textContent = "Window still closed";
+    var b = document.createElement("p"); b.textContent = "No recording behind this one yet. The question stays on the wall and the window opens itself the day a video ID is added.";
+    e.appendChild(a); e.appendChild(b); screen.appendChild(e);
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+function closeWindow(){
+  scrim.classList.remove("on"); screen.innerHTML = "";
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+function step(n){ openWindow((current + n + W.length) % W.length); }
+document.getElementById("stage").addEventListener("click", function(e){
+  var t = e.target.closest("[data-i]");
+  if(t){ openWindow(Number(t.getAttribute("data-i"))); }
+});
+document.getElementById("closeBtn").addEventListener("click", closeWindow);
+document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeWindow(); } });
+document.addEventListener("keydown", function(e){
+  if(scrim.classList.contains("on")){
+    if(e.key === "Escape"){ closeWindow(); }
+    if(e.key === "ArrowRight"){ step(1); }
+    if(e.key === "ArrowLeft"){ step(-1); }
+    return;
+  }
+  if(e.key === "[" ){ setVariant(Math.max(1, active - 1)); }
+  if(e.key === "]" ){ setVariant(Math.min(VARIANTS.length, active + 1)); }
+});
+</script>
+
+</html>
