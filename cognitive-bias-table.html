@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="74 cognitive biases as a periodic table, grouped into six families by the kind of decision they spoil.">
+<meta name="description" content="74 cognitive biases as a periodic table in six families, each opening as a two-sided card.">
 <meta name="theme-color" content="#F1F2EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0C1214" media="(prefers-color-scheme: dark)">
 </head>
@@ -218,11 +218,61 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   mask-image:linear-gradient(180deg,#000 48%,transparent 92%);
 }
 .face .plate, .face .meta{position:relative; z-index:1}
-.inner{
-  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;
-  border-radius:10px; border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule));
-  background:var(--surface);
+.flipper{
+  position:relative; flex:1; min-height:0; transform-style:preserve-3d;
+  transition:transform .58s cubic-bezier(.4,.05,.2,1);
 }
+.card.flipped .flipper{transform:rotateY(180deg)}
+.inner{
+  position:absolute; inset:0; display:flex; flex-direction:column; overflow:hidden;
+  border-radius:10px; border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule));
+  background:var(--surface); backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.inner.back{
+  transform:rotateY(180deg); border-color:transparent; cursor:pointer;
+  background:var(--fam); color:var(--paper);
+  align-items:center; justify-content:center; text-align:center; padding:30px 26px 22px;
+}
+/* the chart's own grid, printed on the back, with one cell out of place */
+.back .weave{
+  position:absolute; inset:0; opacity:.17; pointer-events:none;
+  background-image:
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 30px);
+}
+.back .slip{
+  position:absolute; width:46px; height:46px; border:1.5px solid currentColor; opacity:.55;
+  top:13%; right:15%; transform:rotate(12deg); pointer-events:none;
+}
+.back .wordmark{
+  position:relative; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.28em;
+  text-transform:uppercase; opacity:.72;
+}
+.back .cut{
+  position:relative; font-size:clamp(74px,17vw,104px); line-height:1; margin:14px 0 6px;
+  font-variation-settings:"wdth" 96,"wght" 800; color:transparent;
+  -webkit-text-stroke-width:1.6px; -webkit-text-stroke-color:var(--paper);
+}
+.back .fam-name{
+  position:relative; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; opacity:.8; margin-bottom:20px;
+}
+.back .move{
+  position:relative; font-family:"IBM Plex Serif",Georgia,serif; font-size:16px; line-height:1.55;
+  max-width:34ch; margin:0;
+}
+.back .move em{font-style:normal; display:block; font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.75; margin-bottom:9px}
+.back .turn{
+  position:absolute; bottom:16px; left:0; right:0; font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.6;
+}
+.flipbtn{
+  display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--rule);
+  border-radius:3px; padding:6px 10px; cursor:pointer; color:var(--ink-2); font-family:"IBM Plex Mono",monospace;
+  font-size:11px; letter-spacing:.06em; text-transform:uppercase; transition:color .15s, border-color .15s;
+}
+.flipbtn:hover,.flipbtn:focus-visible{color:var(--fam); border-color:var(--fam); outline:none}
 .band{
   flex:none; display:flex; align-items:center; justify-content:space-between; gap:10px;
   padding:9px 13px; background:var(--fam); color:var(--paper);
@@ -323,22 +373,44 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.06em; line-height:1.7;
   text-transform:uppercase; color:var(--ink-3); margin:14px 0 0;
 }
-.stack{position:relative; height:236px}
-.stack .mini{
-  position:absolute; top:50%; left:50%; width:132px; height:174px; padding:10px 11px;
-  border-radius:10px; border:1px solid color-mix(in oklab, var(--fam) 32%, var(--rule-strong));
-  background:linear-gradient(168deg, color-mix(in oklab, var(--fam) 10%, var(--surface)), var(--surface) 62%);
+.stack{
+  display:flex; align-items:center; justify-content:center; padding:10px 0;
+}
+.mini{
+  flex:none; width:clamp(108px, 30%, 146px); aspect-ratio:1 / 1.32; padding:11px 12px;
+  border-radius:11px; border:1px solid color-mix(in oklab, var(--fam) 34%, var(--rule-strong));
+  background:linear-gradient(168deg, color-mix(in oklab, var(--fam) 12%, var(--surface)), var(--surface) 64%);
   box-shadow:var(--shadow); display:flex; flex-direction:column;
 }
-.stack .mini u{text-decoration:none; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--ink-3)}
-.stack .mini strong{
-  font-size:37px; line-height:1; color:var(--fam); margin:auto 0 2px;
-  font-variation-settings:"wdth" 96,"wght" 700;
+.mini + .mini{margin-left:-9px}
+.mini.back-mini{margin-left:8px}
+.mini u{text-decoration:none; font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink-3)}
+.mini strong{
+  font-size:clamp(28px, 4.4vw, 38px); line-height:1; color:var(--fam); margin:auto 0 4px;
+  font-variation-settings:"wdth" 98,"wght" 700;
 }
-.stack .mini span{font-size:11.5px; line-height:1.15; color:var(--ink-2); font-variation-settings:"wdth" 74,"wght" 500}
-.stack .m1{transform:translate(-50%,-50%) rotate(-9deg) translateX(-104px)}
-.stack .m2{transform:translate(-50%,-50%) rotate(-1deg) translateX(0)}
-.stack .m3{transform:translate(-50%,-50%) rotate(9deg) translateX(104px)}
+.mini span{
+  font-size:11.5px; line-height:1.16; color:var(--ink-2); font-variation-settings:"wdth" 80,"wght" 550;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+}
+.mini.back-mini{
+  background:var(--fam); border-color:transparent; color:var(--paper);
+  align-items:center; justify-content:center; text-align:center; position:relative; overflow:hidden;
+}
+.mini.back-mini .weave{
+  position:absolute; inset:0; opacity:.2;
+  background-image:
+    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 20px),
+    repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 20px);
+}
+.mini.back-mini b{
+  position:relative; font-family:"IBM Plex Mono",monospace; font-size:8px; letter-spacing:.2em;
+  text-transform:uppercase; font-weight:500; opacity:.85; line-height:1.7;
+}
+.mini:nth-child(1){transform:rotate(-8deg)}
+.mini:nth-child(2){transform:rotate(-1deg); z-index:1}
+.mini:nth-child(3){transform:rotate(6deg); z-index:2}
+.mini:nth-child(4){transform:rotate(14deg); z-index:3}
 
 /* ---------- responsive ---------- */
 @media (max-width:1000px){.hint{display:block}}
@@ -404,11 +476,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
       <a class="buy" href="#boxset" id="buy-main">Buy the box set <span class="arrow">&rarr;</span></a>
       <p class="fine">74 cards &middot; 6 suits &middot; 63 &times; 88 mm &middot; rigid box &middot; pre-orders opening soon</p>
     </div>
-    <div class="stack" aria-hidden="true">
-      <div class="mini m1" style="--fam:var(--g1)"><u>01</u><strong>Ha</strong><span>Halo Effect</span></div>
-      <div class="mini m2" style="--fam:var(--g7)"><u>17</u><strong>Av</strong><span>Availability Heuristic</span></div>
-      <div class="mini m3" style="--fam:var(--g4)"><u>14</u><strong>Su</strong><span>Sunk Cost Fallacy</span></div>
-    </div>
+    <div class="stack" id="stack" aria-hidden="true"></div>
   </section>
 
   <div class="notes">
@@ -704,7 +772,8 @@ function open(sym, keepFocus){
   card.style.setProperty("--fam", b.grp.v);
   card.innerHTML =
     '<button type="button" class="close" id="x" aria-label="Close">&times;</button>' +
-    '<div class="inner">' +
+    '<div class="flipper">' +
+    '<div class="inner front">' +
       '<div class="band"><span>' + b.grp.roman + " &middot; " + b.grp.name + "</span>" +
         '<span class="idx">No. ' + b.n + " / " + BIASES.length + "</span></div>" +
       '<div class="face" data-sym="' + b.s + '">' +
@@ -728,10 +797,21 @@ function open(sym, keepFocus){
       "</div>" +
       '<div class="card-foot">' +
         '<button type="button" class="navbtn" data-step="-1">&larr; ' + prevNext(-1).s + "</button>" +
+        '<button type="button" class="flipbtn" data-flip>Turn over</button>' +
         '<a class="deck-link" href="' + BUY_URL + '">Buy the deck &rarr;</a>' +
         '<button type="button" class="navbtn" data-step="1">' + prevNext(1).s + " &rarr;</button>" +
       "</div>" +
+    "</div>" +
+    '<div class="inner back" data-flip>' +
+      '<span class="weave"></span><span class="slip"></span>' +
+      '<span class="wordmark">Periodic Table of Biases</span>' +
+      '<span class="cut">' + b.s + "</span>" +
+      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + " / " + BIASES.length + "</span>" +
+      '<p class="move"><em>Counter-move</em>' + b.fix + "</p>" +
+      '<span class="turn">Tap to turn back</span>' +
+    "</div>" +
     "</div>";
+  card.classList.remove("flipped");
   backdrop.classList.add("open");
   document.body.style.overflow = "hidden";
   history.replaceState(null, "", "#" + b.s);
@@ -749,7 +829,11 @@ function close(){
   if(lastFocus) lastFocus.focus();
   current = null;
 }
+function flip(on){
+  card.classList.toggle("flipped", on === undefined ? !card.classList.contains("flipped") : on);
+}
 card.addEventListener("click", e => {
+  if(e.target.closest("[data-flip]")){ flip(); return; }
   const chip = e.target.closest("[data-go]");
   if(chip){ open(chip.dataset.go, true); return; }
   const nav = e.target.closest("[data-step]");
@@ -760,7 +844,8 @@ card.addEventListener("click", e => {
 backdrop.addEventListener("mousedown", e => { if(e.target === backdrop) close(); });
 document.addEventListener("keydown", e => {
   if(!current) return;
-  if(e.key === "Escape") close();
+  if(e.key === "Escape"){ card.classList.contains("flipped") ? flip(false) : close(); }
+  else if(e.key === "f" || e.key === "F") flip();
   else if(e.key === "ArrowRight") open(prevNext(1).s, true);
   else if(e.key === "ArrowLeft") open(prevNext(-1).s, true);
 });
@@ -799,6 +884,24 @@ else{
   zin.disabled = i === STEPS.length - 1;
   zout.disabled = i === 0;
 }
+
+/* The box-set stack is built from the data, so its numbers and colours
+   cannot drift away from the table above. */
+const stack = document.getElementById("stack");
+["Ha", "Av", "Su"].forEach(sym => {
+  const b = BY_SYM[sym];
+  const el = document.createElement("div");
+  el.className = "mini";
+  el.style.setProperty("--fam", b.grp.v);
+  el.innerHTML = "<u>" + String(b.n).padStart(2, "0") + "</u><strong>" + b.s +
+                 "</strong><span>" + b.name + "</span>";
+  stack.appendChild(el);
+});
+const backMini = document.createElement("div");
+backMini.className = "mini back-mini";
+backMini.style.setProperty("--fam", GROUPS[3].v);
+backMini.innerHTML = '<span class="weave"></span><b>Periodic<br>Table of<br>Biases</b>';
+stack.appendChild(backMini);
 
 document.getElementById("buy-top").href = BUY_URL;
 document.getElementById("buy-main").href = BUY_URL;
