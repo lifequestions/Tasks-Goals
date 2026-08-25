@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="72 cognitive biases as a periodic table, grouped into eight kinds of decision.">
+<meta name="description" content="72 cognitive biases as a periodic table, grouped by the kind of decision they spoil.">
 <meta name="theme-color" content="#F1F2EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0C1214" media="(prefers-color-scheme: dark)">
 </head>
@@ -21,7 +21,7 @@
   --g5:#9A6C12; --g6:#0E8275; --g7:#A8492A; --g8:#6549C4;
   --shadow:0 1px 2px rgba(20,24,26,.07), 0 8px 24px -12px rgba(20,24,26,.22);
   --shadow-lift:0 2px 4px rgba(20,24,26,.08), 0 18px 40px -16px rgba(20,24,26,.32);
-  --col:clamp(118px, calc((100vw - 190px) / 8), 196px);
+  --col:clamp(122px, calc((100vw - 190px) / 7), 182px);
   --gap:8px; --rail:26px; --pad:clamp(14px,3vw,32px);
 }
 @media (prefers-color-scheme: dark){
@@ -109,8 +109,19 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   width:100vw; margin-left:calc(50% - 50vw); padding:22px var(--pad) 6px;
   overflow-x:auto; overflow-y:hidden;
 }
-.chart{min-width:calc(var(--rail) + 8 * (var(--col) + var(--gap)));}
-.head, .grid{display:grid; grid-template-columns:var(--rail) repeat(8, var(--col)); gap:var(--gap);}
+.chart{min-width:calc(var(--rail) + 7 * (var(--col) + var(--gap)));}
+.head, .grid, .series-rule, .series{
+  display:grid; grid-template-columns:var(--rail) repeat(7, var(--col)); gap:var(--gap);
+}
+.series-rule{margin-top:20px; align-items:center}
+.series-rule .label{
+  grid-column:2 / span 7; display:flex; align-items:center; gap:14px;
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.series-rule .label::before{content:""; width:22px; height:3px; background:var(--fam); flex:none}
+.series-rule .label::after{content:""; height:1px; flex:1; background:var(--rule-strong)}
+.series{margin-top:9px}
 .ghead{
   grid-row:1; align-self:start; text-align:left; cursor:pointer; font-family:inherit; color:var(--ink);
   background:none; border:0; border-top:3px solid var(--fam); padding:9px 2px 12px;
@@ -387,6 +398,8 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
     <div class="chart">
       <div class="head" id="head"></div>
       <div class="grid" id="grid"></div>
+      <div class="series-rule"><span class="label" id="series-label"></span></div>
+      <div class="series" id="series"></div>
     </div>
   </div>
 
@@ -412,15 +425,16 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   <div class="notes">
     <div>
       <h4>How it is arranged</h4>
-      <p>Columns are kinds of decision, not kinds of thinking &mdash; the eight rooms where these errors
-      actually cost something. Nine biases to a group, numbered across the rows. Before a decision of
-      one kind, read that column.</p>
+      <p>Columns are kinds of decision, not kinds of thinking &mdash; the seven rooms where these errors
+      actually cost something, plus a series set apart below for the ones that only bite afterwards.
+      Groups are different sizes, which is what gives the chart its staircase. Before a decision of one
+      kind, read that column.</p>
     </div>
     <div>
       <h4>The dot</h4>
       <p>Each element carries a second mark: the mental shortcut underneath it &mdash; too much information,
       not enough meaning, the need to act fast, or the limits of memory. Different columns, same four
-      causes.</p>
+      causes, which is why one counter-move often fixes several.</p>
     </div>
     <div>
       <h4>Bonds</h4>
@@ -513,24 +527,26 @@ const BIASES=[
 {n:71,s:"Rc",name:"Risk Compensation",cat:"act",what:"A new safety measure raises your risk-taking until some of the benefit is spent.",wild:"Better test coverage leads to bolder deploys, and the incident rate settles back near where it started.",why:"Behaviour tracks a roughly constant felt level of risk rather than a fixed level of caution.",fix:"Measure the outcome, not the safeguard. If incidents did not fall, the margin was consumed rather than banked.",rel:["Op","Il","Au"]},
 {n:72,s:"Pk",name:"Bikeshedding",cat:"act",what:"Discussion time goes to the trivial items everyone understands and skips the consequential ones nobody does.",wild:"Forty minutes on the button colour and four on the migration plan that carries all the risk.",why:"Contributing to an easy item is cheap and visible. Engaging with the hard item risks looking uninformed.",fix:"Set the agenda by impact and time-box in that order. Take the cheap item to a decision by one person offline.",rel:["Fl","Sl","Fc"]},
 ];
-/* Eight kinds of decision. Nine biases each: the table is 8 x 9. */
+/* Seven kinds of decision, of unequal size - which is what gives the chart its
+   staircase - plus a detached series below, the way the lanthanides sit apart.
+   A column is bottom-aligned to row 10, so its size sets where it starts. */
 const GROUPS = [
-  {id:"g1", roman:"I",    name:"Judging People",     sub:"hiring, appraisal, blame",
-   members:["Ha","Fu","St","Ig","Jw","Sk","Ck","Ba","Sr"]},
-  {id:"g2", roman:"II",   name:"Money & Commitment", sub:"spending, owning",
-   members:["Su","La","En","Sq","De","Ik","Hd","Om","Cs"]},
-  {id:"g3", roman:"III",  name:"Plans & Forecasts",  sub:"estimates, confidence",
-   members:["Pf","Op","Oc","An","Dk","Il","Ze","Eg","Te"]},
-  {id:"g4", roman:"IV",   name:"Risk & Uncertainty", sub:"safety, odds, the unknown",
-   members:["Av","Ng","Zr","Am","Rc","Au","Sl","Fc","Vr"]},
-  {id:"g5", roman:"V",    name:"Picking an Option",  sub:"menus, offers, defaults",
-   members:["Fr","Dc","Ct","Db","Me","Fl","Ps","Re","At"]},
-  {id:"g6", roman:"VI",   name:"Reading Evidence",   sub:"data, patterns, proof",
-   members:["Cb","Br","Sv","Ss","Ic","Cl","Gf","Hh","Fi"]},
-  {id:"g7", roman:"VII",  name:"Rooms & Consensus",  sub:"meetings, authority",
-   members:["Bw","Ab","Rd","Sm","Bb","Nb","It","Pk","Oe"]},
-  {id:"g8", roman:"VIII", name:"Looking Back",       sub:"reviews, memory",
-   members:["Hb","Pe","Rr","Sp","Mi","Sc","Fa","Ge","Ci"]}
+  {id:"g1", roman:"I",   name:"Judging People",     sub:"hiring, appraisal, blame",
+   members:["Ha","Fu","St","Ig","Jw","Sk","Ck","Ba","Sr","Vr"]},
+  {id:"g2", roman:"II",  name:"Money & Commitment", sub:"spending, owning",
+   members:["Su","La","En","Sq","De","Ik","Hd","Om","Db"]},
+  {id:"g3", roman:"III", name:"Plans & Forecasts",  sub:"estimates, confidence",
+   members:["Pf","Op","Oc","An","Dk","Eg","Fc"]},
+  {id:"g4", roman:"IV",  name:"Risk & Uncertainty", sub:"safety, odds, the unknown",
+   members:["Av","Ng","Zr","Am","Rc","Au","Il"]},
+  {id:"g5", roman:"V",   name:"Picking an Option",  sub:"menus, offers, defaults",
+   members:["Fr","Dc","Ct","Me","Fl","Ps","Sl"]},
+  {id:"g6", roman:"VI",  name:"Reading Evidence",   sub:"data, patterns, proof",
+   members:["Cb","Br","Ss","Ic","Cl","Gf","Hh","Fi","At"]},
+  {id:"g7", roman:"VII", name:"Rooms & Consensus",  sub:"meetings, authority",
+   members:["Bw","Ab","Rd","Sm","Bb","Nb","Pk","Oe","Re","It"]},
+  {id:"g8", roman:"VIII", name:"Looking Back", sub:"reviews, post-mortems, memory", series:true,
+   members:["Hb","Pe","Rr","Sp","Mi","Sc","Fa","Ge","Ci","Te","Cs","Sv","Ze"]}
 ];
 /* Store link. Replace "#boxset" with the shop URL when the store is live -
    it is used by the masthead button, the box-set button and every card. */
@@ -547,17 +563,30 @@ const FAM_DOT = {tmi:"#0E8275", nem:"#6549C4", act:"#BC3247", mem:"#9A6C12"};
 
 const BY_SYM = Object.fromEntries(BIASES.map(b => [b.s, b]));
 
-/* Numbered across the rows: 1-8 is the first row of the eight groups. */
-GROUPS.forEach((g, col) => {
-  g.v = "var(--" + g.id + ")";
-  g.members.forEach((sym, row) => {
-    const b = BY_SYM[sym];
-    b.n = row * 8 + col + 1;
-    b.grp = g;
-    b.row = row + 1;
-    b.col = col + 1;
+const MAIN = GROUPS.filter(g => !g.series);
+const SERIES = GROUPS.find(g => g.series);
+const ROWS = Math.max(...MAIN.map(g => g.members.length));
+
+/* Each column is bottom-aligned to the last row, so a short group starts
+   further down - that stagger is the chart's staircase. */
+MAIN.forEach((g, i) => { g.col = i + 1; g.startRow = ROWS - g.members.length + 1; });
+GROUPS.forEach(g => { g.v = "var(--" + g.id + ")"; });
+
+let n = 0;
+for(let row = 1; row <= ROWS; row++){
+  MAIN.forEach(g => {
+    if(row < g.startRow) return;
+    const b = BY_SYM[g.members[row - g.startRow]];
+    b.n = ++n; b.grp = g; b.row = row; b.col = g.col;
   });
+}
+SERIES.members.forEach((sym, i) => {
+  const b = BY_SYM[sym];
+  b.n = ++n; b.grp = SERIES;
+  b.row = Math.floor(i / MAIN.length) + 1;
+  b.col = (i % MAIN.length) + 1;
 });
+
 const ORDER = [...BIASES].sort((a, b) => a.n - b.n);
 
 /* Break points are curated, not guessed - an automatic split gives "Attrib-ution". */
@@ -582,7 +611,7 @@ const grid = document.getElementById("grid");
 const chart = document.querySelector(".chart");
 const active = new Set();
 
-GROUPS.forEach((g, i) => {
+MAIN.forEach((g, i) => {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "ghead";
@@ -601,34 +630,42 @@ GROUPS.forEach((g, i) => {
 });
 
 const cells = {};
-for(let row = 1; row <= 9; row++){
+function tile(b){
+  const el = document.createElement("button");
+  el.type = "button";
+  el.className = "cell";
+  el.style.setProperty("--fam", b.grp.v);
+  el.style.setProperty("--famdot", FAM_DOT[b.cat]);
+  el.style.gridRow = b.row;
+  el.style.gridColumn = b.col + 1;
+  el.style.animationDelay = Math.min(b.n * 6, 460) + "ms";
+  el.dataset.sym = b.s;
+  el.setAttribute("aria-label", b.name + " — " + b.grp.name + ", " + FAM[b.cat].name);
+  el.innerHTML =
+    '<span class="top"><span class="num">' + b.n + '</span>' +
+    '<span class="fam" title="' + FAM[b.cat].name + '"></span></span>' +
+    '<span class="sym">' + b.s + '</span>' +
+    '<span class="nm">' + shy(b.name) + "</span>";
+  cells[b.s] = el;
+  return el;
+}
+for(let row = 1; row <= ROWS; row++){
   const p = document.createElement("div");
   p.className = "period";
   p.style.gridRow = row;
   p.textContent = row;
   grid.appendChild(p);
-  GROUPS.forEach((g, i) => {
-    const b = BY_SYM[g.members[row - 1]];
-    const el = document.createElement("button");
-    el.type = "button";
-    el.className = "cell";
-    el.style.setProperty("--fam", g.v);
-    el.style.setProperty("--famdot", FAM_DOT[b.cat]);
-    el.style.gridRow = row;
-    el.style.gridColumn = i + 2;
-    el.style.animationDelay = Math.min((row * 8 + i) * 7, 480) + "ms";
-    el.dataset.sym = b.s;
-    el.setAttribute("aria-label", b.name + " — " + g.name + ", " + FAM[b.cat].name);
-    el.innerHTML =
-      '<span class="top"><span class="num">' + b.n + '</span>' +
-      '<span class="fam" title="' + FAM[b.cat].name + '"></span></span>' +
-      '<span class="sym">' + b.s + '</span>' +
-      '<span class="nm">' + shy(b.name) + "</span>";
-    grid.appendChild(el);
-    cells[b.s] = el;
-  });
 }
+BIASES.filter(b => !b.grp.series).forEach(b => grid.appendChild(tile(b)));
+
+const series = document.getElementById("series");
+SERIES.members.forEach(sym => series.appendChild(tile(BY_SYM[sym])));
+document.getElementById("series-label").textContent =
+  "Series " + BY_SYM[SERIES.members[0]].n + "\u2013" + BY_SYM[SERIES.members[SERIES.members.length - 1]].n +
+  " \u00b7 " + SERIES.name + " \u00b7 " + SERIES.sub;
+document.querySelector(".series-rule").style.setProperty("--fam", SERIES.v);
 grid.classList.add("plate-in");
+series.classList.add("plate-in");
 
 /* family key under the chart */
 const famkey = document.getElementById("famkey");
