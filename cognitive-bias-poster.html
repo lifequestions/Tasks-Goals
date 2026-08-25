@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="74 cognitive biases as a periodic table in six families, each opening as a two-sided card.">
+<meta name="description" content="The Bias Poster - the whole table printed, in two sizes.">
 <meta name="theme-color" content="#F1F2EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0C1214" media="(prefers-color-scheme: dark)">
 </head>
 <body>
-<title>Periodic Table of Biases</title>
+<title>The Bias Poster</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
@@ -47,333 +47,103 @@
 *{box-sizing:border-box}
 body{
   margin:0; background:var(--paper); color:var(--ink);
-  font-family:"Archivo","Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif; -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:1680px; margin:0 auto; padding:clamp(20px,4vw,44px) var(--pad) 64px;}
-
-/* ---------- masthead ---------- */
-.masthead{
-  display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
-  gap:24px 32px; padding-bottom:18px; border-bottom:1.5px solid var(--ink);
+.wrap{max-width:1180px; margin:0 auto; padding:0 clamp(16px,4vw,36px)}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  padding:18px 0 16px; border-bottom:1px solid var(--rule);
 }
-.masthead > div:first-child{flex:1 1 460px; max-width:820px}
+.brand{
+  display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink);
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+}
+.brand .mark{
+  width:22px; height:26px; border-radius:2px; border:1px solid var(--ink); display:flex;
+  align-items:flex-end; justify-content:center; padding-bottom:2px; font-size:11px; font-weight:700;
+  font-family:"Archivo",sans-serif; letter-spacing:0;
+}
+.topnav{display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.topnav a{
+  text-decoration:none; color:var(--ink-2); padding:7px 11px; border-radius:2px;
+  font-size:13px; font-weight:500; border:1px solid transparent;
+}
+.topnav a:hover{color:var(--ink); border-color:var(--rule)}
+.topnav a[aria-current="page"]{color:var(--ink); border-color:var(--rule-strong); background:var(--surface)}
 .eyebrow{
-  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.14em;
-  text-transform:uppercase; color:var(--ink-2); margin:0 0 10px;
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 14px;
 }
 h1{
-  margin:0; font-size:clamp(30px,5.2vw,58px); line-height:.94; letter-spacing:-.025em;
-  font-weight:800; font-variation-settings:"wdth" 112,"wght" 800; text-wrap:balance;
+  margin:0; font-size:clamp(36px,6vw,68px); line-height:.96; letter-spacing:-.03em; font-weight:800;
+  font-variation-settings:"wdth" 110,"wght" 800; text-wrap:balance;
 }
-h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght" 500; font-size:.44em; letter-spacing:.02em; color:var(--ink-2); margin-top:.5em;}
-.tools{display:flex; flex-direction:column; gap:10px; align-items:flex-start; margin-left:auto;}
-.buy{
-  display:inline-flex; align-items:center; gap:8px; text-decoration:none; cursor:pointer;
-  background:var(--ink); color:var(--paper); border:1px solid var(--ink); border-radius:2px;
-  padding:9px 14px; font-family:inherit; font-size:13.5px; font-weight:600;
-  transition:opacity .15s, transform .15s;
+h2.sec{
+  margin:0 0 8px; font-size:clamp(24px,3.4vw,36px); line-height:1.04; letter-spacing:-.025em;
+  font-weight:750; font-variation-settings:"wdth" 104,"wght" 750; text-wrap:balance;
 }
-.buy:hover{opacity:.86}
-.buy:active{transform:translateY(1px)}
-.buy:focus-visible{outline:none; box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
-.buy .arrow{font-family:"IBM Plex Mono",monospace; font-size:12px}
-.search{
-  display:flex; align-items:center; gap:8px; background:var(--surface);
-  border:1px solid var(--rule-strong); border-radius:2px; padding:7px 10px; min-width:min(280px,72vw);
+.lede{
+  font-family:"IBM Plex Serif",Georgia,serif; font-size:clamp(16px,1.6vw,19px); line-height:1.6;
+  color:var(--ink-2); max-width:56ch; margin:20px 0 0;
 }
-.search svg{flex:none; opacity:.6}
-.search input{
-  border:0; background:transparent; color:var(--ink); font:500 14.5px/1.2 "Archivo",sans-serif;
-  width:100%; outline:none;
+p.body{font-family:"IBM Plex Serif",Georgia,serif; font-size:16px; line-height:1.62; color:var(--ink-2); max-width:60ch}
+section{padding:clamp(48px,7vw,84px) 0; border-top:1px solid var(--rule)}
+section.plain{border-top:0}
+.kicker{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-3); margin:0 0 10px;
 }
-.search input::placeholder{color:var(--ink-3)}
-.count{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-3); letter-spacing:.06em;}
-.zoom{display:flex; align-items:center; gap:6px}
-.zoom > span{
-  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--ink-3);
+.cta{
+  display:inline-flex; align-items:center; gap:10px; text-decoration:none; cursor:pointer;
+  background:var(--ink); color:var(--paper); border:1px solid var(--ink); border-radius:3px;
+  padding:14px 22px; font-family:inherit; font-size:15px; font-weight:650; letter-spacing:.005em;
+  transition:opacity .15s, transform .12s;
 }
-.zoom button{
-  width:30px; height:30px; display:flex; align-items:center; justify-content:center;
-  background:var(--surface); border:1px solid var(--rule-strong); border-radius:2px;
-  color:var(--ink); font-family:"IBM Plex Mono",monospace; font-size:15px; line-height:1; cursor:pointer;
-  transition:border-color .15s;
+.cta:hover{opacity:.87}
+.cta:active{transform:translateY(1px)}
+.cta:focus-visible{outline:none; box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
+.cta.ghost{background:none; color:var(--ink); border-color:var(--rule-strong)}
+.cta.ghost:hover{border-color:var(--ink)}
+.cta .arrow{font-family:"IBM Plex Mono",monospace; font-size:13px}
+.buyrow{display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:26px}
+.price{
+  font-size:26px; font-weight:750; font-variation-settings:"wdth" 104,"wght" 750; letter-spacing:-.02em;
 }
-.zoom button:hover:not(:disabled){border-color:var(--ink-3)}
-.zoom button:disabled{opacity:.35; cursor:default}
-.zoom button:focus-visible{outline:none; box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink-3)}
-
-/* ---------- chart ---------- */
-.scroller{
-  width:100vw; margin-left:calc(50% - 50vw); padding:22px var(--pad) 6px;
-  overflow-x:auto; overflow-y:hidden;
+.price small{
+  display:block; font-family:"IBM Plex Mono",monospace; font-size:10.5px; font-weight:400;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-top:5px;
 }
-.chart{min-width:calc(var(--rail) + 16 * (var(--col) + var(--gap)));}
-.head, .grid, .series-rule, .series{
-  display:grid; grid-template-columns:var(--rail) repeat(16, var(--col)); gap:var(--gap);
-}
-.ghead{
-  grid-row:1; align-self:start; text-align:left; cursor:pointer; font-family:inherit; color:var(--ink);
-  background:none; border:0; border-top:4px solid var(--fam); padding:9px 6px 12px; margin-right:var(--gap);
-  transition:opacity .16s;
-}
-.ghead .roman{
-  display:block; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em;
-  color:var(--fam); margin-bottom:5px;
-}
-.ghead b{display:block; font-size:14.5px; font-weight:650; line-height:1.15; letter-spacing:-.008em;}
-.ghead i{
-  display:block; margin-top:3px; font-style:normal; font-family:"IBM Plex Mono",monospace;
-  font-size:10px; line-height:1.35; color:var(--ink-3); letter-spacing:.02em;
-}
-.ghead:hover b{text-decoration:underline; text-underline-offset:3px}
-.ghead:focus-visible{outline:none; box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--fam)}
-.head.filtering .ghead[aria-pressed="false"]{opacity:.38}
-.period{
-  grid-column:1; display:flex; align-items:center; justify-content:center;
-  font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3);
-}
-.cell{
-  position:relative; aspect-ratio:1 / 1.1; display:flex; flex-direction:column; align-items:flex-start;
-  text-align:left; padding:6px 7px 8px; cursor:pointer; overflow:hidden; font-family:inherit; color:var(--ink);
-  background:color-mix(in oklab, var(--fam) 9%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 32%, var(--rule));
-  border-radius:3px;
-  transition:transform .16s cubic-bezier(.2,.7,.3,1), box-shadow .16s, background .16s, border-color .16s, opacity .18s;
-}
-.cell .top{display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px;}
-.cell .num{
-  font-family:"IBM Plex Mono",monospace; font-size:clamp(9px, .088 * var(--col), 11.5px);
-  color:var(--ink-3); line-height:1; font-variant-numeric:tabular-nums;
-}
-.cell .fam{
-  width:5.5px; height:5.5px; border-radius:50%; flex:none; background:var(--famdot); opacity:.85;
-}
-.cell .sym{
-  font-size:clamp(23px, .25 * var(--col), 35px); line-height:1; font-weight:700; color:var(--fam);
-  font-variation-settings:"wdth" 98,"wght" 700; margin:auto 0 3px; letter-spacing:-.01em;
-}
-.cell .nm{
-  font-size:clamp(12.5px, .145 * var(--col), 17px); line-height:1.12; height:3.36em; flex:none;
-  font-variation-settings:"wdth" 76,"wght" 600; hyphens:auto; overflow-wrap:break-word;
-  color:var(--ink); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
-  overflow:hidden; width:100%; margin-top:auto;
-}
-.cell:hover, .cell:focus-visible{
-  transform:translateY(-3px); box-shadow:var(--shadow-lift); outline:none;
-  background:color-mix(in oklab, var(--fam) 18%, var(--surface));
-  border-color:var(--fam);
-}
-.cell:focus-visible{box-shadow:var(--shadow-lift), 0 0 0 2px var(--paper), 0 0 0 4px var(--fam);}
-.cell.linked{border-color:var(--fam); box-shadow:inset 0 0 0 1.5px var(--fam);}
-.cell.dim{opacity:.15; pointer-events:none;}
-
-/* ---------- keys and notes ---------- */
-.famkey{
-  display:flex; flex-wrap:wrap; gap:6px 20px; align-items:center; margin:20px 0 0;
-  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em;
-  text-transform:uppercase; color:var(--ink-3);
-}
-.famkey span{display:flex; align-items:center; gap:7px}
-.famkey span::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--famdot)}
-.notes{
-  margin-top:34px; padding-top:16px; border-top:1px solid var(--rule);
-  display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  font-family:"IBM Plex Serif",Georgia,serif; font-size:14px; line-height:1.6; color:var(--ink-2);
-}
-.notes h4{
-  margin:0 0 6px; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.13em;
+.grid3{display:grid; gap:26px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card-note{background:var(--surface); border:1px solid var(--rule); border-radius:3px; padding:22px}
+.card-note h3{margin:0 0 8px; font-size:17px; font-weight:650; letter-spacing:-.01em}
+.card-note p{margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:14.5px; line-height:1.56; color:var(--ink-2)}
+.specs{width:100%; border-collapse:collapse; font-size:14.5px; max-width:620px}
+.specs th, .specs td{text-align:left; padding:12px 0; border-bottom:1px solid var(--rule); vertical-align:top}
+.specs th{
+  width:170px; font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.12em;
   text-transform:uppercase; color:var(--ink-3); font-weight:500;
 }
-.notes p{margin:0}
-.hint{
-  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--ink-3); margin:14px 0 0; display:none;
+.specs td{font-family:"IBM Plex Serif",Georgia,serif; color:var(--ink)}
+.faq{display:grid; gap:2px; max-width:760px}
+.faq details{background:var(--surface); border:1px solid var(--rule); border-radius:3px; padding:16px 18px}
+.faq summary{cursor:pointer; font-weight:600; font-size:15.5px; list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+"; float:right; font-family:"IBM Plex Mono",monospace; color:var(--ink-3)}
+.faq details[open] summary::after{content:"\2212"}
+.faq p{margin:12px 0 0; font-family:"IBM Plex Serif",Georgia,serif; font-size:15px; line-height:1.6; color:var(--ink-2)}
+footer{
+  padding:36px 0 60px; border-top:1px solid var(--rule); display:flex; flex-wrap:wrap; gap:16px;
+  justify-content:space-between; align-items:baseline;
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--ink-3);
 }
-/* ---------- the card ---------- */
-.backdrop{
-  position:fixed; inset:0; z-index:40; display:none; align-items:center; justify-content:center;
-  padding:clamp(10px,3vw,34px); background:color-mix(in oklab, var(--ink) 46%, transparent);
-  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+footer a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule-strong)}
+footer a:hover{color:var(--ink)}
+.note-small{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); margin:16px 0 0; line-height:1.7;
 }
-.backdrop.open{display:flex}
-.card{
-  position:relative; width:min(456px, 94vw); height:min(86vh, 716px);
-  display:flex; flex-direction:column; padding:14px;
-  border-radius:18px; border:1px solid color-mix(in oklab, var(--fam) 26%, var(--rule-strong));
-  background:
-    radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--fam) 15%, var(--surface)), transparent 62%),
-    linear-gradient(168deg, color-mix(in oklab, var(--fam) 11%, var(--surface)), var(--surface) 58%);
-  box-shadow:var(--shadow-lift);
-  animation:deal .26s cubic-bezier(.2,.8,.3,1);
-}
-@keyframes deal{from{opacity:0; transform:translateY(14px) rotate(-1.2deg) scale(.97)} to{opacity:1; transform:none}}
-.flipper{
-  position:relative; flex:1; min-height:0; transform-style:preserve-3d;
-  transition:transform .58s cubic-bezier(.4,.05,.2,1);
-}
-.card.flipped .flipper{transform:rotateY(180deg)}
-.inner{
-  position:absolute; inset:0; display:flex; flex-direction:column; overflow:hidden;
-  border-radius:10px; border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule));
-  background:var(--surface); backface-visibility:hidden; -webkit-backface-visibility:hidden;
-}
-.inner.back{
-  transform:rotateY(180deg); border-color:transparent; cursor:pointer;
-  background:var(--fam); color:var(--paper);
-  align-items:center; justify-content:center; text-align:center; padding:30px 26px 22px;
-}
-/* the chart's own grid, printed on the back, with one cell out of place */
-.back .weave{
-  position:absolute; inset:0; opacity:.17; pointer-events:none;
-  background-image:
-    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 30px),
-    repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 30px);
-}
-.back .slip{
-  position:absolute; width:46px; height:46px; border:1.5px solid currentColor; opacity:.55;
-  top:13%; right:15%; transform:rotate(12deg); pointer-events:none;
-}
-.back .wordmark{
-  position:relative; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.28em;
-  text-transform:uppercase; opacity:.72;
-}
-.back .cut{
-  position:relative; display:inline-flex; align-items:center; justify-content:center;
-  min-width:38px; height:28px; padding:0 9px; margin:18px 0 14px; border-radius:3px;
-  font-size:16px; font-weight:700; font-variation-settings:"wdth" 96,"wght" 700;
-  border:1.5px solid currentColor; opacity:.9;
-}
-.back .title{
-  position:relative; margin:0; font-size:clamp(26px,5.6vw,36px); line-height:1.03;
-  letter-spacing:-.022em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
-  text-wrap:balance; max-width:15ch;
-}
-.back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
-.back .fam-name{
-  position:relative; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em;
-  text-transform:uppercase; opacity:.8; margin:9px 0 22px;
-}
-.back .move{
-  position:relative; font-family:"IBM Plex Serif",Georgia,serif; font-size:16px; line-height:1.55;
-  max-width:34ch; margin:0;
-}
-.back .move em{font-style:normal; display:block; font-family:"IBM Plex Mono",monospace;
-  font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; opacity:.75; margin-bottom:9px}
-.back .turn{
-  position:absolute; bottom:16px; left:0; right:0; font-family:"IBM Plex Mono",monospace;
-  font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.6;
-}
-.flipbtn{
-  display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--rule);
-  border-radius:3px; padding:6px 10px; cursor:pointer; color:var(--ink-2); font-family:"IBM Plex Mono",monospace;
-  font-size:11px; letter-spacing:.06em; text-transform:uppercase; transition:color .15s, border-color .15s;
-}
-.flipbtn:hover,.flipbtn:focus-visible{color:var(--fam); border-color:var(--fam); outline:none}
-.band{
-  flex:none; display:flex; align-items:center; justify-content:space-between; gap:10px;
-  padding:9px 13px; background:var(--fam); color:var(--paper);
-  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.13em; text-transform:uppercase;
-}
-.band .idx{opacity:.85; font-variant-numeric:tabular-nums}
-.face{flex:none; display:flex; flex-direction:column; gap:9px; padding:20px 20px 16px;}
-.ident{display:flex; align-items:center; gap:9px}
-.sym-chip{
-  display:inline-flex; align-items:center; justify-content:center; min-width:34px; height:26px;
-  padding:0 8px; border-radius:3px; font-size:15px; font-weight:700; color:var(--fam);
-  background:color-mix(in oklab, var(--fam) 13%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 40%, var(--rule));
-  font-variation-settings:"wdth" 96,"wght" 700;
-}
-.ident .note{
-  margin:0; display:flex; align-items:center; gap:7px;
-  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--ink-2);
-}
-.ident .note .dot{width:6px; height:6px; border-radius:50%; background:var(--famdot); flex:none}
-.face .meta{min-width:0}
-.face h2{
-  margin:0; font-size:clamp(26px,5.4vw,34px); line-height:1.02; letter-spacing:-.025em;
-  font-weight:750; font-variation-settings:"wdth" 102,"wght" 750; text-wrap:balance;
-}
-/* the two letters the symbol is made from */
-.src{text-decoration:none; box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--fam) 55%, transparent)}
-
-.scroll{flex:1; min-height:0; overflow-y:auto; padding:2px 17px 16px; display:grid; gap:15px;}
-.scroll::-webkit-scrollbar{width:8px}
-.scroll::-webkit-scrollbar-thumb{background:var(--rule-strong); border-radius:4px}
-.field h3{
-  margin:0 0 5px; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.14em;
-  text-transform:uppercase; color:var(--ink-3); font-weight:500;
-}
-.field p{
-  margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:15px; line-height:1.58; color:var(--ink);
-}
-.field.wild p{font-style:italic; color:var(--ink-2)}
-.field.fix{
-  padding:12px 14px; border-radius:4px;
-  background:color-mix(in oklab, var(--fam) 10%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 26%, transparent);
-}
-.field.fix h3{color:var(--fam)}
-.rel-list{display:flex; flex-wrap:wrap; gap:6px}
-.chip{
-  display:flex; align-items:center; gap:6px; cursor:pointer; font-family:inherit; color:var(--ink);
-  background:var(--sunk); border:1px solid var(--rule); border-radius:3px; padding:5px 9px;
-  font-size:12.5px; font-weight:500; transition:border-color .15s, background .15s;
-}
-.chip:hover,.chip:focus-visible{border-color:var(--fam-chip); background:var(--surface); outline:none}
-.chip:focus-visible{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--fam-chip)}
-.chip b{font-family:"IBM Plex Mono",monospace; font-weight:600; font-size:12px; color:var(--fam-chip)}
-.card-foot{
-  flex:none; display:flex; align-items:center; justify-content:space-between; gap:8px;
-  padding:9px 11px; border-top:1px solid var(--rule); background:var(--sunk);
-}
-.navbtn{
-  display:flex; align-items:center; gap:6px; background:none; border:1px solid var(--rule); cursor:pointer;
-  border-radius:3px; padding:6px 10px; color:var(--ink-2);
-  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase;
-  transition:color .15s, border-color .15s;
-}
-.navbtn:hover,.navbtn:focus-visible{color:var(--ink); border-color:var(--rule-strong); outline:none}
-.navbtn:focus-visible{box-shadow:0 0 0 2px var(--sunk),0 0 0 3px var(--ink-3)}
-.deck-link{
-  display:flex; align-items:center; gap:6px; text-decoration:none; color:var(--fam);
-  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-  border-bottom:1px solid color-mix(in oklab, var(--fam) 40%, transparent); padding-bottom:1px;
-}
-.deck-link:hover{border-bottom-color:var(--fam)}
-.close{
-  position:absolute; top:-13px; right:-13px; width:34px; height:34px; display:flex;
-  align-items:center; justify-content:center; background:var(--surface); cursor:pointer;
-  border:1px solid var(--rule-strong); border-radius:50%; color:var(--ink); font-size:16px; line-height:1;
-  box-shadow:var(--shadow);
-}
-.close:hover{border-color:var(--ink-3)}
-.close:focus-visible{outline:none; box-shadow:0 0 0 3px var(--fam)}
-
-/* ---------- shop ---------- */
-.shop{margin:44px auto 0; max-width:1240px; padding-top:34px; border-top:1px solid var(--rule)}
-.shop-head{display:flex; flex-wrap:wrap; gap:12px 24px; align-items:baseline; justify-content:space-between}
-.shop-head h2{
-  margin:0; font-size:clamp(22px,3vw,32px); line-height:1.04; letter-spacing:-.025em;
-  font-weight:800; font-variation-settings:"wdth" 106,"wght" 800;
-}
-.two-up{display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); margin-top:26px}
-.product{
-  display:flex; flex-direction:column; gap:18px; padding:26px 26px 24px; border-radius:4px;
-  background:var(--sunk); border:1px solid var(--rule-strong); overflow:hidden;
-}
-.product .art{display:flex; align-items:center; justify-content:center; min-height:190px}
-.product h3{margin:0; font-size:22px; font-weight:750; letter-spacing:-.02em; font-variation-settings:"wdth" 104,"wght" 750}
-.product p{margin:6px 0 0; font-family:"IBM Plex Serif",Georgia,serif; font-size:15px; line-height:1.58; color:var(--ink-2)}
-.product .row{display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:auto; padding-top:4px}
-.product .amt{font-size:20px; font-weight:750; font-variation-settings:"wdth" 104,"wght" 750}
-.product .fine{
-  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--ink-3); margin:0;
-}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important; transition-duration:.01ms !important}}
 /* The chart itself, drawn at poster size and scaled wherever it is shown. */
 .sheet-wrap{position:relative; width:100%; max-width:var(--sheet-max,760px)}
 .sheet-wrap::before{content:""; display:block; padding-top:70.7%}
@@ -421,237 +191,151 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   font-family:"IBM Plex Mono",monospace; font-size:6px; letter-spacing:.14em;
   text-transform:uppercase; color:#6B7373;
 }
-/* A card, drawn at card size and scaled by --s wherever it is placed. */
-.slot{
-  --w:300px; --h:396px; --s:.46;
-  position:relative; flex:none; width:calc(var(--w) * var(--s)); height:calc(var(--h) * var(--s));
+/* a crop of the real thing, at reading size */
+.crop{
+  display:grid; grid-template-columns:repeat(3, 128px); gap:7px; padding:22px; overflow:auto;
+  background:var(--surface); border:1px solid var(--rule); border-radius:3px;
 }
-.card-mini{
-  position:absolute; top:0; left:0; width:var(--w); height:var(--h);
-  transform:scale(var(--s)); transform-origin:top left;
-  display:flex; flex-direction:column; padding:9px; border-radius:22px;
-  border:1px solid color-mix(in oklab, var(--fam) 26%, var(--rule-strong));
-  background:
-    radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--fam) 15%, var(--surface)), transparent 62%),
-    linear-gradient(168deg, color-mix(in oklab, var(--fam) 11%, var(--surface)), var(--surface) 58%);
-  box-shadow:var(--shadow);
+.crop .ccell{
+  aspect-ratio:1 / 1.1; padding:8px 9px 10px; display:flex; flex-direction:column; border-radius:3px;
+  border:1px solid color-mix(in oklab, var(--fam) 32%, var(--rule));
+  background:color-mix(in oklab, var(--fam) 9%, var(--surface));
 }
-.card-mini .inner{
-  position:relative; inset:auto; transform:none; backface-visibility:visible;
-  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; border-radius:14px;
-  border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule)); background:var(--surface);
+.crop .top{display:flex; align-items:center; justify-content:space-between}
+.crop .cn{font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3); line-height:1}
+.crop .cdot{width:6px; height:6px; border-radius:50%; background:var(--famdot)}
+.crop .csym{
+  font-size:32px; line-height:1; font-weight:700; color:var(--fam); margin:auto 0 3px;
+  font-variation-settings:"wdth" 98,"wght" 700;
 }
-.card-mini .band{
-  flex:none; display:flex; align-items:center; justify-content:space-between; gap:8px;
-  padding:8px 11px; background:var(--fam); color:var(--paper);
-  font-family:"IBM Plex Mono",monospace; font-size:8.5px; letter-spacing:.11em; text-transform:uppercase;
-}
-.card-mini .face{flex:none; display:flex; flex-direction:column; gap:8px; padding:15px 14px 10px}
-.card-mini .ident{display:flex; align-items:center; gap:8px}
-.card-mini .sym-chip{
-  display:inline-flex; align-items:center; justify-content:center; min-width:28px; height:21px;
-  padding:0 7px; border-radius:3px; font-size:13px; font-weight:700; color:var(--fam);
-  background:color-mix(in oklab, var(--fam) 13%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 40%, var(--rule));
-  font-variation-settings:"wdth" 96,"wght" 700;
-}
-.card-mini .note{
-  margin:0; display:flex; align-items:center; gap:6px; font-family:"IBM Plex Mono",monospace;
-  font-size:8px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-2);
-}
-.card-mini .note .dot{width:5px; height:5px; border-radius:50%; background:var(--famdot); flex:none}
-.card-mini h2{
-  margin:0; font-size:22px; line-height:1.02; letter-spacing:-.025em; font-weight:750;
-  font-variation-settings:"wdth" 102,"wght" 750; text-wrap:balance;
-}
-.card-mini .src{text-decoration:none; box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--fam) 55%, transparent)}
-.card-mini .field{padding:0 14px 12px}
-.card-mini .field h4{
-  margin:0 0 4px; font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.14em;
-  text-transform:uppercase; color:var(--ink-3); font-weight:500;
-}
-.card-mini .field p{
-  margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:10.5px; line-height:1.5; color:var(--ink-2);
-  display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden;
-}
-.card-mini .fix{
-  margin:auto 14px 14px; padding:10px 11px; border-radius:4px;
-  background:color-mix(in oklab, var(--fam) 10%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 26%, transparent);
-}
-.card-mini .fix h4{color:var(--fam)}
-.card-mini .fix p{color:var(--ink); -webkit-line-clamp:5}
-/* the printed back */
-.card-mini .inner.back{
-  position:relative; inset:auto; transform:none; backface-visibility:visible; border-color:transparent; background:var(--fam); color:var(--paper);
-  align-items:center; justify-content:center; text-align:center; padding:24px 20px 18px;
-}
-.card-mini .weave{
-  position:absolute; inset:0; opacity:.18; pointer-events:none;
-  background-image:
-    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 22px);
-}
-.card-mini .slip{
-  position:absolute; width:30px; height:30px; border:1.4px solid currentColor; opacity:.55;
-  top:12%; right:14%; transform:rotate(12deg); pointer-events:none;
-}
-.card-mini .wordmark{
-  position:relative; font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.24em;
-  text-transform:uppercase; opacity:.72;
-}
-.card-mini .cut{
-  position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
-  height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px; font-weight:700;
-  border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
-}
-.card-mini .title{
-  position:relative; margin:0; font-size:20px; line-height:1.04; letter-spacing:-.02em; font-weight:750;
-  font-variation-settings:"wdth" 102,"wght" 750; max-width:14ch;
-}
-.card-mini .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
-.card-mini .fam-name{
-  position:relative; font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.16em;
-  text-transform:uppercase; opacity:.8; margin-top:9px;
-}
-.card-mini .move{
-  position:relative; margin:16px 0 0; font-family:"IBM Plex Serif",Georgia,serif; font-size:11px;
-  line-height:1.5; max-width:30ch;
-}
-/* the fanned deck */
-.fan{display:flex; align-items:center; justify-content:center; max-width:100%}
-.fan .slot + .slot{margin-left:calc(var(--w) * var(--s) * -.07)}
-.fan .slot:nth-child(1){transform:rotate(-8deg)}
-.fan .slot:nth-child(2){transform:rotate(-1deg); z-index:1}
-.fan .slot:nth-child(3){transform:rotate(6deg); z-index:2}
-.fan .slot:nth-child(4){transform:rotate(13deg); z-index:3}
+.crop .cnm{font-size:14px; line-height:1.15; font-variation-settings:"wdth" 78,"wght" 600}
 
-/* ---------- responsive ---------- */
-@media (max-width:1000px){.hint{display:block}}
-@media (max-width:860px){
-  .boxset{grid-template-columns:1fr; gap:18px}
-  .stack{order:-1; height:196px}
-  .face{gap:12px; padding:14px 14px 11px}
-  .plate{width:72px; height:87px}
-  .plate .sym{font-size:34px}
-  .scroll{padding:2px 14px 14px}
+.hero{display:grid; gap:clamp(30px,5vw,56px); grid-template-columns:minmax(0,440px) minmax(300px,1fr); align-items:center; padding:clamp(36px,6vw,72px) 0}
+.wall{
+  padding:clamp(20px,4vw,44px); border-radius:4px;
+  background:linear-gradient(165deg, color-mix(in oklab, var(--ink) 5%, var(--paper)), var(--paper));
+  border:1px solid var(--rule);
 }
-@media (max-width:620px){
-  /* four fanned cards do not fit a phone - show the three faces */
-  .slot{--s:.38}
-  .slot:nth-child(4){display:none}
+.sizes{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin-top:30px}
+.size{
+  background:var(--surface); border:1px solid var(--rule); border-radius:3px; padding:22px;
+  display:flex; flex-direction:column; gap:14px;
 }
-@media (max-width:560px){
-  .masthead{align-items:flex-start}
-  .tools{width:100%}
-  .eyebrow{font-size:10.5px}
-}
-@media (prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important}
-  .cell:hover{transform:none}
-}
-.plate-in .cell{animation:plate .45s cubic-bezier(.2,.8,.3,1) backwards}
-@keyframes plate{from{opacity:0; transform:translateY(7px) scale(.94)} to{opacity:1; transform:none}}
+.size .dims{display:flex; align-items:flex-end; gap:12px}
+.size .box{border:1.5px solid var(--ink-3); border-radius:2px; flex:none}
+.size h3{margin:0; font-size:19px; font-weight:700; letter-spacing:-.015em}
+.size p{margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:14.5px; line-height:1.55; color:var(--ink-2)}
+.size .row{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-top:auto}
+.size .amt{font-size:22px; font-weight:750; font-variation-settings:"wdth" 104,"wght" 750}
+@media (max-width:720px){.hero{grid-template-columns:1fr}}
 </style>
+
 <div class="wrap">
-  <header class="masthead">
-    <div>
-      <p class="eyebrow">74 elements &middot; 6 families &middot; one broken instrument</p>
-      <h1>Periodic Table of Biases<em>The systematic errors of human judgement, grouped by the kind of decision they spoil</em></h1>
-    </div>
-    <div class="tools">
-      <a class="buy" href="#boxset" id="buy-top">Shop the deck &amp; poster <span class="arrow">&rarr;</span></a>
-      <label class="search">
-        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5 14 14"/></svg>
-        <input id="q" type="search" placeholder="Search 74 biases" autocomplete="off" aria-label="Search biases">
-      </label>
-      <div class="zoom">
-        <span>Size</span>
-        <button type="button" id="zout" aria-label="Smaller elements">&minus;</button>
-        <button type="button" id="zin" aria-label="Larger elements">+</button>
-        <span class="count" id="count">74 shown</span>
-      </div>
-    </div>
+  <header class="topbar">
+    <a class="brand" href="https://claude.ai/code/artifact/ae3c71e3-b63d-45a4-a03f-97844e1adc1f"><span class="mark">Pb</span> Periodic Table of Biases</a>
+    <nav class="topnav">
+      <a href="https://claude.ai/code/artifact/ae3c71e3-b63d-45a4-a03f-97844e1adc1f">The table</a>
+      <a href="https://claude.ai/code/artifact/37fbb95f-0ae4-4f66-a34e-328ef1667b73">The deck</a>
+      <a href="#" aria-current="page">The poster</a>
+    </nav>
   </header>
 
-  <p class="hint">Scroll the chart sideways &rarr; &middot; tap any element</p>
-
-  <div class="scroller">
-    <div class="chart">
-      <div class="head" id="head"></div>
-      <div class="grid" id="grid"></div>
+  <div class="hero">
+    <div>
+      <p class="eyebrow">74 elements &middot; 6 families &middot; one sheet</p>
+      <h1>The Bias Poster</h1>
+      <p class="lede">The whole table, printed. Seventy-four ways judgement goes wrong, arranged by the
+      kind of decision they spoil &mdash; so the wall above the desk answers the question before the
+      meeting does.</p>
+      <div class="buyrow">
+        <span class="price">£28<small>Pre-order &middot; ships rolled</small></span>
+        <a class="cta" href="#preorder">Pre-order the poster <span class="arrow">&rarr;</span></a>
+        <a class="cta ghost" href="https://claude.ai/code/artifact/ae3c71e3-b63d-45a4-a03f-97844e1adc1f">Explore it first</a>
+      </div>
+      <p class="note-small">Two sizes &middot; 200 gsm uncoated &middot; archival inks &middot; shipped in a tube</p>
+    </div>
+    <div class="wall">
+      <div class="sheet-wrap" id="sheet-wrap"><div class="sheet" id="sheet"></div></div>
     </div>
   </div>
 
-  <div class="famkey" id="famkey"><span class="lead">Dot marks the mental cause:</span></div>
+  <section>
+    <p class="kicker">Up close</p>
+    <h2 class="sec">Every element carries its own antidote.</h2>
+    <p class="body">Each cell gives you the number, the symbol drawn from the name's own letters, and
+    the name itself set large enough to read from a step back. The dot marks the mental cause
+    underneath &mdash; the reason the error keeps happening.</p>
+    <div class="crop" id="crop" style="margin-top:28px"></div>
+    <p class="note-small">Shown at roughly the printed size of the 70 &times; 100 cm edition.</p>
+  </section>
 
-  <section class="shop" id="boxset">
-    <div class="shop-head">
-      <h2>The physical editions</h2>
-      <p class="fine" style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0">
-        Pre-orders opening soon</p>
-    </div>
-    <div class="two-up">
-      <article class="product">
-        <div class="art"><div class="fan" id="stack"></div></div>
-        <div>
-          <h3>The Bias Deck</h3>
-          <p>All 74 as cards you can hold &mdash; the definition and the example on the front, the
-          counter-move on the back. Six suits, one per kind of decision.</p>
-        </div>
-        <div class="row">
-          <span class="amt" id="deck-price"></span>
-          <a class="buy" id="buy-deck">Pre-order the deck <span class="arrow">&rarr;</span></a>
-          <a class="deck-link" id="deck-more" style="color:var(--ink-2);border-bottom-color:var(--rule-strong)">Details</a>
-        </div>
-        <p class="fine">74 cards &middot; 63 &times; 88 mm &middot; rigid box</p>
-      </article>
-      <article class="product">
-        <div class="art"><div class="sheet-wrap" id="sheet-wrap" style="--sheet-max:420px"><div class="sheet" id="sheet"></div></div></div>
-        <div>
-          <h3>The Bias Poster</h3>
-          <p>The whole table on one sheet, for the wall above the desk &mdash; every element, every
-          family, printed at reading size.</p>
-        </div>
-        <div class="row">
-          <span class="amt" id="poster-price"></span>
-          <a class="buy" id="buy-poster">Pre-order the poster <span class="arrow">&rarr;</span></a>
-          <a class="deck-link" id="poster-more" style="color:var(--ink-2);border-bottom-color:var(--rule-strong)">Details</a>
-        </div>
-        <p class="fine">Two sizes &middot; 200 gsm &middot; ships rolled</p>
-      </article>
+  <section>
+    <p class="kicker">Sizes</p>
+    <h2 class="sec">Pick the distance you read it from.</h2>
+    <div class="sizes">
+      <div class="size">
+        <div class="dims"><span class="box" style="width:56px;height:40px"></span><span class="box" style="width:34px;height:24px"></span></div>
+        <h3>A1 &mdash; 59.4 &times; 84.1 cm</h3>
+        <p>For a desk wall or a small studio. Symbols read across the room, names from a step away.</p>
+        <div class="row"><span class="amt">£28</span><a class="cta ghost" href="#preorder">Pre-order</a></div>
+      </div>
+      <div class="size">
+        <div class="dims"><span class="box" style="width:72px;height:50px"></span><span class="box" style="width:34px;height:24px"></span></div>
+        <h3>70 &times; 100 cm</h3>
+        <p>For a meeting room, where people will stand in front of it and argue. Names readable at
+        arm's length.</p>
+        <div class="row"><span class="amt">£38</span><a class="cta ghost" href="#preorder">Pre-order</a></div>
+      </div>
     </div>
   </section>
 
-  <div class="notes">
-    <div>
-      <h4>How it is arranged</h4>
-      <p>Six families, one per kind of decision &mdash; money, power, people, self, information, speed.
-      Each family owns a block of columns rather than a single one, and the column heights inside it are
-      what cut the staircase. Before a decision of one kind, read that block.</p>
+  <section>
+    <p class="kicker">Specification</p>
+    <h2 class="sec">How it is printed.</h2>
+    <table class="specs" style="margin-top:26px">
+      <tr><th>Paper</th><td>200 gsm uncoated, lightly textured &mdash; no glare under office light</td></tr>
+      <tr><th>Inks</th><td>Pigment, rated for decades without shifting</td></tr>
+      <tr><th>Border</th><td>20 mm white margin, sized for a standard frame without trimming</td></tr>
+      <tr><th>Ships</th><td>Rolled in a rigid tube, worldwide, tracked</td></tr>
+      <tr><th>Also</th><td>Both sizes carry all 74 elements &mdash; nothing is cut for the smaller sheet</td></tr>
+    </table>
+    <p class="note-small">Specification and prices are placeholders until the print run is confirmed.</p>
+  </section>
+
+  <section>
+    <p class="kicker">Questions</p>
+    <h2 class="sec">Before you order.</h2>
+    <div class="faq" style="margin-top:26px">
+      <details><summary>Is the poster readable from a desk?</summary>
+        <p>The symbols and numbers are, at either size. The names need a step closer on A1, which is why
+        the larger sheet exists for rooms where people gather.</p></details>
+      <details><summary>Does it match the deck?</summary>
+        <p>Exactly &mdash; same 74 elements, same six suits, same numbering. The poster is the map, the
+        deck is the detail.</p></details>
+      <details><summary>Framing?</summary>
+        <p>Both sizes are standard, so any off-the-shelf frame fits. The white margin is part of the
+        design, not a trim allowance.</p></details>
     </div>
-    <div>
-      <h4>The dot</h4>
-      <p>Each element carries a second mark: the mental shortcut underneath it &mdash; too much information,
-      not enough meaning, the need to act fast, or the limits of memory. Different columns, same four
-      causes, which is why one counter-move often fixes several.</p>
+    <div class="buyrow">
+      <a class="cta" href="#preorder">Pre-order the poster <span class="arrow">&rarr;</span></a>
+      <a class="cta ghost" href="https://claude.ai/code/artifact/37fbb95f-0ae4-4f66-a34e-328ef1667b73">See the deck</a>
     </div>
-    <div>
-      <h4>Bonds</h4>
-      <p>Hover an element to see the biases it reinforces. Few act alone: anchoring feeds framing,
-      sunk cost leans on loss aversion, and the blind spot covers all of them.</p>
-    </div>
-    <div>
-      <h4>Counter-moves</h4>
-      <p>Every card ends with one. Knowing a bias by name does not dissolve it &mdash; the fixes that work
-      are procedural: written predictions, fixed criteria, outside views, and someone else holding the pen.</p>
-    </div>
-  </div>
+  </section>
+
+
+  <section id="preorder">
+    <p class="kicker">Pre-order</p>
+    <h2 class="sec">Not open yet.</h2>
+    <p class="body">The print run is being quoted. Pre-orders open here once it is confirmed, and the
+    store link then replaces this section and every button above it.</p>
+  </section>
+
+  <footer>
+    <span>Periodic Table of Biases</span>
+    <span><a href="https://claude.ai/code/artifact/ae3c71e3-b63d-45a4-a03f-97844e1adc1f">The table</a> &middot; <a href="https://claude.ai/code/artifact/37fbb95f-0ae4-4f66-a34e-328ef1667b73">The deck</a></span>
+  </footer>
 </div>
 
-<div class="backdrop" id="backdrop" role="dialog" aria-modal="true" aria-labelledby="card-title">
-  <article class="card" id="card"></article>
-</div>
 <script>
 const BIASES=[
 {n:1,s:"Pe",mark:[0,5],name:"Peak-End Rule",cat:"mem",what:"You judge an experience almost entirely by its most intense moment and its ending, not by its average or its length.",wild:"A four-day trip with one perfect dinner and a smooth flight home is remembered as excellent, even if two of the days were dull.",why:"Memory stores a few vivid snapshots rather than a running total. Duration barely registers when the snapshots are strong.",fix:"When judging something, list what actually happened hour by hour before you rate it. When designing something, spend your effort on the ending.",rel:["Sp","Rr","Fd"]},
@@ -743,29 +427,16 @@ const GROUPS = [
   {id:"g6", roman:"VI", name:"Narrative & Information", sub:"Media & data distortion", cols:[6,5,5],
    members:["Av","Ne","It","Ci","Mi","Sn","Go","Sa","Fi","Br","Ss","Il","Cl","Oe","Ga","Hh"]}
 ];
-/* The two product pages, and the prices shown here. One place to change each. */
-const DECK_URL   = "https://claude.ai/code/artifact/37fbb95f-0ae4-4f66-a34e-328ef1667b73";
-const POSTER_URL = "https://claude.ai/code/artifact/64771218-c11c-488a-b932-3f8a077e3a14";
-const DECK_PRICE = "\u00A334";
-const POSTER_PRICE = "from \u00A328";
-const BUY_URL = DECK_URL;
-
-/* The four mental causes, kept as a second dimension: the dot on each tile. */
+/* Shared shop helpers: the same data as the table, rendered as products. */
 const FAM = {
-  tmi:{name:"Too Much Information", note:"Filters at the door"},
-  nem:{name:"Not Enough Meaning",   note:"Stories over gaps"},
-  act:{name:"Need To Act Fast",     note:"Shortcuts under pressure"},
-  mem:{name:"What We Remember",     note:"Edits in storage"}
+  tmi:{name:"Too Much Information"}, nem:{name:"Not Enough Meaning"},
+  act:{name:"Need To Act Fast"},     mem:{name:"What We Remember"}
 };
 const FAM_DOT = {tmi:"#0E8275", nem:"#6549C4", act:"#BC3247", mem:"#9A6C12"};
-
 const BY_SYM = Object.fromEntries(BIASES.map(b => [b.s, b]));
 
 const ROWS = Math.max(...GROUPS.flatMap(g => g.cols));
 const COLS = GROUPS.reduce((n, g) => n + g.cols.length, 0);
-
-/* Each category owns a run of columns. A column is bottom-aligned to the last
-   row, so its height decides where it starts - that stagger is the staircase. */
 let col = 0;
 GROUPS.forEach(g => {
   g.v = "var(--" + g.id + ")";
@@ -780,301 +451,48 @@ GROUPS.forEach(g => {
   });
   g.lastCol = col;
 });
-
-/* Numbered across the rows, the way atomic numbers run. */
 const AT = {};
 BIASES.forEach(b => { AT[b.row + ":" + b.col] = b; });
 let n = 0;
-for(let row = 1; row <= ROWS; row++){
-  for(let c = 1; c <= COLS; c++){
-    const b = AT[row + ":" + c];
-    if(b) b.n = ++n;
-  }
-}
+for(let row = 1; row <= ROWS; row++)
+  for(let c = 1; c <= COLS; c++){ const b = AT[row + ":" + c]; if(b) b.n = ++n; }
 
-const ORDER = [...BIASES].sort((a, b) => a.n - b.n);
-
-/* Break points are curated, not guessed - an automatic split gives "Attrib-ution". */
-const BREAKS = {
-  Retrospection:"Retro|spection", Misinformation:"Mis|information", Telescoping:"Tele|scoping",
-  Availability:"Avail|ability", Attentional:"Atten|tional", Confirmation:"Confir|mation",
-  Negativity:"Nega|tivity", Survivorship:"Survivor|ship", Superiority:"Superi|ority",
-  Fundamental:"Funda|mental", Attribution:"Attri|bution", Hypothesis:"Hypo|thesis",
-  Overconfidence:"Over|confidence", Correlation:"Corre|lation", Stereotyping:"Stereo|typing",
-  Distinction:"Distinc|tion", Automation:"Auto|mation", Semmelweis:"Semmel|weis",
-  Expectancy:"Expec|tancy", Devaluation:"Devalu|ation", Hyperbolic:"Hyper|bolic",
-  Discounting:"Dis|counting", Compensation:"Compen|sation", Bikeshedding:"Bike|shedding",
-  Supportive:"Sup|portive"
-};
-/* Show where the symbol comes from: the two letters it was drawn from,
-   marked in the name itself. */
 function markName(b){
-  const out = [...b.name].map((ch, i) =>
-    b.mark && b.mark.includes(i) ? '<u class="src">' + ch + "</u>" : ch);
-  return out.join("");
+  return [...b.name].map((ch, i) => b.mark && b.mark.includes(i) ? '<u class="src">' + ch + "</u>" : ch).join("");
 }
-
-function shy(name){
-  return name.split(" ").map(w => (BREAKS[w] || w).replace("|", "­")).join(" ");
-}
-
-/* ---- chart ---- */
-const head = document.getElementById("head");
-const grid = document.getElementById("grid");
-const chart = document.querySelector(".chart");
-const active = new Set();
-
-GROUPS.forEach(g => {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "ghead";
-  btn.style.setProperty("--fam", g.v);
-  btn.style.gridColumn = (g.firstCol + 1) + " / span " + g.cols.length;
-  btn.dataset.grp = g.id;
-  btn.setAttribute("aria-pressed", "false");
-  btn.innerHTML = '<span class="roman">' + g.roman + "</span><b>" + g.name + "</b><i>" + g.sub + "</i>";
-  btn.addEventListener("click", () => {
-    active.has(g.id) ? active.delete(g.id) : active.add(g.id);
-    btn.setAttribute("aria-pressed", active.has(g.id) ? "true" : "false");
-    head.classList.toggle("filtering", active.size > 0);
-    apply();
-  });
-  head.appendChild(btn);
-});
-
-const cells = {};
-function tile(b){
-  const el = document.createElement("button");
-  el.type = "button";
-  el.className = "cell";
-  el.style.setProperty("--fam", b.grp.v);
-  el.style.setProperty("--famdot", FAM_DOT[b.cat]);
-  el.style.gridRow = b.row;
-  el.style.gridColumn = b.col + 1;
-  el.style.animationDelay = Math.min(b.n * 6, 460) + "ms";
-  el.dataset.sym = b.s;
-  el.setAttribute("aria-label", b.name + " — " + b.grp.name + ", " + FAM[b.cat].name);
-  el.innerHTML =
-    '<span class="top"><span class="num">' + b.n + '</span>' +
-    '<span class="fam" title="' + FAM[b.cat].name + '"></span></span>' +
-    '<span class="sym">' + b.s + '</span>' +
-    '<span class="nm">' + shy(b.name) + "</span>";
-  cells[b.s] = el;
-  return el;
-}
-for(let row = 1; row <= ROWS; row++){
-  const p = document.createElement("div");
-  p.className = "period";
-  p.style.gridRow = row;
-  p.textContent = row;
-  grid.appendChild(p);
-}
-[...BIASES].sort((a, b) => a.n - b.n).forEach(b => grid.appendChild(tile(b)));
-grid.classList.add("plate-in");
-
-/* family key under the chart */
-const famkey = document.getElementById("famkey");
-Object.entries(FAM).forEach(([k, f]) => {
-  const s = document.createElement("span");
-  s.style.setProperty("--famdot", FAM_DOT[k]);
-  s.textContent = f.name;
-  famkey.appendChild(s);
-});
-
-/* ---- search + filter ---- */
-const q = document.getElementById("q");
-const countEl = document.getElementById("count");
-function apply(){
-  const term = q.value.trim().toLowerCase();
-  let shown = 0;
-  BIASES.forEach(b => {
-    const hay = (b.name + " " + b.s + " " + b.what + " " + b.wild + " " +
-                 b.grp.name + " " + b.grp.sub + " " + FAM[b.cat].name).toLowerCase();
-    const ok = (!term || hay.includes(term)) && (active.size === 0 || active.has(b.grp.id));
-    cells[b.s].classList.toggle("dim", !ok);
-    if(ok) shown++;
-  });
-  countEl.textContent = shown === BIASES.length ? BIASES.length + " shown" : shown + " of " + BIASES.length + " shown";
-}
-q.addEventListener("input", apply);
-
-/* ---- bonds on hover ---- */
-function link(b, on){
-  b.rel.forEach(s => cells[s] && cells[s].classList.toggle("linked", on));
-}
-BIASES.forEach(b => {
-  const el = cells[b.s];
-  el.addEventListener("mouseenter", () => link(b, true));
-  el.addEventListener("mouseleave", () => link(b, false));
-  el.addEventListener("focus", () => link(b, true));
-  el.addEventListener("blur", () => link(b, false));
-  el.addEventListener("click", () => open(b.s));
-});
-
-/* ---- card ---- */
-const backdrop = document.getElementById("backdrop");
-const card = document.getElementById("card");
-let current = null, lastFocus = null;
-
-function open(sym, keepFocus){
-  const b = BY_SYM[sym];
-  if(!b) return;
-  if(!current && !keepFocus) lastFocus = document.activeElement;
-  current = b;
-  card.style.setProperty("--fam", b.grp.v);
-  card.innerHTML =
-    '<button type="button" class="close" id="x" aria-label="Close">&times;</button>' +
-    '<div class="flipper">' +
-    '<div class="inner front">' +
+function cardFront(b, opts){
+  const o = opts || {};
+  return '<div class="card-mini" style="--fam:' + b.grp.v + ';--famdot:' + FAM_DOT[b.cat] + '">' +
+    '<div class="inner">' +
       '<div class="band"><span>' + b.grp.roman + " &middot; " + b.grp.name + "</span>" +
-        '<span class="idx">No. ' + b.n + " / " + BIASES.length + "</span></div>" +
-      '<div class="face" data-sym="' + b.s + '">' +
+        '<span>No. ' + b.n + "</span></div>" +
+      '<div class="face">' +
         '<div class="ident"><span class="sym-chip">' + b.s + "</span>" +
-        '<p class="note"><span class="dot" style="--famdot:' + FAM_DOT[b.cat] + '"></span>' +
-        FAM[b.cat].name + "</p></div>" +
-        '<h2 id="card-title">' + markName(b) + "</h2>" +
+        '<p class="note"><span class="dot"></span>' + FAM[b.cat].name + "</p></div>" +
+        "<h2>" + markName(b) + "</h2>" +
       "</div>" +
-      '<div class="scroll">' +
-        '<div class="field"><h3>What it is</h3><p>' + b.what + "</p></div>" +
-        '<div class="field wild"><h3>In the wild</h3><p>' + b.wild + "</p></div>" +
-        '<div class="field"><h3>Why it happens</h3><p>' + b.why + "</p></div>" +
-        '<div class="field fix"><h3>Counter-move</h3><p>' + b.fix + "</p></div>" +
-        '<div class="field"><h3>Bonds with</h3><div class="rel-list">' +
-          b.rel.map(s => {
-            const r = BY_SYM[s];
-            return '<button type="button" class="chip" data-go="' + s + '" style="--fam-chip:' +
-                   r.grp.v + '"><b>' + r.s + "</b>" + r.name + "</button>";
-          }).join("") +
-        "</div></div>" +
-      "</div>" +
-      '<div class="card-foot">' +
-        '<button type="button" class="navbtn" data-step="-1">&larr; ' + prevNext(-1).s + "</button>" +
-        '<button type="button" class="flipbtn" data-flip>Turn over</button>' +
-        '<a class="deck-link" href="' + BUY_URL + '">Buy the deck &rarr;</a>' +
-        '<button type="button" class="navbtn" data-step="1">' + prevNext(1).s + " &rarr;</button>" +
-      "</div>" +
-    "</div>" +
-    '<div class="inner back" data-flip>' +
+      '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
+      (o.full ? '<div class="field"><h4>In the wild</h4><p>' + b.wild + "</p></div>" : "") +
+      '<div class="fix"><h4>Counter-move</h4><p>' + b.fix + "</p></div>" +
+    "</div></div>";
+}
+function cardBack(b){
+  return '<div class="card-mini" style="--fam:' + b.grp.v + '">' +
+    '<div class="inner back">' +
       '<span class="weave"></span><span class="slip"></span>' +
       '<span class="wordmark">Periodic Table of Biases</span>' +
       '<span class="cut">' + b.s + "</span>" +
       '<h3 class="title">' + markName(b) + "</h3>" +
-      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + " / " + BIASES.length + "</span>" +
-      '<p class="move"><em>Counter-move</em>' + b.fix + "</p>" +
-      '<span class="turn">Tap to turn back</span>' +
-    "</div>" +
-    "</div>";
-  card.classList.remove("flipped");
-  backdrop.classList.add("open");
-  document.body.style.overflow = "hidden";
-  history.replaceState(null, "", "#" + b.s);
-  card.querySelector(".scroll").scrollTop = 0;
-  card.querySelector("#x").focus();
+      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span>" +
+      '<p class="move">' + b.fix + "</p>" +
+    "</div></div>";
 }
-function prevNext(step){
-  const i = ORDER.indexOf(current);
-  return ORDER[(i + step + ORDER.length) % ORDER.length];
-}
-function close(){
-  backdrop.classList.remove("open");
-  document.body.style.overflow = "";
-  history.replaceState(null, "", location.pathname + location.search);
-  if(lastFocus) lastFocus.focus();
-  current = null;
-}
-function flip(on){
-  card.classList.toggle("flipped", on === undefined ? !card.classList.contains("flipped") : on);
-}
-card.addEventListener("click", e => {
-  if(e.target.closest("[data-flip]")){ flip(); return; }
-  const chip = e.target.closest("[data-go]");
-  if(chip){ open(chip.dataset.go, true); return; }
-  const nav = e.target.closest("[data-step]");
-  if(nav){ open(prevNext(+nav.dataset.step).s, true); return; }
-  if(e.target.closest("#x")) close();
-  else if(e.target.closest(".deck-link")) close();
-});
-backdrop.addEventListener("mousedown", e => { if(e.target === backdrop) close(); });
-document.addEventListener("keydown", e => {
-  if(!current) return;
-  if(e.key === "Escape"){ card.classList.contains("flipped") ? flip(false) : close(); }
-  else if(e.key === "f" || e.key === "F") flip();
-  else if(e.key === "ArrowRight") open(prevNext(1).s, true);
-  else if(e.key === "ArrowLeft") open(prevNext(-1).s, true);
-});
-
-/* ---- size control ---- */
-const STEPS = [76, 88, 100, 114, 130, 148, 170, 194];
-const zin = document.getElementById("zin"), zout = document.getElementById("zout");
-let step = null;
-
-function baseCol(){
-  /* --col resolves through clamp()/calc(), so measure a laid-out tile. */
-  const c = document.querySelector(".cell");
-  return c ? c.getBoundingClientRect().width : 152;
-}
-function nearest(px){
-  let i = 0;
-  STEPS.forEach((v, j) => { if(Math.abs(v - px) < Math.abs(STEPS[i] - px)) i = j; });
-  return i;
-}
-function setZoom(i, remember){
-  step = Math.max(0, Math.min(STEPS.length - 1, i));
-  const px = STEPS[step];
-  chart.style.setProperty("--col", px + "px");
-  zin.disabled = step === STEPS.length - 1;
-  zout.disabled = step === 0;
-  if(remember){ try{ localStorage.setItem("biasCol", px); }catch(e){} }
-}
-function nudge(dir){ setZoom((step === null ? nearest(baseCol()) : step) + dir, true); }
-zin.addEventListener("click", () => nudge(1));
-zout.addEventListener("click", () => nudge(-1));
-let saved = null;
-try{ saved = parseFloat(localStorage.getItem("biasCol")); }catch(e){}
-if(saved) setZoom(nearest(saved), false);
-else{
-  const i = nearest(baseCol());
-  zin.disabled = i === STEPS.length - 1;
-  zout.disabled = i === 0;
+function slot(html, scale, w, h){
+  const style = "--s:" + (scale || .46) + (w ? ";--w:" + w + "px;--h:" + h + "px" : "");
+  return '<div class="slot" style="' + style + '">' + html + "</div>";
 }
 
-/* The deck shows real cards, drawn at card size and scaled down - the same
-   markup the shop pages use, so the two never drift apart. */
-function miniFront(b){
-  return '<div class="inner">' +
-    '<div class="band"><span>' + b.grp.roman + " &middot; " + b.grp.name + "</span>" +
-      '<span>No. ' + b.n + "</span></div>" +
-    '<div class="face">' +
-      '<div class="ident"><span class="sym-chip">' + b.s + "</span>" +
-      '<p class="note"><span class="dot" style="--famdot:' + FAM_DOT[b.cat] + '"></span>' +
-      FAM[b.cat].name + "</p></div>" +
-      "<h2>" + markName(b) + "</h2>" +
-    "</div>" +
-    '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
-    '<div class="fix"><h4>Counter-move</h4><p>' + b.fix + "</p></div>" +
-  "</div>";
-}
-function miniBack(b){
-  return '<div class="inner back">' +
-    '<span class="weave"></span><span class="slip"></span>' +
-    '<span class="wordmark">Periodic Table of Biases</span>' +
-    '<span class="cut">' + b.s + "</span>" +
-    '<h3 class="title">' + markName(b) + "</h3>" +
-    '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span>" +
-    '<p class="move">' + b.fix + "</p>" +
-  "</div>";
-}
-const stack = document.getElementById("stack");
-[["Ha", false], ["Av", false], ["Su", false], ["Sc", true]].forEach(([sym, back]) => {
-  const b = BY_SYM[sym];
-  const slot = document.createElement("div");
-  slot.className = "slot";
-  slot.innerHTML = '<div class="card-mini" style="--fam:' + b.grp.v + '">' +
-                   (back ? miniBack(b) : miniFront(b)) + "</div>";
-  stack.appendChild(slot);
-});
-
-/* the poster, drawn from the same data as the table */
+/* the poster itself, drawn from the same data as the table */
 const sheet = document.getElementById("sheet");
 sheet.innerHTML =
   '<div class="head-line"><div><h3>Periodic Table of Biases</h3>' +
@@ -1084,33 +502,29 @@ sheet.innerHTML =
     GROUPS.map(g =>
       '<div class="pgroup" style="--fam:' + g.v + '; grid-column:' + g.firstCol + " / span " + g.cols.length + '">' +
       "<b>" + g.name + "</b><i>" + g.sub + "</i></div>").join("") +
-    ORDER.map(b =>
+    [...BIASES].sort((a, b) => a.n - b.n).map(b =>
       '<div class="pcell" style="--fam:' + b.grp.v + '; grid-column:' + b.col + '; grid-row:' + (b.row + 1) + '">' +
       '<span class="pn">' + b.n + '</span><span class="psym">' + b.s + "</span>" +
       '<span class="pnm">' + b.name + "</span></div>").join("") +
   "</div>" +
   '<div class="foot-line"><span>Dot marks the mental cause</span><span>cognitivebiases.co</span></div>';
+
+/* scale the sheet to whatever width it is given */
 const SHEET_W = 1080;
 function fitSheet(){
   const wrap = document.getElementById("sheet-wrap");
-  if(!wrap) return;
   sheet.style.setProperty("--sw", SHEET_W + "px");
   sheet.style.setProperty("--ss", wrap.clientWidth / SHEET_W);
 }
 fitSheet();
 addEventListener("resize", fitSheet);
 
-document.getElementById("deck-price").textContent = DECK_PRICE;
-document.getElementById("poster-price").textContent = POSTER_PRICE;
-[["buy-top", DECK_URL], ["buy-deck", DECK_URL], ["deck-more", DECK_URL],
- ["buy-poster", POSTER_URL], ["poster-more", POSTER_URL]].forEach(([id, href]) => {
-  const el = document.getElementById(id);
-  if(el && id !== "buy-top") el.href = href;
-});
-document.getElementById("buy-top").href = "#boxset";
-
-const start = decodeURIComponent(location.hash.slice(1));
-if(BY_SYM[start]) open(start);
+document.getElementById("crop").innerHTML = ["Sc", "Cb", "Ha", "Pl", "Av", "Bb"].map(sym => {
+  const b = BY_SYM[sym];
+  return '<div class="ccell" style="--fam:' + b.grp.v + ';--famdot:' + FAM_DOT[b.cat] + '">' +
+    '<span class="top"><span class="cn">' + b.n + '</span><span class="cdot"></span></span>' +
+    '<span class="csym">' + b.s + '</span><span class="cnm">' + b.name + "</span></div>";
+}).join("");
 </script>
 
 </body>
