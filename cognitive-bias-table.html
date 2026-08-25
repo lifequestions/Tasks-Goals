@@ -17,22 +17,24 @@
   --paper:#F1F2EF; --surface:#FBFBFA; --sunk:#E7E9E4;
   --ink:#14181A; --ink-2:#535B5C; --ink-3:#7B8384;
   --rule:#D2D6CF; --rule-strong:#B3B9B1;
-  --g1:#984A78; --g2:#2C7A4B; --g3:#2A6BA8; --g4:#BC3247;
-  --g5:#9A6C12; --g6:#0E8275; --g7:#A8492A; --g8:#6549C4;
-  --g9:#6B7A18; --g10:#A03A5D; --g11:#167E9B; --g12:#4A4A8F;
+  --g1:#8C213C; --g2:#218C25; --g3:#45218C; --g4:#8C6421;
+  --g5:#218C83; --g6:#8C2176; --g7:#4D7C1D; --g8:#21378C;
+  --g9:#8C2A21; --g10:#218C49; --g11:#69218C; --g12:#7C781D;
+  --g13:#21728C; --g14:#8C2152; --g15:#338C21; --g16:#2E218C;
   --shadow:0 1px 2px rgba(20,24,26,.07), 0 8px 24px -12px rgba(20,24,26,.22);
   --shadow-lift:0 2px 4px rgba(20,24,26,.08), 0 18px 40px -16px rgba(20,24,26,.32);
-  --col:clamp(102px, calc((100vw - 178px) / 11), 152px);
-  --gap:6px; --rail:24px; --pad:clamp(14px,3vw,32px);
+  --col:clamp(84px, calc((100vw - 168px) / 15), 124px);
+  --gap:5px; --rail:22px; --pad:clamp(14px,3vw,32px);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#0C1214; --surface:#151D20; --sunk:#101719;
     --ink:#E9ECE8; --ink-2:#9BA5A4; --ink-3:#78807F;
     --rule:#232D30; --rule-strong:#33403F;
-    --g1:#E58FC0; --g2:#4FC183; --g3:#6FB4EE; --g4:#F2697D;
-    --g5:#E2A93F; --g6:#3EC8B2; --g7:#F0906A; --g8:#AE92F7;
-    --g9:#BFCC57; --g10:#F07FA0; --g11:#4FC2E0; --g12:#9E9EE8;
+    --g1:#E2839B; --g2:#83E287; --g3:#A383E2; --g4:#E2BE83;
+    --g5:#83E2DA; --g6:#E283CE; --g7:#9EDA62; --g8:#8397E2;
+    --g9:#E28B83; --g10:#83E2A7; --g11:#C283E2; --g12:#DAD562;
+    --g13:#83CAE2; --g14:#E283AF; --g15:#93E283; --g16:#8F83E2;
     --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.7);
     --shadow-lift:0 2px 6px rgba(0,0,0,.55), 0 20px 44px -16px rgba(0,0,0,.8);
   }
@@ -41,9 +43,10 @@
   --paper:#0C1214; --surface:#151D20; --sunk:#101719;
   --ink:#E9ECE8; --ink-2:#9BA5A4; --ink-3:#78807F;
   --rule:#232D30; --rule-strong:#33403F;
-    --g1:#E58FC0; --g2:#4FC183; --g3:#6FB4EE; --g4:#F2697D;
-  --g5:#E2A93F; --g6:#3EC8B2; --g7:#F0906A; --g8:#AE92F7;
-  --g9:#BFCC57; --g10:#F07FA0; --g11:#4FC2E0; --g12:#9E9EE8;
+  --g1:#E2839B; --g2:#83E287; --g3:#A383E2; --g4:#E2BE83;
+  --g5:#83E2DA; --g6:#E283CE; --g7:#9EDA62; --g8:#8397E2;
+  --g9:#E28B83; --g10:#83E2A7; --g11:#C283E2; --g12:#DAD562;
+  --g13:#83CAE2; --g14:#E283AF; --g15:#93E283; --g16:#8F83E2;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 24px -12px rgba(0,0,0,.7);
   --shadow-lift:0 2px 6px rgba(0,0,0,.55), 0 20px 44px -16px rgba(0,0,0,.8);
 }
@@ -112,13 +115,13 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   width:100vw; margin-left:calc(50% - 50vw); padding:22px var(--pad) 6px;
   overflow-x:auto; overflow-y:hidden;
 }
-.chart{min-width:calc(var(--rail) + 11 * (var(--col) + var(--gap)));}
+.chart{min-width:calc(var(--rail) + 15 * (var(--col) + var(--gap)));}
 .head, .grid, .series-rule, .series{
-  display:grid; grid-template-columns:var(--rail) repeat(11, var(--col)); gap:var(--gap);
+  display:grid; grid-template-columns:var(--rail) repeat(15, var(--col)); gap:var(--gap);
 }
 .series-rule{margin-top:20px; align-items:center}
 .series-rule .label{
-  grid-column:2 / span 11; display:flex; align-items:center; gap:14px;
+  grid-column:2 / span 15; display:flex; align-items:center; gap:14px;
   font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.13em;
   text-transform:uppercase; color:var(--ink-3);
 }
@@ -131,13 +134,13 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   transition:opacity .16s;
 }
 .ghead .roman{
-  display:block; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em;
+  display:block; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.12em;
   color:var(--fam); margin-bottom:5px;
 }
-.ghead b{display:block; font-size:clamp(12.5px,.105 * var(--col),15px); font-weight:650; line-height:1.15; letter-spacing:-.005em;}
+.ghead b{display:block; font-size:clamp(11.5px,.115 * var(--col),14px); font-weight:650; line-height:1.15; letter-spacing:-.005em;}
 .ghead i{
   display:block; margin-top:3px; font-style:normal; font-family:"IBM Plex Mono",monospace;
-  font-size:9.5px; line-height:1.35; color:var(--ink-3); letter-spacing:.02em;
+  font-size:9px; line-height:1.35; color:var(--ink-3); letter-spacing:.02em;
 }
 .ghead:hover b{text-decoration:underline; text-underline-offset:3px}
 .ghead:focus-visible{outline:none; box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--fam)}
@@ -148,7 +151,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 }
 .cell{
   position:relative; aspect-ratio:1; display:flex; flex-direction:column; align-items:flex-start;
-  text-align:left; padding:7px 8px 9px; cursor:pointer; overflow:hidden; font-family:inherit; color:var(--ink);
+  text-align:left; padding:6px 7px 8px; cursor:pointer; overflow:hidden; font-family:inherit; color:var(--ink);
   background:color-mix(in oklab, var(--fam) 9%, var(--surface));
   border:1px solid color-mix(in oklab, var(--fam) 32%, var(--rule));
   border-radius:3px;
@@ -156,18 +159,18 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 }
 .cell .top{display:flex; align-items:center; justify-content:space-between; width:100%; gap:6px;}
 .cell .num{
-  font-family:"IBM Plex Mono",monospace; font-size:clamp(9.5px, .082 * var(--col), 12px);
+  font-family:"IBM Plex Mono",monospace; font-size:clamp(9px, .088 * var(--col), 11.5px);
   color:var(--ink-3); line-height:1; font-variant-numeric:tabular-nums;
 }
 .cell .fam{
-  width:6px; height:6px; border-radius:50%; flex:none; background:var(--famdot); opacity:.85;
+  width:5.5px; height:5.5px; border-radius:50%; flex:none; background:var(--famdot); opacity:.85;
 }
 .cell .sym{
-  font-size:clamp(28px, .31 * var(--col), 47px); line-height:1; font-weight:700; color:var(--fam);
+  font-size:clamp(25px, .285 * var(--col), 40px); line-height:1; font-weight:700; color:var(--fam);
   font-variation-settings:"wdth" 98,"wght" 700; margin:auto 0 3px; letter-spacing:-.01em;
 }
 .cell .nm{
-  font-size:clamp(12.5px, .118 * var(--col), 17px); line-height:1.13; height:2.26em; flex:none;
+  font-size:clamp(12px, .131 * var(--col), 16px); line-height:1.12; height:2.24em; flex:none;
   font-variation-settings:"wdth" 76,"wght" 600; hyphens:auto; overflow-wrap:break-word;
   color:var(--ink); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
   overflow:hidden; width:100%; margin-top:auto;
@@ -377,7 +380,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 <div class="wrap">
   <header class="masthead">
     <div>
-      <p class="eyebrow">72 elements &middot; 12 groups &middot; one broken instrument</p>
+      <p class="eyebrow">72 elements &middot; 16 groups &middot; one broken instrument</p>
       <h1>Periodic Table of Biases<em>The systematic errors of human judgement, grouped by the kind of decision they spoil</em></h1>
     </div>
     <div class="tools">
@@ -411,12 +414,12 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   <section class="boxset" id="boxset">
     <div>
       <p class="eyebrow">The physical deck</p>
-      <h2>Seventy-two cards. Twelve suits. One broken instrument.</h2>
+      <h2>Seventy-two cards. Sixteen suits. One broken instrument.</h2>
       <p>Every element in this table as a card you can hold: the definition, an example from working
       life, the mechanism underneath, and the counter-move that actually helps. One suit per kind of
       decision, so before a hire, a purchase or a forecast you can pull just the cards that apply.</p>
       <a class="buy" href="#boxset" id="buy-main">Buy the box set <span class="arrow">&rarr;</span></a>
-      <p class="fine">72 cards &middot; 12 suits &middot; 63 &times; 88 mm &middot; rigid box &middot; pre-orders opening soon</p>
+      <p class="fine">72 cards &middot; 16 suits &middot; 63 &times; 88 mm &middot; rigid box &middot; pre-orders opening soon</p>
     </div>
     <div class="stack" aria-hidden="true">
       <div class="mini m1" style="--fam:var(--g1)"><u>01</u><strong>Ha</strong><span>Halo Effect</span></div>
@@ -428,7 +431,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   <div class="notes">
     <div>
       <h4>How it is arranged</h4>
-      <p>Columns are kinds of decision, not kinds of thinking &mdash; the eleven rooms where these errors
+      <p>Columns are kinds of decision, not kinds of thinking &mdash; the fifteen rooms where these errors
       actually cost something, plus a series set apart below for the ones that only bite afterwards.
       Groups are different sizes, which is what cuts the staircase. Before a decision of one kind, read
       that column.</p>
@@ -530,33 +533,41 @@ const BIASES=[
 {n:71,s:"Rc",name:"Risk Compensation",cat:"act",what:"A new safety measure raises your risk-taking until some of the benefit is spent.",wild:"Better test coverage leads to bolder deploys, and the incident rate settles back near where it started.",why:"Behaviour tracks a roughly constant felt level of risk rather than a fixed level of caution.",fix:"Measure the outcome, not the safeguard. If incidents did not fall, the margin was consumed rather than banked.",rel:["Op","Il","Au"]},
 {n:72,s:"Pk",name:"Bikeshedding",cat:"act",what:"Discussion time goes to the trivial items everyone understands and skips the consequential ones nobody does.",wild:"Forty minutes on the button colour and four on the migration plan that carries all the risk.",why:"Contributing to an easy item is cheap and visible. Engaging with the hard item risks looking uninformed.",fix:"Set the agenda by impact and time-box in that order. Take the cheap item to a decision by one person offline.",rel:["Fl","Sl","Fc"]},
 ];
-/* Eleven kinds of decision plus a detached series. Sizes run 7,6,6,5,5,5,5,6,6,7,7:
-   tall at the edges, short through the middle. Each column is bottom-aligned to
-   the last row, so those sizes are what cut the staircase. */
+/* Fifteen kinds of decision plus a detached series. Sizes run
+   6,6,5,4,4,4,3,3,3,4,4,4,4,5,6 - tall at the edges, three short columns
+   through the middle. Columns are bottom-aligned, so the sizes cut the notch. */
 const GROUPS = [
-  {id:"g1",  roman:"I",    name:"Hiring",           sub:"shortlists, appraisals",
-   members:["Ha","St","Ba","Vr","Sp","Sk","Ck"]},
-  {id:"g2",  roman:"II",   name:"Blame & Credit",   sub:"who did that, and why",
+  {id:"g1",  roman:"I",    name:"Hiring",      sub:"shortlists, appraisals",
+   members:["Ha","St","Ba","Vr","Sp","Sk"]},
+  {id:"g2",  roman:"II",   name:"Blame",       sub:"who did that, and why",
    members:["Fu","Ig","Jw","Nb","Bb","Sr"]},
-  {id:"g3",  roman:"III",  name:"Spending",         sub:"prices, purchases",
-   members:["La","En","Hd","Db","Ct","Me"]},
-  {id:"g4",  roman:"IV",   name:"Keeping",          sub:"quitting, holding on",
-   members:["Su","Sq","Ik","Cs","Om"]},
-  {id:"g5",  roman:"V",    name:"Estimating",       sub:"time, cost, distance",
-   members:["Pf","An","Eg","Fc","Te"]},
-  {id:"g6",  roman:"VI",   name:"Confidence",       sub:"how sure you are",
-   members:["Oc","Op","Dk","Il","Ze"]},
-  {id:"g7",  roman:"VII",  name:"Risk",             sub:"safety, odds",
-   members:["Av","Ng","Zr","Am","Rc"]},
-  {id:"g8",  roman:"VIII", name:"Offers",           sub:"menus, defaults, pitches",
-   members:["Fr","Dc","De","Ps","Re","Fl"]},
-  {id:"g9",  roman:"IX",   name:"Evidence",         sub:"data, proof",
-   members:["Cb","Br","Ss","Sv","Oe","Au"]},
-  {id:"g10", roman:"X",    name:"Patterns",         sub:"streaks, correlations",
-   members:["Ic","Cl","Gf","Hh","Fi","At","Sl"]},
-  {id:"g11", roman:"XI",   name:"Meetings",         sub:"consensus, authority",
-   members:["Bw","Ab","It","Pk","Sm","Rd","Ci"]},
-  {id:"g12", roman:"XII",  name:"Reviews & Memory", sub:"post-mortems, recall", series:true,
+  {id:"g3",  roman:"III",  name:"Explaining",  sub:"pitches, teaching",
+   members:["Ck","Ps","Fl","Me","Oe"]},
+  {id:"g4",  roman:"IV",   name:"Spending",    sub:"prices, purchases",
+   members:["La","En","Hd","Db"]},
+  {id:"g5",  roman:"V",    name:"Keeping",     sub:"quitting, holding on",
+   members:["Su","Sq","Ik","Cs"]},
+  {id:"g6",  roman:"VI",   name:"Offers",      sub:"menus, defaults",
+   members:["Fr","Dc","De","Ct"]},
+  {id:"g7",  roman:"VII",  name:"Estimating",  sub:"time, cost",
+   members:["Pf","An","Te"]},
+  {id:"g8",  roman:"VIII", name:"Confidence",  sub:"how sure you are",
+   members:["Oc","Op","Dk"]},
+  {id:"g9",  roman:"IX",   name:"Control",     sub:"acting, or not",
+   members:["Il","Om","Rc"]},
+  {id:"g10", roman:"X",    name:"Risk",        sub:"safety, odds",
+   members:["Av","Ng","Zr","Am"]},
+  {id:"g11", roman:"XI",   name:"Whose Word",  sub:"sources, authority",
+   members:["Ab","Au","Rd","It"]},
+  {id:"g12", roman:"XII",  name:"Evidence",    sub:"data, proof",
+   members:["Cb","Br","Ss","Sv"]},
+  {id:"g13", roman:"XIII", name:"Patterns",    sub:"streaks, correlations",
+   members:["Ic","Cl","Gf","Hh"]},
+  {id:"g14", roman:"XIV",  name:"Meetings",    sub:"consensus, pushback",
+   members:["Bw","Re","Pk","Ci","Sm"]},
+  {id:"g15", roman:"XV",   name:"Attention",   sub:"what you notice",
+   members:["At","Sl","Fc","Eg","Ze","Fi"]},
+  {id:"g16", roman:"XVI",  name:"Reviews & Memory", sub:"post-mortems, recall", series:true,
    members:["Hb","Pe","Rr","Mi","Sc","Fa","Ge"]}
 ];
 /* Store link. Replace "#boxset" with the shop URL when the store is live -
