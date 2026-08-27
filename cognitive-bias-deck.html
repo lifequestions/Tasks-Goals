@@ -131,6 +131,24 @@ section.plain{border-top:0}
 .faq summary::after{content:"+"; float:right; font-family:"IBM Plex Mono",monospace; color:var(--ink-3)}
 .faq details[open] summary::after{content:"\2212"}
 .faq p{margin:12px 0 0; font-family:"IBM Plex Serif",Georgia,serif; font-size:15px; line-height:1.6; color:var(--ink-2)}
+.bundle{
+  display:flex; flex-wrap:wrap; align-items:center; gap:16px 26px; justify-content:space-between;
+  padding:22px 26px; border-radius:4px; background:var(--ink); color:var(--paper); margin-top:26px;
+}
+.bundle .say{min-width:0}
+.bundle h3{margin:0 0 5px; font-size:19px; font-weight:700; letter-spacing:-.015em}
+.bundle p{
+  margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:14.5px; line-height:1.5;
+  color:color-mix(in oklab, var(--paper) 76%, var(--ink)); max-width:52ch;
+}
+.bundle .cost{display:flex; align-items:baseline; gap:10px}
+.bundle .now{font-size:26px; font-weight:750; font-variation-settings:"wdth" 104,"wght" 750}
+.bundle .was{font-size:15px; text-decoration:line-through; opacity:.55}
+.bundle .save{
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+  border:1px solid color-mix(in oklab, var(--paper) 45%, transparent); border-radius:2px; padding:4px 8px;
+}
+.bundle .cta{background:var(--paper); color:var(--ink); border-color:var(--paper)}
 footer{
   padding:36px 0 60px; border-top:1px solid var(--rule); display:flex; flex-wrap:wrap; gap:16px;
   justify-content:space-between; align-items:baseline;
@@ -152,18 +170,15 @@ footer a:hover{color:var(--ink)}
 .card-mini{
   position:absolute; top:0; left:0; width:var(--w); height:var(--h);
   transform:scale(var(--s)); transform-origin:top left;
-  --cardpad:9px;
-  display:flex; flex-direction:column; padding:var(--cardpad); border-radius:22px;
-  border:1px solid color-mix(in oklab, var(--fam) 26%, var(--rule-strong));
-  background:
-    radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--fam) 15%, var(--surface)), transparent 62%),
-    linear-gradient(168deg, color-mix(in oklab, var(--fam) 11%, var(--surface)), var(--surface) 58%);
+  display:flex; flex-direction:column; padding:0; border-radius:16px; overflow:hidden;
+  border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule-strong));
+  background:var(--surface);
   box-shadow:var(--shadow);
 }
 .card-mini .inner{
   position:relative; inset:auto; transform:none; backface-visibility:visible;
-  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; border-radius:14px;
-  border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule)); background:var(--surface);
+  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;
+  border:0; background:var(--surface);
 }
 .card-mini .band{
   flex:none; display:flex; align-items:center; justify-content:space-between; gap:8px;
@@ -206,11 +221,30 @@ footer a:hover{color:var(--ink)}
 .card-mini .fix h4{color:var(--fam)}
 .card-mini .fix p{color:var(--ink); -webkit-line-clamp:5}
 /* the printed back */
+.card-mini{text-align:left}
 .card-mini .inner.back{
-  position:absolute; inset:calc(-1 * var(--cardpad)); border-radius:22px;
-  transform:none; backface-visibility:visible; border-color:transparent; background:var(--fam); color:var(--paper);
-  align-items:center; justify-content:center; text-align:center; padding:24px 20px 18px;
+  position:absolute; inset:0; border-radius:0;
+  transform:none; backface-visibility:visible; border-color:transparent;
+  background:var(--fam); color:var(--paper);
+  align-items:stretch; justify-content:flex-start; text-align:left; padding:16px 15px 15px;
 }
+.card-mini .back .head{position:relative; display:flex; align-items:center; gap:9px; margin-bottom:12px}
+.card-mini .back .head .cut{margin:0}
+.card-mini .back .who{min-width:0}
+.card-mini .back .panel{
+  position:relative; flex:1; min-height:0; overflow:hidden; background:var(--surface); color:var(--ink);
+  border-radius:9px; padding:14px; display:grid; gap:13px; align-content:start;
+}
+.card-mini .back .panel .field p{color:var(--ink-2); -webkit-line-clamp:5}
+.card-mini .back .panel .field.fix{
+  margin:0; padding:11px 12px; border-radius:5px;
+  background:color-mix(in oklab, var(--fam) 12%, var(--surface));
+  border:1px solid color-mix(in oklab, var(--fam) 28%, transparent);
+}
+.card-mini .back .panel .field.fix h4{color:var(--fam)}
+.card-mini .back .panel .field.fix p{color:var(--ink); font-size:11.5px; -webkit-line-clamp:6}
+.card-mini .field.big{margin-block:auto}
+.card-mini .field.big p{font-size:12.5px; line-height:1.5; -webkit-line-clamp:6; color:var(--ink)}
 .card-mini .weave{
   position:absolute; inset:0; opacity:.18; pointer-events:none;
   background-image:
@@ -222,22 +256,22 @@ footer a:hover{color:var(--ink)}
   top:12%; right:14%; transform:rotate(12deg); pointer-events:none;
 }
 .card-mini .wordmark{
-  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.24em;
-  text-transform:uppercase; opacity:.72;
+  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
+  font-size:6.5px; letter-spacing:.2em; text-transform:uppercase; opacity:.75; margin-bottom:2px;
 }
 .card-mini .cut{
-  position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
+  position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
   height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px; font-weight:700;
   border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
 }
 .card-mini .title{
-  position:relative; color:var(--paper); margin:0; font-size:20px; line-height:1.04; letter-spacing:-.02em; font-weight:750;
-  font-variation-settings:"wdth" 102,"wght" 750; max-width:14ch;
+  position:relative; color:var(--paper); margin:0; font-size:15px; line-height:1.05; letter-spacing:-.02em;
+  font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
 }
 .card-mini .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .card-mini .fam-name{
-  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.16em;
-  text-transform:uppercase; opacity:.8; margin-top:9px;
+  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
+  font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:2px;
 }
 .card-mini .move{
   position:relative; margin:18px 0 0; color:var(--paper);
@@ -289,10 +323,10 @@ footer a:hover{color:var(--ink)}
       <p class="eyebrow">74 cards &middot; 6 suits</p>
       <h1>The Bias Deck</h1>
       <p class="lede">Every element of the table as a card you can hold. One side names the bias and
-      shows how it goes wrong; the other gives you the counter-move. Six suits, one per kind of
+      says what it is; the other tells you how to overcome it. Six suits, one per kind of
       decision &mdash; so before a hire, a purchase or a forecast, you can pull just the cards that apply.</p>
       <div class="buyrow">
-        <span class="price">£34<small>Pre-order &middot; ships spring</small></span>
+        <span class="price">£42<small>Pre-order &middot; ships spring</small></span>
         <a class="cta" href="#preorder">Pre-order the deck <span class="arrow">&rarr;</span></a>
         <a class="cta ghost" href="https://claude.ai/code/artifact/ae3c71e3-b63d-45a4-a03f-97844e1adc1f">Browse all 74 first</a>
       </div>
@@ -304,13 +338,14 @@ footer a:hover{color:var(--ink)}
   <section>
     <p class="kicker">Anatomy</p>
     <h2 class="sec">Both sides do a job.</h2>
-    <p class="body">The front is for recognising the bias while it is happening. The back is for the
-    thing you actually do about it &mdash; printed large enough to read across a table.</p>
+    <p class="body">The front names the bias and says what it is, and nothing else &mdash; enough to
+    recognise it while it is happening. Turn it over for the example, the reason it keeps happening,
+    and the thing you actually do about it.</p>
     <div class="sides">
       <div class="side"><div id="front-demo"></div>
-        <p class="kicker">Front &mdash; name, family, what it is, the counter-move</p></div>
+        <p class="kicker">Front &mdash; the name and what it is</p></div>
       <div class="side"><div id="back-demo"></div>
-        <p class="kicker">Back &mdash; the deck mark, the symbol, and the move again, alone</p></div>
+        <p class="kicker">Back &mdash; how to overcome it, the example, and why it happens</p></div>
     </div>
   </section>
 
@@ -372,6 +407,18 @@ footer a:hover{color:var(--ink)}
     </div>
   </section>
 
+
+  <section>
+    <div class="bundle">
+      <div class="say">
+        <h3>Both together</h3>
+        <p>The deck for the decision in front of you, the poster for the ones you have not thought of yet.</p>
+      </div>
+      <div class="cost"><span class="now">£65</span><span class="was">£78</span>
+        <span class="save">Save £13</span></div>
+      <a class="cta" href="#preorder">Pre-order both <span class="arrow">&rarr;</span></a>
+    </div>
+  </section>
 
   <section id="preorder">
     <p class="kicker">Pre-order</p>
@@ -522,20 +569,21 @@ function cardFront(b, opts){
         '<p class="note"><span class="dot"></span>' + FAM[b.cat].name + "</p></div>" +
         "<h2>" + markName(b) + "</h2>" +
       "</div>" +
-      '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
-      '<div class="field"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
-      (o.full ? '<div class="field"><h4>Why it happens</h4><p>' + b.why + "</p></div>" : "") +
+      '<div class="field big"><h4>What it is</h4><p>' + b.what + "</p></div>" +
     "</div></div>";
 }
 function cardBack(b){
   return '<div class="card-mini" style="--fam:' + b.grp.v + '">' +
     '<div class="inner back">' +
-      '<span class="weave"></span><span class="slip"></span>' +
-      '<span class="wordmark">Periodic Table of Biases</span>' +
-      '<span class="cut">' + b.s + "</span>" +
-      '<h3 class="title">' + markName(b) + "</h3>" +
-      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span>" +
-      '<p class="move"><em>What to do instead</em>' + b.fix + "</p>" +
+      '<span class="weave"></span>' +
+      '<div class="head"><span class="cut">' + b.s + "</span>" +
+      '<span class="who"><span class="wordmark">Periodic Table of Biases</span>' +
+      '<h3 class="title">' + b.name + "</h3>" +
+      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span></span></div>" +
+      '<div class="panel">' +
+        '<div class="field fix"><h4>How to overcome it</h4><p>' + b.fix + "</p></div>" +
+        '<div class="field wild"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
+      "</div>" +
     "</div></div>";
 }
 function slot(html, scale, w, h){

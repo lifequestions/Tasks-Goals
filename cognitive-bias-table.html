@@ -103,6 +103,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .zoom button:hover:not(:disabled){border-color:var(--ink-3)}
 .zoom button:disabled{opacity:.35; cursor:default}
 .zoom button:focus-visible{outline:none; box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink-3)}
+.zoom .fit{width:auto; padding:0 9px; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase}
 
 /* ---------- chart ---------- */
 .scroller{
@@ -135,7 +136,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--ink-3);
 }
 .cell{
-  position:relative; aspect-ratio:1 / 1.1; display:flex; flex-direction:column; align-items:flex-start;
+  position:relative; height:var(--cellh, auto); aspect-ratio:var(--cellar, 1 / 1.1); display:flex; flex-direction:column; align-items:flex-start;
   text-align:left; padding:6px 7px 8px; cursor:pointer; overflow:hidden; font-family:inherit; color:var(--ink);
   background:color-mix(in oklab, var(--fam) 9%, var(--surface));
   border:1px solid color-mix(in oklab, var(--fam) 32%, var(--rule));
@@ -154,10 +155,16 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   font-size:clamp(23px, .25 * var(--col), 35px); line-height:1; font-weight:700; color:var(--fam);
   font-variation-settings:"wdth" 98,"wght" 700; margin:auto 0 3px; letter-spacing:-.01em;
 }
+/* When the chart is scaled to fit a window, names stop being legible below
+   this size, so the tiles fall back to number and symbol. */
+.chart.compact .cell{--cellar:1}
+.chart.compact .cell .nm{display:none}
+.chart.compact .cell .sym{font-size:clamp(20px, .42 * var(--col), 40px); margin:auto 0}
 .cell .nm{
-  font-size:clamp(12.5px, .145 * var(--col), 17px); line-height:1.12; height:3.36em; flex:none;
+  font-size:max(12.5px, min(.145 * var(--col), 17px)); line-height:1.12;
+  height:calc(var(--nmlines, 3) * 1.12em); flex:none;
   font-variation-settings:"wdth" 76,"wght" 600; hyphens:auto; overflow-wrap:break-word;
-  color:var(--ink); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  color:var(--ink); display:-webkit-box; -webkit-line-clamp:var(--nmlines, 3); -webkit-box-orient:vertical;
   overflow:hidden; width:100%; margin-top:auto;
 }
 .cell:hover, .cell:focus-visible{
@@ -177,6 +184,24 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 }
 .famkey span{display:flex; align-items:center; gap:7px}
 .famkey span::before{content:""; width:7px; height:7px; border-radius:50%; background:var(--famdot)}
+.bundle{
+  display:flex; flex-wrap:wrap; align-items:center; gap:16px 26px; justify-content:space-between;
+  padding:22px 26px; border-radius:4px; background:var(--ink); color:var(--paper); margin-top:20px;
+}
+.bundle .say{min-width:0}
+.bundle h3{margin:0 0 5px; font-size:19px; font-weight:700; letter-spacing:-.015em}
+.bundle p{
+  margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:14.5px; line-height:1.5;
+  color:color-mix(in oklab, var(--paper) 76%, var(--ink)); max-width:52ch;
+}
+.bundle .cost{display:flex; align-items:baseline; gap:10px}
+.bundle .now{font-size:25px; font-weight:750; font-variation-settings:"wdth" 104,"wght" 750}
+.bundle .was{font-size:15px; text-decoration:line-through; opacity:.55}
+.bundle .save{
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+  border:1px solid color-mix(in oklab, var(--paper) 45%, transparent); border-radius:2px; padding:4px 8px;
+}
+.bundle .buy{background:var(--paper); color:var(--ink); border-color:var(--paper)}
 .notes{
   margin-top:34px; padding-top:16px; border-top:1px solid var(--rule);
   display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -199,13 +224,11 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 }
 .backdrop.open{display:flex}
 .card{
-  --cardpad:14px; cursor:pointer;
-  position:relative; width:min(456px, 94vw); height:min(86vh, 716px);
-  display:flex; flex-direction:column; padding:var(--cardpad);
-  border-radius:18px; border:1px solid color-mix(in oklab, var(--fam) 26%, var(--rule-strong));
-  background:
-    radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--fam) 15%, var(--surface)), transparent 62%),
-    linear-gradient(168deg, color-mix(in oklab, var(--fam) 11%, var(--surface)), var(--surface) 58%);
+  cursor:pointer;
+  position:relative; width:min(452px, 94vw); height:min(84vh, 668px);
+  display:flex; flex-direction:column; padding:0;
+  border-radius:16px; border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule-strong));
+  background:var(--surface);
   box-shadow:var(--shadow-lift);
   animation:deal .26s cubic-bezier(.2,.8,.3,1);
 }
@@ -217,15 +240,32 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .card.flipped .flipper{transform:rotateY(180deg)}
 .inner{
   position:absolute; inset:0; display:flex; flex-direction:column; overflow:hidden;
-  border-radius:10px; border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule));
-  background:var(--surface); backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  border-radius:15px; border:0; background:var(--surface);
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
 }
 .inner.back{
-  inset:calc(-1 * var(--cardpad)); border-radius:17px;
-  transform:rotateY(180deg); border-color:transparent; cursor:pointer;
+  inset:0; border-radius:15px;
+  transform:rotateY(180deg); cursor:pointer;
   background:var(--fam); color:var(--paper);
-  align-items:center; justify-content:center; text-align:center; padding:30px 26px 22px;
+  align-items:stretch; justify-content:flex-start; text-align:left; padding:20px 18px 16px;
 }
+.back .head{position:relative; display:flex; align-items:center; gap:10px; margin-bottom:14px}
+.back .head .cut{margin:0}
+.back .head .who{min-width:0}
+.back .panel{
+  position:relative; flex:1; min-height:0; overflow-y:auto; background:var(--surface); color:var(--ink);
+  border-radius:11px; padding:18px 18px 20px; display:grid; gap:18px; align-content:start;
+}
+.back .panel .field h3{margin:0 0 6px}
+.back .panel .field p{font-size:15.5px; line-height:1.58}
+.back .panel .field.wild p{font-style:italic; color:var(--ink-2)}
+.back .panel .field.fix{
+  padding:15px 16px; border-radius:6px;
+  background:color-mix(in oklab, var(--fam) 12%, var(--surface));
+  border:1px solid color-mix(in oklab, var(--fam) 28%, transparent);
+}
+.back .panel .field.fix h3{color:var(--fam)}
+.back .panel .field.fix p{font-size:clamp(16px,2.2vw,18px); line-height:1.55; color:var(--ink)}
 /* the chart's own grid, printed on the back, with one cell out of place */
 .back .weave{
   position:absolute; inset:0; opacity:.17; pointer-events:none;
@@ -234,12 +274,12 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
     repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 30px);
 }
 .back .slip{
-  position:absolute; width:46px; height:46px; border:1.5px solid currentColor; opacity:.55;
+  display:none; position:absolute; width:46px; height:46px; border:1.5px solid currentColor; opacity:.55;
   top:13%; right:15%; transform:rotate(12deg); pointer-events:none;
 }
 .back .wordmark{
-  position:relative; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.28em;
-  text-transform:uppercase; opacity:.72;
+  position:relative; display:block; font-family:"IBM Plex Mono",monospace; font-size:8.5px;
+  letter-spacing:.24em; text-transform:uppercase; opacity:.75; margin-bottom:3px;
 }
 .back .cut{
   position:relative; display:inline-flex; align-items:center; justify-content:center;
@@ -248,14 +288,13 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   border:1.5px solid currentColor; opacity:.9;
 }
 .back .title{
-  position:relative; margin:0; font-size:clamp(26px,5.6vw,36px); line-height:1.03;
-  letter-spacing:-.022em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
-  text-wrap:balance; max-width:15ch;
+  position:relative; margin:0; font-size:clamp(19px,3vw,23px); line-height:1.05;
+  letter-spacing:-.02em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
 }
 .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .back .fam-name{
-  position:relative; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em;
-  text-transform:uppercase; opacity:.8; margin:9px 0 26px;
+  position:relative; display:block; font-family:"IBM Plex Mono",monospace; font-size:9px;
+  letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:3px;
 }
 .back .move{
   position:relative; font-family:"IBM Plex Serif",Georgia,serif; font-size:clamp(17px,2.4vw,20px);
@@ -264,8 +303,8 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .back .move em{font-style:normal; display:block; font-family:"IBM Plex Mono",monospace;
   font-size:10px; letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:14px}
 .back .turn{
-  position:absolute; bottom:16px; left:0; right:0; font-family:"IBM Plex Mono",monospace;
-  font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.6;
+  position:relative; text-align:center; margin-top:11px; font-family:"IBM Plex Mono",monospace;
+  font-size:9px; letter-spacing:.14em; text-transform:uppercase; opacity:.7;
 }
 .flipbtn{
   display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--rule);
@@ -302,7 +341,9 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 /* the two letters the symbol is made from */
 .src{text-decoration:none; box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--fam) 55%, transparent)}
 
-.scroll{flex:1; min-height:0; overflow-y:auto; padding:4px 17px 18px; display:grid; gap:20px; align-content:start;}
+.scroll{flex:1; min-height:0; overflow-y:auto; padding:4px 20px 20px; display:grid; gap:20px; align-content:start;}
+.front .scroll{align-content:center}
+.front .scroll .field p{font-size:clamp(18px,2.5vw,21px); line-height:1.58}
 .scroll::-webkit-scrollbar{width:8px}
 .scroll::-webkit-scrollbar-thumb{background:var(--rule-strong); border-radius:4px}
 .chip, .navbtn, .deck-link, .flipbtn, .close{cursor:pointer}
@@ -433,18 +474,15 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .card-mini{
   position:absolute; top:0; left:0; width:var(--w); height:var(--h);
   transform:scale(var(--s)); transform-origin:top left;
-  --cardpad:9px;
-  display:flex; flex-direction:column; padding:var(--cardpad); border-radius:22px;
-  border:1px solid color-mix(in oklab, var(--fam) 26%, var(--rule-strong));
-  background:
-    radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--fam) 15%, var(--surface)), transparent 62%),
-    linear-gradient(168deg, color-mix(in oklab, var(--fam) 11%, var(--surface)), var(--surface) 58%);
+  display:flex; flex-direction:column; padding:0; border-radius:16px; overflow:hidden;
+  border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule-strong));
+  background:var(--surface);
   box-shadow:var(--shadow);
 }
 .card-mini .inner{
   position:relative; inset:auto; transform:none; backface-visibility:visible;
-  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; border-radius:14px;
-  border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule)); background:var(--surface);
+  flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden;
+  border:0; background:var(--surface);
 }
 .card-mini .band{
   flex:none; display:flex; align-items:center; justify-content:space-between; gap:8px;
@@ -487,11 +525,30 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .card-mini .fix h4{color:var(--fam)}
 .card-mini .fix p{color:var(--ink); -webkit-line-clamp:5}
 /* the printed back */
+.card-mini{text-align:left}
 .card-mini .inner.back{
-  position:absolute; inset:calc(-1 * var(--cardpad)); border-radius:22px;
-  transform:none; backface-visibility:visible; border-color:transparent; background:var(--fam); color:var(--paper);
-  align-items:center; justify-content:center; text-align:center; padding:24px 20px 18px;
+  position:absolute; inset:0; border-radius:0;
+  transform:none; backface-visibility:visible; border-color:transparent;
+  background:var(--fam); color:var(--paper);
+  align-items:stretch; justify-content:flex-start; text-align:left; padding:16px 15px 15px;
 }
+.card-mini .back .head{position:relative; display:flex; align-items:center; gap:9px; margin-bottom:12px}
+.card-mini .back .head .cut{margin:0}
+.card-mini .back .who{min-width:0}
+.card-mini .back .panel{
+  position:relative; flex:1; min-height:0; overflow:hidden; background:var(--surface); color:var(--ink);
+  border-radius:9px; padding:14px; display:grid; gap:13px; align-content:start;
+}
+.card-mini .back .panel .field p{color:var(--ink-2); -webkit-line-clamp:5}
+.card-mini .back .panel .field.fix{
+  margin:0; padding:11px 12px; border-radius:5px;
+  background:color-mix(in oklab, var(--fam) 12%, var(--surface));
+  border:1px solid color-mix(in oklab, var(--fam) 28%, transparent);
+}
+.card-mini .back .panel .field.fix h4{color:var(--fam)}
+.card-mini .back .panel .field.fix p{color:var(--ink); font-size:11.5px; -webkit-line-clamp:6}
+.card-mini .field.big{margin-block:auto}
+.card-mini .field.big p{font-size:12.5px; line-height:1.5; -webkit-line-clamp:6; color:var(--ink)}
 .card-mini .weave{
   position:absolute; inset:0; opacity:.18; pointer-events:none;
   background-image:
@@ -503,22 +560,22 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   top:12%; right:14%; transform:rotate(12deg); pointer-events:none;
 }
 .card-mini .wordmark{
-  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.24em;
-  text-transform:uppercase; opacity:.72;
+  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
+  font-size:6.5px; letter-spacing:.2em; text-transform:uppercase; opacity:.75; margin-bottom:2px;
 }
 .card-mini .cut{
-  position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
+  position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
   height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px; font-weight:700;
   border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
 }
 .card-mini .title{
-  position:relative; color:var(--paper); margin:0; font-size:20px; line-height:1.04; letter-spacing:-.02em; font-weight:750;
-  font-variation-settings:"wdth" 102,"wght" 750; max-width:14ch;
+  position:relative; color:var(--paper); margin:0; font-size:15px; line-height:1.05; letter-spacing:-.02em;
+  font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
 }
 .card-mini .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .card-mini .fam-name{
-  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px; letter-spacing:.16em;
-  text-transform:uppercase; opacity:.8; margin-top:9px;
+  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
+  font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:2px;
 }
 .card-mini .move{
   position:relative; margin:18px 0 0; color:var(--paper);
@@ -579,6 +636,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
         <span>Size</span>
         <button type="button" id="zout" aria-label="Smaller elements">&minus;</button>
         <button type="button" id="zin" aria-label="Larger elements">+</button>
+        <button type="button" class="fit" id="zfit">Fit</button>
         <span class="count" id="count">74 shown</span>
       </div>
     </div>
@@ -606,8 +664,8 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
         <div class="art"><div class="fan" id="stack"></div></div>
         <div>
           <h3>The Bias Deck</h3>
-          <p>All 74 as cards you can hold &mdash; the definition and the example on the front, the
-          counter-move on the back. Six suits, one per kind of decision.</p>
+          <p>All 74 as cards you can hold &mdash; the name and what it is on the front, how to
+          overcome it on the back. Six suits, one per kind of decision.</p>
         </div>
         <div class="row">
           <span class="amt" id="deck-price"></span>
@@ -630,6 +688,15 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
         </div>
         <p class="fine">Two sizes &middot; 200 gsm &middot; ships rolled</p>
       </article>
+    </div>
+    <div class="bundle">
+      <div class="say">
+        <h3>Both together</h3>
+        <p>The deck for the decision in front of you, the poster for the ones you have not thought of yet.</p>
+      </div>
+      <div class="cost"><span class="now" id="bundle-now"></span><span class="was" id="bundle-was"></span>
+        <span class="save" id="bundle-save"></span></div>
+      <a class="buy" id="bundle-buy">Pre-order both <span class="arrow">&rarr;</span></a>
     </div>
   </section>
 
@@ -756,8 +823,11 @@ const GROUPS = [
 /* The two product pages, and the prices shown here. One place to change each. */
 const DECK_URL   = "https://claude.ai/code/artifact/37fbb95f-0ae4-4f66-a34e-328ef1667b73";
 const POSTER_URL = "https://claude.ai/code/artifact/64771218-c11c-488a-b932-3f8a077e3a14";
-const DECK_PRICE = "\u00A334";
-const POSTER_PRICE = "from \u00A328";
+const DECK_PRICE = "\u00A342";
+const POSTER_PRICE = "from \u00A336";
+const BUNDLE_PRICE = "\u00A365";
+const BUNDLE_FULL = "\u00A378";
+const BUNDLE_SAVE = "\u00A313";
 const BUY_URL = DECK_URL;
 
 /* The four mental causes, kept as a second dimension: the dot on each tile. */
@@ -939,7 +1009,7 @@ function open(sym, keepFocus){
     '<div class="inner front">' +
       '<div class="band"><span>' + b.grp.roman + " &middot; " + b.grp.name + "</span>" +
         '<span class="idx">No. ' + b.n + " / " + BIASES.length + "</span></div>" +
-      '<div class="face" data-sym="' + b.s + '">' +
+      '<div class="face">' +
         '<div class="ident"><span class="sym-chip">' + b.s + "</span>" +
         '<p class="note"><span class="dot" style="--famdot:' + FAM_DOT[b.cat] + '"></span>' +
         FAM[b.cat].name + "</p></div>" +
@@ -947,6 +1017,22 @@ function open(sym, keepFocus){
       "</div>" +
       '<div class="scroll">' +
         '<div class="field"><h3>What it is</h3><p>' + b.what + "</p></div>" +
+      "</div>" +
+      '<div class="card-foot">' +
+        '<button type="button" class="navbtn" data-step="-1">&larr; ' + prevNext(-1).s + "</button>" +
+        '<button type="button" class="flipbtn">Turn over</button>' +
+        '<a class="deck-link" href="' + BUY_URL + '">Buy the deck &rarr;</a>' +
+        '<button type="button" class="navbtn" data-step="1">' + prevNext(1).s + " &rarr;</button>" +
+      "</div>" +
+    "</div>" +
+    '<div class="inner back">' +
+      '<span class="weave"></span>' +
+      '<div class="head"><span class="cut">' + b.s + "</span>" +
+        '<span class="who"><span class="wordmark">Periodic Table of Biases</span>' +
+        '<h3 class="title">' + b.name + "</h3>" +
+        '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span></span></div>" +
+      '<div class="panel">' +
+        '<div class="field fix"><h3>How to overcome it</h3><p>' + b.fix + "</p></div>" +
         '<div class="field wild"><h3>In the wild</h3><p>' + b.wild + "</p></div>" +
         '<div class="field"><h3>Why it happens</h3><p>' + b.why + "</p></div>" +
         '<div class="field"><h3>Bonds with</h3><div class="rel-list">' +
@@ -957,24 +1043,9 @@ function open(sym, keepFocus){
           }).join("") +
         "</div></div>" +
       "</div>" +
-      '<div class="card-foot">' +
-        '<button type="button" class="navbtn" data-step="-1">&larr; ' + prevNext(-1).s + "</button>" +
-        '<button type="button" class="flipbtn">Turn over</button>' +
-        '<a class="deck-link" href="' + BUY_URL + '">Buy the deck &rarr;</a>' +
-        '<button type="button" class="navbtn" data-step="1">' + prevNext(1).s + " &rarr;</button>" +
-      "</div>" +
-    "</div>" +
-    '<div class="inner back" data-flip>' +
-      '<span class="weave"></span><span class="slip"></span>' +
-      '<span class="wordmark">Periodic Table of Biases</span>' +
-      '<span class="cut">' + b.s + "</span>" +
-      '<h3 class="title">' + markName(b) + "</h3>" +
-      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + " / " + BIASES.length + "</span>" +
-      '<p class="move"><em>What to do instead</em>' + b.fix + "</p>" +
       '<span class="turn">Tap to turn back</span>' +
     "</div>" +
     "</div>";
-  card.classList.remove("flipped");
   backdrop.classList.add("open");
   document.body.style.overflow = "hidden";
   history.replaceState(null, "", "#" + b.s);
@@ -1033,22 +1104,67 @@ function nearest(px){
 function setZoom(i, remember){
   step = Math.max(0, Math.min(STEPS.length - 1, i));
   const px = STEPS[step];
+  const lines = px >= 78 ? 3 : px >= 52 ? 2 : 0;
+  chart.classList.toggle("compact", lines === 0);
   chart.style.setProperty("--col", px + "px");
+  chart.style.setProperty("--nmlines", lines || 3);
+  chart.style.setProperty("--cellh", tileHeight(px, lines).toFixed(2) + "px");
   zin.disabled = step === STEPS.length - 1;
   zout.disabled = step === 0;
   if(remember){ try{ localStorage.setItem("biasCol", px); }catch(e){} }
 }
 function nudge(dir){ setZoom((step === null ? nearest(baseCol()) : step) + dir, true); }
+
+/* Fit: size the columns so the whole chart, headers and all, is on screen.
+   The tile height is worked out from the type that actually goes in it, so
+   nothing is ever cut off - names drop to two lines, then off, if it is tight. */
+const scroller = document.querySelector(".scroller");
+function tileHeight(col, lines){
+  const pad = 14;
+  const num = Math.max(9, col * .088);
+  const sym = lines ? col * .25 : col * .42;
+  const name = lines ? Math.max(12.5, Math.min(col * .145, 17)) * 1.12 * lines + 2 : 0;
+  return pad + num + sym + name;
+}
+function fitToScreen(remember){
+  step = null;
+  const style = getComputedStyle(document.documentElement);
+  const gap = parseFloat(style.getPropertyValue("--gap")) || 5;
+  const rail = parseFloat(style.getPropertyValue("--rail")) || 22;
+  const pad = parseFloat(getComputedStyle(scroller).paddingLeft) || 0;
+  const byWidth = (scroller.clientWidth - pad * 2 - rail - (COLS + 1) * gap) / COLS;
+  const top = scroller.getBoundingClientRect().top + window.scrollY;
+  const headH = head.getBoundingClientRect().height;
+  const room = (window.innerHeight - top - headH - (ROWS + 1) * gap - 26) / ROWS;
+
+  let chosen = null;
+  [3, 2, 0].forEach(lines => {
+    if(chosen) return;
+    let lo = 30, hi = 116;
+    for(let i = 0; i < 24; i++){
+      const mid = (lo + hi) / 2;
+      if(tileHeight(mid, lines) <= room) lo = mid; else hi = mid;
+    }
+    const col = Math.min(lo, byWidth);
+    if(col >= (lines === 3 ? 78 : lines === 2 ? 52 : 30)) chosen = {col, lines};
+  });
+  if(!chosen) chosen = {col: Math.max(30, Math.min(byWidth, 44)), lines: 0};
+
+  chart.classList.toggle("compact", chosen.lines === 0);
+  chart.style.setProperty("--col", chosen.col.toFixed(2) + "px");
+  chart.style.setProperty("--nmlines", chosen.lines || 3);
+  chart.style.setProperty("--cellh", tileHeight(chosen.col, chosen.lines).toFixed(2) + "px");
+  zin.disabled = false; zout.disabled = false;
+  if(remember){ try{ localStorage.removeItem("biasCol"); }catch(e){} }
+}
+document.getElementById("zfit").addEventListener("click", () => fitToScreen(true));
 zin.addEventListener("click", () => nudge(1));
 zout.addEventListener("click", () => nudge(-1));
 let saved = null;
 try{ saved = parseFloat(localStorage.getItem("biasCol")); }catch(e){}
 if(saved) setZoom(nearest(saved), false);
-else{
-  const i = nearest(baseCol());
-  zin.disabled = i === STEPS.length - 1;
-  zout.disabled = i === 0;
-}
+else fitToScreen(false);
+addEventListener("resize", () => { if(step === null) fitToScreen(false); });
 
 /* The deck shows real cards, drawn at card size and scaled down - the same
    markup the shop pages use, so the two never drift apart. */
@@ -1063,7 +1179,6 @@ function miniFront(b){
       "<h2>" + markName(b) + "</h2>" +
     "</div>" +
     '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
-    '<div class="field wild"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
   "</div>";
 }
 function miniBack(b){
@@ -1115,6 +1230,10 @@ addEventListener("resize", fitSheet);
 
 document.getElementById("deck-price").textContent = DECK_PRICE;
 document.getElementById("poster-price").textContent = POSTER_PRICE;
+document.getElementById("bundle-now").textContent = BUNDLE_PRICE;
+document.getElementById("bundle-was").textContent = BUNDLE_FULL;
+document.getElementById("bundle-save").textContent = "Save " + BUNDLE_SAVE;
+document.getElementById("bundle-buy").href = DECK_URL;
 [["buy-top", DECK_URL], ["buy-deck", DECK_URL], ["deck-more", DECK_URL],
  ["buy-poster", POSTER_URL], ["poster-more", POSTER_URL]].forEach(([id, href]) => {
   const el = document.getElementById(id);

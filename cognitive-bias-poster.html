@@ -131,6 +131,24 @@ section.plain{border-top:0}
 .faq summary::after{content:"+"; float:right; font-family:"IBM Plex Mono",monospace; color:var(--ink-3)}
 .faq details[open] summary::after{content:"\2212"}
 .faq p{margin:12px 0 0; font-family:"IBM Plex Serif",Georgia,serif; font-size:15px; line-height:1.6; color:var(--ink-2)}
+.bundle{
+  display:flex; flex-wrap:wrap; align-items:center; gap:16px 26px; justify-content:space-between;
+  padding:22px 26px; border-radius:4px; background:var(--ink); color:var(--paper); margin-top:26px;
+}
+.bundle .say{min-width:0}
+.bundle h3{margin:0 0 5px; font-size:19px; font-weight:700; letter-spacing:-.015em}
+.bundle p{
+  margin:0; font-family:"IBM Plex Serif",Georgia,serif; font-size:14.5px; line-height:1.5;
+  color:color-mix(in oklab, var(--paper) 76%, var(--ink)); max-width:52ch;
+}
+.bundle .cost{display:flex; align-items:baseline; gap:10px}
+.bundle .now{font-size:26px; font-weight:750; font-variation-settings:"wdth" 104,"wght" 750}
+.bundle .was{font-size:15px; text-decoration:line-through; opacity:.55}
+.bundle .save{
+  font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+  border:1px solid color-mix(in oklab, var(--paper) 45%, transparent); border-radius:2px; padding:4px 8px;
+}
+.bundle .cta{background:var(--paper); color:var(--ink); border-color:var(--paper)}
 footer{
   padding:36px 0 60px; border-top:1px solid var(--rule); display:flex; flex-wrap:wrap; gap:16px;
   justify-content:space-between; align-items:baseline;
@@ -248,7 +266,7 @@ footer a:hover{color:var(--ink)}
       kind of decision they spoil &mdash; so the wall above the desk answers the question before the
       meeting does.</p>
       <div class="buyrow">
-        <span class="price">£28<small>Pre-order &middot; ships rolled</small></span>
+        <span class="price">£36<small>Pre-order &middot; ships rolled</small></span>
         <a class="cta" href="#preorder">Pre-order the poster <span class="arrow">&rarr;</span></a>
         <a class="cta ghost" href="https://claude.ai/code/artifact/ae3c71e3-b63d-45a4-a03f-97844e1adc1f">Explore it first</a>
       </div>
@@ -277,14 +295,14 @@ footer a:hover{color:var(--ink)}
         <div class="dims"><span class="box" style="width:56px;height:40px"></span><span class="box" style="width:34px;height:24px"></span></div>
         <h3>A1 &mdash; 59.4 &times; 84.1 cm</h3>
         <p>For a desk wall or a small studio. Symbols read across the room, names from a step away.</p>
-        <div class="row"><span class="amt">£28</span><a class="cta ghost" href="#preorder">Pre-order</a></div>
+        <div class="row"><span class="amt">£36</span><a class="cta ghost" href="#preorder">Pre-order</a></div>
       </div>
       <div class="size">
         <div class="dims"><span class="box" style="width:72px;height:50px"></span><span class="box" style="width:34px;height:24px"></span></div>
         <h3>70 &times; 100 cm</h3>
         <p>For a meeting room, where people will stand in front of it and argue. Names readable at
         arm's length.</p>
-        <div class="row"><span class="amt">£38</span><a class="cta ghost" href="#preorder">Pre-order</a></div>
+        <div class="row"><span class="amt">£48</span><a class="cta ghost" href="#preorder">Pre-order</a></div>
       </div>
     </div>
   </section>
@@ -322,6 +340,18 @@ footer a:hover{color:var(--ink)}
     </div>
   </section>
 
+
+  <section>
+    <div class="bundle">
+      <div class="say">
+        <h3>Both together</h3>
+        <p>The deck for the decision in front of you, the poster for the ones you have not thought of yet.</p>
+      </div>
+      <div class="cost"><span class="now">£65</span><span class="was">£78</span>
+        <span class="save">Save £13</span></div>
+      <a class="cta" href="#preorder">Pre-order both <span class="arrow">&rarr;</span></a>
+    </div>
+  </section>
 
   <section id="preorder">
     <p class="kicker">Pre-order</p>
@@ -472,20 +502,21 @@ function cardFront(b, opts){
         '<p class="note"><span class="dot"></span>' + FAM[b.cat].name + "</p></div>" +
         "<h2>" + markName(b) + "</h2>" +
       "</div>" +
-      '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
-      '<div class="field"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
-      (o.full ? '<div class="field"><h4>Why it happens</h4><p>' + b.why + "</p></div>" : "") +
+      '<div class="field big"><h4>What it is</h4><p>' + b.what + "</p></div>" +
     "</div></div>";
 }
 function cardBack(b){
   return '<div class="card-mini" style="--fam:' + b.grp.v + '">' +
     '<div class="inner back">' +
-      '<span class="weave"></span><span class="slip"></span>' +
-      '<span class="wordmark">Periodic Table of Biases</span>' +
-      '<span class="cut">' + b.s + "</span>" +
-      '<h3 class="title">' + markName(b) + "</h3>" +
-      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span>" +
-      '<p class="move"><em>What to do instead</em>' + b.fix + "</p>" +
+      '<span class="weave"></span>' +
+      '<div class="head"><span class="cut">' + b.s + "</span>" +
+      '<span class="who"><span class="wordmark">Periodic Table of Biases</span>' +
+      '<h3 class="title">' + b.name + "</h3>" +
+      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span></span></div>" +
+      '<div class="panel">' +
+        '<div class="field fix"><h4>How to overcome it</h4><p>' + b.fix + "</p></div>" +
+        '<div class="field wild"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
+      "</div>" +
     "</div></div>";
 }
 function slot(html, scale, w, h){
