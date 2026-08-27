@@ -226,52 +226,27 @@ footer a:hover{color:var(--ink)}
   position:absolute; inset:0; border-radius:0;
   transform:none; backface-visibility:visible; border-color:transparent;
   background:var(--fam); color:var(--paper);
-  align-items:stretch; justify-content:flex-start; text-align:left; padding:16px 15px 15px;
+  align-items:center; justify-content:center; text-align:center; padding:24px 20px 18px;
 }
-.card-mini .back .head{position:relative; display:flex; align-items:center; gap:9px; margin-bottom:12px}
-.card-mini .back .head .cut{margin:0}
-.card-mini .back .who{min-width:0}
-.card-mini .back .panel{
-  position:relative; flex:1; min-height:0; overflow:hidden; background:var(--surface); color:var(--ink);
-  border-radius:9px; padding:14px; display:grid; gap:13px; align-content:start;
-}
-.card-mini .back .panel .field p{color:var(--ink-2); -webkit-line-clamp:5}
-.card-mini .back .panel .field.fix{
-  margin:0; padding:11px 12px; border-radius:5px;
-  background:color-mix(in oklab, var(--fam) 12%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 28%, transparent);
-}
-.card-mini .back .panel .field.fix h4{color:var(--fam)}
-.card-mini .back .panel .field.fix p{color:var(--ink); font-size:11.5px; -webkit-line-clamp:6}
 .card-mini .field.big{margin-block:auto}
 .card-mini .field.big p{font-size:12.5px; line-height:1.5; -webkit-line-clamp:6; color:var(--ink)}
-.card-mini .weave{
-  position:absolute; inset:0; opacity:.18; pointer-events:none;
-  background-image:
-    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 22px);
-}
-.card-mini .slip{
-  position:absolute; width:30px; height:30px; border:1.4px solid currentColor; opacity:.55;
-  top:12%; right:14%; transform:rotate(12deg); pointer-events:none;
-}
 .card-mini .wordmark{
-  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
-  font-size:6.5px; letter-spacing:.2em; text-transform:uppercase; opacity:.75; margin-bottom:2px;
+  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px;
+  letter-spacing:.24em; text-transform:uppercase; opacity:.72;
 }
 .card-mini .cut{
-  position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
-  height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px; font-weight:700;
-  border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
+  position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center;
+  min-width:28px; height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px;
+  font-weight:700; border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
 }
 .card-mini .title{
-  position:relative; color:var(--paper); margin:0; font-size:15px; line-height:1.05; letter-spacing:-.02em;
-  font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
+  position:relative; color:var(--paper); margin:0; font-size:20px; line-height:1.04;
+  letter-spacing:-.02em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750; max-width:14ch;
 }
 .card-mini .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .card-mini .fam-name{
-  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
-  font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:2px;
+  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px;
+  letter-spacing:.16em; text-transform:uppercase; opacity:.8; margin-top:9px;
 }
 .card-mini .move{
   position:relative; margin:18px 0 0; color:var(--paper);
@@ -281,6 +256,7 @@ footer a:hover{color:var(--ink)}
   font-style:normal; display:block; font-family:"IBM Plex Mono",monospace; font-size:7.5px;
   letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:9px;
 }
+
 /* the fanned deck */
 .fan{display:flex; align-items:center; justify-content:center; max-width:100%}
 .fan .slot + .slot{margin-left:calc(var(--w) * var(--s) * -.07)}
@@ -322,8 +298,8 @@ footer a:hover{color:var(--ink)}
     <div>
       <p class="eyebrow">74 cards &middot; 6 suits</p>
       <h1>The Bias Deck</h1>
-      <p class="lede">Every element of the table as a card you can hold. One side names the bias and
-      says what it is; the other tells you how to overcome it. Six suits, one per kind of
+      <p class="lede">Every element of the table as a card you can hold. One side shows you the bias
+      at work; the other tells you how to overcome it. Six suits, one per kind of
       decision &mdash; so before a hire, a purchase or a forecast, you can pull just the cards that apply.</p>
       <div class="buyrow">
         <span class="price">£42<small>Pre-order &middot; ships spring</small></span>
@@ -338,14 +314,14 @@ footer a:hover{color:var(--ink)}
   <section>
     <p class="kicker">Anatomy</p>
     <h2 class="sec">Both sides do a job.</h2>
-    <p class="body">The front names the bias and says what it is, and nothing else &mdash; enough to
-    recognise it while it is happening. Turn it over for the example, the reason it keeps happening,
-    and the thing you actually do about it.</p>
+    <p class="body">The front is for recognising the bias while it is happening &mdash; what it is, an
+    example, and why it keeps happening. The back holds one thing only: what to do about it, printed
+    large enough to read across a table.</p>
     <div class="sides">
       <div class="side"><div id="front-demo"></div>
-        <p class="kicker">Front &mdash; the name and what it is</p></div>
+        <p class="kicker">Front &mdash; what it is, an example, and why</p></div>
       <div class="side"><div id="back-demo"></div>
-        <p class="kicker">Back &mdash; how to overcome it, the example, and why it happens</p></div>
+        <p class="kicker">Back &mdash; how to overcome it, alone</p></div>
     </div>
   </section>
 
@@ -569,21 +545,20 @@ function cardFront(b, opts){
         '<p class="note"><span class="dot"></span>' + FAM[b.cat].name + "</p></div>" +
         "<h2>" + markName(b) + "</h2>" +
       "</div>" +
-      '<div class="field big"><h4>What it is</h4><p>' + b.what + "</p></div>" +
+      '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
+      '<div class="field wild"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
+      (o.full ? '<div class="field"><h4>Why it happens</h4><p>' + b.why + "</p></div>" : "") +
     "</div></div>";
 }
 function cardBack(b){
   return '<div class="card-mini" style="--fam:' + b.grp.v + '">' +
     '<div class="inner back">' +
       '<span class="weave"></span>' +
-      '<div class="head"><span class="cut">' + b.s + "</span>" +
-      '<span class="who"><span class="wordmark">Periodic Table of Biases</span>' +
-      '<h3 class="title">' + b.name + "</h3>" +
-      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span></span></div>" +
-      '<div class="panel">' +
-        '<div class="field fix"><h4>How to overcome it</h4><p>' + b.fix + "</p></div>" +
-        '<div class="field wild"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
-      "</div>" +
+      '<span class="wordmark">Periodic Table of Biases</span>' +
+      '<span class="cut">' + b.s + "</span>" +
+      '<h3 class="title">' + markName(b) + "</h3>" +
+      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span>" +
+      '<p class="move"><em>How to overcome it</em>' + b.fix + "</p>" +
     "</div></div>";
 }
 function slot(html, scale, w, h){

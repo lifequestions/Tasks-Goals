@@ -225,7 +225,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .backdrop.open{display:flex}
 .card{
   cursor:pointer;
-  position:relative; width:min(452px, 94vw); height:min(84vh, 668px);
+  position:relative; width:min(456px, 94vw); height:min(86vh, 716px);
   display:flex; flex-direction:column; padding:0;
   border-radius:16px; border:1px solid color-mix(in oklab, var(--fam) 30%, var(--rule-strong));
   background:var(--surface);
@@ -247,26 +247,40 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   inset:0; border-radius:15px;
   transform:rotateY(180deg); cursor:pointer;
   background:var(--fam); color:var(--paper);
-  align-items:stretch; justify-content:flex-start; text-align:left; padding:20px 18px 16px;
+  align-items:center; justify-content:center; text-align:center; padding:30px 26px 22px;
 }
-.back .head{position:relative; display:flex; align-items:center; gap:10px; margin-bottom:14px}
-.back .head .cut{margin:0}
-.back .head .who{min-width:0}
-.back .panel{
-  position:relative; flex:1; min-height:0; overflow-y:auto; background:var(--surface); color:var(--ink);
-  border-radius:11px; padding:18px 18px 20px; display:grid; gap:18px; align-content:start;
+.back .wordmark{
+  position:relative; font-family:"IBM Plex Mono",monospace; font-size:9.5px; letter-spacing:.28em;
+  text-transform:uppercase; opacity:.72;
 }
-.back .panel .field h3{margin:0 0 6px}
-.back .panel .field p{font-size:15.5px; line-height:1.58}
-.back .panel .field.wild p{font-style:italic; color:var(--ink-2)}
-.back .panel .field.fix{
-  padding:15px 16px; border-radius:6px;
-  background:color-mix(in oklab, var(--fam) 12%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 28%, transparent);
+.back .cut{
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  min-width:38px; height:28px; padding:0 9px; margin:18px 0 14px; border-radius:3px;
+  font-size:16px; font-weight:700; font-variation-settings:"wdth" 96,"wght" 700;
+  border:1.5px solid currentColor; opacity:.9;
 }
-.back .panel .field.fix h3{color:var(--fam)}
-.back .panel .field.fix p{font-size:clamp(16px,2.2vw,18px); line-height:1.55; color:var(--ink)}
-/* the chart's own grid, printed on the back, with one cell out of place */
+.back .title{
+  position:relative; margin:0; font-size:clamp(26px,5.6vw,36px); line-height:1.03;
+  letter-spacing:-.022em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
+  text-wrap:balance; max-width:15ch; color:var(--paper);
+}
+.back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
+.back .fam-name{
+  position:relative; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; opacity:.8; margin:9px 0 26px;
+}
+.back .move{
+  position:relative; font-family:"IBM Plex Serif",Georgia,serif; font-size:clamp(17px,2.4vw,20px);
+  line-height:1.5; max-width:30ch; margin:0; color:var(--paper);
+}
+.back .move em{
+  font-style:normal; display:block; font-family:"IBM Plex Mono",monospace;
+  font-size:10px; letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:14px;
+}
+.back .turn{
+  position:absolute; bottom:16px; left:0; right:0; font-family:"IBM Plex Mono",monospace;
+  font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.6;
+}
 .back .weave{
   position:absolute; inset:0; opacity:.17; pointer-events:none;
   background-image:
@@ -295,16 +309,6 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .back .fam-name{
   position:relative; display:block; font-family:"IBM Plex Mono",monospace; font-size:9px;
   letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:3px;
-}
-.back .move{
-  position:relative; font-family:"IBM Plex Serif",Georgia,serif; font-size:clamp(17px,2.4vw,20px);
-  line-height:1.5; max-width:30ch; margin:0; color:var(--paper);
-}
-.back .move em{font-style:normal; display:block; font-family:"IBM Plex Mono",monospace;
-  font-size:10px; letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:14px}
-.back .turn{
-  position:relative; text-align:center; margin-top:11px; font-family:"IBM Plex Mono",monospace;
-  font-size:9px; letter-spacing:.14em; text-transform:uppercase; opacity:.7;
 }
 .flipbtn{
   display:flex; align-items:center; gap:7px; background:none; border:1px solid var(--rule);
@@ -342,8 +346,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .src{text-decoration:none; box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--fam) 55%, transparent)}
 
 .scroll{flex:1; min-height:0; overflow-y:auto; padding:4px 20px 20px; display:grid; gap:20px; align-content:start;}
-.front .scroll{align-content:center}
-.front .scroll .field p{font-size:clamp(18px,2.5vw,21px); line-height:1.58}
+.front .scroll .field p{font-size:clamp(15.5px,2vw,16.5px); line-height:1.6}
 .scroll::-webkit-scrollbar{width:8px}
 .scroll::-webkit-scrollbar-thumb{background:var(--rule-strong); border-radius:4px}
 .chip, .navbtn, .deck-link, .flipbtn, .close{cursor:pointer}
@@ -530,52 +533,27 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   position:absolute; inset:0; border-radius:0;
   transform:none; backface-visibility:visible; border-color:transparent;
   background:var(--fam); color:var(--paper);
-  align-items:stretch; justify-content:flex-start; text-align:left; padding:16px 15px 15px;
+  align-items:center; justify-content:center; text-align:center; padding:24px 20px 18px;
 }
-.card-mini .back .head{position:relative; display:flex; align-items:center; gap:9px; margin-bottom:12px}
-.card-mini .back .head .cut{margin:0}
-.card-mini .back .who{min-width:0}
-.card-mini .back .panel{
-  position:relative; flex:1; min-height:0; overflow:hidden; background:var(--surface); color:var(--ink);
-  border-radius:9px; padding:14px; display:grid; gap:13px; align-content:start;
-}
-.card-mini .back .panel .field p{color:var(--ink-2); -webkit-line-clamp:5}
-.card-mini .back .panel .field.fix{
-  margin:0; padding:11px 12px; border-radius:5px;
-  background:color-mix(in oklab, var(--fam) 12%, var(--surface));
-  border:1px solid color-mix(in oklab, var(--fam) 28%, transparent);
-}
-.card-mini .back .panel .field.fix h4{color:var(--fam)}
-.card-mini .back .panel .field.fix p{color:var(--ink); font-size:11.5px; -webkit-line-clamp:6}
 .card-mini .field.big{margin-block:auto}
 .card-mini .field.big p{font-size:12.5px; line-height:1.5; -webkit-line-clamp:6; color:var(--ink)}
-.card-mini .weave{
-  position:absolute; inset:0; opacity:.18; pointer-events:none;
-  background-image:
-    repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(0deg, currentColor 0 1px, transparent 1px 22px);
-}
-.card-mini .slip{
-  position:absolute; width:30px; height:30px; border:1.4px solid currentColor; opacity:.55;
-  top:12%; right:14%; transform:rotate(12deg); pointer-events:none;
-}
 .card-mini .wordmark{
-  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
-  font-size:6.5px; letter-spacing:.2em; text-transform:uppercase; opacity:.75; margin-bottom:2px;
+  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px;
+  letter-spacing:.24em; text-transform:uppercase; opacity:.72;
 }
 .card-mini .cut{
-  position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center; min-width:28px;
-  height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px; font-weight:700;
-  border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
+  position:relative; flex:none; display:inline-flex; align-items:center; justify-content:center;
+  min-width:28px; height:21px; padding:0 7px; margin:13px 0 10px; border-radius:3px; font-size:12px;
+  font-weight:700; border:1.3px solid currentColor; opacity:.9; font-variation-settings:"wdth" 96,"wght" 700;
 }
 .card-mini .title{
-  position:relative; color:var(--paper); margin:0; font-size:15px; line-height:1.05; letter-spacing:-.02em;
-  font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
+  position:relative; color:var(--paper); margin:0; font-size:20px; line-height:1.04;
+  letter-spacing:-.02em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750; max-width:14ch;
 }
 .card-mini .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .card-mini .fam-name{
-  position:relative; display:block; color:var(--paper); font-family:"IBM Plex Mono",monospace;
-  font-size:6.5px; letter-spacing:.14em; text-transform:uppercase; opacity:.8; margin-top:2px;
+  position:relative; color:var(--paper); font-family:"IBM Plex Mono",monospace; font-size:7.5px;
+  letter-spacing:.16em; text-transform:uppercase; opacity:.8; margin-top:9px;
 }
 .card-mini .move{
   position:relative; margin:18px 0 0; color:var(--paper);
@@ -585,6 +563,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   font-style:normal; display:block; font-family:"IBM Plex Mono",monospace; font-size:7.5px;
   letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin-bottom:9px;
 }
+
 /* the fanned deck */
 .fan{display:flex; align-items:center; justify-content:center; max-width:100%}
 .fan .slot + .slot{margin-left:calc(var(--w) * var(--s) * -.07)}
@@ -664,7 +643,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
         <div class="art"><div class="fan" id="stack"></div></div>
         <div>
           <h3>The Bias Deck</h3>
-          <p>All 74 as cards you can hold &mdash; the name and what it is on the front, how to
+          <p>All 74 as cards you can hold &mdash; what it is and an example on the front, how to
           overcome it on the back. Six suits, one per kind of decision.</p>
         </div>
         <div class="row">
@@ -1017,22 +996,6 @@ function open(sym, keepFocus){
       "</div>" +
       '<div class="scroll">' +
         '<div class="field"><h3>What it is</h3><p>' + b.what + "</p></div>" +
-      "</div>" +
-      '<div class="card-foot">' +
-        '<button type="button" class="navbtn" data-step="-1">&larr; ' + prevNext(-1).s + "</button>" +
-        '<button type="button" class="flipbtn">Turn over</button>' +
-        '<a class="deck-link" href="' + BUY_URL + '">Buy the deck &rarr;</a>' +
-        '<button type="button" class="navbtn" data-step="1">' + prevNext(1).s + " &rarr;</button>" +
-      "</div>" +
-    "</div>" +
-    '<div class="inner back">' +
-      '<span class="weave"></span>' +
-      '<div class="head"><span class="cut">' + b.s + "</span>" +
-        '<span class="who"><span class="wordmark">Periodic Table of Biases</span>' +
-        '<h3 class="title">' + b.name + "</h3>" +
-        '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span></span></div>" +
-      '<div class="panel">' +
-        '<div class="field fix"><h3>How to overcome it</h3><p>' + b.fix + "</p></div>" +
         '<div class="field wild"><h3>In the wild</h3><p>' + b.wild + "</p></div>" +
         '<div class="field"><h3>Why it happens</h3><p>' + b.why + "</p></div>" +
         '<div class="field"><h3>Bonds with</h3><div class="rel-list">' +
@@ -1043,6 +1006,20 @@ function open(sym, keepFocus){
           }).join("") +
         "</div></div>" +
       "</div>" +
+      '<div class="card-foot">' +
+        '<button type="button" class="navbtn" data-step="-1">&larr; ' + prevNext(-1).s + "</button>" +
+        '<button type="button" class="flipbtn">Turn over</button>' +
+        '<a class="deck-link" href="' + BUY_URL + '">Buy the deck &rarr;</a>' +
+        '<button type="button" class="navbtn" data-step="1">' + prevNext(1).s + " &rarr;</button>" +
+      "</div>" +
+    "</div>" +
+    '<div class="inner back">' +
+      '<span class="weave"></span>' +
+      '<span class="wordmark">Periodic Table of Biases</span>' +
+      '<span class="cut">' + b.s + "</span>" +
+      '<h3 class="title">' + markName(b) + "</h3>" +
+      '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + " / " + BIASES.length + "</span>" +
+      '<p class="move"><em>How to overcome it</em>' + b.fix + "</p>" +
       '<span class="turn">Tap to turn back</span>' +
     "</div>" +
     "</div>";
@@ -1179,18 +1156,20 @@ function miniFront(b){
       "<h2>" + markName(b) + "</h2>" +
     "</div>" +
     '<div class="field"><h4>What it is</h4><p>' + b.what + "</p></div>" +
+    '<div class="field wild"><h4>In the wild</h4><p>' + b.wild + "</p></div>" +
   "</div>";
 }
 function miniBack(b){
   return '<div class="inner back">' +
-    '<span class="weave"></span><span class="slip"></span>' +
+    '<span class="weave"></span>' +
     '<span class="wordmark">Periodic Table of Biases</span>' +
     '<span class="cut">' + b.s + "</span>" +
     '<h3 class="title">' + markName(b) + "</h3>" +
     '<span class="fam-name">' + b.grp.name + " &middot; No. " + b.n + "</span>" +
-    '<p class="move"><em>What to do instead</em>' + b.fix + "</p>" +
+    '<p class="move"><em>How to overcome it</em>' + b.fix + "</p>" +
   "</div>";
 }
+
 const stack = document.getElementById("stack");
 [["Halo Effect", false], ["Availability Heuristic", false], ["Survivorship Bias", false],
  ["Sunk Cost Fallacy", true]].forEach(([name, back]) => {
