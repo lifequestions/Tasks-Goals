@@ -21,7 +21,7 @@
   --g5:#CE1A62; --g6:#C07A08;
   --shadow:0 1px 2px rgba(20,24,26,.07), 0 8px 24px -12px rgba(20,24,26,.22);
   --shadow-lift:0 2px 4px rgba(20,24,26,.08), 0 18px 40px -16px rgba(20,24,26,.32);
-  --col:clamp(78px, calc((100vw - 168px) / 16), 116px);
+  --col:clamp(68px, calc((100vw - 168px) / 16), 92px);
   --gap:5px; --rail:22px; --pad:clamp(14px,3vw,32px);
 }
 @media (prefers-color-scheme: dark){
@@ -260,9 +260,9 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   border:1.5px solid currentColor; opacity:.9;
 }
 .back .title{
-  position:relative; margin:0; font-size:clamp(26px,5.6vw,36px); line-height:1.03;
-  letter-spacing:-.022em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
-  text-wrap:balance; max-width:15ch; color:var(--paper);
+  position:relative; margin:0; font-size:clamp(29px,6.2vw,40px); line-height:1.02;
+  letter-spacing:-.026em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
+  text-wrap:balance; max-width:16ch; color:var(--paper);
 }
 .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .back .fam-name{
@@ -301,10 +301,6 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
   font-size:16px; font-weight:700; font-variation-settings:"wdth" 96,"wght" 700;
   border:1.5px solid currentColor; opacity:.9;
 }
-.back .title{
-  position:relative; margin:0; font-size:clamp(19px,3vw,23px); line-height:1.05;
-  letter-spacing:-.02em; font-weight:750; font-variation-settings:"wdth" 102,"wght" 750;
-}
 .back .src{box-shadow:inset 0 -2px 0 color-mix(in oklab, var(--paper) 70%, transparent)}
 .back .fam-name{
   position:relative; display:block; font-family:"IBM Plex Mono",monospace; font-size:9px;
@@ -339,7 +335,7 @@ h1 em{font-style:normal; display:block; font-variation-settings:"wdth" 74,"wght"
 .ident .note .dot{width:6px; height:6px; border-radius:50%; background:var(--famdot); flex:none}
 .face .meta{min-width:0}
 .face h2{
-  margin:0; font-size:clamp(26px,5.4vw,34px); line-height:1.02; letter-spacing:-.025em;
+  margin:0; font-size:clamp(29px,6vw,39px); line-height:1.0; letter-spacing:-.028em;
   font-weight:750; font-variation-settings:"wdth" 102,"wght" 750; text-wrap:balance;
 }
 /* the two letters the symbol is made from */
@@ -1109,23 +1105,24 @@ function fitToScreen(remember){
   const gap = parseFloat(style.getPropertyValue("--gap")) || 5;
   const rail = parseFloat(style.getPropertyValue("--rail")) || 22;
   const pad = parseFloat(getComputedStyle(scroller).paddingLeft) || 0;
-  const byWidth = (scroller.clientWidth - pad * 2 - rail - (COLS + 1) * gap) / COLS;
+  /* The width sets the size. Height can only shrink it further - never
+     stretch the tiles to fill a tall window. */
+  const byWidth = Math.min((scroller.clientWidth - pad * 2 - rail - (COLS + 1) * gap) / COLS, 96);
   const top = scroller.getBoundingClientRect().top + window.scrollY;
   const headH = head.getBoundingClientRect().height;
   const room = (window.innerHeight - top - headH - (ROWS + 1) * gap - 26) / ROWS;
 
   let chosen = null;
-  [3, 2, 0].forEach(lines => {
+  [[3, 64], [2, 48], [0, 30]].forEach(([lines, floor]) => {
     if(chosen) return;
-    let lo = 30, hi = 116;
+    let lo = 24, hi = byWidth;
     for(let i = 0; i < 24; i++){
       const mid = (lo + hi) / 2;
       if(tileHeight(mid, lines) <= room) lo = mid; else hi = mid;
     }
     const col = Math.min(lo, byWidth);
-    if(col >= (lines === 3 ? 78 : lines === 2 ? 52 : 30)) chosen = {col, lines};
+    if(col >= floor || lines === 0) chosen = {col: Math.max(col, 30), lines};
   });
-  if(!chosen) chosen = {col: Math.max(30, Math.min(byWidth, 44)), lines: 0};
 
   chart.classList.toggle("compact", chosen.lines === 0);
   chart.style.setProperty("--col", chosen.col.toFixed(2) + "px");
@@ -1140,8 +1137,14 @@ zout.addEventListener("click", () => nudge(-1));
 let saved = null;
 try{ saved = parseFloat(localStorage.getItem("biasCol")); }catch(e){}
 if(saved) setZoom(nearest(saved), false);
-else fitToScreen(false);
-addEventListener("resize", () => { if(step === null) fitToScreen(false); });
+else{
+  /* Width sets the size; the page scrolls. Fit is a button, not the default. */
+  chart.classList.remove("compact");
+  chart.style.setProperty("--nmlines", 3);
+  const i = nearest(baseCol());
+  zin.disabled = i === STEPS.length - 1;
+  zout.disabled = i === 0;
+}
 
 /* The deck shows real cards, drawn at card size and scaled down - the same
    markup the shop pages use, so the two never drift apart. */
