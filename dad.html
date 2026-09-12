@@ -41,7 +41,10 @@ img{max-width:100%;display:block}
 .hero-grid{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:clamp(1.8rem,5vw,4rem);align-items:center}
 @media (max-width:760px){.hero-grid{grid-template-columns:1fr;gap:1.6rem}}
 .portrait{position:relative;aspect-ratio:4/5;background:var(--surf2);border:1px solid var(--line);overflow:hidden;box-shadow:0 26px 50px -34px var(--shadow)}
-.portrait img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+/* --face nudges the crop: first value left/right, second up/down.
+   48% 30% is set for the photo of him with his fist up — it keeps his face
+   centred and crops the phone screenshot's black bars and the wine glass out. */
+.portrait img{width:100%;height:100%;object-fit:cover;object-position:var(--face,48% 30%);position:relative;z-index:1}
 .portrait img.dead{display:none}
 .portrait .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.55rem;text-align:center;padding:1.4rem;background:linear-gradient(155deg,var(--surf2),var(--accSoft))}
 .portrait .slot .mg{font-family:"Newsreader",Georgia,serif;font-size:3.4rem;color:var(--acc);letter-spacing:.03em;line-height:1}
@@ -135,11 +138,14 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
       <div class="portrait">
         <span class="slot">
           <span class="mg">LdS</span>
-          <span class="cap">Save his photograph<br>as dad.jpg beside this page</span>
+          <span class="cap">Save his photo as dad.jpg<br>in the same folder as this page</span>
         </span>
-        <img src="dad.jpg" alt="Luis James de Souza" onerror="this.className='dead'">
+        <img src="dad.jpg" alt="Luis James de Souza" id="portrait"
+             data-try="dad.jpeg,dad.png,DadPhoto.jpg"
+             onerror="nextPhoto(this)">
       </div>
       <div class="hero-copy">
+        <!-- Optional: name the photo, e.g. <p class="mo">Kent, Christmas 2019</p> -->
         <p class="mo">His life, in his own voice &nbsp;·&nbsp; recording started September 2026</p>
         <h1>Luis James de Souza</h1>
         <p class="dob">
@@ -245,6 +251,17 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
 </div>
 
 <script>
+/* Tries dad.jpg, then the other likely filenames, then falls back to the monogram card. */
+function nextPhoto(img){
+  var left = (img.getAttribute("data-try") || "").split(",").filter(Boolean);
+  if(left.length){
+    img.setAttribute("data-try", left.slice(1).join(","));
+    img.src = left[0].trim();
+    return;
+  }
+  img.className = "dead";
+}
+
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 /* ---------------------------------------------------------------
