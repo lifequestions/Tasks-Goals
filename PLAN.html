@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Dad First, Then Everyone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap">
+
+<style>
+:root{
+  --bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+  --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--warn:#8A4B2A;--warnSoft:#F4E7DE;
+  --shadow:rgba(30,26,22,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+    --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--warn:#D69A6E;--warnSoft:#2B211A;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+  --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--warn:#D69A6E;--warnSoft:#2B211A;
+  --shadow:rgba(0,0,0,.5);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+p,ul,ol{margin:0}
+a{color:var(--acc)}
+.in{max-width:940px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.4rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+header.top{padding:clamp(2.6rem,7vw,5rem) 0 clamp(1.6rem,4vw,2.6rem)}
+header.top h1{font-size:clamp(2.3rem,6vw,3.7rem);line-height:1.02;margin:.9rem 0 1.1rem}
+header.top .lede{font-size:1.1rem;color:var(--ink2);max-width:58ch}
+.stamp{display:inline-flex;gap:.5rem;align-items:center;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:.2rem .7rem}
+
+section{padding:clamp(2.2rem,5vw,3.6rem) 0;border-top:1px solid var(--line)}
+.sec-hd{margin-bottom:1.6rem;max-width:62ch;display:flex;flex-direction:column;gap:.5rem}
+.sec-hd h2{font-size:clamp(1.5rem,3.2vw,2.05rem);line-height:1.14}
+.sec-hd p{color:var(--ink2);font-size:.98rem}
+.body-copy{display:flex;flex-direction:column;gap:1rem;max-width:66ch}
+.body-copy p{color:var(--ink2)}
+.body-copy strong{color:var(--ink);font-weight:600}
+
+/* callout */
+.call{background:var(--accSoft);border-left:3px solid var(--acc);padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;margin:.4rem 0}
+.call.warn{background:var(--warnSoft);border-left-color:var(--warn)}
+.call h4{font-size:1.1rem}
+.call p{color:var(--ink2);font-size:.95rem;max-width:64ch}
+
+/* phases */
+.phases{display:flex;flex-direction:column;gap:0}
+.ph{display:grid;grid-template-columns:96px minmax(0,1fr);gap:1.4rem;padding:1.4rem 0;border-bottom:1px solid var(--line);position:relative}
+.ph:last-child{border-bottom:0}
+@media (max-width:620px){.ph{grid-template-columns:1fr;gap:.6rem}}
+.ph .when{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);padding-top:.3rem}
+.ph h3{font-size:1.22rem;margin-bottom:.4rem}
+.ph p{color:var(--ink2);font-size:.95rem;max-width:62ch}
+.ph ul{margin:.6rem 0 0;padding-left:1.1rem;color:var(--ink2);font-size:.93rem}
+.ph li{margin-bottom:.25rem}
+.ph .out{display:inline-block;margin-top:.7rem;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--surf2);border:1px solid var(--line);padding:.22rem .6rem}
+
+/* money options */
+.opts{display:flex;flex-direction:column;gap:.9rem}
+.opt{background:var(--surf);border:1px solid var(--line);padding:1.1rem 1.2rem;display:grid;grid-template-columns:minmax(0,1fr) 118px;gap:1rem;align-items:start}
+@media (max-width:620px){.opt{grid-template-columns:1fr}}
+.opt h3{font-size:1.12rem;margin-bottom:.35rem}
+.opt p{color:var(--ink2);font-size:.93rem;max-width:60ch}
+.opt .verdict{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;text-align:right;line-height:1.5}
+@media (max-width:620px){.opt .verdict{text-align:left}}
+.v-core{color:var(--acc)}
+.v-later{color:var(--ink3)}
+.v-no{color:var(--warn)}
+.opt .tag{display:block;font-size:.58rem;color:var(--ink3);margin-top:.2rem}
+
+/* loop */
+.loop{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.8rem;counter-reset:step}
+.step{background:var(--surf);border:1px solid var(--line);padding:.9rem 1rem;display:flex;flex-direction:column;gap:.35rem;position:relative}
+.step .n{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.1em;color:var(--acc)}
+.step h4{font-size:1rem}
+.step p{font-size:.86rem;color:var(--ink2)}
+.loop-note{margin-top:.9rem;font-size:.9rem;color:var(--ink2);border-left:2px solid var(--acc);padding-left:.9rem}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);background:var(--surf)}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:520px}
+th,td{text-align:left;padding:.65rem .85rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:500;background:var(--surf2)}
+td:last-child,th:last-child{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td strong{font-weight:600}
+td .s{display:block;color:var(--ink3);font-size:.82rem;margin-top:.15rem}
+tfoot td{background:var(--surf2);font-weight:600;color:var(--ink)}
+
+/* two-col lists */
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.4rem 2.2rem}
+.cols h3{font-size:1.06rem;margin-bottom:.5rem}
+.cols ul{padding-left:1.1rem;color:var(--ink2);font-size:.93rem}
+.cols li{margin-bottom:.4rem}
+.cols ul.tick{list-style:none;padding-left:0}
+.cols ul.tick li{display:flex;gap:.6rem}
+.cols ul.tick li::before{content:"\2713";color:var(--acc);flex:none}
+.cols ul.cross{list-style:none;padding-left:0}
+.cols ul.cross li{display:flex;gap:.6rem}
+.cols ul.cross li::before{content:"\00D7";color:var(--warn);flex:none;font-weight:700}
+
+/* names */
+.names{display:flex;flex-wrap:wrap;gap:.5rem}
+.name{border:1px solid var(--line);background:var(--surf);padding:.4rem .8rem;font-family:"Newsreader",Georgia,serif;font-size:1.02rem}
+.name span{font-family:"Karla",sans-serif;font-size:.74rem;color:var(--ink3);margin-left:.5rem}
+
+/* now */
+.now{display:flex;flex-direction:column;gap:.55rem;counter-reset:n}
+.now li{list-style:none;display:flex;gap:.85rem;align-items:baseline;padding:.7rem .9rem;background:var(--surf);border:1px solid var(--line)}
+.now li::before{counter-increment:n;content:counter(n);font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--acc);flex:none}
+.now li span{font-size:.94rem}
+.now li b{font-weight:600}
+.now ol{padding:0;margin:0}
+
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3);font-size:.86rem;display:flex;flex-direction:column;gap:.4rem}
+</style>
+
+<div class="in">
+
+<header class="top">
+  <span class="stamp">Product &amp; money plan</span>
+  <h1>Dad first, then everyone</h1>
+  <p class="lede">A plan for turning the page we just built into something you can run for your father this autumn, hand to your in&#8209;laws after that, and charge for by next summer. Written to be argued with.</p>
+</header>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">What it is</p>
+    <h2>One sentence, so every later decision has something to answer to</h2>
+  </div>
+  <div class="body-copy">
+    <p><strong>You film someone answering questions about their life, and we turn it into a page their family will still be watching in fifty years.</strong></p>
+    <p>Everything below follows from three facts about that sentence. The person recording is usually old and not on the internet much. The person <em>buying</em> is their adult child. And the people who make it spread are the fifteen relatives who get sent the link &mdash; each of whom has a parent of their own.</p>
+    <p>That last group is the whole business. They are not customers yet; they are the next fifteen organisers. Design everything for them.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">The plan</p>
+    <h2>Five phases, and only the first one matters right now</h2>
+    <p>Each phase has to produce something the next one needs. If a phase doesn't, skip it.</p>
+  </div>
+  <div class="phases">
+
+    <div class="ph">
+      <p class="when">Now<br>4 weeks</p>
+      <div>
+        <h3>Do it for your Dad, by hand</h3>
+        <p>No product, no signup, no payment. You edit the HTML yourself. The only goal is to find out what actually happens when you point a phone at your father and ask him about his childhood.</p>
+        <ul>
+          <li>Pick twelve questions, not sixty. Sixty will defeat you both.</li>
+          <li>Record in three sittings of about forty minutes. Ask from off camera.</li>
+          <li>Upload unlisted to YouTube, paste the IDs into the page, send the link to your family.</li>
+          <li>Write down every single thing that went wrong &mdash; where he froze, which questions fell flat, what your mother said when she saw it.</li>
+        </ul>
+        <span class="out">Output: one real page, and a list of what the product has to fix</span>
+      </div>
+    </div>
+
+    <div class="ph">
+      <p class="when">Winter<br>8 weeks</p>
+      <div>
+        <h3>Five more families, still by hand</h3>
+        <p>Your in&#8209;laws and three or four friends. You remain the machine: they film, you build. Painful on purpose &mdash; doing it manually is how you learn what to automate, and five families is enough to see the pattern.</p>
+        <ul>
+          <li>Charge them nothing, but ask for two things: honest feedback, and permission to quote them.</li>
+          <li>Build the question pack properly &mdash; sixty questions in stages, with follow-up prompts. This becomes an asset you own.</li>
+          <li>Time yourself. If a page takes you four hours, that four hours is your spec.</li>
+        </ul>
+        <span class="out">Output: a question pack, six finished pages, six families who'll vouch for it</span>
+      </div>
+    </div>
+
+    <div class="ph">
+      <p class="when">Spring<br>10 weeks</p>
+      <div>
+        <h3>The self-serve version</h3>
+        <p>The smallest thing a stranger can use without you. Resist building the clever parts.</p>
+        <ul>
+          <li>Sign up, create a person, pick questions from the pack.</li>
+          <li>Upload video from a phone. <strong>Do not build in-browser recording</strong> &mdash; that's where products like this die. They film with the camera app they already know.</li>
+          <li>Auto-transcribe everything. It costs pennies and it unlocks search, captions and the book.</li>
+          <li>One private page per person, one payment, one "invite the family" button.</li>
+        </ul>
+        <span class="out">Output: someone you've never met pays you</span>
+      </div>
+    </div>
+
+    <div class="ph">
+      <p class="when">Summer</p>
+      <div>
+        <h3>The things people actually pay for</h3>
+        <p>The page is the hook. The margin is in objects and permanence &mdash; this is where competitors make their money, and the part that survives the family arguing about whose parent it was.</p>
+        <ul>
+          <li>The printed book, generated from the transcripts and photos.</li>
+          <li>The "forever" archive: a real promise, properly funded, plus a downloadable copy of every file.</li>
+          <li>QR cards for the funeral, a sticker for a bench or a headstone.</li>
+        </ul>
+        <span class="out">Output: average revenue per family roughly doubles</span>
+      </div>
+    </div>
+
+    <div class="ph">
+      <p class="when">Year two</p>
+      <div>
+        <h3>Stop selling to families one at a time</h3>
+        <p>Every funeral director, celebrant, hospice and care home in the country is standing next to a family at exactly the moment this matters, and most of them are already selling an ugly memorial webpage. Be the thing they hand over instead.</p>
+        <ul>
+          <li>Co-branded pages, they take a cut, you never pay for advertising again.</li>
+          <li>Care homes and hospices are the other end of it &mdash; recording while there's still time.</li>
+        </ul>
+        <span class="out">Output: a channel that grows without you</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">The money</p>
+    <h2>Your sponsorship idea is right, with one change</h2>
+  </div>
+  <div class="body-copy">
+    <p>The instinct behind it is correct: one person shouldn't carry the cost of something fifteen people will treasure, and &pound;15 from each of fifteen relatives is painless where &pound;150 from one is not. Group-funded emotional products work &mdash; it's why people happily chip in for a collective leaving card.</p>
+  </div>
+  <div class="call warn">
+    <h4>But never charge a relative to watch a recording that already exists</h4>
+    <p>"Sponsor this page or you can't see Grandad" is the one move that could kill this. It turns grief into a turnstile, and the first person who says so on Facebook is right. Get this wrong once and the product is radioactive inside that family forever.</p>
+  </div>
+  <div class="body-copy">
+    <p><strong>The rule instead: paying adds, it never unlocks.</strong> Everything recorded is free to watch for anyone with the link, always. Money buys <em>more</em> &mdash; more questions, the book, the printed cards, the guarantee it's still there in 2075. A relative chipping in isn't buying access, they're buying the family another twenty answers. Same revenue, opposite feeling.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Five ways to charge</p>
+    <h2>Ranked by how likely they are to work</h2>
+  </div>
+  <div class="opts">
+
+    <div class="opt">
+      <div>
+        <h3>1. The adult child buys it as a gift</h3>
+        <p>A one-off payment, bought by a son or daughter, given to a parent. This is the proven engine in this category &mdash; it spikes at Christmas, Father's Day and eightieth birthdays, and the buyer is emotionally committed before they see the price.</p>
+      </div>
+      <p class="verdict v-core">Core<br><span class="tag">Do first</span></p>
+    </div>
+
+    <div class="opt">
+      <div>
+        <h3>2. The family chips in</h3>
+        <p>Your idea, rebuilt as "help us finish Dad's story". The organiser starts free; any relative can put &pound;10 or &pound;25 toward the family plan, more questions, or copies of the book. Surplus goes to prints rather than your pocket &mdash; visibly.</p>
+      </div>
+      <p class="verdict v-core">Core<br><span class="tag">Growth engine</span></p>
+    </div>
+
+    <div class="opt">
+      <div>
+        <h3>3. Objects: the book, the cards, the plaque</h3>
+        <p>A hardback of the transcripts with the photographs, printed on demand. Twenty-five QR cards for the order of service. This is high margin, it's what people give at Christmas, and it's the only part of the product that survives the internet.</p>
+      </div>
+      <p class="verdict v-core">Core<br><span class="tag">Most of the margin</span></p>
+    </div>
+
+    <div class="opt">
+      <div>
+        <h3>4. Funeral directors, celebrants, hospices</h3>
+        <p>They hand it to the family; you give them a cut. Enormous reach, zero ad spend, and it catches the highest-intent moment there is. Slow to sell and needs the product to be finished first &mdash; but this is what turns a side project into a business.</p>
+      </div>
+      <p class="verdict v-later">Year two<br><span class="tag">Where scale is</span></p>
+    </div>
+
+    <div class="opt">
+      <div>
+        <h3>5. A monthly subscription</h3>
+        <p>Don't. Asking someone to pay &pound;5 a month forever for their dead father's page means one day they have to decide to cancel him, and they will resent you for making that a decision. Sell permanence once, properly, and fund it.</p>
+      </div>
+      <p class="verdict v-no">Avoid<br><span class="tag">Guilt churn</span></p>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Prices</p>
+    <h2>A first go, in pounds</h2>
+    <p>Deliberately one-off and deliberately cheap to start &mdash; you're buying evidence, not revenue, for the first year.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>What</th><th>Includes</th><th>Price</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Free page</strong><span class="s">The seed</span></td><td>One person, five questions, three recordings, private link, kept a year. Everything recorded is watchable by the whole family.</td><td>&pound;0</td></tr>
+        <tr><td><strong>Family</strong><span class="s">The main purchase</span></td><td>All sixty questions, unlimited recordings, ten people can contribute, transcripts, photos and maps, page kept indefinitely.</td><td>&pound;79</td></tr>
+        <tr><td><strong>Forever archive</strong><span class="s">Add-on</span></td><td>Two named custodians, a yearly copy of every file emailed to them, and a written promise with a way out if you ever shut down.</td><td>&pound;49</td></tr>
+        <tr><td><strong>The book</strong><span class="s">Object</span></td><td>Hardback, transcripts edited into chapters, photographs, roughly 200 pages. Costs about &pound;22 to print.</td><td>&pound;59</td></tr>
+        <tr><td><strong>Memorial pack</strong><span class="s">Object</span></td><td>Twenty-five QR cards for the order of service and a weatherproof plaque sticker.</td><td>&pound;29</td></tr>
+        <tr><td><strong>Chip in</strong><span class="s">From any relative</span></td><td>Any amount from &pound;10 toward the above. Shown on the page as "twelve people helped finish this".</td><td>open</td></tr>
+      </tbody>
+      <tfoot><tr><td>Realistic average</td><td>Family plan plus one object, across all customers</td><td>~&pound;110</td></tr></tfoot>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">The loop</p>
+    <h2>How one page becomes fifteen</h2>
+    <p>This is the only growth mechanism you need, and it's free. Every step has to be doable by a 68-year-old aunt on a phone.</p>
+  </div>
+  <div class="loop">
+    <div class="step"><span class="n">01</span><h4>One answer</h4><p>The organiser records a single question about their parent and builds a free page. Ten minutes, no payment.</p></div>
+    <div class="step"><span class="n">02</span><h4>An invitation, not a video</h4><p>What gets shared on WhatsApp and Facebook is a card: his face, his name, his dates, and "eleven questions still waiting". The recordings stay behind the link.</p></div>
+    <div class="step"><span class="n">03</span><h4>The family watches free</h4><p>No signup, no wall. They see one answer and they see how much is missing.</p></div>
+    <div class="step"><span class="n">04</span><h4>They ask a question</h4><p>The strongest move in the whole product. Free, takes ten seconds, appears on the page credited &mdash; "asked by Tom, aged 9" &mdash; and now Dad has a reason to keep recording.</p></div>
+    <div class="step"><span class="n">05</span><h4>They chip in</h4><p>Some of them pay toward finishing it. All of them leave an email address.</p></div>
+    <div class="step"><span class="n">06</span><h4>They think about their own Dad</h4><p>Every relative who watched has a parent of their own and has just been shown exactly what they'll wish they had. That's your next customer, acquired for nothing.</p></div>
+  </div>
+  <p class="loop-note">The metric that tells you it's working isn't signups &mdash; it's <strong>questions asked per page by people other than the organiser</strong>. If that number is above three, this spreads. If it's zero, nothing else will save it.</p>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">What it costs to run</p>
+    <h2>The numbers that decide whether "forever" is honest</h2>
+  </div>
+  <div class="body-copy">
+    <p>Ninety minutes of video per person is a realistic average. Where you keep it changes the answer completely, and it's the one technical decision with a moral edge to it &mdash; don't promise permanence you can't fund.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Where the video lives</th><th>Trade</th><th>Cost per family, per year</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Unlisted YouTube</strong><span class="s">Phase 1&ndash;2</span></td><td>Free and instant. But it sits in someone's personal Google account, you don't control it, and it can't be part of a paid promise.</td><td>&pound;0</td></tr>
+        <tr><td><strong>Cheap object storage</strong><span class="s">The archive copy</span></td><td>Roughly 1.5&nbsp;GB per family. Slower to serve, needs converting on the way in, but this is what makes "forever" affordable.</td><td>~&pound;0.30</td></tr>
+        <tr><td><strong>A proper video service</strong><span class="s">What people watch</span></td><td>Handles phone footage, plays everywhere, gives you captions. Priced per minute stored, so it's the bit that adds up.</td><td>~&pound;4</td></tr>
+      </tbody>
+      <tfoot><tr><td>Recommendation</td><td>Serve from the video service, keep the archive copy in cheap storage, and let old pages fall back to it</td><td>~&pound;1&ndash;2</td></tr></tfoot>
+    </table>
+  </div>
+  <div class="body-copy" style="margin-top:1.2rem">
+    <p>At roughly &pound;1&ndash;2 a year, a &pound;49 forever fee covers a very long time and you can say so with a straight face. At &pound;4 a year it doesn't, and you'd be quietly relying on families forgetting. Build the cheap archive copy before you sell permanence.</p>
+    <p><strong>What year one actually looks like:</strong> forty paid families at about &pound;110 is &pound;4,400, against maybe &pound;600 of costs. That is not yet a business &mdash; it's proof, six good testimonials and a product that works. The business is phase five, or volume through the gift season. Decide now that year one's job is evidence, and you won't panic in March.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">How to build it</p>
+    <h2>Boring on purpose</h2>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>Use</h3>
+      <ul class="tick">
+        <li>Phone camera for filming, straight upload. No recording in the browser.</li>
+        <li>One database, one page template, pages generated from data &mdash; exactly what we already have.</li>
+        <li>Automatic transcription of everything, from day one.</li>
+        <li>One-off payments and a "chip in" link. No billing system.</li>
+        <li>Private links with long random addresses, and a page that never appears in search.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Don't</h3>
+      <ul class="cross">
+        <li>An app. Nobody installs an app to interview their mother.</li>
+        <li>Accounts for relatives. An email address when they ask a question, nothing more.</li>
+        <li>Editing tools. If a video needs trimming, they'll re-film it.</li>
+        <li>AI that answers as the dead person. Say plainly that you won't do it &mdash; it's a real fear and refusing is a selling point.</li>
+        <li>Family trees. That's a different, crowded product.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Trust</p>
+    <h2>The four things that will bite you</h2>
+    <p>None of these are hypothetical. They are the standard failure modes of every memorial product, and handling them out loud is a genuine advantage.</p>
+  </div>
+  <div class="cols">
+    <div>
+      <h3>Consent, recorded</h3>
+      <p style="color:var(--ink2);font-size:.93rem">Ask the person, on camera, whether they're happy for their family to have this. Ten seconds, kept as the first clip. It also makes a lovely opening.</p>
+    </div>
+    <div>
+      <h3>Who owns it when they die</h3>
+      <p style="color:var(--ink2);font-size:.93rem">Name two custodians at the start. Families fall out, and the commonest support problem for pages like this is a sibling demanding control of a page another sibling paid for. Decide it while everyone's getting along.</p>
+    </div>
+    <div>
+      <h3>Living people in the videos</h3>
+      <p style="color:var(--ink2);font-size:.93rem">Your father will name and discuss people who are still alive. You need a plain takedown route and the ability to make a single answer private without deleting it.</p>
+    </div>
+    <div>
+      <h3>The promise if you stop</h3>
+      <p style="color:var(--ink2);font-size:.93rem">Write down what happens if you shut the company: every family gets every file. Publish it. It's the difference between a keepsake and a risk, and it costs you nothing to promise.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Names</p>
+    <h2>Worth deciding before you tell anyone</h2>
+    <p>What you call it changes who buys it. Warmer names sell to the child; plainer ones sell to the funeral director. I'd pick from the first three.</p>
+  </div>
+  <div class="names">
+    <span class="name">Ask Dad<span>warm, clearly a gift, awkward for mothers</span></span>
+    <span class="name">In Their Words<span>works for anyone, works for a funeral home</span></span>
+    <span class="name">Still Talking<span>alive and a bit funny, which people like</span></span>
+    <span class="name">The Long Answer<span>good, slightly literary</span></span>
+    <span class="name">Sixty Windows<span>ours, but obscure until explained</span></span>
+    <span class="name">Tell Me Again<span>what grandchildren actually say</span></span>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Next</p>
+    <h2>The next fortnight</h2>
+  </div>
+  <ol class="now">
+    <li><span><b>Pick twelve questions for your Dad</b> from the packs we've already written, and put the hardest one last.</span></li>
+    <li><span><b>Book the first sitting</b> as a specific hour on a specific day. "Sometime soon" is how this never happens.</span></li>
+    <li><span><b>Film one answer this week</b> and paste it into the page. One is enough to know whether the whole idea holds up.</span></li>
+    <li><span><b>Send it to five relatives</b> with no explanation beyond the link, and watch what they do with it.</span></li>
+    <li><span><b>Count the questions they ask back.</b> That single number tells you whether to build the product.</span></li>
+  </ol>
+</section>
+
+<footer>
+  <p>Written for David, September 2026. The page design it refers to is the tribute layout we settled on &mdash; portrait, name, dates, then the highlights.</p>
+  <p>Numbers are estimates at UK prices and want checking before anything depends on them.</p>
+</footer>
+
+</div>
+
+</html>

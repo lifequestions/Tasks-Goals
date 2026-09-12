@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="The life of Luis James de Souza, in his own voice.">
+<title>Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap">
+
+<style>
+:root{
+  --bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+  --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--shadow:rgba(30,26,22,.16);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+    --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+  --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:2px}
+.in{max-width:1060px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.6rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0}
+
+/* hero */
+.hero{padding:clamp(2.4rem,7vw,5rem) 0 clamp(1.8rem,4vw,3rem)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:clamp(1.8rem,5vw,4rem);align-items:center}
+@media (max-width:760px){.hero-grid{grid-template-columns:1fr;gap:1.6rem}}
+.portrait{position:relative;aspect-ratio:4/5;background:var(--surf2);border:1px solid var(--line);overflow:hidden;box-shadow:0 26px 50px -34px var(--shadow)}
+.portrait img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+.portrait img.dead{display:none}
+.portrait .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.55rem;text-align:center;padding:1.4rem;background:linear-gradient(155deg,var(--surf2),var(--accSoft))}
+.portrait .slot .mg{font-family:"Newsreader",Georgia,serif;font-size:3.4rem;color:var(--acc);letter-spacing:.03em;line-height:1}
+.portrait .slot .cap{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);line-height:1.7}
+.hero-copy{display:flex;flex-direction:column;gap:1.1rem}
+.hero h1{font-size:clamp(2.4rem,6.4vw,4rem);line-height:1.02}
+.dob{display:flex;flex-wrap:wrap;gap:.3rem .9rem;font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--ink2)}
+.dob .sep{color:var(--line)}
+.intro{font-size:1.06rem;color:var(--ink2);max-width:48ch}
+.bar{display:flex;flex-direction:column;gap:.5rem;max-width:30rem}
+.bar .track{height:5px;background:var(--surf2);border:1px solid var(--line);display:flex}
+.bar .track i{display:block;background:var(--acc)}
+.bar .t{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.06em;color:var(--ink2)}
+.cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.3rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:var(--bg);border:1px solid var(--acc);border-radius:2px;padding:.6rem 1.05rem;font-size:.9rem;font-weight:600}
+.btn:hover{filter:brightness(1.12)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--ink2);filter:none}
+
+/* facts */
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.4rem 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1.3rem}
+.fact{display:flex;flex-direction:column;gap:.2rem}
+.fact .k{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+.fact .v{font-family:"Newsreader",Georgia,serif;font-size:1.12rem;line-height:1.25}
+.fact .v.todo{color:var(--ink3);font-style:italic;font-size:.98rem}
+
+section{padding:clamp(2.4rem,5.5vw,4rem) 0}
+.sec-hd{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.7rem;max-width:60ch}
+.sec-hd h2{font-size:clamp(1.5rem,3.2vw,2.05rem);line-height:1.14}
+.sec-hd p{color:var(--ink2);font-size:.97rem}
+
+/* empty highlight */
+.hl-empty{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(1.2rem,3.5vw,2.6rem);align-items:center;border:1px dashed var(--line);padding:clamp(1rem,2.5vw,1.6rem)}
+@media (max-width:760px){.hl-empty{grid-template-columns:1fr}}
+.hl-empty .ghost-still{aspect-ratio:16/9;background:var(--surf2);display:grid;place-content:center;gap:.5rem;text-align:center;padding:1rem}
+.hl-empty .ghost-still .mo{color:var(--ink3)}
+.hl-empty .txt{display:flex;flex-direction:column;gap:.6rem}
+.hl-empty h3{font-size:1.3rem}
+.hl-empty p{color:var(--ink2);font-size:.95rem;max-width:44ch}
+
+/* questions */
+.qs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.qcard{text-align:left;background:var(--surf);border:1px solid var(--line);padding:.95rem 1rem 1rem;display:flex;flex-direction:column;gap:.55rem;color:inherit;transition:transform .18s,border-color .18s,box-shadow .18s}
+.qcard:hover{transform:translateY(-2px);border-color:var(--acc);box-shadow:0 14px 28px -22px var(--shadow)}
+.qcard .n{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;color:var(--acc)}
+.qcard .q{font-family:"Newsreader",Georgia,serif;font-size:1.16rem;line-height:1.26}
+.qcard .st{margin-top:auto;display:flex;justify-content:space-between;gap:.5rem;align-items:center;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);border-top:1px solid var(--line);padding-top:.55rem}
+.qcard .dot{width:6px;height:6px;border-radius:50%;background:var(--line);display:inline-block;margin-right:.4rem}
+.qcard.done .dot{background:var(--acc)}
+.qcard.done .st{color:var(--acc)}
+.qcard .still{position:relative;aspect-ratio:16/9;background:var(--surf2);overflow:hidden;margin:-.2rem 0 .2rem}
+.qcard .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:rgba(18,18,16,.55);display:grid;place-content:center}
+.qcard .play::after{content:"";width:0;height:0;border-left:10px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:2px}
+
+/* extras empty */
+.opt-empty{border:1px dashed var(--line);padding:1.2rem;display:flex;flex-direction:column;gap:.6rem;max-width:64ch}
+.opt-empty h3{font-size:1.12rem}
+.opt-empty p{color:var(--ink2);font-size:.94rem}
+.opt-empty ul{margin:.2rem 0 0;padding-left:1.1rem;color:var(--ink2);font-size:.92rem}
+.opt-empty li{margin-bottom:.2rem}
+
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3);font-size:.85rem;display:flex;flex-direction:column;gap:.35rem}
+
+/* panel */
+.scrim{position:fixed;inset:0;background:rgba(12,12,10,.86);display:none;align-items:center;justify-content:center;padding:clamp(.7rem,3vw,2rem);z-index:60;backdrop-filter:blur(4px)}
+.scrim.on{display:flex}
+.proj{background:var(--surf);border:1px solid var(--line);width:min(760px,100%);max-height:94vh;overflow-y:auto}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line)}
+.xb{background:none;border:1px solid var(--line);padding:.32rem .7rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.xb:hover{color:var(--ink);border-color:var(--ink2)}
+.screen{aspect-ratio:16/9;background:#000;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{position:absolute;inset:0;display:grid;place-content:center;gap:.55rem;text-align:center;padding:1.6rem;background:var(--surf2);color:var(--ink2)}
+.screen-empty p{font-size:.93rem;max-width:40ch;margin:0 auto}
+.pbody{padding:1.2rem 1.1rem 1.5rem;display:flex;flex-direction:column;gap:1rem}
+.pbody h2{font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.2}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.42rem}
+.prompts li{display:flex;gap:.6rem;color:var(--ink2);font-size:.93rem}
+.prompts li::before{content:"\2192";color:var(--acc)}
+.howto{background:var(--accSoft);border-left:3px solid var(--acc);padding:.85rem 1rem;display:flex;flex-direction:column;gap:.4rem}
+.howto .mo{color:var(--acc)}
+.howto ol{margin:0;padding-left:1.2rem;color:var(--ink2);font-size:.9rem}
+.howto li{margin-bottom:.22rem}
+.pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.8rem 1.1rem;border-top:1px solid var(--line);background:var(--surf2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="in">
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="portrait">
+        <span class="slot">
+          <span class="mg">LdS</span>
+          <span class="cap">Save his photograph<br>as dad.jpg beside this page</span>
+        </span>
+        <img src="dad.jpg" alt="Luis James de Souza" onerror="this.className='dead'">
+      </div>
+      <div class="hero-copy">
+        <p class="mo">His life, in his own voice &nbsp;·&nbsp; recording started September 2026</p>
+        <h1>Luis James de Souza</h1>
+        <p class="dob">
+          <span>Born 4 February 1943</span>
+          <span class="sep">&mdash;</span>
+          <span>83 years old</span>
+        </p>
+        <p class="intro" id="intro">Twelve questions, waiting for him to answer them. Nothing here is written by anyone but him &mdash; as each answer is recorded it appears on this page, in his own words.</p>
+        <div class="bar">
+          <div class="track"><i id="fill" style="width:0%"></i></div>
+          <p class="t" id="prog">0 of 12 answers recorded</p>
+        </div>
+        <div class="cta">
+          <button class="btn" id="startBtn">Start with question one</button>
+          <button class="btn ghost" id="howBtn">How to record</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="facts">
+    <div class="fact"><span class="k">Born</span><span class="v">4 February 1943</span></div>
+    <div class="fact"><span class="k">Born in</span><span class="v todo">to add</span></div>
+    <div class="fact"><span class="k">Married</span><span class="v todo">to add</span></div>
+    <div class="fact"><span class="k">Children</span><span class="v todo">to add</span></div>
+    <div class="fact"><span class="k">Work</span><span class="v todo">to add</span></div>
+    <div class="fact"><span class="k">Recorded</span><span class="v">From Sept 2026</span></div>
+  </div>
+
+  <section>
+    <div class="sec-hd">
+      <p class="mo">The highlights</p>
+      <h2>This is where his best answers will sit</h2>
+      <p>Once there are a few recordings, the strongest go here &mdash; big, with a line of his own words pulled out underneath. Empty for now, and it should look empty.</p>
+    </div>
+    <div class="hl-empty">
+      <div class="ghost-still"><p class="mo">First recording goes here</p></div>
+      <div class="txt">
+        <h3>Nothing recorded yet</h3>
+        <p>Record any one of the twelve questions below and it appears here within the hour. One answer is enough to send the link to the family.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-hd">
+      <p class="mo">The questions</p>
+      <h2>Twelve to start with</h2>
+      <p>Roughly in order, easiest first and the hardest one last. Tap any of them to see the follow-up prompts to ask him &mdash; those are what turn a thirty-second answer into a five-minute one.</p>
+    </div>
+    <div class="qs" id="qs"></div>
+  </section>
+
+  <section>
+    <div class="sec-hd">
+      <p class="mo">Optional</p>
+      <h2>Photographs, maps and papers</h2>
+    </div>
+    <div class="opt-empty">
+      <h3>Nothing added yet &mdash; and a page works perfectly without any</h3>
+      <p>When an answer needs something to look at, it can be attached to that question rather than dumped in an album:</p>
+      <ul>
+        <li>A map of the street or town he was born in.</li>
+        <li>A photograph of the house, his first car, his first child.</li>
+        <li>Papers &mdash; a certificate, a ticket, a letter, a payslip.</li>
+      </ul>
+      <p>Each one sits under the answer it belongs to, captioned in his words.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>A private page for the de Souza family. The videos are unlisted &mdash; only people with this link can watch them.</p>
+    <p>Luis James de Souza &nbsp;·&nbsp; born 4 February 1943</p>
+  </footer>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="pq">
+  <div class="proj">
+    <div class="proj-top">
+      <p class="mo" id="pn">Question</p>
+      <button class="xb" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <div class="pbody">
+      <h2 id="pq">Question</h2>
+      <ul class="prompts" id="pprompts"></ul>
+      <div class="howto" id="howto">
+        <p class="mo">Recording this one</p>
+        <ol>
+          <li>Phone landscape, propped on something, at his eye level.</li>
+          <li>Sit off to the side of the camera and ask him &mdash; he'll talk to you, not the lens.</li>
+          <li>Ask the question, then stay quiet. The good part usually comes after the first pause.</li>
+          <li>Work through the prompts above if he dries up. Aim for four to six minutes.</li>
+          <li>Upload to YouTube as <strong>unlisted</strong>, then paste the eleven-character video ID into this question.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="pnav">
+      <button class="xb" id="prevBtn">&larr; Previous</button>
+      <button class="xb" id="nextBtn">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+/* ---------------------------------------------------------------
+   Luis James de Souza — twelve questions.
+   To publish an answer: put the YouTube ID in v, e.g. v:"aBcDeFgHiJk"
+   Everything else on the page updates itself.
+   --------------------------------------------------------------- */
+var Q = [
+  { q:"Tell me about the house you grew up in.", v:null,
+    p:["Walk me through the front door — what's the first thing I'd see?",
+       "Which room did everyone end up in?",
+       "What could you hear from your bed at night?"] },
+  { q:"Who were your mother and father, really — not as parents, but as people?", v:null,
+    p:["What did they want for themselves before the children came along?",
+       "What did they never talk about?",
+       "What of them do you catch yourself doing?"] },
+  { q:"What did you do after school, before you were old enough to work?", v:null,
+    p:["Where did you go when nobody knew where you were?",
+       "Who were your two closest friends, and what happened to them?"] },
+  { q:"What did you want to be at fifteen, and what happened to that plan?", v:null,
+    p:["Who was the first person who took you seriously?",
+       "When did you know it wasn't going to happen — and how did that feel?",
+       "Do you still think about it?"] },
+  { q:"Your first job, and your first wage.", v:null,
+    p:["What did they actually have you doing?",
+       "What did you spend the first wage on?",
+       "Who taught you to do it properly?"] },
+  { q:"The first time you fell in love.", v:null,
+    p:["Where were you standing when you realised?",
+       "What did you do about it?",
+       "How did it end?"] },
+  { q:"How did you meet the person you built your life with?", v:null,
+    p:["What was the first thing you noticed?",
+       "What did your family make of them?",
+       "When did you decide?"] },
+  { q:"The day each of your children was born.", v:null,
+    p:["Take them one at a time.",
+       "What frightened you most in that first month?",
+       "Who did we look like?"] },
+  { q:"The work you did, and the thing you're proudest of making.", v:null,
+    p:["What did a normal Tuesday actually look like?",
+       "Is any of it still standing, still running, still being used?",
+       "What did it cost you at home?"] },
+  { q:"What was the hardest year of your life, and how did you get through it?", v:null,
+    p:["Who turned up for you, and who didn't?",
+       "What got you out of bed?",
+       "What would you say now to yourself in that year?"] },
+  { q:"What have you changed your mind about?", v:null,
+    p:["What did you believe firmly at thirty that you don't now?",
+       "What changed it — a person, an event, or just time?",
+       "What are you still not sure about?"] },
+  { q:"What would you say to whoever watches this in fifty years?", v:null,
+    p:["Who do you imagine is watching?",
+       "What do you want them to know about you that isn't in any of the other answers?",
+       "What do you want them to do on your birthday?"] }
+];
+
+/* ---------- cards ---------- */
+var qs = document.getElementById("qs");
+Q.forEach(function(item, i){
+  var lit = Boolean(item.v);
+  var b = document.createElement("button");
+  b.className = "qcard" + (lit ? " done" : "");
+  b.setAttribute("data-i", i);
+  b.setAttribute("aria-label", (lit ? "Play: " : "Not yet recorded: ") + item.q);
+  b.innerHTML =
+    '<span class="n">' + ("0" + (i + 1)).slice(-2) + '</span>' +
+    (lit ? '<span class="still"><img src="https://i.ytimg.com/vi/' + item.v + '/mqdefault.jpg" alt="" ' +
+           'onerror="this.style.display=\'none\'"><span class="play"></span></span>' : "") +
+    '<span class="q">' + esc(item.q) + '</span>' +
+    '<span class="st"><span><span class="dot"></span>' + (lit ? "Recorded" : "To record") + '</span>' +
+    '<span>' + (lit ? "Play" : item.p.length + " prompts") + '</span></span>';
+  qs.appendChild(b);
+});
+
+/* ---------- progress ---------- */
+var done = Q.filter(function(x){ return x.v; }).length;
+document.getElementById("prog").textContent = done + " of " + Q.length + " answers recorded";
+document.getElementById("fill").style.width = Math.round(done / Q.length * 100) + "%";
+
+/* ---------- panel ---------- */
+var scrim = document.getElementById("scrim"), screen = document.getElementById("screen");
+var current = 0, lastFocus = null;
+
+function openQ(i){
+  var item = Q[i];
+  current = i;
+  if(!scrim.classList.contains("on")){ lastFocus = document.activeElement; }
+
+  document.getElementById("pn").textContent = "Question " + (i + 1) + " of " + Q.length;
+  document.getElementById("pq").textContent = item.q;
+
+  var list = document.getElementById("pprompts");
+  list.innerHTML = "";
+  item.p.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; list.appendChild(li); });
+
+  document.getElementById("howto").style.display = item.v ? "none" : "";
+
+  screen.innerHTML = "";
+  if(item.v){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + item.v + "?rel=0&modestbranding=1";
+    f.title = item.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    screen.appendChild(f);
+  } else {
+    var e = document.createElement("div");
+    e.className = "screen-empty";
+    var a = document.createElement("p"); a.className = "mo"; a.textContent = "Not recorded yet";
+    var b2 = document.createElement("p"); b2.textContent = "Film his answer, upload it unlisted, and paste the video ID into this question. The window fills itself.";
+    e.appendChild(a); e.appendChild(b2); screen.appendChild(e);
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+function closeQ(){
+  scrim.classList.remove("on"); screen.innerHTML = "";
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+function step(n){ openQ((current + n + Q.length) % Q.length); }
+
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-i]");
+  if(t){ openQ(Number(t.getAttribute("data-i"))); }
+});
+document.getElementById("startBtn").addEventListener("click", function(){ openQ(0); });
+document.getElementById("howBtn").addEventListener("click", function(){ openQ(0); });
+document.getElementById("closeBtn").addEventListener("click", closeQ);
+document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeQ(); } });
+document.addEventListener("keydown", function(e){
+  if(!scrim.classList.contains("on")){ return; }
+  if(e.key === "Escape"){ closeQ(); }
+  if(e.key === "ArrowRight"){ step(1); }
+  if(e.key === "ArrowLeft"){ step(-1); }
+});
+</script>
+
+</html>
