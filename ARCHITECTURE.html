@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>One Site, Many Lives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap">
+
+<style>
+:root{
+  --bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+  --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--warn:#8A4B2A;--warnSoft:#F4E7DE;
+  --shadow:rgba(30,26,22,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+    --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--warn:#D69A6E;--warnSoft:#2B211A;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+  --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--warn:#D69A6E;--warnSoft:#2B211A;
+  --shadow:rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+p,ul,ol{margin:0}
+code{font-family:"IBM Plex Mono",monospace;font-size:.86em;background:var(--surf2);border:1px solid var(--line);padding:.06em .34em;white-space:nowrap}
+.in{max-width:960px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.4rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+header.top{padding:clamp(2.6rem,7vw,5rem) 0 clamp(1.4rem,3.5vw,2.2rem)}
+header.top h1{font-size:clamp(2.2rem,5.8vw,3.5rem);line-height:1.03;margin:.9rem 0 1rem}
+header.top .lede{font-size:1.08rem;color:var(--ink2);max-width:58ch}
+.stamp{display:inline-flex;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:.2rem .7rem}
+
+section{padding:clamp(2.2rem,5vw,3.4rem) 0;border-top:1px solid var(--line)}
+.sec-hd{margin-bottom:1.5rem;max-width:64ch;display:flex;flex-direction:column;gap:.5rem}
+.sec-hd h2{font-size:clamp(1.5rem,3.2vw,2rem);line-height:1.14}
+.sec-hd p{color:var(--ink2);font-size:.97rem}
+.copy{display:flex;flex-direction:column;gap:.95rem;max-width:66ch}
+.copy p{color:var(--ink2)}
+.copy strong{color:var(--ink);font-weight:600}
+
+.verdicts{display:flex;flex-direction:column;gap:.7rem}
+.vd{display:grid;grid-template-columns:92px minmax(0,1fr);gap:1rem;background:var(--surf);border:1px solid var(--line);padding:.95rem 1.1rem}
+@media (max-width:600px){.vd{grid-template-columns:1fr;gap:.4rem}}
+.vd .tag{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;padding-top:.2rem}
+.vd .tag.keep{color:var(--acc)}
+.vd .tag.drop{color:var(--warn)}
+.vd .tag.add{color:var(--ink3)}
+.vd h3{font-size:1.08rem;margin-bottom:.25rem}
+.vd p{color:var(--ink2);font-size:.93rem}
+
+.call{background:var(--accSoft);border-left:3px solid var(--acc);padding:1.05rem 1.15rem;display:flex;flex-direction:column;gap:.45rem;margin:.3rem 0}
+.call.warn{background:var(--warnSoft);border-left-color:var(--warn)}
+.call h4{font-size:1.08rem}
+.call p{color:var(--ink2);font-size:.94rem;max-width:64ch}
+
+/* site map */
+.map{display:flex;flex-direction:column;gap:.5rem;font-family:"IBM Plex Mono",monospace;font-size:.8rem}
+.node{background:var(--surf);border:1px solid var(--line);padding:.6rem .8rem;display:flex;flex-wrap:wrap;gap:.3rem 1rem;align-items:baseline}
+.node .u{color:var(--acc)}
+.node .d{font-family:"Karla",sans-serif;font-size:.86rem;color:var(--ink2)}
+.node.ind{margin-left:clamp(.8rem,3vw,2.2rem)}
+.node.ind2{margin-left:clamp(1.6rem,6vw,4.4rem)}
+.node.pri{border-style:dashed}
+.node .pill{font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:0 .35rem;color:var(--ink3)}
+
+.tw{overflow-x:auto;border:1px solid var(--line);background:var(--surf)}
+table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:560px}
+th,td{text-align:left;padding:.62rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:500;background:var(--surf2)}
+tr:last-child td{border-bottom:0}
+td .s{display:block;color:var(--ink3);font-size:.82rem;margin-top:.12rem}
+.pick{background:var(--accSoft)}
+.pick td:first-child{font-weight:600}
+
+/* before after */
+.ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.1rem}
+.mock{border:1px solid var(--line);background:var(--surf);display:flex;flex-direction:column}
+.mock .cap{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;padding:.5rem .7rem;border-bottom:1px solid var(--line);color:var(--ink3)}
+.mock .cap b{color:var(--warn);font-weight:500}
+.mock .cap b.ok{color:var(--acc)}
+.mock .frame{padding:.7rem;display:flex;flex-direction:column;gap:.45rem}
+.bnd{background:var(--warnSoft);border:1px dashed var(--warn);color:var(--warn);font-family:"IBM Plex Mono",monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .5rem;text-align:center}
+.bnd.good{background:var(--accSoft);border-color:var(--acc);color:var(--acc);border-style:solid}
+.face{aspect-ratio:16/10;background:var(--surf2);display:grid;place-content:center;font-family:"IBM Plex Mono",monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.ln{height:7px;background:var(--surf2)}
+.ln.s{width:55%}
+.ln.m{width:75%}
+
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.3rem 2.2rem}
+.cols h3{font-size:1.05rem;margin-bottom:.45rem}
+.cols ul{padding-left:0;list-style:none;color:var(--ink2);font-size:.93rem;display:flex;flex-direction:column;gap:.4rem}
+.cols li{display:flex;gap:.6rem}
+.cols ul.tick li::before{content:"\2713";color:var(--acc);flex:none}
+.cols ul.cross li::before{content:"\00D7";color:var(--warn);flex:none;font-weight:700}
+
+.order{display:flex;flex-direction:column;gap:.5rem}
+.order li{list-style:none;display:flex;gap:.85rem;align-items:baseline;padding:.65rem .85rem;background:var(--surf);border:1px solid var(--line);font-size:.94rem}
+.order li .w{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.09em;text-transform:uppercase;color:var(--acc);flex:0 0 4.6rem}
+.order ol{margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.order b{font-weight:600}
+.order span{color:var(--ink2)}
+
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3);font-size:.85rem;display:flex;flex-direction:column;gap:.35rem}
+</style>
+
+<div class="in">
+
+<header class="top">
+  <span class="stamp">Site architecture</span>
+  <h1>One site, many lives</h1>
+  <p class="lede">Your instinct on per-person pages is right. Your instinct on the banners is half right, and the half that's wrong would quietly cost you the thing that makes this spread. Here's the structure I'd build, and the argument for it.</p>
+</header>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Your proposal</p>
+    <h2>What I'd keep, drop and add</h2>
+  </div>
+  <div class="verdicts">
+    <div class="vd">
+      <p class="tag keep">Keep</p>
+      <div>
+        <h3>A page per person</h3>
+        <p>Obviously right, and it's the whole product. One page, one life, one link you can print on a card. Everything else is scaffolding around it.</p>
+      </div>
+    </div>
+    <div class="vd">
+      <p class="tag keep">Keep</p>
+      <div>
+        <h3>&ldquo;Start a page for someone&rdquo; on every person's page</h3>
+        <p>This is the growth loop, and putting it on the page itself is exactly correct &mdash; the people reading Luis's page are the ones who'll build the next fifteen pages. I'd only change <em>where</em> it sits.</p>
+      </div>
+    </div>
+    <div class="vd">
+      <p class="tag drop">Drop</p>
+      <div>
+        <h3>A banner to the homepage</h3>
+        <p>Think about who's actually on Luis's page: his sister, a grandson, an old colleague, arriving from a WhatsApp link. A bar across the top saying &ldquo;Home&rdquo; takes them out of a private family moment and into your marketing. It's the least valuable thing they could click, and it competes with his face for the first thing they see. Put the brand mark small in the footer and let the homepage be found by people looking for it.</p>
+      </div>
+    </div>
+    <div class="vd">
+      <p class="tag add">Add</p>
+      <div>
+        <h3>A page for a single answer</h3>
+        <p>The easiest thing to leave out and one of the most important. One three-minute answer, with its own link and its own preview when pasted into WhatsApp. That's how a clip goes round a family on a Tuesday night, and how strangers first meet the product.</p>
+      </div>
+    </div>
+    <div class="vd">
+      <p class="tag add">Add</p>
+      <div>
+        <h3>Families, not just people</h3>
+        <p>The bigger idea, argued properly further down: your own plan &mdash; Dad, then the in-laws &mdash; means related people. Treat the family as the container and you unlock something no competitor has.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">The banner argument</p>
+    <h2>Ask at the end, not the top</h2>
+  </div>
+  <div class="copy">
+    <p>A promotional bar above someone's father is the product elbowing into a family's grief, and it converts badly for a plain reason: <strong>nobody wants to make a page for their own Dad until after they've watched somebody else's.</strong> The feeling that sells this &mdash; <em>I should do this before it's too late</em> &mdash; arrives about four minutes into an answer, not on arrival.</p>
+    <p>So the same invitation, moved: quiet mark at the top, the real ask at the bottom, and one contextual ask that <em>helps</em> the reader rather than selling to them &mdash; &ldquo;ask Luis a question&rdquo; &mdash; sitting right next to the questions he hasn't answered.</p>
+  </div>
+  <div class="ba" style="margin-top:1.3rem">
+    <div class="mock">
+      <p class="cap"><b>What you described</b></p>
+      <div class="frame">
+        <p class="bnd">Home &nbsp;|&nbsp; Start a page &nbsp;|&nbsp; Sign up</p>
+        <div class="face">his photograph</div>
+        <div class="ln m"></div><div class="ln s"></div>
+      </div>
+    </div>
+    <div class="mock">
+      <p class="cap"><b class="ok">What I'd do</b></p>
+      <div class="frame">
+        <div class="face">his photograph</div>
+        <div class="ln m"></div><div class="ln s"></div>
+        <p class="bnd good">Ask Luis a question &mdash; in context, free</p>
+        <div class="ln"></div><div class="ln s"></div>
+        <p class="bnd good">Start one for someone you love &mdash; at the end</p>
+      </div>
+    </div>
+  </div>
+  <div class="call">
+    <h4>One exception worth making</h4>
+    <p>If someone arrives on a page that has almost nothing recorded &mdash; a page seeded with a single answer &mdash; then a prominent ask near the top is fair, because there's nothing else to do yet. Show the invitation in proportion to how empty the page is.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Page types</p>
+    <h2>Seven pages, not two</h2>
+    <p>Solid borders are reachable by anyone with the link. Dashed ones need to be signed in.</p>
+  </div>
+  <div class="map">
+    <div class="node"><span class="u">/</span><span class="d">Homepage. Sells the idea to a stranger. Never linked from a person's page except in the footer.</span></div>
+    <div class="node ind"><span class="u">/luis-de-souza-7fk2</span><span class="d">His page. The product.</span><span class="pill">the link people share</span></div>
+    <div class="node ind2"><span class="u">&hellip;/the-house-i-grew-up-in</span><span class="d">One answer, with its own preview card for WhatsApp and Facebook.</span></div>
+    <div class="node ind2"><span class="u">&hellip;/ask</span><span class="d">Ask him a question. No account, just a name and an email.</span><span class="pill">the loop</span></div>
+    <div class="node ind2"><span class="u">&hellip;/invite</span><span class="d">The share card: his face, his name, &ldquo;eleven questions still waiting&rdquo;. Built to be pasted.</span></div>
+    <div class="node ind"><span class="u">/family/de-souza</span><span class="d">Everyone in one family, and the same question answered by several of them.</span></div>
+    <div class="node ind pri"><span class="u">/luis-de-souza-7fk2/record</span><span class="d">The organiser's console: paste video IDs, reorder, mark answers private.</span><span class="pill">private</span></div>
+    <div class="node pri"><span class="u">/mine</span><span class="d">Every page you run or contribute to. Where a second and third page get started.</span><span class="pill">private</span></div>
+  </div>
+  <div class="copy" style="margin-top:1.2rem">
+    <p>Note what isn't here: no dashboard, no feed, no browse-all-pages, no public directory of the dead. A stranger should never be able to wander into someone's father.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">URLs</p>
+    <h2>These get printed on funeral cards. Choose carefully.</h2>
+    <p>A person's link will be pasted into WhatsApp, written in a Christmas card, and stuck on a bench as a QR code. It has to be short, dignified, permanent, and impossible to guess your way into.</p>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Shape</th><th>Trouble with it</th></tr></thead>
+      <tbody>
+        <tr><td><code>/luis-james-de-souza</code><span class="s">Just the name</span></td><td>Beautiful, and wrong. Two people share a name, someone squats the good ones, and anyone can test whether their father is on your site by typing his name in.</td></tr>
+        <tr><td><code>/p/7fK2mQ9x</code><span class="s">Just a token</span></td><td>Private and permanent, but looks like a parcel tracking number on an order of service. It also tells the reader nothing when it arrives in a message.</td></tr>
+        <tr class="pick"><td><code>/luis-de-souza-7fk2</code><span class="s">Name plus a short token</span></td><td>Readable when pasted, unguessable in practice, no collisions, no namespace to police. This is what I'd ship.</td></tr>
+        <tr><td><code>/luis</code><span class="s">A vanity alias</span></td><td>Lovely, so sell it. A custom short link is a natural paid extra and costs you nothing but a lookup table.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="copy" style="margin-top:1.2rem">
+    <p><strong>Two rules that go with it.</strong> A URL, once issued, works forever &mdash; if a name is corrected, the old link redirects rather than dies, because it may already be printed on two hundred cards. And every person's page carries a no-index instruction, so none of this turns up in a search for his name.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">My counter-proposal</p>
+    <h2>The family is the unit, not the person</h2>
+  </div>
+  <div class="copy">
+    <p>Your own plan gives this away: Dad first, then your in&#8209;laws. Those aren't unrelated strangers, they're two households &mdash; and in a few years your father's page will sit alongside his brothers and sisters, and eventually your mother's.</p>
+    <p>If every person is an island, you throw away the single most affecting thing this product could do: <strong>the same question, answered by four people who were there.</strong></p>
+  </div>
+  <div class="call">
+    <h4>&ldquo;Tell me about the house you grew up in&rdquo;</h4>
+    <p>Answered by your father. Then by his sister. Then by his brother. Three people, three versions of one kitchen, and the contradictions are the interesting part. No competitor does this, because they all treat a life story as a single-author book.</p>
+  </div>
+  <div class="copy">
+    <p>It's also the cheapest revenue you will ever find. The hard part of selling this is persuading someone that recording a parent is worth doing at all &mdash; and a family who has already done it for one person needs no persuading for the second. A page for Dad's sister is an upsell to a customer who is already convinced.</p>
+    <p>You don't need to build the family view now. You need the <em>data</em> to allow it: people belong to a family, answers belong to a question from a shared library, and the same question keeps its identity across people. Get that wrong in the first schema and the feature is a rewrite instead of a weekend.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">The thing everyone forgets</p>
+    <h2>A page has to survive the person dying</h2>
+  </div>
+  <div class="copy">
+    <p>Today your father's page says <em>83 years old</em> and <em>still recording</em>. One day someone will have to change that, and they'll be doing it in the worst week of their life. That should be one field and a gentle confirmation, never a support email.</p>
+    <p>What changes when it flips: a second date appears, the tone moves to the past, the highlights rise above the unanswered questions, and the unrecorded ones stop being a to-do list and become part of the record &mdash; questions he never got to. The <em>page</em> doesn't change. The state does.</p>
+  </div>
+  <div class="cols" style="margin-top:1.2rem">
+    <div>
+      <h3>States worth having from day one</h3>
+      <ul class="tick">
+        <li><b>Recording</b> &mdash; alive, questions outstanding, progress shown</li>
+        <li><b>Complete</b> &mdash; alive, finished, no to-do list nagging</li>
+        <li><b>Remembered</b> &mdash; died, dates closed, highlights first</li>
+        <li><b>Sealed</b> &mdash; a specific answer held until a date</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Per-answer, not just per-page</h3>
+      <ul class="tick">
+        <li>Visible to anyone with the link (the default)</li>
+        <li>Family only &mdash; because he will name living people</li>
+        <li>Custodians only &mdash; kept, not shown</li>
+        <li>Never deleted by a relative in a row. Hidden, and recoverable.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Build order</p>
+    <h2>What six pages need versus six hundred</h2>
+  </div>
+  <div class="order">
+    <ol>
+      <li><span class="w">This month</span><span><b>Nothing new.</b> Your father's page is a file. Six families is six files in one folder &mdash; that is a working site, and the URLs can already be <code>/luis-de-souza-7fk2</code>.</span></li>
+      <li><span class="w">Next</span><span><b>One answer, one link.</b> The share page for a single answer, with a proper preview card. This is the first thing that earns its keep.</span></li>
+      <li><span class="w">Next</span><span><b>The ask page.</b> A form that adds a question to a page and emails the organiser. No accounts, and it's the loop.</span></li>
+      <li><span class="w">Then</span><span><b>The organiser's console</b>, so you stop being the person who pastes video IDs.</span></li>
+      <li><span class="w">Then</span><span><b>Family grouping and the cross-family question view.</b> Schema from the start, screen when you have two families who overlap.</span></li>
+      <li><span class="w">Last</span><span><b>The homepage.</b> Genuinely last. Until a stranger can arrive without you, it's decoration.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="sec-hd">
+    <p class="mo">Not building</p>
+    <h2>Four tempting mistakes</h2>
+  </div>
+  <div class="cols">
+    <div>
+      <ul class="cross">
+        <li><b>A public directory of pages.</b> It reads as a graveyard you can browse, and every family will hate it.</li>
+        <li><b>Accounts for viewers.</b> His sister is 79. A link works; a password reset does not.</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="cross">
+        <li><b>Comments under answers.</b> Families argue. Let them record their own memory instead &mdash; same instinct, better outcome.</li>
+        <li><b>A follower count or view counter.</b> Nothing about this should feel like performance.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Written for David, September 2026. Companion to the product and money plan.</p>
+  <p>The recommendation, in one line: per-person pages at name-plus-token URLs, families as the container, the invitation at the foot of the page rather than the top.</p>
+</footer>
+
+</div>
+
+</html>

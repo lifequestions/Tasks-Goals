@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="The life of Luis James de Souza, in his own voice.">
 <title>Luis James de Souza</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -106,6 +105,27 @@ section{padding:clamp(2.4rem,5.5vw,4rem) 0}
 .opt-empty ul{margin:.2rem 0 0;padding-left:1.1rem;color:var(--ink2);font-size:.92rem}
 .opt-empty li{margin-bottom:.2rem}
 
+/* a quiet wordmark, not a nav bar: no links, no buttons, no competing with his face */
+.mark{border-bottom:1px solid var(--line)}
+.mark .in{display:flex;align-items:baseline;gap:.6rem;padding-top:.7rem;padding-bottom:.7rem}
+.mark .wm{font-family:"Newsreader",Georgia,serif;font-size:.95rem;color:var(--ink2)}
+.mark .wm a{color:inherit;text-decoration:none}
+.mark .wm a:hover{color:var(--ink)}
+.mark .who{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-left:auto}
+
+/* contextual ask: helps the reader, sits beside the unanswered questions */
+.ask{margin-top:1.4rem;border:1px solid var(--line);background:var(--surf);padding:1.1rem 1.2rem;display:flex;flex-wrap:wrap;gap:.9rem 1.6rem;align-items:center;justify-content:space-between}
+.ask .t{display:flex;flex-direction:column;gap:.25rem;max-width:46ch}
+.ask h3{font-size:1.12rem}
+.ask p{color:var(--ink2);font-size:.92rem}
+
+/* the real invitation, at the end — where the feeling is */
+.invite{border-top:1px solid var(--line);margin-top:clamp(2rem,5vw,3.4rem);padding:clamp(2.2rem,5vw,3.4rem) 0 0}
+.invite .box{background:var(--accSoft);border-left:3px solid var(--acc);padding:clamp(1.3rem,3vw,2rem)}
+.invite .box{display:flex;flex-wrap:wrap;gap:1.1rem 2rem;align-items:center;justify-content:space-between}
+.invite h2{font-size:clamp(1.4rem,3vw,1.9rem);line-height:1.16;max-width:26ch}
+.invite p{color:var(--ink2);font-size:.95rem;max-width:42ch;margin-top:.45rem}
+
 footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3);font-size:.85rem;display:flex;flex-direction:column;gap:.35rem}
 
 /* panel */
@@ -131,6 +151,13 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
 .pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.8rem 1.1rem;border-top:1px solid var(--line);background:var(--surf2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+
+<div class="mark">
+  <div class="in">
+    <span class="wm"><a href="/">Sixty Windows</a></span>
+    <span class="who">A private page for the de Souza family</span>
+  </div>
+</div>
 
 <div class="in">
   <header class="hero">
@@ -197,6 +224,14 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
       <p>Roughly in order, easiest first and the hardest one last. Tap any of them to see the follow-up prompts to ask him &mdash; those are what turn a thirty-second answer into a five-minute one.</p>
     </div>
     <div class="qs" id="qs"></div>
+
+    <div class="ask">
+      <div class="t">
+        <h3>Something you want to ask him?</h3>
+        <p>Anyone in the family can add a question and it appears on this page with their name on it. It's the quickest way to get him talking about something nobody has thought to ask.</p>
+      </div>
+      <button class="btn ghost" id="askBtn">Ask Luis a question</button>
+    </div>
   </section>
 
   <section>
@@ -215,6 +250,16 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
       <p>Each one sits under the answer it belongs to, captioned in his words.</p>
     </div>
   </section>
+
+  <div class="invite">
+    <div class="box">
+      <div>
+        <h2>Somebody should be asking your father these questions too</h2>
+        <p>It takes forty minutes and a phone propped on a stack of books. Most people wish they had started ten years earlier.</p>
+      </div>
+      <a class="btn" href="/start">Start a page for someone</a>
+    </div>
+  </div>
 
   <footer>
     <p>A private page for the de Souza family. The videos are unlisted &mdash; only people with this link can watch them.</p>
@@ -393,6 +438,11 @@ document.addEventListener("click", function(e){
 });
 document.getElementById("startBtn").addEventListener("click", function(){ openQ(0); });
 document.getElementById("howBtn").addEventListener("click", function(){ openQ(0); });
+document.getElementById("askBtn").addEventListener("click", function(){
+  /* On the live site this opens /ask. Here it jumps to the first unanswered question. */
+  var i = Q.findIndex(function(x){ return !x.v; });
+  openQ(i === -1 ? 0 : i);
+});
 document.getElementById("closeBtn").addEventListener("click", closeQ);
 document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
 document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
