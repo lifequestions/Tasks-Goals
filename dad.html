@@ -46,11 +46,21 @@ img{max-width:100%;display:block}
    centred and crops the phone screenshot's black bars and the wine glass out. */
 .portrait img{width:100%;height:100%;object-fit:cover;object-position:var(--face,48% 30%);position:relative;z-index:1}
 .portrait img.dead{display:none}
-.portrait .slot{position:absolute;inset:0;display:grid;place-content:center;gap:.55rem;text-align:center;padding:1.4rem;background:linear-gradient(155deg,var(--surf2),var(--accSoft))}
+.portrait .slot{position:absolute;inset:0;cursor:pointer;transition:background .2s;display:grid;place-content:center;gap:.55rem;text-align:center;padding:1.4rem;background:linear-gradient(155deg,var(--surf2),var(--accSoft))}
+.portrait .slot:hover{background:linear-gradient(155deg,var(--accSoft),var(--surf2))}
+.portrait .slot:hover .cap{color:var(--acc)}
+.portrait .slot .cap{transition:color .2s}
 .portrait .slot .mg{font-family:"Newsreader",Georgia,serif;font-size:3.4rem;color:var(--acc);letter-spacing:.03em;line-height:1}
 .portrait .slot .cap{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);line-height:1.7}
 .port-col{display:flex;flex-direction:column;gap:.6rem}
 .photo-ctl{display:flex;flex-wrap:wrap;align-items:baseline;gap:.5rem .8rem}
+.photo-ctl{flex-direction:column;align-items:flex-start;gap:.5rem}
+.filelab{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.photo-ctl input[type=file]{font-family:"Karla",sans-serif;font-size:.82rem;color:var(--ink2);max-width:100%}
+.photo-ctl input[type=file]::file-selector-button{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;background:var(--acc);color:var(--bg);border:0;border-radius:2px;padding:.4rem .8rem;margin-right:.6rem;cursor:pointer}
+.photo-ctl input[type=file]::file-selector-button:hover{filter:brightness(1.12)}
+.portrait.over{outline:2px dashed var(--acc);outline-offset:-6px}
+.hint.bad{color:var(--warn)}
 .photo-ctl button{background:none;border:1px solid var(--line);color:var(--ink2);border-radius:2px;padding:.3rem .65rem;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase}
 .photo-ctl button:hover{border-color:var(--acc);color:var(--acc)}
 .photo-ctl .hint{font-family:"IBM Plex Mono",monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
@@ -170,20 +180,20 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
     <div class="hero-grid">
       <div class="port-col">
         <div class="portrait">
-          <span class="slot">
+          <label class="slot" for="pickInput">
             <span class="mg">LdS</span>
-            <span class="cap">No photo yet &mdash;<br>choose one below</span>
-          </span>
+            <span class="cap">Click here to add his photo<br>or drag one onto this card</span>
+          </label>
           <img src="dad.jpg" alt="Luis James de Souza" id="portrait"
                data-try="dad.jpeg,dad.png,DadPhoto.jpg"
                onerror="nextPhoto(this)">
         </div>
         <p class="photo-ctl">
-          <button id="pickBtn">Add his photo</button>
+          <label class="filelab" for="pickInput">Or choose a file</label>
+          <input type="file" accept="image/*" id="pickInput">
           <button id="dropBtn" hidden>Remove</button>
-          <span class="hint" id="pickHint">Kept in this browser only</span>
         </p>
-        <input type="file" accept="image/*" id="pickInput" hidden>
+        <p class="hint" id="pickHint">Pick a file, drag one onto the frame, or paste one with &#8984;V</p>
       </div>
       <div class="hero-copy">
         <!-- Optional: name the photo, e.g. <p class="mo">Kent, Christmas 2019</p> -->
@@ -347,7 +357,6 @@ function showPortrait(src){
   img.className = "";
   img.src = src;
   document.getElementById("dropBtn").hidden = false;
-  document.getElementById("pickBtn").textContent = "Change photo";
 }
 
 function shrink(file, done){
@@ -498,36 +507,60 @@ document.addEventListener("click", function(e){
   var t = e.target.closest("[data-i]");
   if(t){ openQ(Number(t.getAttribute("data-i"))); }
 });
-/* portrait picker */
+/* portrait picker — a real file input, plus drag-and-drop and paste */
 (function(){
-  var saved = recall();
-  if(saved){ showPortrait(saved); }
-
   var input = document.getElementById("pickInput");
-  var hint = document.getElementById("pickHint");
+  var hint  = document.getElementById("pickHint");
+  var frame = document.querySelector(".portrait");
+  var drop  = document.getElementById("dropBtn");
 
-  document.getElementById("pickBtn").addEventListener("click", function(){ input.click(); });
+  var saved = recall();
+  if(saved){ showPortrait(saved); hint.textContent = "Saved in this browser"; }
 
-  input.addEventListener("change", function(){
-    var f = input.files && input.files[0];
-    if(!f){ return; }
+  function use(file){
+    if(!file || !/^image\//.test(file.type)){
+      hint.textContent = "That isn't an image file";
+      hint.className = "hint bad";
+      return;
+    }
+    hint.className = "hint";
     hint.textContent = "Adding\u2026";
-    shrink(f, function(dataUrl){
+    shrink(file, function(dataUrl){
       showPortrait(dataUrl);
       hint.textContent = remember(dataUrl)
-        ? "Kept in this browser only"
-        : "Shown now, too large to keep \u2014 save it as dad.jpg instead";
+        ? "Saved in this browser. To share it, save the file as dad.jpg beside this page."
+        : "Showing now, but too large to save \u2014 use a smaller copy, or save it as dad.jpg beside this page.";
     });
+  }
+
+  input.addEventListener("change", function(){ use(input.files && input.files[0]); });
+
+  ["dragenter","dragover"].forEach(function(ev){
+    frame.addEventListener(ev, function(e){ e.preventDefault(); frame.classList.add("over"); });
+  });
+  ["dragleave","drop"].forEach(function(ev){
+    frame.addEventListener(ev, function(e){ e.preventDefault(); frame.classList.remove("over"); });
+  });
+  frame.addEventListener("drop", function(e){
+    if(e.dataTransfer && e.dataTransfer.files){ use(e.dataTransfer.files[0]); }
   });
 
-  document.getElementById("dropBtn").addEventListener("click", function(){
+  document.addEventListener("paste", function(e){
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    for(var i = 0; i < items.length; i++){
+      if(items[i].type && items[i].type.indexOf("image") === 0){ use(items[i].getAsFile()); return; }
+    }
+  });
+
+  drop.addEventListener("click", function(){
     try{ localStorage.removeItem(PKEY); }catch(err){}
     var img = document.getElementById("portrait");
     img.setAttribute("data-try", "dad.jpeg,dad.png,DadPhoto.jpg");
     img.src = "dad.jpg";
-    document.getElementById("dropBtn").hidden = true;
-    document.getElementById("pickBtn").textContent = "Add his photo";
-    hint.textContent = "Kept in this browser only";
+    drop.hidden = true;
+    input.value = "";
+    hint.className = "hint";
+    hint.textContent = "Pick a file, drag one onto the frame, or paste one with \u2318V";
   });
 })();
 
