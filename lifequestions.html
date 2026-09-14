@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Life Questions — a life biography, recorded rather than written. We send the questions, they answer on a phone, and it becomes a page the family keeps.">
 <title>Life Questions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,18 +77,21 @@ button{font:inherit;color:inherit;cursor:pointer}
 .proof p{font-size:.98rem;color:var(--ink2)}
 .proof b{display:block;font-family:"Fraunces",Georgia,serif;font-size:1.12rem;color:var(--ink);font-weight:500;margin-bottom:.1rem}
 
-/* the people */
-.fams{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:1.1rem}
-.fam{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s,border-color .18s}
-.fam:hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 20px 40px -30px var(--shadow)}
-.fam img{aspect-ratio:4/5;object-fit:cover;width:100%}
-.fi{padding:.95rem 1.05rem 1.1rem;display:flex;flex-direction:column;gap:.3rem;flex:1}
-.fn{font-family:"Fraunces",Georgia,serif;font-size:1.18rem;line-height:1.2}
-.fd{font-size:.82rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
-.fl{font-size:.94rem;color:var(--ink2);margin-top:.25rem;flex:1}
-.ft{height:5px;border-radius:99px;background:var(--band);overflow:hidden;margin-top:.7rem}
-.ft i{display:block;height:100%;background:var(--acc);border-radius:99px}
-.fc{font-size:.8rem;color:var(--ink3)}
+/* the reel */
+.reelrow{display:flex;gap:1rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:.8rem;scrollbar-width:thin}
+.vc{flex:0 0 clamp(258px,30vw,340px);scroll-snap-align:start;background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s,border-color .18s}
+.vc:hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 20px 40px -30px var(--shadow)}
+.vthumb{position:relative;aspect-ratio:16/9;background:var(--band);overflow:hidden}
+.vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(16,16,14,.62);display:grid;place-content:center;z-index:2;transition:background .2s}
+.vplay::after{content:"";width:0;height:0;border-left:15px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.vc:hover .vplay{background:var(--acc)}
+.vdur{position:absolute;right:8px;bottom:8px;z-index:2;font-size:.72rem;font-weight:600;background:rgba(16,16,14,.78);color:#fff;padding:.1rem .42rem;border-radius:4px}
+.vmeta{padding:.95rem 1.05rem 1.1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.vq{font-family:"Fraunces",Georgia,serif;font-size:1.1rem;line-height:1.25}
+.vwho{font-size:.86rem;color:var(--ink2);margin-top:auto}
+.vsrc{font-size:.76rem;color:var(--ink3)}
 .illus{text-align:center;margin-top:1.6rem;font-size:.85rem;color:var(--ink3)}
 
 /* alternating rows */
@@ -164,6 +166,18 @@ button{font:inherit;color:inherit;cursor:pointer}
 .done ol{margin:0;padding-left:1.3rem;color:var(--ink2);display:flex;flex-direction:column;gap:.5rem;font-size:1rem}
 .fine2{margin-top:1rem;font-size:.88rem;color:var(--ink3)}
 
+/* the player */
+.vscrim{position:fixed;inset:0;background:rgba(12,12,10,.88);display:none;align-items:center;justify-content:center;padding:clamp(.7rem,3vw,2rem);z-index:90;backdrop-filter:blur(4px)}
+.vscrim.on{display:flex}
+.vbox{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;width:min(900px,100%)}
+.vtop{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line)}
+.xb{background:none;border:1px solid var(--line);border-radius:99px;padding:.35rem .85rem;font-size:.78rem;font-weight:600;color:var(--ink2)}
+.xb:hover{border-color:var(--ink2);color:var(--ink)}
+.vscreen{aspect-ratio:16/9;background:#000}
+.vscreen iframe{width:100%;height:100%;border:0;display:block}
+.vfoot{padding:.85rem 1.1rem 1.1rem;font-size:.88rem;color:var(--ink2)}
+.vfoot a{color:var(--acc)}
+
 /* closing band */
 .close{background:var(--accDeep);color:#F6F1E6}
 .close .in{padding:clamp(3rem,7vw,5.4rem) 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem}
@@ -180,7 +194,7 @@ footer a:hover{color:var(--ink)}
   <div class="in">
     <a class="wm" href="#top">Life&nbsp;Questions</a>
     <span class="sp"></span>
-    <a class="q" href="#people">Who's on here</a>
+    <a class="q" href="#reel">The answers</a>
     <a class="q" href="#how">How it works</a>
     <a class="q" href="#book">The book</a>
     <a class="q" href="#price">Price</a>
@@ -222,96 +236,15 @@ footer a:hover{color:var(--ink)}
 </div>
 
 
-<div class="wrap-band" id="people">
+<div class="wrap-band" id="reel">
   <div class="in sec">
     <div class="sec-hd mid">
-      <p class="eyebrow">Who's on here</p>
-      <h2>Ordinary people, being asked at last</h2>
-      <p>Mothers, fathers, grandparents, aunts, neighbours &mdash; and a few people recording themselves. Every page belongs to one person and to whoever is recording them, and none of them are public.</p>
+      <p class="eyebrow">What you end up with</p>
+      <h2>A reel of answers, in their own voices</h2>
+      <p>Every question becomes one short film. Press any of them &mdash; this is exactly how a finished page plays.</p>
     </div>
-    <div class="fams">
-        <a class="fam" href="#start">
-          <img src="p1.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Ray Whelan</p>
-            <p class="fd">1938 &ndash; 2024</p>
-            <p class="fl">Forty years on the buses out of Leeds.</p>
-            <div class="ft"><i style="width:70%"></i></div>
-            <p class="fc">42 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p2.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Amara Okonkwo</p>
-            <p class="fd">Born 1949</p>
-            <p class="fl">Came over from Lagos in 1972 with a nursing offer.</p>
-            <div class="ft"><i style="width:30%"></i></div>
-            <p class="fc">18 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p3.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Peter Nov&aacute;k</p>
-            <p class="fd">1940 &ndash; 2023</p>
-            <p class="fl">Fitted half the kitchens in the village.</p>
-            <div class="ft"><i style="width:100%"></i></div>
-            <p class="fc">60 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p4.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Yannick Baptiste</p>
-            <p class="fd">Born 1951</p>
-            <p class="fl">Played bass in a band that nearly made it.</p>
-            <div class="ft"><i style="width:15%"></i></div>
-            <p class="fc">9 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p5.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Ruth Bernstein</p>
-            <p class="fd">Born 1937</p>
-            <p class="fl">Still runs the bridge club she started in 1981.</p>
-            <div class="ft"><i style="width:52%"></i></div>
-            <p class="fc">31 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p6.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Alan Prosser</p>
-            <p class="fd">1936 &ndash; 2025</p>
-            <p class="fl">Never once talked about the war until we asked.</p>
-            <div class="ft"><i style="width:92%"></i></div>
-            <p class="fc">55 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p7.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Zainab Rahman</p>
-            <p class="fd">Born 1954</p>
-            <p class="fl">Three children, two countries, one very small kitchen.</p>
-            <div class="ft"><i style="width:40%"></i></div>
-            <p class="fc">24 of 60 recorded</p>
-          </div>
-        </a>
-        <a class="fam" href="#start">
-          <img src="p8.jpg" alt="">
-          <div class="fi">
-            <p class="fn">Tom&aacute;s Ferreira</p>
-            <p class="fd">Born 1944</p>
-            <p class="fl">Fisherman, then a fishmonger, then a grandfather.</p>
-            <div class="ft"><i style="width:20%"></i></div>
-            <p class="fc">12 of 60 recorded</p>
-          </div>
-        </a>
-    </div>
-    <p class="illus">Illustrated placeholders. Real families replace these as they join.</p>
+    <div class="reelrow" id="reelrow"></div>
+    <p class="illus">Example recordings, borrowed from public oral-history interviews while we build. Each is credited, and real families replace them as they join.</p>
   </div>
 </div>
 
@@ -548,7 +481,88 @@ footer a:hover{color:var(--ink)}
   </footer>
 </div>
 
+<div class="vscrim" id="vscrim">
+  <div class="vbox">
+    <div class="vtop"><p class="eyebrow" id="vtitle">Answer</p><button class="xb" id="vclose">Close &nbsp;esc</button></div>
+    <div class="vscreen" id="vscreen"></div>
+    <p class="vfoot" id="vfoot"></p>
+  </div>
+</div>
+
 <script>
+/* YouTube stores the video and serves the still, so a page costs nothing to host.
+   The still is only swapped for the player when someone presses play. */
+var REEL = [
+  { id:"3Uz6uZC9hik", q:"Tell me about the house you grew up in.", who:"Recorded by her granddaughter", len:"8:14", src:"Grandma tells our story" },
+  { id:"WNfvuJr9164", q:"The night we met at the dance.",          who:"Danny and Annie, married 27 years", len:"5:38", src:"StoryCorps" },
+  { id:"nVu__vyps9Q", q:"The work I did, and what it cost.",       who:"A hundred years old, recorded in full", len:"12:41", src:"Veteran interview" },
+  { id:"BjQqDWj1LQw", q:"Who my mother and father really were.",   who:"Recorded at her kitchen table", len:"6:02", src:"An interview with Grandma" },
+  { id:"aJ_RVsf90xg", q:"What I have changed my mind about.",      who:"Filmed in 1986, still watched today", len:"4:29", src:"TV Eye, centenarians" },
+  { id:"x3fphutRYso", q:"My first job, and my first wage.",        who:"Recorded by his family", len:"7:22", src:"Veteran interview" },
+  { id:"abyMCAS4vEI", q:"The day each of my children was born.",   who:"A grandson asking the questions", len:"6:55", src:"StoryCorps" },
+  { id:"rZAv7uoE25Q", q:"What I would say to you in fifty years.", who:"110 years old", len:"3:47", src:"Words of wisdom" }
+];
+
+function posterFallback(img, id){
+  var wrap = img.parentNode;
+  img.remove();
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + id + "?rel=0&modestbranding=1";
+  f.setAttribute("loading","lazy"); f.setAttribute("tabindex","-1"); f.setAttribute("allowfullscreen","");
+  f.title = "";
+  wrap.insertBefore(f, wrap.firstChild);
+}
+
+var reelrow = document.getElementById("reelrow");
+REEL.forEach(function(v, i){
+  var b = document.createElement("button");
+  b.className = "vc";
+  b.setAttribute("data-v", i);
+  b.setAttribute("aria-label", "Play: " + v.q);
+  b.innerHTML =
+    '<span class="vthumb">' +
+      '<img src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy" ' +
+           'onerror="posterFallback(this,\'' + v.id + '\')">' +
+      '<span class="vplay"></span><span class="vdur">' + v.len + '</span>' +
+    '</span>' +
+    '<span class="vmeta">' +
+      '<span class="vq">' + v.q + '</span>' +
+      '<span class="vwho">' + v.who + '</span>' +
+      '<span class="vsrc">Example clip &middot; ' + v.src + '</span>' +
+    '</span>';
+  reelrow.appendChild(b);
+});
+
+var vscrim = document.getElementById("vscrim"), vscreen = document.getElementById("vscreen");
+function playVideo(i){
+  var v = REEL[i];
+  document.getElementById("vtitle").textContent = v.who;
+  document.getElementById("vfoot").innerHTML = v.q + ' &nbsp;&middot;&nbsp; Example clip from ' + v.src +
+    ' &nbsp;&middot;&nbsp; <a href="https://www.youtube.com/watch?v=' + v.id + '" target="_blank" rel="noopener">open on YouTube &#8599;</a>';
+  vscreen.innerHTML = "";
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + v.id + "?rel=0&modestbranding=1&autoplay=1";
+  f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+  f.setAttribute("allowfullscreen",""); f.title = v.q;
+  vscreen.appendChild(f);
+  vscrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("vclose").focus();
+}
+function stopVideo(){
+  vscrim.classList.remove("on"); vscreen.innerHTML = "";
+  document.body.style.overflow = "";
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-v]");
+  if(t){ playVideo(Number(t.getAttribute("data-v"))); }
+});
+document.getElementById("vclose").addEventListener("click", stopVideo);
+vscrim.addEventListener("click", function(e){ if(e.target === vscrim){ stopVideo(); } });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && vscrim.classList.contains("on")){ stopVideo(); }
+});
+
 function slug(name){
   var p = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
     .replace(/[^a-z0-9\s-]/g,"").trim().split(/\s+/).filter(Boolean);

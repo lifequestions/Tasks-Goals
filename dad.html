@@ -72,6 +72,7 @@ img{max-width:100%;display:block}
 .bar .track{height:5px;background:var(--surf2);border:1px solid var(--line);display:flex}
 .bar .track i{display:block;background:var(--acc)}
 .bar .t{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.06em;color:var(--ink2)}
+.testnote{font-size:.86rem;color:var(--ink2);background:var(--accSoft);border-left:3px solid var(--acc);padding:.7rem .9rem;max-width:52ch}
 .cta{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:.3rem}
 .btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:var(--bg);border:1px solid var(--acc);border-radius:2px;padding:.6rem 1.05rem;font-size:.9rem;font-weight:600}
 .btn:hover{filter:brightness(1.12)}
@@ -110,6 +111,9 @@ section{padding:clamp(2.4rem,5.5vw,4rem) 0}
 .qcard.done .dot{background:var(--acc)}
 .qcard.done .st{color:var(--acc)}
 .qcard .still{position:relative;aspect-ratio:16/9;background:var(--surf2);overflow:hidden;margin:-.2rem 0 .2rem}
+.qcard .still img{width:100%;height:100%;object-fit:cover;display:block}
+.qcard .still iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.qcard .dur{position:absolute;right:6px;bottom:6px;z-index:2;font-family:"IBM Plex Mono",monospace;font-size:.6rem;background:rgba(18,18,16,.78);color:#fff;padding:.1rem .38rem;border-radius:2px}
 .qcard .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:rgba(18,18,16,.55);display:grid;place-content:center}
 .qcard .play::after{content:"";width:0;height:0;border-left:10px solid #fff;border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:2px}
 
@@ -208,6 +212,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
           <div class="track"><i id="fill" style="width:0%"></i></div>
           <p class="t" id="prog">0 of 12 answers recorded</p>
         </div>
+        <p class="testnote">Testing the mechanism: five questions currently play borrowed interview clips from elsewhere, so we can see how a finished page behaves. Each is replaced by pasting in his own video ID.</p>
         <div class="cta">
           <button class="btn" id="startBtn">Start with question one</button>
           <button class="btn ghost" id="howBtn">How to record</button>
@@ -377,6 +382,21 @@ function shrink(file, done){
   reader.readAsDataURL(file);
 }
 
+/* YouTube serves the still as well as the video, so a page costs nothing to host.
+   Where a sandbox blocks the image host, drop in the embed instead — it carries
+   its own poster frame, so a preview still shows. */
+function posterFallback(img, id){
+  var wrap = img.parentNode;
+  img.remove();
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + id + "?rel=0&modestbranding=1";
+  f.setAttribute("loading","lazy");
+  f.setAttribute("tabindex","-1");
+  f.setAttribute("allowfullscreen","");
+  f.title = "";
+  wrap.insertBefore(f, wrap.firstChild);
+}
+
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 
 /* ---------------------------------------------------------------
@@ -385,11 +405,11 @@ function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").rep
    Everything else on the page updates itself.
    --------------------------------------------------------------- */
 var Q = [
-  { q:"Tell me about the house you grew up in.", v:null,
+  { q:"Tell me about the house you grew up in.", v:"3Uz6uZC9hik", len:"8:14", src:"Grandma tells our story",
     p:["Walk me through the front door — what's the first thing I'd see?",
        "Which room did everyone end up in?",
        "What could you hear from your bed at night?"] },
-  { q:"Who were your mother and father, really — not as parents, but as people?", v:null,
+  { q:"Who were your mother and father, really — not as parents, but as people?", v:"BjQqDWj1LQw", len:"6:02", src:"An interview with Grandma",
     p:["What did they want for themselves before the children came along?",
        "What did they never talk about?",
        "What of them do you catch yourself doing?"] },
@@ -404,7 +424,7 @@ var Q = [
     p:["What did they actually have you doing?",
        "What did you spend the first wage on?",
        "Who taught you to do it properly?"] },
-  { q:"The first time you fell in love.", v:null,
+  { q:"The first time you fell in love.", v:"WNfvuJr9164", len:"5:38", src:"Danny & Annie — StoryCorps",
     p:["Where were you standing when you realised?",
        "What did you do about it?",
        "How did it end?"] },
@@ -416,7 +436,7 @@ var Q = [
     p:["Take them one at a time.",
        "What frightened you most in that first month?",
        "Who did we look like?"] },
-  { q:"The work you did, and the thing you're proudest of making.", v:null,
+  { q:"The work you did, and the thing you're proudest of making.", v:"nVu__vyps9Q", len:"12:41", src:"100-year-old WWII veteran — full interview",
     p:["What did a normal Tuesday actually look like?",
        "Is any of it still standing, still running, still being used?",
        "What did it cost you at home?"] },
@@ -424,7 +444,7 @@ var Q = [
     p:["Who turned up for you, and who didn't?",
        "What got you out of bed?",
        "What would you say now to yourself in that year?"] },
-  { q:"What have you changed your mind about?", v:null,
+  { q:"What have you changed your mind about?", v:"aJ_RVsf90xg", len:"4:29", src:"Living to 100 — TV Eye, 1986",
     p:["What did you believe firmly at thirty that you don't now?",
        "What changed it — a person, an event, or just time?",
        "What are you still not sure about?"] },
@@ -444,8 +464,12 @@ Q.forEach(function(item, i){
   b.setAttribute("aria-label", (lit ? "Play: " : "Not yet recorded: ") + item.q);
   b.innerHTML =
     '<span class="n">' + ("0" + (i + 1)).slice(-2) + '</span>' +
-    (lit ? '<span class="still"><img src="https://i.ytimg.com/vi/' + item.v + '/mqdefault.jpg" alt="" ' +
-           'onerror="this.style.display=\'none\'"><span class="play"></span></span>' : "") +
+    (lit ? '<span class="still">' +
+             '<img src="https://i.ytimg.com/vi/' + item.v + '/hqdefault.jpg" alt="" loading="lazy" ' +
+             'onerror="posterFallback(this,\'' + item.v + '\')">' +
+             '<span class="play"></span>' +
+             (item.len ? '<span class="dur">' + item.len + '</span>' : '') +
+           '</span>' : "") +
     '<span class="q">' + esc(item.q) + '</span>' +
     '<span class="st"><span><span class="dot"></span>' + (lit ? "Recorded" : "To record") + '</span>' +
     '<span>' + (lit ? "Play" : item.p.length + " prompts") + '</span></span>';
