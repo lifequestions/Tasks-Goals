@@ -171,6 +171,27 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
 .howto li{margin-bottom:.22rem}
 .pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.8rem 1.1rem;border-top:1px solid var(--line);background:var(--surf2)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.geo{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:clamp(1.3rem,3.5vw,2.4rem);align-items:center;background:var(--surf);border:1px solid var(--line);padding:clamp(.9rem,2.2vw,1.4rem)}
+@media (max-width:700px){.geo{grid-template-columns:1fr}}
+.geo .frame{border:1px solid var(--line);overflow:hidden;background:var(--surf2);line-height:0}
+.pl{display:flex;flex-direction:column;gap:.15rem;padding:0 0 .9rem;margin-bottom:.9rem;border-bottom:1px solid var(--line)}
+.pl.last{padding-bottom:0;margin-bottom:0;border-bottom:0}
+.pl .k{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+.pl .v{font-family:"Newsreader",Georgia,serif;font-size:1.3rem;line-height:1.2}
+.pl .c{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--ink3)}
+.pl .m{font-size:.9rem;color:var(--ink2);margin-top:.25rem}
+.mapsvg{width:100%;height:auto;display:block}
+.mapsvg .sea{fill:var(--surf)}
+.mapsvg .grid line{stroke:var(--line);stroke-width:1.5}
+.mapsvg .neigh{fill:var(--surf2);stroke:var(--line);stroke-width:2;stroke-linejoin:round}
+.mapsvg .land{fill:var(--accSoft);stroke:var(--acc);stroke-width:3;stroke-linejoin:round}
+.mapsvg .link{fill:none;stroke:var(--acc);stroke-width:3;stroke-dasharray:11 11;opacity:.55}
+.mapsvg .halo{fill:var(--acc);opacity:.13}
+.mapsvg .ring{fill:none;stroke:var(--acc);stroke-width:3;opacity:.5}
+.mapsvg .dot{fill:var(--acc)}
+.mapsvg .lab{fill:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:42px;letter-spacing:.02em}
+.mapsvg .pin.sm .dot{fill:var(--ink2)}
+.mapsvg .pin.sm .lab{fill:var(--ink2);font-size:32px}
 </style>
 
 <div class="mark">
@@ -224,12 +245,32 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
 
   <div class="facts">
     <div class="fact"><span class="k">Born</span><span class="v">4 February 1943</span></div>
-    <div class="fact"><span class="k">Born in</span><span class="v todo">to add</span></div>
+    <div class="fact"><span class="k">Born in</span><span class="v">Bangalore, India</span></div>
+    <div class="fact"><span class="k">School</span><span class="v">Lamenty College, Mussoorie</span></div>
     <div class="fact"><span class="k">Married</span><span class="v todo">to add</span></div>
     <div class="fact"><span class="k">Children</span><span class="v todo">to add</span></div>
     <div class="fact"><span class="k">Work</span><span class="v todo">to add</span></div>
     <div class="fact"><span class="k">Recorded</span><span class="v">From Sept 2026</span></div>
   </div>
+
+
+  <section id="places">
+    <div class="sec-hd">
+      <p class="mo">Where he&rsquo;s from</p>
+      <h2>Bangalore, and a school up in the hills</h2>
+      <p>The two places we already know without having to ask him. Everything else on this page has to come from him.</p>
+    </div>
+    <div class="geo">
+      <div class="frame"><svg class="mapsvg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map showing Bangalore, India in India"><rect class="sea" x="0" y="0" width="1000" height="1000"/><g class="grid"><line x1="100" y1="0" x2="100" y2="1000"/><line x1="0" y1="100" x2="1000" y2="100"/><line x1="200" y1="0" x2="200" y2="1000"/><line x1="0" y1="200" x2="1000" y2="200"/><line x1="300" y1="0" x2="300" y2="1000"/><line x1="0" y1="300" x2="1000" y2="300"/><line x1="400" y1="0" x2="400" y2="1000"/><line x1="0" y1="400" x2="1000" y2="400"/><line x1="500" y1="0" x2="500" y2="1000"/><line x1="0" y1="500" x2="1000" y2="500"/><line x1="600" y1="0" x2="600" y2="1000"/><line x1="0" y1="600" x2="1000" y2="600"/><line x1="700" y1="0" x2="700" y2="1000"/><line x1="0" y1="700" x2="1000" y2="700"/><line x1="800" y1="0" x2="800" y2="1000"/><line x1="0" y1="800" x2="1000" y2="800"/><line x1="900" y1="0" x2="900" y2="1000"/><line x1="0" y1="900" x2="1000" y2="900"/></g><path class="neigh" d="M95.1 2.7L79.3 33.4L58.1 27.0L42.4 26.8L43.2 8.2L19.4 0.0L94.4 0.0L95.1 2.7ZM851.6 991.9L869.7 993.1L914.1 1000.0L852.9 1000.0L851.6 991.9ZM986.7 751.9L984.5 785.2L960.2 856.2L962.1 878.1L980.4 879.1L991.8 906.7L993.1 957.8L991.3 956.7L986.4 962.1L975.3 950.5L970.5 935.5L941.9 904.1L937.3 921.8L931.9 905.0L943.3 857.1L956.9 826.0L972.4 797.8L961.4 770.2L961.8 756.1L958.6 739.2L939.8 715.2L933.1 700.0L942.8 694.4L953.1 668.1L941.6 648.1L923.8 626.0L910.2 599.4L922.0 593.9L934.9 561.2L954.7 559.8L971.1 546.7L987.2 539.7L993.1 544.2L993.1 751.9L986.7 751.9ZM987.2 539.7L993.1 528.8L993.1 544.2L987.2 539.7ZM971.1 546.7L954.7 559.8L934.9 561.2L922.0 593.9L910.2 599.4L923.8 626.0L941.6 648.1L953.1 668.1L942.8 694.4L933.1 700.0L939.8 715.2L958.6 739.2L961.8 756.1L961.4 770.2L972.4 797.8L956.9 826.0L943.3 857.1L940.6 834.6L949.2 811.4L939.8 793.5L942.1 760.6L930.6 744.9L921.5 708.6L916.4 670.4L904.2 645.3L853.7 682.1L838.0 679.4L820.6 672.3L830.2 634.8L824.4 606.4L802.3 571.5L805.8 560.6L789.3 556.7L769.4 532.1L767.5 507.7L777.3 512.3L777.9 490.6L791.8 483.4L788.8 470.5L795.2 460.2L796.3 428.9L818.2 435.8L830.8 410.8L832.2 396.1L847.7 370.7L846.9 353.4L883.3 332.5L903.4 337.9L901.1 319.3L910.9 313.7L908.8 302.3L925.3 300.0L934.6 317.8L946.9 325.1L946.6 373.2L920.0 398.5L916.6 434.4L946.3 429.4L953.0 457.2L970.8 463.1L962.6 488.2L993.1 504.0L993.1 528.8L987.2 539.7L971.1 546.7ZM777.3 512.3L767.5 507.7L769.4 532.1L761.3 516.3L759.7 500.9L754.4 486.3L742.6 468.7L716.7 467.5L719.3 479.9L710.4 496.8L698.5 490.6L694.4 496.1L675.5 490.1L671.2 465.2L661.4 442.4L666.2 424.2L648.9 416.1L655.1 405.1L672.7 393.8L652.4 377.8L662.4 357.2L684.6 370.3L698.0 371.8L700.5 392.8L727.3 397.0L753.4 396.5L769.6 401.7L756.6 427.3L744.0 429.1L735.4 446.3L750.7 462.0L755.3 442.6L763.1 442.6L777.9 490.6L777.3 512.3ZM761.9 326.8L759.9 345.4L713.3 344.2L695.6 349.0L670.0 337.5L669.4 331.4L688.0 308.9L703.2 301.2L723.3 308.2L738.2 309.0L761.9 326.8ZM647.7 327.0L651.4 346.2L648.2 358.2L624.8 358.7L569.2 348.7L553.0 333.4L514.5 329.4L424.0 286.1L435.0 257.8L464.5 236.8L487.0 246.2L515.4 265.9L531.2 270.2L540.6 284.8L562.5 290.7L585.3 304.0L617.1 311.0L649.9 313.9L647.7 327.0ZM333.6 108.8L302.2 113.3L259.6 105.9L245.8 118.9L265.5 165.9L288.2 180.9L264.2 198.4L264.7 220.0L237.4 250.4L219.8 281.1L190.3 312.8L157.7 310.5L126.7 342.2L145.1 355.8L148.3 379.1L164.1 394.5L169.7 420.5L107.8 420.4L89.1 440.6L68.5 432.9L60.1 411.2L38.4 388.1L6.9 391.6L6.9 263.6L37.6 253.0L38.6 227.3L54.3 210.1L75.2 210.2L78.3 201.7L99.8 197.8L110.2 200.6L121.2 192.1L119.6 173.9L131.6 155.6L149.4 148.0L138.4 128.0L165.1 128.9L172.9 118.0L171.7 106.4L185.7 93.7L182.5 78.6L175.8 65.8L192.3 52.6L222.5 46.2L254.7 42.7L285.4 33.7L306.2 47.8L314.5 71.1L360.7 83.3L333.6 108.8ZM58.1 27.0L87.9 37.0L108.3 27.3L117.7 33.2L126.8 19.3L143.6 19.9L148.0 15.5L150.9 3.3L154.7 0.0L178.1 0.0L175.2 8.9L183.7 10.3L181.1 35.8L192.2 45.7L202.0 39.3L214.5 36.3L232.0 22.8L280.4 25.0L285.4 33.7L254.7 42.7L222.5 46.2L192.3 52.6L175.8 65.8L182.5 78.6L185.7 93.7L171.7 106.4L172.9 118.0L165.1 128.9L138.4 128.0L149.4 148.0L131.6 155.6L119.6 173.9L121.2 192.1L110.2 200.6L99.8 197.8L78.3 201.7L75.2 210.2L54.3 210.1L38.6 227.3L37.6 253.0L6.9 263.6L6.9 30.8L16.3 28.5L20.7 17.7L34.0 25.8L58.1 27.0ZM95.1 2.7L94.4 0.0L154.7 0.0L150.9 3.3L148.0 15.5L143.6 19.9L126.8 19.3L117.7 33.2L108.3 27.3L87.9 37.0L79.3 33.4L95.1 2.7ZM276.2 7.8L280.4 25.0L232.0 22.8L214.5 36.3L202.0 39.3L192.2 45.7L181.1 35.8L183.7 10.3L175.2 8.9L178.1 0.0L276.8 0.0L276.2 7.8ZM43.2 8.2L42.4 26.8L34.0 25.8L20.7 17.7L16.3 28.5L6.9 30.8L6.9 0.0L19.4 0.0L43.2 8.2ZM467.6 961.6L455.8 970.2L431.4 977.1L418.0 953.1L413.0 909.5L425.7 860.4L445.1 877.2L458.2 898.5L471.8 930.1L467.6 961.6ZM993.1 504.0L962.6 488.2L970.8 463.1L953.0 457.2L946.3 429.4L916.6 434.4L920.0 398.5L946.6 373.2L946.9 325.1L934.6 317.8L925.3 300.0L908.8 302.3L878.5 297.7L888.0 285.0L874.8 266.2L854.7 279.0L831.2 271.5L798.7 290.8L773.1 313.3L750.5 317.1L738.2 309.0L723.3 308.2L703.2 301.2L688.0 308.9L669.4 331.4L667.1 307.6L649.9 313.9L617.1 311.0L585.3 304.0L562.5 290.7L540.6 284.8L531.2 270.2L515.4 265.9L487.0 246.2L464.5 236.8L452.8 244.1L413.7 222.9L386.1 203.8L378.2 170.4L398.4 174.5L399.3 159.0L388.1 143.5L391.0 118.8L360.7 83.3L314.5 71.1L306.2 47.8L285.4 33.7L280.4 25.0L276.2 7.8L276.8 0.0L993.1 0.0L993.1 504.0ZM991.3 956.7L993.1 957.8L993.1 1000.0L989.5 997.0L992.6 974.9L986.4 962.1L991.3 956.7Z"/><path class="land" d="M908.8 302.3L910.9 313.7L901.1 319.3L903.4 337.9L883.3 332.5L846.9 353.4L847.7 370.7L832.2 396.1L830.8 410.8L818.2 435.8L796.3 428.9L795.2 460.2L788.8 470.5L791.8 483.4L777.9 490.6L763.1 442.6L755.3 442.6L750.7 462.0L735.4 446.3L744.0 429.1L756.6 427.3L769.6 401.7L753.4 396.5L727.3 397.0L700.5 392.8L698.0 371.8L684.6 370.3L662.4 357.2L652.4 377.8L672.7 393.8L655.1 405.1L648.9 416.1L666.2 424.2L661.4 442.4L671.2 465.2L675.5 490.1L671.5 501.2L652.4 500.8L617.7 507.1L619.3 529.9L604.3 547.8L563.9 568.1L532.4 603.8L511.2 622.9L483.2 642.7L483.2 656.6L443.8 674.9L430.7 676.5L422.3 699.6L428.1 739.0L429.6 764.1L417.7 792.8L417.6 844.3L403.0 845.7L390.2 868.8L398.8 878.8L373.1 887.4L363.7 908.0L352.4 916.7L325.7 888.4L301.9 815.5L292.1 801.2L277.2 772.1L265.3 715.3L239.7 673.7L219.7 576.3L219.8 539.7L214.3 511.3L173.4 529.4L153.6 525.8L116.8 489.1L130.4 478.2L122.1 466.3L89.1 440.6L107.8 420.4L169.7 420.5L164.1 394.5L148.3 379.1L145.1 355.8L126.7 342.2L157.7 310.5L190.3 312.8L219.8 281.1L237.4 250.4L264.7 220.0L264.2 198.4L288.2 180.9L265.5 165.9L245.8 118.9L259.6 105.9L302.2 113.3L333.6 108.8L360.7 83.3L391.0 118.8L388.1 143.5L399.3 159.0L398.4 174.5L378.2 170.4L386.1 203.8L413.7 222.9L452.8 244.1L435.0 257.8L424.0 286.1L451.3 297.6L477.8 312.4L514.5 329.4L553.0 333.4L569.2 348.7L624.8 358.7L648.2 358.2L651.4 346.2L647.7 327.0L649.9 313.9L667.1 307.6L670.0 337.5L695.6 349.0L713.3 344.2L737.0 346.3L759.9 345.4L761.9 326.8L750.5 317.1L773.1 313.3L798.7 290.8L831.2 271.5L854.7 279.0L874.8 266.2L888.0 285.0L878.5 297.7L908.8 302.3Z"/><path class="link" d="M353.9 765.1 L367.2 235.7"/><g class="pin sm"><circle class="dot" cx="367.2" cy="235.7" r="10"/><text class="lab" x="395.2" y="246.7" text-anchor="start">Lamenty College</text></g><g class="pin"><circle class="halo" cx="353.9" cy="765.1" r="46"/><circle class="ring" cx="353.9" cy="765.1" r="27"/><circle class="dot" cx="353.9" cy="765.1" r="14"/><text class="lab" x="401.9" y="779.1" text-anchor="start">Bangalore</text></g></svg></div>
+      <div>
+        <div class="pl"><span class="k">Born in</span><span class="v">Bangalore, India</span><span class="c">12.9716° N, 77.5946° E</span></div>
+        <div class="pl last"><span class="k">School</span><span class="v">Lamenty College, Mussoorie</span><span class="c">30.4599° N, 78.0664° E</span>
+          <p class="m">1,945 km north of where he was born &mdash; near enough the length of the country.</p>
+        </div>
+      </div>
+    </div>
+    <p class="testnote" style="margin-top:1.3rem">Check both of these with him. The pin is on the city, not the street &mdash; when he tells you the road, the hospital, the name of the school as he says it, they go in here and the pin moves.</p>
+  </section>
 
   <section>
     <div class="sec-hd">
