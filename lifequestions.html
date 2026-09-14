@@ -62,28 +62,31 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hero .cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem;justify-content:center}
 .hero .fine{font-size:1rem;color:var(--ink3);margin-top:1.2rem}
 
-/* the gallery of faces: five across, arrows for the rest */
-.gallery{--g:clamp(12px,1.5vw,22px);--per:5;position:relative;max-width:1320px;
-         margin:clamp(2.2rem,4.5vw,3.2rem) auto 0;padding:0 clamp(3rem,5vw,4.4rem)}
-.viewport{overflow:hidden;padding:30px 0 38px;margin:-30px 0 -30px}
-.track{display:flex;gap:var(--g);transition:transform .5s cubic-bezier(.22,1,.36,1);will-change:transform}
-.pc{flex:0 0 calc((100% - (var(--per) - 1) * var(--g)) / var(--per));
-    background:#fff;padding:10px;border-radius:4px;box-shadow:0 18px 36px -22px var(--shadow);
-    overflow:visible;border:0;display:block;position:relative;
+/* A wall of faces running off both edges of the screen and fading as it goes.
+   The prints are deliberately large; --g is the gap between them. */
+.gallery{--g:clamp(14px,1.6vw,26px);position:relative;width:100vw;margin-left:calc(50% - 50vw);
+         margin-top:clamp(2.2rem,4.5vw,3.4rem)}
+.viewport{overflow:hidden;padding:34px 0 26px;margin:-34px 0 -14px;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}
+.track{display:flex;gap:var(--g);transition:transform .55s cubic-bezier(.22,1,.36,1);will-change:transform}
+.track.second{margin-top:var(--g);display:none}
+body[data-rows="2"] .track.second{display:flex}
+.pc{flex:0 0 clamp(210px,23vw,330px);background:#fff;padding:11px;border-radius:4px;
+    box-shadow:0 20px 40px -22px var(--shadow);border:0;display:block;position:relative;
     transition:transform .32s cubic-bezier(.22,1,.36,1),box-shadow .32s}
 .pc img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:2px}
-.pc .cap{display:block;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:1rem;color:var(--ink2);padding:.7rem 0 .3rem}
-.pc:hover{transform:translateY(-18px) scale(1.07);box-shadow:0 44px 70px -28px var(--shadow);z-index:20}
-.arw{position:absolute;top:calc(50% - 1.2rem);transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
-     background:var(--surf);border:1px solid var(--line);color:var(--ink2);font-size:1.1rem;line-height:1;
-     display:grid;place-content:center;box-shadow:0 10px 22px -14px var(--shadow);transition:.18s;z-index:30}
-.arw:hover{border-color:var(--acc);color:var(--acc);transform:translateY(-50%) scale(1.07)}
-.arw[disabled]{opacity:.3;cursor:default;transform:translateY(-50%)}
-#prevBtn{left:clamp(.2rem,1.4vw,1.1rem)}
-#nextBtn{right:clamp(.2rem,1.4vw,1.1rem)}
-.gcount{text-align:center;margin-top:1.1rem;font-size:.92rem;color:var(--ink3)}
-@media (max-width:1000px){.gallery{--per:3}}
-@media (max-width:620px){.gallery{--per:2;padding:0 2.6rem}}
+.pc .cap{display:block;text-align:center;font-family:"Fraunces",Georgia,serif;
+         font-size:1.05rem;color:var(--ink2);padding:.75rem 0 .35rem}
+.pc:hover{transform:translateY(-20px) scale(1.07);box-shadow:0 48px 76px -28px var(--shadow);z-index:20}
+.arw{position:absolute;top:38%;width:52px;height:52px;border-radius:50%;
+     background:var(--surf);border:1px solid var(--line);color:var(--ink2);font-size:1.2rem;
+     display:grid;place-content:center;box-shadow:0 12px 26px -14px var(--shadow);transition:.18s;z-index:30}
+.arw:hover{border-color:var(--acc);color:var(--acc);transform:scale(1.08)}
+.arw[disabled]{opacity:.28;cursor:default;transform:none}
+#prevBtn{left:clamp(.6rem,2.5vw,2.4rem)}
+#nextBtn{right:clamp(.6rem,2.5vw,2.4rem)}
+@media (max-width:620px){.pc{flex:0 0 62vw}.arw{width:44px;height:44px}}
 
 /* proof strip */
 .proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--band)}
@@ -234,10 +237,12 @@ footer a:hover{color:var(--ink)}
       <p class="fine">Free to start &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
     </div>
     <div class="gallery" id="gallery">
+      <div class="viewport">
+        <div class="track" id="track1"></div>
+        <div class="track second" id="track2"></div>
+      </div>
       <button class="arw" id="prevBtn" aria-label="Previous people">&#8592;</button>
-      <div class="viewport"><div class="track" id="track"></div></div>
       <button class="arw" id="nextBtn" aria-label="More people">&#8594;</button>
-      <p class="gcount" id="gcount"></p>
     </div>
   </header>
 </div>
@@ -565,7 +570,7 @@ function watchPosters(root){
   }, 2500);
 }
 
-/* The faces under the headline. Add to the list and the arrows do the rest. */
+/* The faces under the headline. Add to the list and the rows grow. */
 var PEOPLE = [
   { img:"f1.jpg", cap:"Ray, 86" },    { img:"f2.jpg", cap:"Tenzin, 79" },
   { img:"f3.jpg", cap:"Aleks, 84" },  { img:"f4.jpg", cap:"Margaret, 81" },
@@ -573,39 +578,40 @@ var PEOPLE = [
   { img:"f7.jpg", cap:"Shanti, 83" }, { img:"f8.jpg", cap:"Luis, 83" }
 ];
 
-var track = document.getElementById("track"),
-    gallery = document.getElementById("gallery"),
-    prevBtn = document.getElementById("prevBtn"),
-    nextBtn = document.getElementById("nextBtn"),
-    gcount = document.getElementById("gcount");
-var at = 0;
+var track1=document.getElementById("track1"), track2=document.getElementById("track2"),
+    prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn");
+var at=0;
 
-PEOPLE.forEach(function(p){
-  var b = document.createElement("button");
-  b.className = "pc";
-  b.setAttribute("aria-label", p.cap);
-  b.innerHTML = '<img src="' + p.img + '" alt=""><span class="cap">' + p.cap + '</span>';
-  track.appendChild(b);
-});
+function fill(track, list){
+  list.forEach(function(p){
+    var b=document.createElement("button");
+    b.className="pc";
+    b.setAttribute("aria-label",p.cap);
+    b.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>';
+    track.appendChild(b);
+  });
+}
+fill(track1, PEOPLE);
+fill(track2, PEOPLE.slice(3).concat(PEOPLE.slice(0,3)));   /* offset, so rows never line up */
 
-function perView(){
-  return Number(getComputedStyle(gallery).getPropertyValue("--per").trim()) || 5;
+function step(){
+  var f=track1.children[0];
+  return f ? f.getBoundingClientRect().width + parseFloat(getComputedStyle(track1).gap||0) : 0;
 }
 function slide(){
-  var per = perView(), max = Math.max(0, PEOPLE.length - per);
-  at = Math.max(0, Math.min(at, max));
-  var first = track.children[0];
-  var step = first ? first.getBoundingClientRect().width +
-             parseFloat(getComputedStyle(track).gap || 0) : 0;
-  track.style.transform = "translateX(" + (-at * step) + "px)";
-  prevBtn.disabled = at === 0;
-  nextBtn.disabled = at >= max;
-  gcount.textContent = "Showing " + (at + 1) + "\u2013" + Math.min(at + per, PEOPLE.length) +
-                       " of " + PEOPLE.length + " people being recorded";
+  var st=step();
+  if(!st){ return; }
+  var max=Math.max(0, PEOPLE.length - Math.max(1, Math.floor(window.innerWidth/st)));
+  at=Math.max(0,Math.min(at,max));
+  /* held a third of a print to the left, so the row is always running off the page */
+  track1.style.transform="translateX("+(-at*st - st*0.35)+"px)";
+  track2.style.transform="translateX("+(-at*st - st*0.72)+"px)";
+  prevBtn.disabled = at===0;
+  nextBtn.disabled = at>=max;
 }
-prevBtn.addEventListener("click", function(){ at -= 1; slide(); });
-nextBtn.addEventListener("click", function(){ at += 1; slide(); });
-window.addEventListener("resize", function(){ clearTimeout(window.__gt); window.__gt = setTimeout(slide, 120); });
+prevBtn.addEventListener("click",function(){ at-=1; slide(); });
+nextBtn.addEventListener("click",function(){ at+=1; slide(); });
+window.addEventListener("resize",function(){ clearTimeout(window.__gt); window.__gt=setTimeout(slide,120); });
 slide();
 
 var reelrow = document.getElementById("reelrow");
