@@ -1,0 +1,160 @@
+<title>A life in their own voice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+
+<style>
+:root{--bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+      --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--shadow:rgba(30,26,22,.16)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+  --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55)}}
+:root[data-theme="dark"]{--bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;
+  --ink3:#7C766D;--line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+p{margin:0}img{max-width:100%;display:block}button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.in{max-width:1060px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.6rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0}
+.mark{border-bottom:1px solid var(--line)}
+.mark .in{display:flex;align-items:baseline;gap:.6rem;padding-top:.7rem;padding-bottom:.7rem}
+.mark .wm{font-family:"Newsreader",Georgia,serif;font-size:.98rem;color:var(--ink2);text-decoration:none}
+.mark .wm:hover{color:var(--ink)}
+.mark .who{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-left:auto}
+.hero{padding:clamp(2.2rem,6vw,4.4rem) 0 clamp(1.6rem,4vw,2.6rem)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,330px) minmax(0,1fr);gap:clamp(1.8rem,5vw,4rem);align-items:center}
+@media (max-width:760px){.hero-grid{grid-template-columns:1fr;gap:1.6rem}}
+.portrait{aspect-ratio:4/5;border:1px solid var(--line);overflow:hidden;box-shadow:0 26px 50px -34px var(--shadow);background:var(--surf2)}
+.portrait img{width:100%;height:100%;object-fit:cover}
+.hero-copy{display:flex;flex-direction:column;gap:1rem}
+.hero h1{font-size:clamp(2.3rem,6vw,3.7rem);line-height:1.02}
+.dob{font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--ink2)}
+.intro{font-size:1.04rem;color:var(--ink2);max-width:46ch}
+.bar{display:flex;flex-direction:column;gap:.45rem;max-width:28rem}
+.track{height:5px;background:var(--surf2);border:1px solid var(--line);display:flex}
+.track i{display:block;background:var(--acc)}
+.bar .t{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--ink2)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:var(--bg);border:1px solid var(--acc);border-radius:2px;padding:.6rem 1.05rem;font-size:.9rem;font-weight:600;text-decoration:none;width:max-content}
+section{padding:clamp(2.2rem,5vw,3.4rem) 0;border-top:1px solid var(--line)}
+.sec-hd{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.5rem;max-width:60ch}
+.sec-hd h2{font-size:clamp(1.4rem,3vw,1.9rem)}
+.sec-hd p{color:var(--ink2);font-size:.96rem}
+.qs{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.qcard{text-align:left;background:var(--surf);border:1px solid var(--line);padding:.9rem 1rem 1rem;display:flex;flex-direction:column;gap:.5rem;transition:.18s}
+.qcard:hover{transform:translateY(-2px);border-color:var(--acc)}
+.qcard .n{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;color:var(--acc)}
+.qcard .q{font-family:"Newsreader",Georgia,serif;font-size:1.12rem;line-height:1.26}
+.qcard .st{margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);border-top:1px solid var(--line);padding-top:.5rem}
+.qcard.done .st{color:var(--acc)}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3);font-size:.84rem;display:flex;flex-direction:column;gap:.3rem}
+.note{background:var(--accSoft);border-left:3px solid var(--acc);padding:.7rem .9rem;font-size:.86rem;color:var(--ink2);max-width:54ch}
+</style>
+
+<div class="mark">
+  <div class="in">
+    <a class="wm" href="lifequestions.html">Life Questions</a>
+    <span class="who" id="fam">A private page</span>
+  </div>
+</div>
+
+<div class="in">
+  <header class="hero">
+    <div class="hero-grid">
+      <div class="portrait"><img id="photo" src="" alt=""></div>
+      <div class="hero-copy">
+        <p class="mo" id="kicker">Their life, in their own voice</p>
+        <h1 id="name">&nbsp;</h1>
+        <p class="dob" id="dob"></p>
+        <p class="intro" id="intro"></p>
+        <div class="bar">
+          <div class="track"><i id="fill" style="width:0%"></i></div>
+          <p class="t" id="prog"></p>
+        </div>
+        <a class="btn" href="#questions">See the questions</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="questions">
+    <div class="sec-hd">
+      <p class="mo">The questions</p>
+      <h2>Twelve to start with</h2>
+      <p>Each one becomes a short film. Recorded answers play; the rest are still waiting.</p>
+    </div>
+    <div class="qs" id="qs"></div>
+    <p class="note" style="margin-top:1.4rem" id="demoNote"></p>
+  </section>
+
+  <footer>
+    <p>A private page. The videos are unlisted &mdash; only people with this link can watch them.</p>
+    <p><a href="lifequestions.html">Life Questions</a></p>
+  </footer>
+</div>
+
+<script>
+var PEOPLE = {
+  ray:      { name:"Ray Whelan",     img:"f1.jpg", born:"Born 2 March 1939", age:"86 years old", done:4,
+              line:"Forty years on the buses out of Leeds, and a word for everyone who got on." },
+  tenzin:   { name:"Tenzin Norbu",   img:"f2.jpg", born:"Born 11 August 1946", age:"79 years old", done:2,
+              line:"Came over the pass at nineteen and never went back." },
+  aleks:    { name:"Aleks Kowal",    img:"f3.jpg", born:"Born 6 January 1942", age:"84 years old", done:7,
+              line:"Fished the same stretch of coast for fifty-one years." },
+  margaret: { name:"Margaret Hale",  img:"f4.jpg", born:"Born 19 April 1944", age:"81 years old", done:5,
+              line:"Taught infants for thirty years and still gets Christmas cards." },
+  iris:     { name:"Iris Bennett",   img:"f5.jpg", born:"Born 30 July 1947", age:"78 years old", done:3,
+              line:"Sang in a covers band until she was seventy-two." },
+  halina:   { name:"Halina Nowak",   img:"f6.jpg", born:"Born 14 May 1937", age:"88 years old", done:9,
+              line:"Arrived with a suitcase in 1961 and stayed for the weather, she says." },
+  shanti:   { name:"Shanti Iyer",    img:"f7.jpg", born:"Born 12 June 1943", age:"83 years old", done:7,
+              line:"Three children, two countries, one very small kitchen." },
+  luis:     { name:"Luis James de Souza", img:"f8.jpg", born:"Born 4 February 1943", age:"83 years old", done:5,
+              line:"Recorded by his family at the kitchen table." }
+};
+
+var QUESTIONS = [
+  "Tell me about the house you grew up in.",
+  "Who were your mother and father, really — not as parents, but as people?",
+  "What did you do after school, before you were old enough to work?",
+  "What did you want to be at fifteen, and what happened to that plan?",
+  "Your first job, and your first wage.",
+  "The first time you fell in love.",
+  "How did you meet the person you built your life with?",
+  "The day each of your children was born.",
+  "The work you did, and the thing you're proudest of making.",
+  "What was the hardest year of your life, and how did you get through it?",
+  "What have you changed your mind about?",
+  "What would you say to whoever watches this in fifty years?"
+];
+
+function slug(){
+  var m = /[?&]p=([a-z0-9\-]+)/i.exec(window.location.search);
+  return (m && PEOPLE[m[1].toLowerCase()]) ? m[1].toLowerCase() : "ray";
+}
+
+var who = slug(), p = PEOPLE[who];
+document.title = p.name;
+document.getElementById("photo").src = p.img;
+document.getElementById("photo").alt = p.name;
+document.getElementById("name").textContent = p.name;
+document.getElementById("dob").innerHTML = p.born + " &nbsp;·&nbsp; " + p.age;
+document.getElementById("intro").textContent = p.line;
+document.getElementById("prog").textContent = p.done + " of 12 answers recorded";
+document.getElementById("fill").style.width = Math.round(p.done / 12 * 100) + "%";
+document.getElementById("fam").textContent = "A private page for the " + p.name.split(" ").pop() + " family";
+document.getElementById("demoNote").textContent =
+  "A sample page, so you can see what a finished one looks like. " + p.name.split(" ")[0] +
+  "'s family record an answer on a phone, upload it, and the question below turns into a window you press.";
+
+var qs = document.getElementById("qs");
+QUESTIONS.forEach(function(q, i){
+  var done = i < p.done;
+  var b = document.createElement("div");
+  b.className = "qcard" + (done ? " done" : "");
+  b.innerHTML = '<span class="n">' + ("0" + (i + 1)).slice(-2) + '</span>' +
+                '<span class="q">' + q + '</span>' +
+                '<span class="st">' + (done ? "Recorded" : "To record") + '</span>';
+  qs.appendChild(b);
+});
+</script>

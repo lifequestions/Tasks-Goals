@@ -89,6 +89,11 @@ body[data-rows="2"] .track.second{display:flex}
 .pc img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:2px}
 .pc .cap{display:block;text-align:center;font-family:"Fraunces",Georgia,serif;
          font-size:1.05rem;color:var(--ink2);padding:.75rem 0 .35rem}
+.pc{text-decoration:none;color:inherit}
+.pc .go{position:absolute;left:11px;right:11px;bottom:3.1rem;text-align:center;font-size:.78rem;font-weight:600;
+        color:#F6F1E6;background:rgba(24,38,35,.88);border-radius:999px;padding:.34rem .5rem;
+        opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;pointer-events:none}
+.pc:hover .go,.pc:focus-visible .go{opacity:1;transform:translateY(0)}
 .pc:hover{transform:translateY(-20px) scale(1.07);box-shadow:0 48px 76px -28px var(--shadow);z-index:20}
 .arw{position:absolute;top:38%;width:52px;height:52px;border-radius:50%;
      background:var(--surf);border:1px solid var(--line);color:var(--ink2);font-size:1.2rem;
@@ -592,10 +597,14 @@ function watchPosters(root){
 
 /* The faces under the headline. Add to the list and the rows grow. */
 var PEOPLE = [
-  { img:"f1.jpg", cap:"Ray, 86" },    { img:"f2.jpg", cap:"Tenzin, 79" },
-  { img:"f3.jpg", cap:"Aleks, 84" },  { img:"f4.jpg", cap:"Margaret, 81" },
-  { img:"f5.jpg", cap:"Iris, 78" },   { img:"f6.jpg", cap:"Halina, 88" },
-  { img:"f7.jpg", cap:"Shanti, 83" }, { img:"f8.jpg", cap:"Luis, 83" }
+  { img:"f1.jpg", cap:"Ray, 86",      href:"person.html?p=ray" },
+  { img:"f2.jpg", cap:"Tenzin, 79",   href:"person.html?p=tenzin" },
+  { img:"f3.jpg", cap:"Aleks, 84",    href:"person.html?p=aleks" },
+  { img:"f4.jpg", cap:"Margaret, 81", href:"person.html?p=margaret" },
+  { img:"f5.jpg", cap:"Iris, 78",     href:"person.html?p=iris" },
+  { img:"f6.jpg", cap:"Halina, 88",   href:"person.html?p=halina" },
+  { img:"f7.jpg", cap:"Shanti, 83",   href:"person.html?p=shanti" },
+  { img:"f8.jpg", cap:"Luis, 83",     href:"dad.html" }
 ];
 
 var track1=document.getElementById("track1"), track2=document.getElementById("track2"),
@@ -604,11 +613,13 @@ var at=0;
 
 function fill(track, list){
   list.forEach(function(p){
-    var b=document.createElement("button");
-    b.className="pc";
-    b.setAttribute("aria-label",p.cap);
-    b.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>';
-    track.appendChild(b);
+    var a=document.createElement("a");
+    a.className="pc";
+    a.href=p.href;
+    a.setAttribute("aria-label","Open "+p.cap.split(",")[0]+"'s page");
+    a.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>'+
+                '<span class="go">Open their page &rarr;</span>';
+    track.appendChild(a);
   });
 }
 fill(track1, PEOPLE);
