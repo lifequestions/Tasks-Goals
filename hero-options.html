@@ -2,203 +2,741 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ten Hero Arrangements</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Life Questions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap">
 
 <style>
-:root{--bg:#FAF6EF;--ink:#211F1C;--ink2:#6A645C;--ink3:#9A9289;--line:#E6DFD3;--acc:#2C5F5A;--shadow:rgba(60,48,36,.5)}
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:#101211;font-family:"Karla",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit;cursor:pointer}
-:focus-visible{outline:2px solid #fff;outline-offset:2px}
-.chrome{position:sticky;top:0;z-index:80;background:#101211;border-bottom:1px solid #232624;color:#E9E9E7}
-.chrome-in{max-width:1500px;margin:0 auto;padding:.55rem 1rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
-.clab{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;font-weight:700;white-space:nowrap}
-.tabs{display:flex;gap:.3rem;overflow-x:auto;flex:1;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{background:none;border:1px solid #2E3230;color:#9AA0A8;border-radius:999px;padding:.32rem .72rem;font-size:.7rem;font-weight:600;white-space:nowrap}
-.tab:hover{color:#fff;border-color:#5B615E}
-.tab[aria-pressed="true"]{background:#F2F2F0;color:#101211;border-color:#F2F2F0}
-.note{max-width:1500px;margin:0 auto;padding:.4rem 1rem .65rem;font-size:.76rem;color:#8A918D;border-top:1px solid #1A1D1B}
-.note b{color:#E9E9E7}
-
-.stage{background:var(--bg);color:var(--ink);min-height:88vh;padding-bottom:4rem;overflow:hidden}
-.eyebrow{font-size:.82rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--acc);margin:0}
-h1{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,5.2vw,4.2rem);line-height:1.02;margin:1rem 0 0;letter-spacing:-.018em}
-h1 em{font-style:italic;color:var(--acc)}
-.sub{color:var(--ink2);margin-top:1.3rem;font-size:clamp(1.14rem,1.85vw,1.4rem);line-height:1.55}
-.cta{display:flex;gap:.8rem;margin-top:2rem;flex-wrap:wrap}
-.btn{background:var(--acc);color:#FAF6EF;border:1px solid var(--acc);border-radius:999px;padding:.9rem 1.8rem;font-weight:700;font-size:1rem}
-.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
-.fine{font-size:1rem;color:var(--ink3);margin-top:1.2rem}
-
-/* below-the-words layout */
-.stage[data-mode="below"] .top{max-width:980px;margin:0 auto;text-align:center;padding:clamp(2.2rem,5vw,4rem) clamp(1.2rem,5vw,3rem) 0}
-.stage[data-mode="below"] h1{max-width:18ch;margin-inline:auto}
-.stage[data-mode="below"] .sub{max-width:56ch;margin-inline:auto}
-.stage[data-mode="below"] .cta,.stage[data-mode="below"] .fine{justify-content:center;text-align:center}
-.stage[data-mode="below"] .band{margin-top:clamp(2.2rem,4.5vw,3.4rem)}
-
-/* side layout */
-.stage[data-mode="side"] .wrap{max-width:1280px;margin:0 auto;padding:clamp(2rem,5vw,4rem) clamp(1.2rem,4vw,2.6rem);
-  display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(1.6rem,4vw,3.4rem);align-items:center}
-@media (max-width:940px){.stage[data-mode="side"] .wrap{grid-template-columns:1fr}}
-.stage[data-mode="side"] h1{max-width:14ch}
-.stage[data-mode="side"] .sub{max-width:40ch}
-
-/* the print */
-.pc{background:#fff;padding:10px;border-radius:4px;box-shadow:0 20px 38px -20px var(--shadow);overflow:hidden;border:0;display:block;
-    transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .3s}
-.pc img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:2px}
-.pc.named{padding-bottom:2.5rem}
-.pc .cap{position:absolute;left:0;right:0;bottom:.85rem;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:.92rem;color:var(--ink2)}
-.pc{position:relative}
-.pc:hover{z-index:60;box-shadow:0 34px 60px -18px var(--shadow)}
-
-/* 01 + 02 four by two */
-[data-h="1"] .band,[data-h="2"] .band{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(12px,1.5vw,22px);max-width:1180px;margin-inline:auto;padding:0 clamp(1.2rem,5vw,3rem)}
-[data-h="1"] .pc:hover,[data-h="2"] .pc:hover{transform:translateY(-9px)}
-[data-h="2"] .band{max-width:1320px;gap:clamp(14px,1.8vw,26px)}
-
-/* 03 + 04 wide fans below */
-[data-h="3"] .band,[data-h="4"] .band{position:relative;height:clamp(340px,34vw,520px);display:flex;align-items:center;justify-content:center}
-[data-h="3"] .pc,[data-h="4"] .pc{position:absolute;width:clamp(150px,17vw,268px);transform-origin:50% 135%}
-[data-h="4"] .pc{width:clamp(160px,19vw,300px)}
-
-/* 05 side fan */
-[data-h="5"] .band{position:relative;height:clamp(360px,32vw,520px);display:flex;align-items:center;justify-content:center}
-[data-h="5"] .pc{position:absolute;width:clamp(120px,13vw,205px);transform-origin:50% 140%}
-
-/* 06 side grid 2x4 */
-[data-h="6"] .band{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1vw,14px)}
-[data-h="6"] .pc{padding:7px}
-[data-h="6"] .pc:hover{transform:translateY(-7px)}
-
-/* 07 side staggered columns */
-[data-h="7"] .band{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1vw,14px);align-items:start}
-[data-h="7"] .pc{padding:7px}
-[data-h="7"] .pc:nth-child(even){margin-top:clamp(20px,3vw,52px)}
-[data-h="7"] .pc:hover{transform:translateY(-7px)}
-
-/* 08 side scatter */
-[data-h="8"] .band{position:relative;height:clamp(380px,34vw,540px)}
-[data-h="8"] .pc{position:absolute;width:clamp(110px,12.5vw,190px)}
-
-@media (max-width:820px){
-  [data-h="1"] .band,[data-h="2"] .band,[data-h="6"] .band,[data-h="7"] .band{grid-template-columns:repeat(2,1fr)}
+:root{
+  --bg:#FAF6EF;--band:#F3EDE3;--surf:#FFFFFF;--ink:#211F1C;--ink2:#6A645C;--ink3:#9A9289;
+  --line:#E6DFD3;--acc:#2C5F5A;--accDeep:#1F4744;--accSoft:#E3EDEA;--gold:#B8873F;
+  --shadow:rgba(60,48,36,.16);--r:14px;
 }
-@media (prefers-reduced-motion:reduce){.pc{transition:none}}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#16150F;--band:#1D1C16;--surf:#211F19;--ink:#F2EDE3;--ink2:#A9A197;--ink3:#7E776D;
+    --line:#302D25;--acc:#8FC2B8;--accDeep:#7FB6AC;--accSoft:#1F2B28;--gold:#D8A85E;
+    --shadow:rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16150F;--band:#1D1C16;--surf:#211F19;--ink:#F2EDE3;--ink2:#A9A197;--ink3:#7E776D;
+  --line:#302D25;--acc:#8FC2B8;--accDeep:#7FB6AC;--accSoft:#1F2B28;--gold:#D8A85E;
+  --shadow:rgba(0,0,0,.55);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Fraunces","Iowan Old Style",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.018em;font-variation-settings:"opsz" 110}
+p{margin:0}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
+.in{max-width:1180px;margin:0 auto;padding:0 clamp(1.2rem,5vw,3rem)}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--acc);margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:var(--acc);color:#FAF6EF;border:1px solid var(--acc);border-radius:999px;padding:.9rem 1.85rem;font-size:1rem;font-weight:700;text-decoration:none;transition:.18s}
+.btn:hover{background:var(--accDeep);border-color:var(--accDeep)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--band);border-color:var(--ink3)}
+.btn.sm{padding:.58rem 1.2rem;font-size:.9rem}
+.btn.pale{background:#FAF6EF;color:#1F4744;border-color:#FAF6EF}
+.btn.pale:hover{background:#fff;border-color:#fff}
+
+/* hero switcher (not part of the page — a tool for choosing) */
+.switch{position:sticky;top:0;z-index:90;background:#101211;color:#E9E9E7;border-bottom:1px solid #232624}
+.switch-in{max-width:1500px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.slab{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;font-weight:700}
+.stabs{display:flex;gap:.3rem;overflow-x:auto;flex:1;scrollbar-width:none}
+.stabs::-webkit-scrollbar{display:none}
+.stab{background:none;border:1px solid #2E3230;color:#9AA0A8;border-radius:999px;padding:.28rem .68rem;font-size:.68rem;font-weight:600;white-space:nowrap;cursor:pointer}
+.stab:hover{color:#fff;border-color:#5B615E}
+.stab[aria-pressed="true"]{background:#F2F2F0;color:#101211;border-color:#F2F2F0}
+.snote{max-width:1500px;margin:0 auto;padding:.35rem 1rem .6rem;font-size:.74rem;color:#8A918D;border-top:1px solid #1A1D1B}
+.snote b{color:#E9E9E7}
+.nav{top:0}
+
+/* hero: shared bits */
+.hero .top{text-align:center;max-width:980px;margin:0 auto;padding:0 clamp(1.2rem,5vw,3rem)}
+.hero .side{max-width:1280px;margin:0 auto;padding:0 clamp(1.2rem,4vw,2.6rem);display:grid;
+  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(1.6rem,4vw,3.4rem);align-items:center}
+@media (max-width:940px){.hero .side{grid-template-columns:1fr}}
+.hero .side .cta{justify-content:flex-start}
+.hero .side h1,.hero .side .sub{margin-inline:0;text-align:left}
+.hero .side h1{max-width:14ch}
+.hero .side .sub{max-width:40ch}
+.hero .side .eyebrow,.hero .side .fine{text-align:left}
+.pc .cap{position:absolute;left:0;right:0;bottom:.8rem;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:.92rem;color:var(--ink2)}
+.pc.named{padding-bottom:2.4rem}
+.pc{position:relative}
+
+/* fans */
+body[data-h="3"] .band,body[data-h="4"] .band,body[data-h="5"] .band,body[data-h="6"] .band{
+  display:flex;align-items:center;justify-content:center;position:relative;
+  height:clamp(330px,33vw,500px);grid-template-columns:none;max-width:none;padding:0}
+body[data-h="3"] .pc,body[data-h="4"] .pc,body[data-h="5"] .pc,body[data-h="6"] .pc{
+  position:absolute;transform-origin:50% 135%;aspect-ratio:auto}
+body[data-h="3"] .pc{width:clamp(180px,21vw,330px)}
+body[data-h="4"] .pc{width:clamp(165px,19vw,300px)}
+body[data-h="5"] .pc{width:clamp(150px,17vw,260px)}
+body[data-h="6"] .pc{width:clamp(140px,15vw,225px)}
+
+/* side layouts */
+body[data-h="7"] .band,body[data-h="8"] .band{margin:0;max-width:none;padding:0;gap:clamp(8px,1vw,14px)}
+body[data-h="8"] .band{align-items:start}
+body[data-h="8"] .pc:nth-child(even){margin-top:clamp(20px,3vw,52px)}
+body[data-h="2"] .band{max-width:1320px;gap:clamp(14px,1.8vw,26px)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .in{display:flex;align-items:center;gap:1.6rem;padding-top:.85rem;padding-bottom:.85rem}
+.wm{font-family:"Fraunces",Georgia,serif;font-size:1.3rem;letter-spacing:-.02em;text-decoration:none}
+.nav .sp{flex:1}
+.nav a.q{font-size:.95rem;color:var(--ink2);text-decoration:none}
+.nav a.q:hover{color:var(--ink)}
+@media (max-width:720px){.nav a.q{display:none}}
+
+/* hero */
+.hero{padding:clamp(2.4rem,6vw,4.4rem) 0 clamp(2.2rem,5vw,3.6rem)}
+.top{max-width:960px;margin:0 auto;text-align:center;padding:0 clamp(1.2rem,5vw,3rem)}
+.hero h1{font-size:clamp(2.6rem,5.6vw,4.3rem);line-height:1.02;margin:1rem auto 0;max-width:18ch}
+.hero h1 em{font-style:italic;color:var(--acc)}
+.hero .sub{font-size:clamp(1.16rem,1.9vw,1.42rem);color:var(--ink2);max-width:54ch;margin:1.3rem auto 0;line-height:1.55}
+.hero .cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem;justify-content:center}
+.hero .fine{font-size:1rem;color:var(--ink3);margin-top:1.2rem}
+
+.band{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(10px,1.3vw,18px);
+      max-width:1180px;margin:clamp(2.2rem,4.5vw,3.4rem) auto 0;padding:0 clamp(1.2rem,5vw,3rem)}
+.pc{background:#fff;padding:9px;border-radius:4px;box-shadow:0 18px 36px -22px var(--shadow);
+    aspect-ratio:4/5;overflow:hidden;border:0;display:block;transition:transform .3s cubic-bezier(.22,1,.36,1),box-shadow .3s}
+.pc img{width:100%;height:100%;object-fit:cover;display:block;border-radius:2px}
+.pc:hover{transform:translateY(-8px);box-shadow:0 30px 50px -22px var(--shadow);z-index:5}
+@media (max-width:820px){.band{grid-template-columns:repeat(2,1fr)}}
+
+/* proof strip */
+.proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--band)}
+.proof .in{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.4rem;padding-top:1.6rem;padding-bottom:1.6rem}
+.proof p{font-size:1.06rem;color:var(--ink2)}
+.proof b{display:block;font-family:"Fraunces",Georgia,serif;font-size:1.22rem;color:var(--ink);font-weight:500;margin-bottom:.1rem}
+
+/* the reel */
+.reelrow{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media (max-width:1000px){.reelrow{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.reelrow{grid-template-columns:1fr}}
+.vc{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s,border-color .18s}
+.vc:hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 20px 40px -30px var(--shadow)}
+.vthumb{position:relative;aspect-ratio:16/9;background:var(--band);overflow:hidden}
+.vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(16,16,14,.62);display:grid;place-content:center;z-index:2;transition:background .2s}
+.vplay::after{content:"";width:0;height:0;border-left:15px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.vc:hover .vplay{background:var(--acc)}
+.noimg{position:absolute;inset:0;display:grid;place-content:center;background:repeating-linear-gradient(-45deg,var(--band) 0 10px,var(--surf) 10px 20px)}
+.noimg-t{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);text-align:center;padding:0 .6rem}
+.g8 .noimg-t{font-size:.54rem}
+.vdur{position:absolute;right:8px;bottom:8px;z-index:2;font-size:.72rem;font-weight:600;background:rgba(16,16,14,.78);color:#fff;padding:.1rem .42rem;border-radius:4px}
+.vmeta{padding:.95rem 1.05rem 1.1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.vq{font-family:"Fraunces",Georgia,serif;font-size:1.18rem;line-height:1.25}
+.vwho{font-size:.94rem;color:var(--ink2);margin-top:auto}
+.vsrc{font-size:.76rem;color:var(--ink3)}
+.illus{text-align:center;margin-top:1.6rem;font-size:.85rem;color:var(--ink3)}
+
+/* alternating rows */
+.rows{padding:clamp(3rem,7vw,5.6rem) 0}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(2rem,5vw,4.4rem);align-items:center;margin-bottom:clamp(3rem,6vw,5rem)}
+.row:last-child{margin-bottom:0}
+.row.flip .txt{order:-1}
+@media (max-width:760px){.row.flip .txt{order:0}}
+.row img{border-radius:var(--r);box-shadow:0 34px 60px -44px var(--shadow)}
+.row .txt{max-width:44ch}
+.row .n{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+.row h2{font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1.1;margin:.7rem 0 .9rem}
+.row p{color:var(--ink2);font-size:1.14rem}
+.row .small{margin-top:.9rem;font-size:1.02rem;color:var(--ink3)}
+
+/* band */
+.wrap-band{background:var(--band);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sec{padding:clamp(3rem,7vw,5.4rem) 0}
+.sec-hd{max-width:36ch;margin-bottom:clamp(1.8rem,4vw,2.8rem)}
+.sec-hd h2{font-size:clamp(1.9rem,4vw,2.9rem);line-height:1.08;margin:.7rem 0 .8rem}
+.sec-hd p{color:var(--ink2);font-size:1.16rem;max-width:52ch}
+.sec-hd.mid{margin-left:auto;margin-right:auto;text-align:center;max-width:44ch}
+.sec-hd.mid p{margin-left:auto;margin-right:auto}
+
+/* questions */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.qq{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:1.45rem 1.5rem;font-family:"Fraunces",Georgia,serif;font-size:1.34rem;line-height:1.26}
+.qnote{margin-top:1.4rem;color:var(--ink2);font-size:1rem}
+
+/* quotes */
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.1rem}
+.quote{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:1.5rem}
+.quote p{font-family:"Fraunces",Georgia,serif;font-size:1.24rem;line-height:1.42}
+.quote .who{margin-top:1rem;font-size:.9rem;color:var(--ink2)}
+.quote .tag{display:inline-block;margin-top:.9rem;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:.1rem .55rem}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.1rem;align-items:start}
+.plan{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:1.6rem}
+.plan.lead{border:2px solid var(--acc);box-shadow:0 26px 50px -40px var(--shadow)}
+.plan .tag{font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+.plan h3{font-size:1.4rem;margin:.5rem 0 .2rem}
+.plan .p{font-family:"Fraunces",Georgia,serif;font-size:2.6rem;line-height:1;margin:.5rem 0 1rem}
+.plan .p small{font-family:"Karla",sans-serif;font-size:.9rem;color:var(--ink3);font-weight:500}
+.plan ul{margin:0 0 1.4rem;padding:0;list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.plan li{display:flex;gap:.6rem;font-size:1.05rem;color:var(--ink2)}
+.plan li::before{content:"\2713";color:var(--acc);font-weight:700;flex:none}
+.addons{margin-top:1.3rem;display:flex;flex-wrap:wrap;gap:.6rem}
+.addons span{background:var(--surf);border:1px solid var(--line);border-radius:99px;padding:.4rem 1rem;font-size:.92rem;color:var(--ink2)}
+.addons b{color:var(--ink)}
+.pledge{margin-top:1.8rem;background:var(--accSoft);border-radius:14px;padding:1.4rem 1.6rem;max-width:64ch}
+.pledge h3{font-size:1.3rem;margin-bottom:.4rem}
+.pledge p{color:var(--ink2);font-size:1rem}
+
+/* faq */
+.faq{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.6rem 3rem}
+.fq h3{font-size:1.28rem;margin-bottom:.35rem}
+.fq p{color:var(--ink2);font-size:1.08rem}
+
+/* start */
+.start{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:clamp(1.5rem,4vw,2.6rem);box-shadow:0 30px 60px -48px var(--shadow)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;align-items:end}
+.field{display:flex;flex-direction:column;gap:.35rem}
+.field label{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.field input{font-family:"Karla",sans-serif;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.8rem .95rem}
+.field input:focus{border-color:var(--acc);outline:none}
+.form .go{grid-column:1/-1}
+@media (min-width:760px){.form .go{grid-column:auto}}
+.done{display:none;flex-direction:column;gap:1rem}
+.done.on{display:flex}
+.done .url{font-family:"Karla",monospace;font-size:1.02rem;font-weight:600;color:var(--acc);background:var(--accSoft);border-radius:10px;padding:.85rem 1rem;word-break:break-all}
+.done ol{margin:0;padding-left:1.3rem;color:var(--ink2);display:flex;flex-direction:column;gap:.5rem;font-size:1rem}
+.fine2{margin-top:1rem;font-size:.88rem;color:var(--ink3)}
+
+/* the player */
+.vscrim{position:fixed;inset:0;background:rgba(12,12,10,.88);display:none;align-items:center;justify-content:center;padding:clamp(.7rem,3vw,2rem);z-index:90;backdrop-filter:blur(4px)}
+.vscrim.on{display:flex}
+.vbox{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;width:min(900px,100%)}
+.vtop{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line)}
+.xb{background:none;border:1px solid var(--line);border-radius:99px;padding:.35rem .85rem;font-size:.78rem;font-weight:600;color:var(--ink2)}
+.xb:hover{border-color:var(--ink2);color:var(--ink)}
+.vscreen{aspect-ratio:16/9;background:#000}
+.vscreen iframe{width:100%;height:100%;border:0;display:block}
+.vfoot{padding:.85rem 1.1rem 1.1rem;font-size:.88rem;color:var(--ink2)}
+.vfoot a{color:var(--acc)}
+
+/* closing band */
+.close{background:var(--accDeep);color:#F6F1E6}
+.close .in{padding:clamp(3rem,7vw,5.4rem) 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+.close h2{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.06;max-width:20ch;color:#F6F1E6}
+.close p{max-width:46ch;color:rgba(246,241,230,.82);font-size:1.18rem}
+
+footer{padding:2.6rem 0 3.6rem;color:var(--ink3);font-size:.92rem;display:flex;flex-wrap:wrap;gap:1rem 2.4rem;justify-content:space-between}
+footer a{color:var(--ink2);text-decoration:none}
+footer a:hover{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
-<div class="chrome">
-  <div class="chrome-in">
-    <span class="clab">Hero arrangements</span>
-    <div class="tabs" id="tabs"></div>
+<div class="switch">
+  <div class="switch-in">
+    <span class="slab">Hero</span>
+    <div class="stabs" id="stabs"></div>
   </div>
-  <p class="note" id="note"></p>
+  <p class="snote" id="snote"></p>
 </div>
 
-<div class="stage" id="stage" data-h="1" data-mode="below"></div>
+<nav class="nav">
+  <div class="in">
+    <a class="wm" href="#top">Life&nbsp;Questions</a>
+    <span class="sp"></span>
+    <a class="q" href="#reel">The answers</a>
+    <a class="q" href="#how">How it works</a>
+    <a class="q" href="#book">The book</a>
+    <a class="q" href="#price">Price</a>
+    <a class="btn sm" href="#start">Start free</a>
+  </div>
+</nav>
+
+<div class="in" id="top">
+  <header class="hero" id="heroHost"></header>
+</div>
+
+<div class="proof">
+  <div class="in">
+    <p><b>Sixty questions</b>Written to get past &ldquo;it was fine&rdquo; &mdash; each with follow-ups for when they dry up.</p>
+    <p><b>Forty minutes</b>That's a first recording. Most families do three sittings and stop worrying about it.</p>
+    <p><b>Yours for good</b>Download every file whenever you like. No subscription, ever.</p>
+  </div>
+</div>
+
+
+<div class="wrap-band" id="reel">
+  <div class="in sec">
+    <div class="sec-hd mid">
+      <p class="eyebrow">What you end up with</p>
+      <h2>A reel of answers, in their own voices</h2>
+      <p>Every question becomes one short film. Press any of them &mdash; this is exactly how a finished page plays.</p>
+    </div>
+    <div class="reelrow" id="reelrow"></div>
+    <p class="illus">Example recordings, borrowed from public oral-history interviews while we build. Each is credited, and real families replace them as they join.</p>
+  </div>
+</div>
+
+<div class="in rows" id="how">
+  <div class="row">
+    <img src="question.jpg" alt="A question card: tell me about the house you grew up in">
+    <div class="txt">
+      <p class="n">Step one</p>
+      <h2>We send you the question</h2>
+      <p>One a week, or all sixty at once if you're in a hurry. Every question comes with the follow-ups that turn a thirty-second answer into a proper story &mdash; the ones you'd never think to ask in the moment.</p>
+      <p class="small">Family can add their own too, credited on the page: <em>asked by Tom, aged 9</em>.</p>
+    </div>
+  </div>
+
+  <div class="row flip">
+    <img src="phone.jpg" alt="A phone recording an answer">
+    <div class="txt">
+      <p class="n">Step two</p>
+      <h2>They answer it on a phone</h2>
+      <p>Prop it on a stack of books, sit beside it rather than behind it, ask them, then stay quiet. No app, no editing, no camera crew &mdash; and no need for them to be any good at technology, because they never touch it.</p>
+      <p class="small">Camera-shy? Record their voice over a photograph instead. It works nearly as well.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <img src="page.jpg" alt="A finished page, with a photograph and the recorded answers">
+    <div class="txt">
+      <p class="n">Step three</p>
+      <h2>It becomes their page</h2>
+      <p>Upload, and the page builds itself: their photograph, their dates, their answers, each one a window you press to hear them. One private link for the whole family &mdash; their sister, your kids, the cousins in Australia.</p>
+      <p class="small">Nothing is public. No search engine, no directory, no strangers.</p>
+    </div>
+  </div>
+</div>
+
+<div class="wrap-band" id="book">
+  <div class="in sec">
+    <div class="row" style="margin-bottom:0">
+      <img src="book.jpg" alt="A hardback book of a life story">
+      <div class="txt">
+        <p class="eyebrow">And at the end of it</p>
+        <h2 style="font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.08;margin:.7rem 0 .9rem">A book, in their own words</h2>
+        <p style="color:var(--ink2);font-size:1.05rem">Every answer is transcribed automatically, so their stories exist as words as well as video. Choose the ones you want, add the photographs, and we print a hardback &mdash; the thing that gets passed round at Christmas and ends up on a shelf for forty years.</p>
+        <p class="small">From &pound;59. One copy or fifteen.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="in sec">
+  <div class="sec-hd">
+    <p class="eyebrow">The questions</p>
+    <h2>Six of the sixty</h2>
+    <p>The easy ones come first. The ones that make people cry are near the end, once they've forgotten the camera is there.</p>
+  </div>
+  <div class="qgrid">
+    <p class="qq">Tell me about the house you grew up in.</p>
+    <p class="qq">Who were your parents, really &mdash; not as parents, but as people?</p>
+    <p class="qq">What did you want to be at fifteen, and what happened to that plan?</p>
+    <p class="qq">What was the hardest year of your life, and how did you get through it?</p>
+    <p class="qq">What have you changed your mind about?</p>
+    <p class="qq">What would you say to whoever watches this in fifty years?</p>
+  </div>
+  <p class="qnote">Every question can be swapped, skipped or reworded. It's their life, not a form.</p>
+</div>
+
+<div class="wrap-band">
+  <div class="in sec">
+    <div class="sec-hd mid">
+      <p class="eyebrow">What families say</p>
+      <h2>The same thing, every time</h2>
+      <p>That they wish they'd started ten years earlier.</p>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p>&ldquo;He talked for forty minutes about a shop that hasn't existed since 1961. I'd never heard any of it.&rdquo;</p>
+        <p class="who">A daughter, recording her father</p>
+        <span class="tag">Example &mdash; replace</span>
+      </div>
+      <div class="quote">
+        <p>&ldquo;My kids play the one where she does the voice. That's how they'll remember her &mdash; not a photograph.&rdquo;</p>
+        <p class="who">A son, recording his mother</p>
+        <span class="tag">Example &mdash; replace</span>
+      </div>
+      <div class="quote">
+        <p>&ldquo;We put the link on the order of service. Half the church had watched him by the evening.&rdquo;</p>
+        <p class="who">A family, six months on</p>
+        <span class="tag">Example &mdash; replace</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="in sec" id="price">
+  <div class="sec-hd">
+    <p class="eyebrow">What it costs</p>
+    <h2>Free to start. Paid once. Never a subscription.</h2>
+    <p>Nobody should have to decide, one day, whether to switch off someone they loved.</p>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <p class="tag">Start here</p>
+      <h3>Free</h3>
+      <p class="p">&pound;0</p>
+      <ul>
+        <li>Five questions</li>
+        <li>Three recordings</li>
+        <li>A private link for the family</li>
+        <li>Everything recorded stays watchable</li>
+      </ul>
+      <a class="btn ghost" href="#start">Start their page</a>
+    </div>
+    <div class="plan lead">
+      <p class="tag">Most families</p>
+      <h3>Family</h3>
+      <p class="p">&pound;79 <small>once</small></p>
+      <ul>
+        <li>All sixty questions</li>
+        <li>Unlimited recordings</li>
+        <li>Ten people can contribute</li>
+        <li>Searchable transcripts</li>
+        <li>Photographs, maps and papers</li>
+        <li>Kept indefinitely, download any time</li>
+      </ul>
+      <a class="btn" href="#start">Choose Family</a>
+    </div>
+    <div class="plan">
+      <p class="tag">Nobody pays alone</p>
+      <h3>Everyone chips in</h3>
+      <p class="p">&pound;10+ <small>from anyone</small></p>
+      <ul>
+        <li>Relatives put in what they like</li>
+        <li>Goes to the plan, or the book</li>
+        <li>&ldquo;Twelve people helped finish this&rdquo;</li>
+        <li>One person needn't carry it</li>
+      </ul>
+      <a class="btn ghost" href="#start">See how</a>
+    </div>
+  </div>
+  <div class="addons">
+    <span><b>The hardback book</b> &nbsp;&pound;59</span>
+    <span><b>Forever archive</b> &nbsp;&pound;49</span>
+    <span><b>QR cards for a funeral</b> &nbsp;&pound;29</span>
+  </div>
+  <div class="pledge">
+    <h3>Paying adds. It never unlocks.</h3>
+    <p>Every answer already recorded is free to watch, forever, for anyone with the link. We will never put someone behind a paywall and charge their sister to see them. Money buys <em>more</em> &mdash; more questions, the book, the promise it's still here in 2075.</p>
+  </div>
+</div>
+
+<div class="wrap-band" id="start">
+  <div class="in sec">
+    <div class="sec-hd">
+      <p class="eyebrow">Start</p>
+      <h2>Who are you recording?</h2>
+      <p>A minute to set up. Nothing is public until you send the link, and you can delete all of it whenever you like.</p>
+    </div>
+    <div class="start">
+      <form class="form" id="startForm">
+        <div class="field">
+          <label for="who">Their name</label>
+          <input id="who" type="text" placeholder="Luis James de Souza" required>
+        </div>
+        <div class="field">
+          <label for="dob">Their date of birth</label>
+          <input id="dob" type="text" placeholder="4 February 1943">
+        </div>
+        <div class="field">
+          <label for="email">Your email</label>
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="go"><button class="btn" type="submit">Create their page</button></div>
+      </form>
+      <div class="done" id="done">
+        <p class="eyebrow">Their page would live at</p>
+        <p class="url" id="url">lifequestions.com/</p>
+        <ol>
+          <li>The first questions arrive in your inbox, one a week, so you're never staring down sixty of them.</li>
+          <li>You film an answer on your phone and upload it. The page fills itself in.</li>
+          <li>When there's something worth seeing, you send the link. Not before.</li>
+        </ol>
+        <p class="fine2">Demo &mdash; not connected yet. Nothing has been sent or stored.</p>
+      </div>
+      <p class="fine2" id="formNote">Free. No card needed.</p>
+    </div>
+  </div>
+</div>
+
+<div class="in sec">
+  <div class="sec-hd">
+    <p class="eyebrow">Straight answers</p>
+    <h2>The things people worry about</h2>
+  </div>
+  <div class="faq">
+    <div class="fq">
+      <h3>Who can actually see it?</h3>
+      <p>Only the people you send the link to. Pages are never listed or searchable, there's no directory to browse, and the videos are unlisted so they appear on no channel and in no search results.</p>
+    </div>
+    <div class="fq">
+      <h3>They hate being filmed.</h3>
+      <p>Most people do, for about four minutes. Sit off to the side so they're talking to you and not a lens, and don't call it an interview. If they really won't have it, record their voice over a photograph.</p>
+    </div>
+    <div class="fq">
+      <h3>What if they die before we finish?</h3>
+      <p>The page becomes a memorial with one change of setting. Their dates close, their best answers move to the top, and the questions they never got to stay on the page instead of being quietly deleted.</p>
+    </div>
+    <div class="fq">
+      <h3>What if you go out of business?</h3>
+      <p>You get every file, and that's written down rather than implied. You can download the whole archive &mdash; video and transcripts &mdash; at any time, without asking us.</p>
+    </div>
+    <div class="fq">
+      <h3>Will you make an AI version of them?</h3>
+      <p>No. Not now, not later, not as an upgrade. Their recordings are not training data and we won't build a chatbot that pretends to be someone you loved.</p>
+    </div>
+    <div class="fq">
+      <h3>Is it too late if they've already gone?</h3>
+      <p>Not necessarily. Families use the same pages the other way round &mdash; everyone else recording their memories of one person. Same questions, different chairs.</p>
+    </div>
+  </div>
+</div>
+
+<div class="close">
+  <div class="in">
+    <h2>Ask them this weekend.</h2>
+    <p>One question, forty minutes, a phone propped on a stack of books. It's the part nobody ever regrets.</p>
+    <a class="btn pale" href="#start">Start their page &mdash; free</a>
+  </div>
+</div>
+
+<div class="in">
+  <footer>
+    <p>Life Questions &mdash; recorded lives, kept properly.<br>Made in Britain.</p>
+    <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#book">The book</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Start free</a></p>
+  </footer>
+</div>
+
+<div class="vscrim" id="vscrim">
+  <div class="vbox">
+    <div class="vtop"><p class="eyebrow" id="vtitle">Answer</p><button class="xb" id="vclose">Close &nbsp;esc</button></div>
+    <div class="vscreen" id="vscreen"></div>
+    <p class="vfoot" id="vfoot"></p>
+  </div>
+</div>
 
 <script>
+/* YouTube stores the video and serves the still, so a page costs nothing to host.
+   The still is only swapped for the player when someone presses play. */
+var REEL = [
+  { id:"3Uz6uZC9hik", q:"Tell me about the house you grew up in.", who:"Recorded by her granddaughter", len:"8:14", src:"Grandma tells our story" },
+  { id:"WNfvuJr9164", q:"The night we met at the dance.",          who:"Danny and Annie, married 27 years", len:"5:38", src:"StoryCorps" },
+  { id:"nVu__vyps9Q", q:"The work I did, and what it cost.",       who:"A hundred years old, recorded in full", len:"12:41", src:"Veteran interview" },
+  { id:"BjQqDWj1LQw", q:"Who my mother and father really were.",   who:"Recorded at her kitchen table", len:"6:02", src:"An interview with Grandma" },
+  { id:"aJ_RVsf90xg", q:"What I have changed my mind about.",      who:"Filmed in 1986, still watched today", len:"4:29", src:"TV Eye, centenarians" },
+  { id:"x3fphutRYso", q:"My first job, and my first wage.",        who:"Recorded by his family", len:"7:22", src:"Veteran interview" },
+  { id:"abyMCAS4vEI", q:"The day each of my children was born.",   who:"A grandson asking the questions", len:"6:55", src:"StoryCorps" },
+  { id:"rZAv7uoE25Q", q:"What I would say to you in fifty years.", who:"110 years old", len:"3:47", src:"Words of wisdom" }
+];
+
+/* Inline onerror attributes are blocked by some sandboxes, so the fallback is
+   wired with addEventListener and backed by a timeout for silent blocks.
+   If the still cannot load, the embed goes in instead — it carries its own
+   poster frame, so a preview shows either way. */
+function swapToEmbed(img){
+  if(!img || img.dataset.swapped){ return; }
+  img.dataset.swapped = "1";
+  if(window.__noExternalMedia){ return placeholder(img); }
+  var id = img.getAttribute("data-yt");
+  var wrap = img.parentNode;
+  if(!wrap){ return; }
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + id + "?rel=0&modestbranding=1";
+  f.setAttribute("loading","lazy");
+  f.setAttribute("tabindex","-1");
+  f.setAttribute("allowfullscreen","");
+  f.title = "";
+  wrap.insertBefore(f, wrap.firstChild);
+  img.remove();
+}
+
+/* Some previews (this one included) block every external image and frame.
+   Rather than leaving a broken-image icon, show a tile that says so. */
+function placeholder(img){
+  var wrap = img.parentNode;
+  if(!wrap){ return; }
+  var d = document.createElement("span");
+  d.className = "noimg";
+  d.innerHTML = '<span class="noimg-t">Still loads from YouTube</span>';
+  wrap.insertBefore(d, wrap.firstChild);
+  img.remove();
+}
+
+function watchPosters(root){
+  var imgs = root.querySelectorAll("img[data-yt]");
+  Array.prototype.forEach.call(imgs, function(img){
+    img.addEventListener("error", function(){ swapToEmbed(img); });
+    if(img.complete && img.naturalWidth === 0){ swapToEmbed(img); }
+  });
+  /* some blocks are silent: nothing loads and no error fires */
+  setTimeout(function(){
+    Array.prototype.forEach.call(imgs, function(img){
+      if(!img.dataset.swapped && img.naturalWidth === 0){ swapToEmbed(img); }
+    });
+  }, 2500);
+}
+
+/* ---- hero chooser -------------------------------------------------- */
 var PEOPLE = [
-  { img:"f1.jpg", cap:"Ray, 86" },
-  { img:"f2.jpg", cap:"Tenzin, 79" },
-  { img:"f3.jpg", cap:"Aleks, 84" },
-  { img:"f4.jpg", cap:"Margaret, 81" },
-  { img:"f5.jpg", cap:"Iris, 78" },
-  { img:"f6.jpg", cap:"Halina, 88" },
-  { img:"f7.jpg", cap:"Shanti, 83" },
-  { img:"f8.jpg", cap:"Luis, 83" }
+  { img:"f1.jpg", cap:"Ray, 86" },   { img:"f2.jpg", cap:"Tenzin, 79" },
+  { img:"f3.jpg", cap:"Aleks, 84" }, { img:"f4.jpg", cap:"Margaret, 81" },
+  { img:"f5.jpg", cap:"Iris, 78" },  { img:"f6.jpg", cap:"Halina, 88" },
+  { img:"f7.jpg", cap:"Shanti, 83" },{ img:"f8.jpg", cap:"Luis, 83" }
 ];
-
-var HEROES = [
-  { n:"4&times;2 + names",  mode:"below", names:true,  note:"The one you chose, with a name and age under each photograph." },
-  { n:"4&times;2 bigger",   mode:"below", names:true,  note:"Same again, pushed wider with more air between the prints, so each face is larger still." },
-  { n:"Fan, wide",          mode:"below", names:true,  note:"The fan spread right across the foot of the hero &mdash; 11&deg; apart, prints half as big again as before." },
-  { n:"Fan, widest",        mode:"below", names:false, note:"Wider still and larger, almost a straight line of prints. No names, so nothing crowds the faces." },
-  { n:"Side fan",           mode:"side",  names:true,  note:"Words left, a fan of all eight on the right &mdash; the layout from your screenshot, opened out properly." },
-  { n:"Side grid",          mode:"side",  names:false, note:"Words left, a tidy two-by-four block on the right. The calmest of the side layouts." },
-  { n:"Side staggered",     mode:"side",  names:false, note:"Words left, four columns with every other print dropped, so the block has a rhythm to it." },
-  { n:"Side scatter",       mode:"side",  names:true,  note:"Words left, prints dropped at angles on the right as though someone spread them on the table." }
-];
-
-var stage=document.getElementById("stage"), tabs=document.getElementById("tabs"), note=document.getElementById("note");
-var active=1;
 
 var COPY = '<p class="eyebrow">Their life, in their own voice</p>' +
   '<h1>One day you&rsquo;ll want to hear them <em>tell it again</em>.</h1>' +
-  '<p class="sub">A life biography, recorded rather than written. We send the questions; they answer on your phone, at their own kitchen table.</p>' +
-  '<div class="cta"><span class="btn">Start their page &mdash; free</span><span class="btn ghost">See how it works</span></div>' +
-  '<p class="fine">Free to start &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>';
+  '<p class="sub">A life biography, recorded rather than written. We send the questions; they answer on your phone, at their own kitchen table. Your mother, your father, a grandparent, an aunt &mdash; or yourself.</p>' +
+  '<div class="cta"><a class="btn" href="#start">Start their page &mdash; free</a>' +
+  '<a class="btn ghost" href="#how">See how it works</a></div>' +
+  '<p class="fine">Free to start &nbsp;&middot;&nbsp; No app to install &nbsp;&middot;&nbsp; Private unless you share it</p>';
 
-function print(p, named){
+var HEROES = [
+  { n:"4&times;2 + names", mode:"below", names:true,  count:8, note:"The grid you chose, with a name and age under each print." },
+  { n:"4&times;2 wider",   mode:"below", names:true,  count:8, note:"Same grid, wider and with more air between the prints." },
+  { n:"Fan of 4",          mode:"below", names:true,  count:4, fan:{deg:12,dx:12,dy:16}, note:"Four large prints only. Every face reads at a glance and nothing hides." },
+  { n:"Fan of 5",          mode:"below", names:true,  count:5, fan:{deg:11,dx:10.5,dy:16}, note:"Five prints, still big. The odd number gives the fan a centre." },
+  { n:"Fan of 6",          mode:"below", names:true,  count:6, fan:{deg:10,dx:9.2,dy:16}, note:"Six prints &mdash; as many as the fan takes before the ends start hiding." },
+  { n:"Fan of 8",          mode:"below", names:false, count:8, fan:{deg:8,dx:7.6,dy:15}, note:"All eight, for comparison. Wider than before but the outer faces still crowd." },
+  { n:"Side grid",         mode:"side",  names:false, count:8, note:"Words left, a tidy two-by-four block on the right." },
+  { n:"Side staggered",    mode:"side",  names:false, count:8, note:"Words left, four columns with every other print dropped." }
+];
+
+function heroPrint(p, named){
   var b=document.createElement("button");
-  b.className="pc" + (named ? " named" : "");
-  b.setAttribute("aria-label", p.cap);
-  b.innerHTML='<img src="'+p.img+'" alt="">' + (named ? '<span class="cap">'+p.cap+'</span>' : '');
+  b.className="pc"+(named?" named":"");
+  b.setAttribute("aria-label",p.cap);
+  b.innerHTML='<img src="'+p.img+'" alt="">'+(named?'<span class="cap">'+p.cap+'</span>':'');
   return b;
 }
 
 function setHero(n){
-  active=n;
-  var h=HEROES[n-1];
-  stage.setAttribute("data-h",String(n));
-  stage.setAttribute("data-mode",h.mode);
-  stage.innerHTML = h.mode==="below"
+  var h=HEROES[n-1], host=document.getElementById("heroHost");
+  document.body.setAttribute("data-h",String(n));
+  host.innerHTML = h.mode==="below"
     ? '<div class="top">'+COPY+'</div><div class="band" id="band"></div>'
-    : '<div class="wrap"><div>'+COPY+'</div><div class="band" id="band"></div></div>';
+    : '<div class="side"><div>'+COPY+'</div><div class="band" id="band"></div></div>';
 
   var band=document.getElementById("band");
-  PEOPLE.forEach(function(p){ band.appendChild(print(p, h.names)); });
-  var cards=Array.prototype.slice.call(band.children);
-  var mid=(cards.length-1)/2;
+  PEOPLE.slice(0,h.count).forEach(function(p){ band.appendChild(heroPrint(p,h.names)); });
 
-  if(n===3 || n===4 || n===5){                       /* fans */
-    var deg = n===3 ? 11 : n===4 ? 8 : 13;
-    var dx  = n===3 ? 8.4 : n===4 ? 10.2 : 5.2;      /* vw between prints */
-    var dy  = n===5 ? 15 : 17;
+  if(h.fan){
+    var cards=Array.prototype.slice.call(band.children), mid=(cards.length-1)/2;
     cards.forEach(function(c,i){
       var off=i-mid;
       c.style.zIndex=String(20-Math.abs(off)*2);
-      var t="rotate("+(off*deg)+"deg) translate("+(off*dx)+"vw,"+(Math.abs(off)*dy)+"px)";
+      var t="rotate("+(off*h.fan.deg)+"deg) translate("+(off*h.fan.dx)+"vw,"+(Math.abs(off)*h.fan.dy)+"px)";
       c.style.transform=t;
-      c.addEventListener("mouseenter",function(){ c.style.transform=t+" translateY(-20px) scale(1.07)"; });
-      c.addEventListener("mouseleave",function(){ c.style.transform=t; });
-    });
-  }
-  if(n===8){                                          /* scatter */
-    var spots=[[1,4,-8],[26,0,5],[52,7,-4],[4,40,6],[30,46,-6],[57,38,7],[16,22,-3],[44,24,4]];
-    cards.forEach(function(c,i){
-      var s=spots[i];
-      c.style.left=s[0]+"%"; c.style.top=s[1]+"%";
-      c.style.zIndex=String(10+i);
-      var t="rotate("+s[2]+"deg)";
-      c.style.transform=t;
-      c.addEventListener("mouseenter",function(){ c.style.transform="rotate(0deg) scale(1.08)"; });
+      c.addEventListener("mouseenter",function(){ c.style.transform=t+" translateY(-20px) scale(1.06)"; });
       c.addEventListener("mouseleave",function(){ c.style.transform=t; });
     });
   }
 
-  note.innerHTML="<b>"+("0"+n).slice(-2)+" &middot; "+h.n+"</b> &nbsp;&mdash;&nbsp; "+h.note;
-  Array.prototype.forEach.call(tabs.children,function(t,i){ t.setAttribute("aria-pressed",String(i+1===n)); });
+  document.getElementById("snote").innerHTML="<b>"+("0"+n).slice(-2)+" &middot; "+h.n+"</b> &nbsp;&mdash;&nbsp; "+h.note;
+  Array.prototype.forEach.call(document.getElementById("stabs").children,function(t,i){
+    t.setAttribute("aria-pressed",String(i+1===n));
+  });
 }
 
 HEROES.forEach(function(h,i){
   var b=document.createElement("button");
-  b.className="tab";
-  b.innerHTML=("0"+(i+1)).slice(-2)+" "+h.n;
-  b.addEventListener("click",function(){ setHero(i+1); });
-  tabs.appendChild(b);
+  b.className="stab"; b.innerHTML=("0"+(i+1)).slice(-2)+" "+h.n;
+  b.addEventListener("click",function(){ setHero(i+1); window.scrollTo({top:0,behavior:"smooth"}); });
+  document.getElementById("stabs").appendChild(b);
 });
 document.addEventListener("keydown",function(e){
-  if(e.key==="[" && active>1){ setHero(active-1); }
-  if(e.key==="]" && active<HEROES.length){ setHero(active+1); }
+  var cur=Number(document.body.getAttribute("data-h"))||1;
+  if(e.key==="[" && cur>1){ setHero(cur-1); }
+  if(e.key==="]" && cur<HEROES.length){ setHero(cur+1); }
 });
 setHero(1);
+
+/* the original static band is replaced by the chooser above */
+var reelrow = document.getElementById("reelrow");
+REEL.forEach(function(v, i){
+  var b = document.createElement("button");
+  b.className = "vc";
+  b.setAttribute("data-v", i);
+  b.setAttribute("aria-label", "Play: " + v.q);
+  b.innerHTML =
+    '<span class="vthumb">' +
+      '<img data-yt="' + v.id + '" src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy">' +
+      '<span class="vplay"></span><span class="vdur">' + v.len + '</span>' +
+    '</span>' +
+    '<span class="vmeta">' +
+      '<span class="vq">' + v.q + '</span>' +
+      '<span class="vwho">' + v.who + '</span>' +
+      '<span class="vsrc">Example clip &middot; ' + v.src + '</span>' +
+    '</span>';
+  reelrow.appendChild(b);
+});
+
+(function(){
+  /* one probe: if a YouTube still cannot load, none of them can */
+  var probe = new Image();
+  probe.onerror = function(){ window.__noExternalMedia = true; };
+  probe.src = "https://i.ytimg.com/vi/3Uz6uZC9hik/default.jpg";
+})();
+watchPosters(document);
+
+var vscrim = document.getElementById("vscrim"), vscreen = document.getElementById("vscreen");
+function playVideo(i){
+  var v = REEL[i];
+  document.getElementById("vtitle").textContent = v.who;
+  document.getElementById("vfoot").innerHTML = v.q + ' &nbsp;&middot;&nbsp; Example clip from ' + v.src +
+    ' &nbsp;&middot;&nbsp; <a href="https://www.youtube.com/watch?v=' + v.id + '" target="_blank" rel="noopener">open on YouTube &#8599;</a>';
+  vscreen.innerHTML = "";
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + v.id + "?rel=0&modestbranding=1&autoplay=1";
+  f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+  f.setAttribute("allowfullscreen",""); f.title = v.q;
+  vscreen.appendChild(f);
+  vscrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("vclose").focus();
+}
+function stopVideo(){
+  vscrim.classList.remove("on"); vscreen.innerHTML = "";
+  document.body.style.overflow = "";
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-v]");
+  if(t){ playVideo(Number(t.getAttribute("data-v"))); }
+});
+document.getElementById("vclose").addEventListener("click", stopVideo);
+vscrim.addEventListener("click", function(e){ if(e.target === vscrim){ stopVideo(); } });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && vscrim.classList.contains("on")){ stopVideo(); }
+});
+
+function slug(name){
+  var p = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+    .replace(/[^a-z0-9\s-]/g,"").trim().split(/\s+/).filter(Boolean);
+  if(p.length > 2){ p = [p[0]].concat(p.slice(-2)); }
+  return p.join("-") || "their-page";
+}
+function token(){
+  var a = "abcdefghijkmnpqrstuvwxyz23456789", s = "";
+  for(var i = 0; i < 4; i++){ s += a[Math.floor(Math.random()*a.length)]; }
+  return s;
+}
+document.getElementById("startForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var n = document.getElementById("who").value.trim() || "their name";
+  document.getElementById("url").textContent = "lifequestions.com/" + slug(n) + "-" + token();
+  document.getElementById("startForm").style.display = "none";
+  document.getElementById("formNote").style.display = "none";
+  document.getElementById("done").classList.add("on");
+});
 </script>
 
 </html>
