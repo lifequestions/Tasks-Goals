@@ -67,8 +67,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 .gallery{--g:clamp(14px,1.6vw,26px);position:relative;width:100vw;margin-left:calc(50% - 50vw);
          margin-top:clamp(2.2rem,4.5vw,3.4rem)}
 .viewport{overflow:hidden;padding:34px 0 26px;margin:-34px 0 -14px;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%);
-          mask-image:linear-gradient(90deg,transparent 0,#000 9%,#000 91%,transparent 100%)}
+  /* --fade is the width of the soft edge; smaller means a harder cut */
+  --fade:3.5%;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%)}
 .track{display:flex;gap:var(--g);transition:transform .55s cubic-bezier(.22,1,.36,1);will-change:transform}
 .track.second{margin-top:var(--g);display:none}
 body[data-rows="2"] .track.second{display:flex}
