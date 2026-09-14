@@ -188,8 +188,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.4rem;color:var(--ink3
             <span class="cap">Click here to add his photo<br>or drag one onto this card</span>
           </label>
           <img src="dad.jpg" alt="Luis James de Souza" id="portrait"
-               data-try="dad.jpeg,dad.png,DadPhoto.jpg"
-               onerror="nextPhoto(this)">
+               data-try="dad.jpeg,dad.png,DadPhoto.jpg">
         </div>
         <p class="photo-ctl">
           <label class="filelab" for="pickInput">Or choose a file</label>
@@ -385,16 +384,34 @@ function shrink(file, done){
 /* YouTube serves the still as well as the video, so a page costs nothing to host.
    Where a sandbox blocks the image host, drop in the embed instead — it carries
    its own poster frame, so a preview still shows. */
-function posterFallback(img, id){
+(function(){
+  var pt = document.getElementById("portrait");
+  if(pt){ pt.addEventListener("error", function(){ nextPhoto(pt); }); }
+})();
+
+function swapToEmbed(img){
+  if(!img || img.dataset.swapped){ return; }
+  img.dataset.swapped = "1";
   var wrap = img.parentNode;
-  img.remove();
+  if(!wrap){ return; }
   var f = document.createElement("iframe");
-  f.src = "https://www.youtube-nocookie.com/embed/" + id + "?rel=0&modestbranding=1";
-  f.setAttribute("loading","lazy");
-  f.setAttribute("tabindex","-1");
-  f.setAttribute("allowfullscreen","");
+  f.src = "https://www.youtube-nocookie.com/embed/" + img.getAttribute("data-yt") + "?rel=0&modestbranding=1";
+  f.setAttribute("loading","lazy"); f.setAttribute("tabindex","-1"); f.setAttribute("allowfullscreen","");
   f.title = "";
   wrap.insertBefore(f, wrap.firstChild);
+  img.remove();
+}
+function watchPosters(root){
+  var imgs = root.querySelectorAll("img[data-yt]");
+  Array.prototype.forEach.call(imgs, function(img){
+    img.addEventListener("error", function(){ swapToEmbed(img); });
+    if(img.complete && img.naturalWidth === 0){ swapToEmbed(img); }
+  });
+  setTimeout(function(){
+    Array.prototype.forEach.call(imgs, function(img){
+      if(!img.dataset.swapped && img.naturalWidth === 0){ swapToEmbed(img); }
+    });
+  }, 2500);
 }
 
 function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
@@ -465,8 +482,7 @@ Q.forEach(function(item, i){
   b.innerHTML =
     '<span class="n">' + ("0" + (i + 1)).slice(-2) + '</span>' +
     (lit ? '<span class="still">' +
-             '<img src="https://i.ytimg.com/vi/' + item.v + '/hqdefault.jpg" alt="" loading="lazy" ' +
-             'onerror="posterFallback(this,\'' + item.v + '\')">' +
+             '<img data-yt="' + item.v + '" src="https://i.ytimg.com/vi/' + item.v + '/hqdefault.jpg" alt="" loading="lazy">' +
              '<span class="play"></span>' +
              (item.len ? '<span class="dur">' + item.len + '</span>' : '') +
            '</span>' : "") +
