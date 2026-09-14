@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ten Hero Arrangements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#FAF6EF;--band:#F3EDE3;--surf:#FFF;--ink:#211F1C;--ink2:#6A645C;--ink3:#9A9289;
+  --line:#E6DFD3;--acc:#2C5F5A;--accDeep:#1F4744;--shadow:rgba(60,48,36,.16);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#101211;font-family:"Karla",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+/* chrome */
+.chrome{position:sticky;top:0;z-index:80;background:#101211;border-bottom:1px solid #232624;color:#E9E9E7}
+.chrome-in{max-width:1400px;margin:0 auto;padding:.55rem 1rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.clab{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;white-space:nowrap;font-weight:700}
+.tabs{display:flex;gap:.3rem;overflow-x:auto;flex:1;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:1px solid #2E3230;color:#9AA0A8;border-radius:999px;padding:.32rem .7rem;font-size:.7rem;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.tab:hover{color:#fff;border-color:#5B615E}
+.tab[aria-pressed="true"]{background:#F2F2F0;color:#101211;border-color:#F2F2F0}
+.note{max-width:1400px;margin:0 auto;padding:.4rem 1rem .65rem;font-size:.76rem;color:#8A918D;border-top:1px solid #1A1D1B}
+.note b{color:#E9E9E7}
+
+/* the page under test */
+.stage{background:var(--bg);color:var(--ink);min-height:82vh}
+.in{max-width:1180px;margin:0 auto;padding:clamp(2rem,5vw,4.2rem) clamp(1.2rem,5vw,3rem)}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(2rem,5vw,4rem);align-items:center}
+@media (max-width:900px){.hero{grid-template-columns:1fr}}
+h1{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:clamp(2.3rem,5vw,3.7rem);line-height:1.03;margin:.8rem 0 0;letter-spacing:-.018em}
+h1 em{font-style:italic;color:var(--acc)}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--acc);margin:0}
+.sub{color:var(--ink2);margin-top:1.1rem;max-width:34ch;font-size:1.05rem}
+.cta{display:flex;gap:.7rem;margin-top:1.6rem;flex-wrap:wrap}
+.btn{background:var(--acc);color:#FAF6EF;border:1px solid var(--acc);border-radius:999px;padding:.8rem 1.6rem;font-weight:700;font-size:.95rem}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+
+/* shared photo card */
+.frame{position:relative}
+.pc{position:absolute;background:#fff;padding:8px 8px 8px;border-radius:3px;box-shadow:0 16px 34px -18px rgba(60,48,36,.5);overflow:hidden;border:0;transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .25s}
+.pc img{width:100%;height:100%;object-fit:cover;display:block}
+.pc .blank{width:100%;height:100%;background:linear-gradient(160deg,#EFE8D9,#E5DCC9);display:grid;place-content:center}
+.pc .blank::after{content:"photo";font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#B0A692}
+.pc:hover{z-index:50;box-shadow:0 26px 48px -18px rgba(60,48,36,.55)}
+
+/* 01 loose fan */
+[data-h="1"] .frame{height:clamp(320px,32vw,420px);display:flex;align-items:center;justify-content:center}
+[data-h="1"] .pc{width:clamp(130px,14vw,178px);aspect-ratio:4/5;transform-origin:50% 150%}
+
+/* 02 scatter */
+[data-h="2"] .frame{height:clamp(330px,34vw,440px)}
+[data-h="2"] .pc{width:clamp(120px,13vw,165px);aspect-ratio:4/5}
+
+/* 03 square grid 4x2 */
+[data-h="3"] .frame,[data-h="4"] .frame,[data-h="5"] .frame,[data-h="6"] .frame,
+[data-h="7"] .frame,[data-h="9"] .frame,[data-h="10"] .frame{height:auto}
+[data-h="3"] .frame{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+[data-h="3"] .pc{position:static;aspect-ratio:1;padding:6px;border-radius:8px}
+
+/* 04 tight square mosaic, no white border */
+[data-h="4"] .frame{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+[data-h="4"] .pc{position:static;aspect-ratio:1;padding:0;border-radius:2px;box-shadow:none;border:1px solid var(--line)}
+
+/* 05 staggered columns */
+[data-h="5"] .frame{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start}
+[data-h="5"] .pc{position:static;aspect-ratio:4/5;padding:7px;border-radius:6px}
+[data-h="5"] .pc:nth-child(even){margin-top:34px}
+
+/* 06 polaroid row */
+[data-h="6"] .frame{display:flex;gap:clamp(.4rem,1.4vw,1rem);justify-content:center;padding:1.4rem 0}
+[data-h="6"] .pc{position:static;width:clamp(110px,12vw,150px);aspect-ratio:4/5;padding:9px 9px 30px}
+[data-h="6"] .pc:nth-child(odd){transform:rotate(-3deg)}
+[data-h="6"] .pc:nth-child(even){transform:rotate(2.5deg) translateY(8px)}
+[data-h="6"] .pc:hover{transform:rotate(0) translateY(-8px)}
+
+/* 07 arc */
+[data-h="7"] .frame{height:clamp(300px,30vw,400px);position:relative}
+[data-h="7"] .pc{width:clamp(112px,12vw,152px);aspect-ratio:4/5}
+
+/* 08 deck */
+[data-h="8"] .frame{height:clamp(320px,32vw,430px);display:flex;align-items:center;justify-content:center}
+[data-h="8"] .pc{width:clamp(180px,20vw,250px);aspect-ratio:4/5}
+
+/* 09 marquee strip */
+[data-h="9"] .frame{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+[data-h="9"] .track{display:flex;gap:10px;width:max-content;animation:slide 26s linear infinite}
+[data-h="9"] .pc{position:static;width:clamp(120px,13vw,168px);aspect-ratio:1;padding:6px;border-radius:8px;flex:none}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+[data-h="9"] .frame:hover .track{animation-play-state:paused}
+
+/* 10 one big, squares beneath */
+[data-h="10"] .frame{display:grid;gap:10px}
+[data-h="10"] .pc{position:static;padding:7px;border-radius:8px}
+[data-h="10"] .pc:first-child{aspect-ratio:16/10}
+[data-h="10"] .row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+[data-h="10"] .row .pc{aspect-ratio:1}
+@media (prefers-reduced-motion:reduce){.pc,[data-h="9"] .track{transition:none;animation:none}}
+</style>
+
+<div class="chrome">
+  <div class="chrome-in">
+    <span class="clab">Hero arrangements</span>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <p class="note" id="note"></p>
+</div>
+
+<div class="stage" id="stage" data-h="1">
+  <div class="in">
+    <div class="hero">
+      <div>
+        <p class="eyebrow">Their life, in their own voice</p>
+        <h1>One day you'll want to hear them <em>tell it again</em>.</h1>
+        <p class="sub">A life biography, recorded rather than written. Your mother, your father, a grandparent, an aunt &mdash; or yourself.</p>
+        <div class="cta"><span class="btn">Start their page &mdash; free</span><span class="btn ghost">See how it works</span></div>
+      </div>
+      <div class="frame" id="frame"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PHOTOS = ["f1.jpg", null, "f2.jpg", null, null, null, null, null];
+
+var HEROES = [
+  { n:"Loose fan",      note:"The fan, opened much wider &mdash; 22&deg; between prints instead of 13, so each face is clear of the one behind it." },
+  { n:"Scattered",      note:"Prints dropped on a table at odd angles. Least tidy, most human; nothing lines up on purpose." },
+  { n:"Squares 4&times;2", note:"Eight clean squares with white borders and a small gap. Orderly, easy to scan, the safest of the ten." },
+  { n:"Mosaic",         note:"Squares butted almost together with no white border &mdash; reads as one block of faces rather than eight photographs." },
+  { n:"Staggered",      note:"Four columns, every other one dropped down. Keeps the grid but takes the stiffness out of it." },
+  { n:"Polaroids",      note:"A row of prints with a caption lip, tilted slightly, straightening when you point at one." },
+  { n:"Arc",            note:"Laid along a gentle curve, the middle ones sitting higher. Elegant, and it needs room to breathe." },
+  { n:"Deck",           note:"One face forward, the rest stacked behind it, cycling every few seconds. Focus on one person at a time." },
+  { n:"Marquee",        note:"A slow-moving strip of squares that never ends, fading at both edges. Pause it by pointing at it." },
+  { n:"Big + row",      note:"One wide photograph with four squares underneath. Closest to how a newspaper would set it." }
+];
+
+var stage = document.getElementById("stage"),
+    frame = document.getElementById("frame"),
+    tabs  = document.getElementById("tabs"),
+    note  = document.getElementById("note");
+var active = 1, deckTimer = null;
+
+function card(i){
+  var src = PHOTOS[i % PHOTOS.length];
+  var b = document.createElement("button");
+  b.className = "pc";
+  b.setAttribute("aria-label", src ? "A photograph" : "A place for a photograph");
+  b.innerHTML = src ? '<img src="' + src + '" alt="">' : '<span class="blank"></span>';
+  return b;
+}
+
+function build(n){
+  clearInterval(deckTimer);
+  frame.innerHTML = "";
+  frame.className = "frame";
+  var count = (n === 8) ? 5 : (n === 9) ? 16 : 8;
+  var host = frame;
+
+  if(n === 9){
+    var track = document.createElement("div");
+    track.className = "track";
+    frame.appendChild(track);
+    host = track;
+  }
+  if(n === 10){
+    var big = card(0);
+    frame.appendChild(big);
+    var row = document.createElement("div");
+    row.className = "row";
+    frame.appendChild(row);
+    for(var k = 1; k < 5; k++){ row.appendChild(card(k)); }
+    return;
+  }
+
+  for(var i = 0; i < count; i++){ host.appendChild(card(i)); }
+  var cards = Array.prototype.slice.call(host.children);
+
+  if(n === 1){                                    /* loose fan */
+    var mid = (cards.length - 1) / 2;
+    cards.forEach(function(c, i){
+      var off = i - mid;
+      c.style.zIndex = 20 - Math.abs(off) * 2;
+      c.style.transform = "rotate(" + (off * 8) + "deg) translate(" + (off * 62) + "px," + (Math.abs(off) * 13) + "px)";
+      c.addEventListener("mouseenter", function(){
+        c.style.transform = "rotate(" + (off * 8) + "deg) translate(" + (off * 62) + "px," + (Math.abs(off) * 13 - 20) + "px) scale(1.08)";
+      });
+      c.addEventListener("mouseleave", function(){
+        c.style.transform = "rotate(" + (off * 8) + "deg) translate(" + (off * 62) + "px," + (Math.abs(off) * 13) + "px)";
+      });
+    });
+  }
+  if(n === 2){                                    /* scatter */
+    var spots = [[4,6,-7],[34,0,5],[63,9,-4],[14,46,6],[44,52,-6],[72,44,8],[26,24,-3],[56,26,4]];
+    cards.forEach(function(c, i){
+      var s = spots[i % spots.length];
+      c.style.left = s[0] + "%"; c.style.top = s[1] + "%";
+      c.style.transform = "rotate(" + s[2] + "deg)";
+      c.style.zIndex = 10 + i;
+      c.addEventListener("mouseenter", function(){ c.style.transform = "rotate(0deg) scale(1.07)"; });
+      c.addEventListener("mouseleave", function(){ c.style.transform = "rotate(" + s[2] + "deg)"; });
+    });
+  }
+  if(n === 7){                                    /* arc */
+    cards.forEach(function(c, i){
+      var t = (i / (cards.length - 1)) * Math.PI;
+      c.style.left = (i / (cards.length - 1)) * 82 + "%";
+      c.style.top = (34 - Math.sin(t) * 26) + "%";
+      c.style.transform = "rotate(" + ((i - (cards.length - 1) / 2) * 5) + "deg)";
+      c.style.zIndex = 10 + i;
+    });
+  }
+  if(n === 8){                                    /* deck */
+    var order = 0;
+    var place = function(){
+      cards.forEach(function(c, i){
+        var d = (i - order + cards.length) % cards.length;
+        c.style.zIndex = 30 - d;
+        c.style.transform = "translate(" + (d * 26) + "px," + (d * 10) + "px) rotate(" + (d * 3) + "deg) scale(" + (1 - d * 0.045) + ")";
+        c.style.opacity = d > 3 ? "0" : "1";
+      });
+    };
+    place();
+    deckTimer = setInterval(function(){ order = (order + 1) % cards.length; place(); }, 2600);
+  }
+}
+
+function setHero(n){
+  active = n;
+  stage.setAttribute("data-h", String(n));
+  build(n);
+  note.innerHTML = "<b>" + ("0" + n).slice(-2) + " &middot; " + HEROES[n-1].n + "</b> &nbsp;&mdash;&nbsp; " + HEROES[n-1].note;
+  Array.prototype.forEach.call(tabs.children, function(t, i){ t.setAttribute("aria-pressed", String(i + 1 === n)); });
+}
+
+HEROES.forEach(function(h, i){
+  var b = document.createElement("button");
+  b.className = "tab";
+  b.innerHTML = ("0" + (i + 1)).slice(-2) + " " + h.n;
+  b.addEventListener("click", function(){ setHero(i + 1); });
+  tabs.appendChild(b);
+});
+document.addEventListener("keydown", function(e){
+  if(e.key === "[" && active > 1){ setHero(active - 1); }
+  if(e.key === "]" && active < HEROES.length){ setHero(active + 1); }
+});
+setHero(1);
+</script>
+
+</html>
