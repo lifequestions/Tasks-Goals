@@ -63,7 +63,18 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hero .cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
 .hero .fine{font-size:.9rem;color:var(--ink3);margin-top:1.1rem}
 .shot{position:relative}
-.grid8{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.fan{position:relative;height:clamp(300px,34vw,430px);display:flex;align-items:center;justify-content:center}
+.fanc{position:absolute;width:clamp(150px,17vw,215px);aspect-ratio:4/5;background:#fff;padding:9px 9px 34px;border-radius:3px;
+      box-shadow:0 16px 34px -18px rgba(60,48,36,.45);transform-origin:50% 115%;
+      transform:rotate(0deg);opacity:0;transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .5s ease,box-shadow .25s ease;
+      border:0;padding-block-end:34px;cursor:pointer}
+.fan.open .fanc{opacity:1}
+.fanc img{width:100%;height:100%;object-fit:cover;display:block;border-radius:1px}
+.fanc .blank{width:100%;height:100%;border-radius:1px;background:linear-gradient(160deg,var(--band),#EFE7D8);display:grid;place-content:center}
+.fanc .blank span{font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.fanc .cap{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-family:"Fraunces",Georgia,serif;font-size:.8rem;color:var(--ink2)}
+.fanc:hover{z-index:20!important;box-shadow:0 26px 50px -20px rgba(60,48,36,.5)}
+@media (prefers-reduced-motion:reduce){.fanc{transition:none}}
 .g8{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--band);padding:0;box-shadow:0 14px 28px -22px var(--shadow);transition:transform .18s,box-shadow .18s}
 .g8:hover{transform:translateY(-2px);box-shadow:0 20px 34px -22px var(--shadow)}
 .g8 img{width:100%;height:100%;object-fit:cover;display:block}
@@ -230,12 +241,8 @@ footer a:hover{color:var(--ink)}
         <p class="fine">Free to start &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
       </div>
       <div class="shot">
-        <div class="grid8" id="grid8"></div>
-        <div class="float">
-          <p class="t">Eight people, mid-story</p>
-          <div class="track"><i></i></div>
-          <p class="c">Press any face to hear them</p>
-        </div>
+        <div class="fan" id="fan"></div>
+
       </div>
     </div>
   </header>
@@ -564,15 +571,49 @@ function watchPosters(root){
   }, 2500);
 }
 
-var grid8 = document.getElementById("grid8");
-REEL.forEach(function(v, i){
-  var b = document.createElement("button");
-  b.className = "g8";
-  b.setAttribute("data-v", i);
-  b.setAttribute("aria-label", "Play: " + v.q);
-  b.innerHTML = '<img data-yt="' + v.id + '" src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="">' +
-                '<span class="dot"></span>';
-  grid8.appendChild(b);
+/* A fan of photographs, the way a handful of prints sits on a table.
+   Drop a file into the list and it joins the fan. */
+var FAN = [
+  { img:"f1.jpg", cap:"Ray, 86" },
+  { img:"f2.jpg", cap:"Luis, 83" },
+  { img:null,     cap:"" },
+  { img:null,     cap:"" },
+  { img:null,     cap:"" },
+  { img:null,     cap:"" }
+];
+
+var fan = document.getElementById("fan");
+var SPREAD = 13;                       /* degrees between prints */
+FAN.forEach(function(f, i){
+  var mid = (FAN.length - 1) / 2;
+  var off = i - mid;
+  var c = document.createElement("button");
+  c.className = "fanc";
+  c.setAttribute("aria-label", f.cap || "A place for a photograph");
+  c.style.zIndex = String(10 - Math.abs(off));
+  c.innerHTML = (f.img ? '<img src="' + f.img + '" alt="">'
+                       : '<span class="blank"><span>photo</span></span>') +
+                (f.cap ? '<span class="cap">' + f.cap + '</span>' : '');
+  c.addEventListener("mouseenter", function(){ c.style.transform = fanTransform(off, 1.16, -14); });
+  c.addEventListener("mouseleave", function(){ c.style.transform = fanTransform(off, 1, 0); });
+  c.dataset.off = off;
+  fan.appendChild(c);
+});
+
+function fanTransform(off, scale, lift){
+  return "rotate(" + (off * SPREAD) + "deg) translate(" + (off * 26) + "px," +
+         (Math.abs(off) * 9 + lift) + "px) scale(" + scale + ")";
+}
+
+/* stacked, then it opens */
+requestAnimationFrame(function(){
+  Array.prototype.forEach.call(fan.children, function(c, i){
+    c.style.transform = "rotate(0deg) translate(0,0) scale(.96)";
+    setTimeout(function(){
+      c.style.transform = fanTransform(Number(c.dataset.off), 1, 0);
+    }, 90 + i * 70);
+  });
+  fan.classList.add("open");
 });
 
 var reelrow = document.getElementById("reelrow");
