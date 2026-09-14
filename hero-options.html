@@ -137,13 +137,14 @@ body[data-rows="2"] .track.second{display:flex}
 .illus{text-align:center;margin-top:1.6rem;font-size:.85rem;color:var(--ink3)}
 
 /* alternating rows */
-.rows{padding:clamp(3rem,7vw,5.6rem) 0}
-.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(2rem,5vw,4.4rem);align-items:center;margin-bottom:clamp(3rem,6vw,5rem)}
+.rows{padding:clamp(3rem,7vw,5.6rem) 0;max-width:1340px}
+.row{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);gap:clamp(2rem,5vw,4.4rem);align-items:center;margin-bottom:clamp(3.4rem,6.5vw,5.6rem)}
+@media (max-width:860px){.row{grid-template-columns:1fr}}
 .row:last-child{margin-bottom:0}
 .row.flip .txt{order:-1}
 @media (max-width:760px){.row.flip .txt{order:0}}
 .row img{border-radius:var(--r);box-shadow:0 34px 60px -44px var(--shadow)}
-.row .txt{max-width:44ch}
+.row .txt{max-width:42ch}
 .row .n{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
 .row h2{font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1.1;margin:.7rem 0 .9rem}
 .row p{color:var(--ink2);font-size:1.14rem}
@@ -249,7 +250,6 @@ footer a:hover{color:var(--ink)}
     <span class="sp"></span>
     <a class="q" href="#reel">The answers</a>
     <a class="q" href="#how">How it works</a>
-    <a class="q" href="#book">The book</a>
     <a class="q" href="#price">Price</a>
     <a class="btn sm" href="#start">Start free</a>
   </div>
@@ -327,20 +327,6 @@ footer a:hover{color:var(--ink)}
       <h2>It becomes their page</h2>
       <p>Upload, and the page builds itself: their photograph, their dates, their answers, each one a window you press to hear them. One private link for the whole family &mdash; their sister, your kids, the cousins in Australia.</p>
       <p class="small">Nothing is public. No search engine, no directory, no strangers.</p>
-    </div>
-  </div>
-</div>
-
-<div class="wrap-band" id="book">
-  <div class="in sec">
-    <div class="row" style="margin-bottom:0">
-      <img src="book.jpg" alt="A hardback book of a life story">
-      <div class="txt">
-        <p class="eyebrow">And at the end of it</p>
-        <h2 style="font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.08;margin:.7rem 0 .9rem">A book, in their own words</h2>
-        <p style="color:var(--ink2);font-size:1.05rem">Every answer is transcribed automatically, so their stories exist as words as well as video. Choose the ones you want, add the photographs, and we print a hardback &mdash; the thing that gets passed round at Christmas and ends up on a shelf for forty years.</p>
-        <p class="small">From &pound;59. One copy or fifteen.</p>
-      </div>
     </div>
   </div>
 </div>
@@ -528,7 +514,7 @@ footer a:hover{color:var(--ink)}
 <div class="in">
   <footer>
     <p>Life Questions &mdash; recorded lives, kept properly.<br>Made in Britain.</p>
-    <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#book">The book</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Start free</a></p>
+    <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Start free</a></p>
   </footer>
 </div>
 
