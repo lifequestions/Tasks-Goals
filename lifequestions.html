@@ -63,8 +63,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .hero .cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
 .hero .fine{font-size:.9rem;color:var(--ink3);margin-top:1.1rem}
 .shot{position:relative}
-.fan{position:relative;height:clamp(300px,34vw,430px);display:flex;align-items:center;justify-content:center}
-.fanc{position:absolute;width:clamp(150px,17vw,215px);aspect-ratio:4/5;background:#fff;padding:9px 9px 34px;border-radius:3px;
+.fan{position:relative;height:clamp(300px,32vw,400px);display:flex;align-items:center;justify-content:center}
+.fanc{position:absolute;width:clamp(118px,12.5vw,166px);aspect-ratio:4/5;background:#fff;padding:9px 9px 34px;border-radius:3px;
       box-shadow:0 16px 34px -18px rgba(60,48,36,.45);transform-origin:50% 115%;
       transform:rotate(0deg);opacity:0;transition:transform .9s cubic-bezier(.22,1,.36,1),opacity .5s ease,box-shadow .25s ease;
       border:0;padding-block-end:34px;cursor:pointer}
@@ -575,15 +575,17 @@ function watchPosters(root){
    Drop a file into the list and it joins the fan. */
 var FAN = [
   { img:"f1.jpg", cap:"Ray, 86" },
-  { img:"f2.jpg", cap:"Luis, 83" },
-  { img:null,     cap:"" },
-  { img:null,     cap:"" },
-  { img:null,     cap:"" },
-  { img:null,     cap:"" }
+  { img:"f2.jpg", cap:"Tenzin, 79" },
+  { img:"f3.jpg", cap:"Aleks, 84" },
+  { img:"f4.jpg", cap:"Margaret, 81" },
+  { img:"f5.jpg", cap:"Iris, 78" },
+  { img:"f6.jpg", cap:"Halina, 88" },
+  { img:"f7.jpg", cap:"Shanti, 83" },
+  { img:"f8.jpg", cap:"Luis, 83" }
 ];
 
 var fan = document.getElementById("fan");
-var SPREAD = 13;                       /* degrees between prints */
+var SPREAD = 8;                        /* degrees between prints — wide enough to read every face */
 FAN.forEach(function(f, i){
   var mid = (FAN.length - 1) / 2;
   var off = i - mid;
@@ -601,8 +603,8 @@ FAN.forEach(function(f, i){
 });
 
 function fanTransform(off, scale, lift){
-  return "rotate(" + (off * SPREAD) + "deg) translate(" + (off * 26) + "px," +
-         (Math.abs(off) * 9 + lift) + "px) scale(" + scale + ")";
+  return "rotate(" + (off * SPREAD) + "deg) translate(" + (off * 58) + "px," +
+         (Math.abs(off) * 12 + lift) + "px) scale(" + scale + ")";
 }
 
 /* stacked, then it opens */
