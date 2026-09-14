@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Sixty Windows — we send the questions, they answer them on your phone, and their life becomes a page your family keeps.">
-<title>Sixty Windows</title>
+<title>Life Questions</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap">
@@ -178,7 +177,7 @@ footer a:hover{color:var(--ink)}
 
 <nav class="nav">
   <div class="in">
-    <a class="wm" href="#top">Sixty Windows</a>
+    <a class="wm" href="#top">Life&nbsp;Questions</a>
     <span class="sp"></span>
     <a class="q" href="#people">Who's on here</a>
     <a class="q" href="#how">How it works</a>
@@ -202,7 +201,7 @@ footer a:hover{color:var(--ink)}
         <p class="fine">Free to start &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
       </div>
       <div class="shot">
-        <img src="wall.jpg" alt="A wall of people whose families are recording them">
+        <img src="wall.jpg" alt="People whose families are recording them">
         <div class="float">
           <p class="t">Being recorded this week</p>
           <div class="track"><i></i></div>
@@ -487,7 +486,7 @@ footer a:hover{color:var(--ink)}
       </form>
       <div class="done" id="done">
         <p class="eyebrow">Their page would live at</p>
-        <p class="url" id="url">sixtywindows.com/</p>
+        <p class="url" id="url">lifequestions.com/</p>
         <ol>
           <li>The first questions arrive in your inbox, one a week, so you're never staring down sixty of them.</li>
           <li>You film an answer on your phone and upload it. The page fills itself in.</li>
@@ -543,7 +542,7 @@ footer a:hover{color:var(--ink)}
 
 <div class="in">
   <footer>
-    <p>Sixty Windows &mdash; recorded lives, kept properly.<br>Made in Britain.</p>
+    <p>Life Questions &mdash; recorded lives, kept properly.<br>Made in Britain.</p>
     <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#book">The book</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Start free</a></p>
   </footer>
 </div>
@@ -563,7 +562,7 @@ function token(){
 document.getElementById("startForm").addEventListener("submit", function(e){
   e.preventDefault();
   var n = document.getElementById("who").value.trim() || "their name";
-  document.getElementById("url").textContent = "sixtywindows.com/" + slug(n) + "-" + token();
+  document.getElementById("url").textContent = "lifequestions.com/" + slug(n) + "-" + token();
   document.getElementById("startForm").style.display = "none";
   document.getElementById("formNote").style.display = "none";
   document.getElementById("done").classList.add("on");
