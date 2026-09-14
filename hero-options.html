@@ -73,8 +73,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* fans */
 body[data-h="3"] .band,body[data-h="4"] .band,body[data-h="5"] .band,body[data-h="6"] .band{
-  display:flex;align-items:center;justify-content:center;position:relative;
-  height:clamp(330px,33vw,500px);grid-template-columns:none;max-width:none;padding:0}
+  display:flex;align-items:flex-start;justify-content:center;position:relative;
+  min-height:260px;grid-template-columns:none;max-width:none;padding:0;overflow:visible}
 body[data-h="3"] .pc,body[data-h="4"] .pc,body[data-h="5"] .pc,body[data-h="6"] .pc{
   position:absolute;transform-origin:50% 135%;aspect-ratio:auto}
 body[data-h="3"] .pc{width:clamp(180px,21vw,330px)}
@@ -611,6 +611,50 @@ var HEROES = [
   { n:"Side staggered",    mode:"side",  names:false, count:8, note:"Words left, four columns with every other print dropped." }
 ];
 
+/* The prints are rotated and pushed outwards, so no CSS height can know how far
+   they reach. Lay them out, measure the real extent, then size the band to it
+   and nudge the whole fan down so nothing spills into the section below. */
+function layoutFan(band, fan){
+  var cards = Array.prototype.slice.call(band.children);
+  var mid = (cards.length - 1) / 2;
+  var bases = cards.map(function(c, i){
+    var off = i - mid;
+    return "rotate(" + (off * fan.deg) + "deg) translate(" +
+           (off * fan.dx) + "vw," + (Math.abs(off) * fan.dy) + "px)";
+  });
+
+  cards.forEach(function(c, i){
+    c.style.transition = "none";
+    c.style.zIndex = String(20 - Math.abs(i - mid) * 2);
+    c.style.transform = bases[i];
+  });
+
+  var br = band.getBoundingClientRect();
+  var top = Infinity, bottom = -Infinity;
+  cards.forEach(function(c){
+    var r = c.getBoundingClientRect();
+    top = Math.min(top, r.top - br.top);
+    bottom = Math.max(bottom, r.bottom - br.top);
+  });
+
+  var pad = 30;                         /* room for the lift on hover */
+  var shift = pad - top;
+  cards.forEach(function(c, i){
+    var t = "translateY(" + shift + "px) " + bases[i];
+    c.style.transform = t;
+    c.dataset.base = t;
+  });
+  band.style.height = Math.ceil(bottom - top + pad * 2) + "px";
+
+  requestAnimationFrame(function(){
+    cards.forEach(function(c){
+      c.style.transition = "";
+      c.addEventListener("mouseenter", function(){ c.style.transform = c.dataset.base + " translateY(-20px) scale(1.06)"; });
+      c.addEventListener("mouseleave", function(){ c.style.transform = c.dataset.base; });
+    });
+  });
+}
+
 function heroPrint(p, named){
   var b=document.createElement("button");
   b.className="pc"+(named?" named":"");
@@ -629,17 +673,7 @@ function setHero(n){
   var band=document.getElementById("band");
   PEOPLE.slice(0,h.count).forEach(function(p){ band.appendChild(heroPrint(p,h.names)); });
 
-  if(h.fan){
-    var cards=Array.prototype.slice.call(band.children), mid=(cards.length-1)/2;
-    cards.forEach(function(c,i){
-      var off=i-mid;
-      c.style.zIndex=String(20-Math.abs(off)*2);
-      var t="rotate("+(off*h.fan.deg)+"deg) translate("+(off*h.fan.dx)+"vw,"+(Math.abs(off)*h.fan.dy)+"px)";
-      c.style.transform=t;
-      c.addEventListener("mouseenter",function(){ c.style.transform=t+" translateY(-20px) scale(1.06)"; });
-      c.addEventListener("mouseleave",function(){ c.style.transform=t; });
-    });
-  }
+  if(h.fan){ layoutFan(band, h.fan); }
 
   document.getElementById("snote").innerHTML="<b>"+("0"+n).slice(-2)+" &middot; "+h.n+"</b> &nbsp;&mdash;&nbsp; "+h.note;
   Array.prototype.forEach.call(document.getElementById("stabs").children,function(t,i){
@@ -658,6 +692,12 @@ document.addEventListener("keydown",function(e){
   if(e.key==="[" && cur>1){ setHero(cur-1); }
   if(e.key==="]" && cur<HEROES.length){ setHero(cur+1); }
 });
+var resizeHold;
+window.addEventListener("resize", function(){
+  clearTimeout(resizeHold);
+  resizeHold = setTimeout(function(){ setHero(Number(document.body.getAttribute("data-h")) || 1); }, 150);
+});
+
 setHero(1);
 
 /* the original static band is replaced by the chooser above */
