@@ -59,7 +59,7 @@ function thumbCard(x, i){
 function sideBlock(){
   return '<div class="side">' +
     '<div class="pt"><img src="dad.jpg" alt="Luis James de Souza"></div>' +
-    '<div><h1>Luis James de Souza</h1>' +
+    '<div class="namebl"><h1>Luis James de Souza</h1>' +
     '<p class="dates">Born 4 February 1943, Bangalore &nbsp;&middot;&nbsp; 83 years old</p>' +
     '<p class="blurb">Twelve questions, recorded at the kitchen table by his family, one at a time.</p></div>' +
     '<div><p class="sechd">The record</p><div class="rec">' + recRows() + '</div></div>' +

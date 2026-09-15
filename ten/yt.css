@@ -141,8 +141,8 @@
 .trow .film .play{width:28px;height:28px}
 .trow .film .play::after{border-left-width:9px;border-top-width:6px;border-bottom-width:6px}
 .trow .film .dur,.trow .film .sh{display:none}
-.trow .t{font-family:"Newsreader",Georgia,serif;font-size:1.06rem;line-height:1.28}
-.trow .m{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-top:.25rem}
+.trow .t{display:block;font-family:"Newsreader",Georgia,serif;font-size:1.06rem;line-height:1.28}
+.trow .m{display:block;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-top:.25rem}
 .trow .dur{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3);white-space:nowrap}
 .trow.on{cursor:pointer}
 .trow.on:hover{background:var(--surf)}
@@ -203,3 +203,9 @@
 .ticks{display:flex;gap:.3rem}
 .ticks i{width:.5rem;height:1.6rem;background:transparent;border:1px solid var(--acc);opacity:.45;display:block}
 .ticks i.on{background:var(--acc);opacity:1}
+
+/* the photograph sits centred over his name */
+.side .circ,.side .pt{margin-left:auto;margin-right:auto}
+.side > div:first-of-type,.side .namebl{text-align:center}
+.side h1,.side .dates,.side .blurb{text-align:center}
+.side .blurb{margin-left:auto;margin-right:auto}
