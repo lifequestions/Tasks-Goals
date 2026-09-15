@@ -1,83 +1,76 @@
-<title>Ten pages for Luis</title>
+<title>Layouts for Luis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
 <link rel="stylesheet" href="base.css">
 <style>
-.head{padding:clamp(2.4rem,6vw,4rem) 0 clamp(1.4rem,3vw,2rem)}
-.head h1{font-size:clamp(2.2rem,6vw,3.4rem);line-height:1.02}
-.head .stand{font-size:1.06rem;color:var(--ink2);margin-top:1.1rem;max-width:56ch}
-.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1.1rem;margin:1.8rem 0 0;border-top:1px solid var(--line);padding-top:1.4rem}
-.rule h3{font-size:1.06rem;margin-bottom:.3rem}
-.rule p{font-size:.9rem;color:var(--ink2)}
-.list{border-top:1px solid var(--line);margin-top:2.2rem}
-.row{display:grid;grid-template-columns:auto minmax(0,13rem) minmax(0,1fr) auto;gap:1.2rem;align-items:baseline;padding:1.05rem .4rem;border-bottom:1px solid var(--line);text-decoration:none;transition:.16s}
+.head{padding:clamp(2.2rem,5.5vw,3.6rem) 0 clamp(1.2rem,2.6vw,1.8rem)}
+.head h1{font-size:clamp(2.1rem,5.4vw,3.2rem);line-height:1.03}
+.head .stand{font-size:1.04rem;color:var(--ink2);margin-top:1rem;max-width:58ch}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem;margin-top:1.8rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.rule h3{font-size:1.04rem;margin-bottom:.3rem}
+.rule p{font-size:.89rem;color:var(--ink2)}
+.fam{margin-top:2.4rem}
+.fam > .mo{padding-bottom:.55rem;border-bottom:1px solid var(--ink)}
+.row{display:grid;grid-template-columns:auto minmax(0,13.5rem) minmax(0,1fr) auto;gap:1.2rem;align-items:baseline;
+     padding:.95rem .4rem;border-bottom:1px solid var(--line);text-decoration:none;transition:.16s}
 .row:hover{background:var(--surf);padding-left:.8rem}
-@media (max-width:760px){.row{grid-template-columns:auto minmax(0,1fr);gap:.5rem 1rem}.row .d{grid-column:2}.row .go{display:none}}
-.row .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--ink3)}
-.row .t{font-family:"Newsreader",Georgia,serif;font-size:1.32rem;line-height:1.2}
-.row .d{color:var(--ink2);font-size:.93rem}
-.row .go{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+@media (max-width:760px){.row{grid-template-columns:auto minmax(0,1fr)}.row .d{grid-column:2}.row .go{display:none}}
+.row .n{font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--ink3)}
+.row .t{font-family:"Newsreader",Georgia,serif;font-size:1.28rem;line-height:1.2}
+.row .d{color:var(--ink2);font-size:.92rem}
+.row .go{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
 .row:hover .go{color:var(--acc)}
-.pick{background:var(--accSoft);border-left:3px solid var(--acc);padding:1rem 1.2rem;margin-top:2rem;max-width:64ch;font-size:.95rem;color:var(--ink2)}
+.note{background:var(--accSoft);border-left:3px solid var(--acc);padding:1rem 1.2rem;margin-top:2.4rem;max-width:66ch;font-size:.94rem;color:var(--ink2)}
 </style>
 <div class="in">
   <header class="head">
     <p class="mo">Luis James de Souza &middot; born 4 February 1943, Bangalore</p>
-    <h1>Ten ways to build his page</h1>
-    <p class="stand">Same man, same twelve questions, same five recordings &mdash; ten different shapes. Open any of them, press any still to play. Everything is live, so you can judge them the way the family would.</p>
+    <h1>Layouts for his page</h1>
+    <p class="stand">Everything is live &mdash; press any question to play his answer. The ones you have ruled out are gone; what is left is the families you liked, each with a few options.</p>
     <div class="rules">
-      <div class="rule"><h3>Easy answers first</h3><p>Name, parents, schools, first job. Typed in once, no camera. It means the page looks like something on day one.</p></div>
-      <div class="rule"><h3>One main film</h3><p>Every layout leads with a single film, so a visitor never has to choose where to start.</p></div>
-      <div class="rule"><h3>Stills, not players</h3><p>Each answer shows a still pulled from YouTube. The player only loads when somebody presses it &mdash; which is why hosting stays free.</p></div>
+      <div class="rule"><h3>Questions, not thumbnails</h3><p>Most of these show the question itself. Press it and the card becomes the player &mdash; nothing loads from YouTube until somebody asks.</p></div>
+      <div class="rule"><h3>The record fills first</h3><p>Name, birthplace, parents, schools, first job. Typed in once, no camera, so the page is never empty.</p></div>
+      <div class="rule"><h3>The map</h3><p>Bangalore, La Martini&egrave;re in Lucknow, St George&rsquo;s in Mussoorie. Drawn as vectors, so it costs nothing to serve.</p></div>
     </div>
   </header>
-  <p class="mo" style="margin-top:2.4rem">Shaped like a video channel &mdash; dark or light, whichever your machine is set to</p>
-  <div class="list" id="ytlist" style="margin-top:.6rem"></div>
-  <p class="mo" style="margin-top:2.6rem">Latest &mdash; the list of answers, with four different tops. All four carry the birthplace map</p>
-  <div class="list" id="newlist" style="margin-top:.6rem"></div>
-  <p class="mo" style="margin-top:2.6rem">The original ten</p>
-  <div class="list" id="list" style="margin-top:.6rem"></div>
-  <p class="pick">The four at the top all share 05&rsquo;s list of answers and all end with the map of Bangalore and the two schools. They differ only in the top: <strong>13</strong> and <strong>14</strong> lead with a photograph, <strong>11</strong> with the film, <strong>12</strong> with the portrait and record card. Say which and I&rsquo;ll build the real one properly.</p>
+  <div id="fams"></div>
+  <p class="note">Removed as agreed: the front page, record card, journey, interview column, start-here, the people, the stages, and the two earlier tops. They are still in the repository if you want one back.</p>
 </div>
 <footer class="in">
-  <p>Five of the twelve answers currently play borrowed interview clips, so the mechanism can be seen working. They are replaced by pasting in his own video ID.</p>
+  <p>Five of the twelve answers currently play borrowed interview clips so the mechanism can be seen working. Each is replaced by pasting in his own video ID.</p>
 </footer>
 <script>
-var IDEAS = [
-  ["01","Front Page","One big film across the top, his name underneath it like a masthead, facts beside it, the other eleven in a grid."],
-  ["02","Record Card","Portrait on the left, a filled-in record card on the right. The main film below, the rest on a shelf you scroll sideways."],
-  ["03","The Journey","The map leads. Bangalore, Mussoorie, Lucknow — press a pin and it jumps to the answers filed under that place."],
-  ["04","The Interview","One column, like a magazine interview. Question in big type, his answer underneath it, all the way down."],
-  ["05","Start Here","One film fills the first screen: if you watch one thing, watch this. Everything else is a tight list with small thumbnails."],
-  ["06","The People","Built out of the people in his life — parents, brothers, wife, children. Whoever opens the link finds themselves on it."],
-  ["07","The Wall","A wall of stills with the question written across each one. His details sit in a thin column that stays put as you scroll."],
-  ["08","The Stages","Six bands, not dates: Bangalore, the hills, out to work, meeting her, children, now. Facts and films inside each."],
-  ["09","The Deck","One question at a time, full screen, arrows to move. Card zero is his details. Made for sitting next to him and recording."],
-  ["10","The Keepsake","Quiet and book-like. A title plate with his portrait, the main film, the record as a printed table, the rest as a list."]
+var FAMS = [
+  ["Sidebar &mdash; him on the left, the films on the right", [
+    ["20","Small thumbnails","A still the size of a stamp beside each question, duration on the right."],
+    ["21","No thumbnails","The questions themselves as cards. Press one and it becomes the player."],
+    ["22","Full thumbnails","Proper 16:9 stills in a grid, question and status underneath."]]],
+  ["Circle portrait", [
+    ["23","Centred","Round photograph over his name, then the questions as a list with small stills."],
+    ["24","With the first film","Photograph and name side by side, the first film at a modest size, then the rest."],
+    ["25","Question cards","Photograph, name, then all twelve as cards with no pictures at all."]]],
+  ["Keepsake &mdash; quiet, and the map up top", [
+    ["10","The record and the map","Title plate, then the record and the map side by side, then the twelve."],
+    ["26","Questions beside the map","Map on the left, the twelve questions on the right, the record underneath."],
+    ["27","Map in the head","Name and map across the top, then the record and the questions in two columns."]]],
+  ["Wall and deck", [
+    ["07","The wall","A dense grid of question cards, him and the record in a narrow column."],
+    ["09","The deck","One card at a time with arrows. Card zero is his photograph and his details."]]],
+  ["Photograph first", [
+    ["13","With the first film","The frame whole across the top, name and record under it, then the eleven."],
+    ["14","No film at the top","His name written across the photograph, the record, then all twelve as a list."]]],
+  ["Library", [
+    ["15","Name plate on top","A banner carrying his name and how far they have got, then the grid."],
+    ["16","Pinned first film","One question pinned above the grid as the place to start."],
+    ["17","Watch and queue","One question big on the left, the other eleven queued down the right."],
+    ["18","Playlist","Cover, play-all, a progress bar, and a numbered list of twelve."],
+    ["19","Shelves","Recorded so far, the easy ones still to do, the ones worth sitting down for."]]]
 ];
-var NEW = [
-  ["13","Photograph first","A wide frame of him across the top, name and record under it, the main film, then the list of eleven."],
-  ["14","Photograph first, no top film","The same wide frame with his name across it, the record in two columns, then all twelve as a list \u2014 no separate film at the top."],
-  ["11","Front-page top","The big film across the top and his name underneath it, the record beside it, then the list of eleven."],
-  ["12","Record-card top","Portrait and the filled-in record card first, the main film under them, then the list of eleven."]
-];
-function rows(list){ return list.map(function(x){
-  return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
-    '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +
-    '<span class="go">Open &rarr;</span></a>'; }).join(""); }
-var YT = [
-  ["15","Channel, banner on top","The full channel page: banner, round photo, @handle, the counts, tabs, and all twelve as a grid of thumbnails."],
-  ["16","Channel, no banner","Same channel, no banner art \u2014 photo, description, then one pinned film above the grid."],
-  ["17","Watch page","The player fills the left, his details sit in the description box beneath, and the other eleven queue down the right."],
-  ["18","Playlist","Twelve questions as a playlist: cover, play-all, progress, and a numbered list. The map sits under the panel."],
-  ["19","Home shelves","Rows you scroll sideways \u2014 recorded so far, the easy ones still to do, the ones worth sitting down for."]
-];
-document.getElementById("ytlist").innerHTML = rows(YT);
-document.getElementById("newlist").innerHTML = rows(NEW);
-document.getElementById("list").innerHTML = IDEAS.map(function(x){
-  return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
-    '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +
-    '<span class="go">Open &rarr;</span></a>';
+document.getElementById("fams").innerHTML = FAMS.map(function(f){
+  return '<div class="fam"><p class="mo">' + f[0] + '</p>' + f[1].map(function(x){
+    return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
+      '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +
+      '<span class="go">Open &rarr;</span></a>'; }).join("") + '</div>';
 }).join("");
 </script>

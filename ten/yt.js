@@ -41,3 +41,28 @@ function qrow(x, i, cls){
   return '<button class="film ' + cls + ' on" data-yt="' + x.v + '" aria-label="Play: ' + esc(x.q) + '">' +
          inner + '</button>';
 }
+
+/* Rows and cards that do carry a still, for the layouts that want one. */
+function thumbRow(x, i){
+  var n = ("0" + (i + 1)).slice(-2);
+  var body = '<span class="idx">' + n + '</span>' + film(x, {none:"—"}) +
+             '<span><span class="t">' + esc(x.q) + '</span><span class="m">' +
+             (x.v ? "Recorded" : (x.easy ? "An easy one · two minutes" : "Not recorded yet")) + '</span></span>' +
+             '<span class="dur">' + (x.v ? x.len : "—") + '</span>';
+  return '<div class="trow ' + (x.v ? "on" : "off") + '">' + body + '</div>';
+}
+function thumbCard(x, i){
+  return '<div class="tcard ' + (x.v ? "on" : "off") + '">' + film(x, {none:"Not recorded"}) +
+         '<span class="t">' + ("0" + (i + 1)).slice(-2) + '. ' + esc(x.q) + '</span>' +
+         '<span class="m">' + (x.v ? "Recorded · " + x.len : (x.easy ? "An easy one · two minutes" : "Not recorded yet")) + '</span></div>';
+}
+function sideBlock(){
+  return '<div class="side">' +
+    '<div class="pt"><img src="dad.jpg" alt="Luis James de Souza"></div>' +
+    '<div><h1>Luis James de Souza</h1>' +
+    '<p class="dates">Born 4 February 1943, Bangalore &nbsp;&middot;&nbsp; 83 years old</p>' +
+    '<p class="blurb">Twelve questions, recorded at the kitchen table by his family, one at a time.</p></div>' +
+    '<div><p class="sechd">The record</p><div class="rec">' + recRows() + '</div></div>' +
+    '<div><p class="sechd">Where he&rsquo;s from</p>' + ymap() + '</div>' +
+    '</div>';
+}

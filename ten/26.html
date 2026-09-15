@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>10 The keepsake &middot; Luis James de Souza</title>
+<title>26 Keepsake &middot; questions beside the map &middot; Luis James de Souza</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
@@ -17,7 +17,7 @@
 <body>
 <div class="lbar"><div class="in">
   <a class="wm" href="index.html">&larr;&nbsp; All the layouts</a>
-  <span class="who">10 &nbsp;&middot;&nbsp; The keepsake</span>
+  <span class="who">26 &nbsp;&middot;&nbsp; Keepsake &middot; questions beside the map</span>
 </div></div>
 <div class="book">
   <header class="kplate">
@@ -25,16 +25,15 @@
     <p class="mo">In his own voice</p>
     <h1>Luis James de Souza</h1>
     <div class="rule"></div>
-    <p class="dates">BORN 4 FEBRUARY 1943 &nbsp;&middot;&nbsp; BANGALORE, INDIA</p>
-    <p class="opening">Recorded by his family, one question at a time, on a phone propped against a stack of books at the kitchen table.</p>
+    <p class="dates">BORN 4 FEBRUARY 1943 &nbsp;&middot;&nbsp; BANGALORE, INDIA &nbsp;&middot;&nbsp; 83 YEARS OLD</p>
   </header>
   <div class="kband">
-    <div><p class="sechd">The record</p><div class="rec" id="rec"></div></div>
     <div><p class="sechd">Where he&rsquo;s from</p><div id="map"></div></div>
+    <div><p class="sechd">Twelve questions &middot; five recorded</p><div id="films"></div></div>
   </div>
   <div class="kq">
-    <div class="films-hd" style="margin-bottom:.4rem"><h2>Twelve questions</h2><span class="c">Five recorded</span></div>
-    <div id="films"></div>
+    <p class="sechd" style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:.9rem">The record</p>
+    <div class="rec" id="rec" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.1rem 2rem"></div>
   </div>
 </div>
 <footer class="in">
@@ -45,9 +44,9 @@
 <script src="map.js"></script>
 <script src="yt.js"></script>
 <script>
-document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
 document.getElementById("films").innerHTML = LUIS.questions.map(function(x, i){ return qrow(x, i); }).join("");
+document.getElementById("rec").innerHTML = recRows();
 
 wire();
 </script>

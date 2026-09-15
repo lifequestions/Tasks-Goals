@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
 <link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="yt.css">
 <style>
 .deck{min-height:calc(100vh - 3.4rem);display:flex;flex-direction:column;justify-content:center;padding:clamp(1.4rem,3vw,2.4rem) 0}
 .dots{display:flex;gap:.34rem;flex-wrap:wrap;margin-bottom:1.3rem}
@@ -50,12 +51,14 @@
   <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
 </footer>
 <script src="data.js"></script>
+<script src="map.js"></script>
+<script src="yt.js"></script>
 <script>
 var at = 0, N = LUIS.questions.length + 1;
 function draw(){
   var c = document.getElementById("card");
   if(at === 0){
-    c.innerHTML = '<div class="card"><div><p class="n">CARD ZERO</p>' +
+    c.innerHTML = '<div class="card"><div><div class="circ" style="margin-bottom:1.2rem"><img src="dad.jpg" alt="Luis James de Souza"></div><p class="n">CARD ZERO</p>' +
       '<h2>Luis James de Souza</h2><p class="note">Born 4 February 1943 in Bangalore, India. ' +
       'Eighty-three years old. Twelve cards, one question each &mdash; flick through them with him and record whichever he feels like answering.</p>' +
       '<p class="meta">' + LUIS.recorded + ' of 12 answered</p></div>' +
@@ -65,7 +68,7 @@ function draw(){
     c.innerHTML = '<div class="card"><div><p class="n">CARD ' + ("0"+at).slice(-2) + '</p>' +
       '<h2>' + esc(x.q) + '</h2>' + (x.note ? '<p class="note">' + x.note + '</p>' : "") +
       '<p class="meta">' + (x.v ? "Recorded &middot; " + x.len : (x.easy ? "An easy one &middot; two minutes" : "Not recorded yet")) + '</p></div>' +
-      '<div>' + film(x, {none:"Nothing here yet"}) + '</div></div>';
+      '<div>' + qcard(x, at - 1, true) + '</div></div>';
   }
   document.getElementById("count").textContent = (at + 1) + " / " + N;
   document.querySelectorAll("#dots button").forEach(function(b, i){
