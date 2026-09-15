@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>07 The Wall &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.wrap{display:grid;grid-template-columns:minmax(0,270px) minmax(0,1fr);gap:clamp(1.4rem,3.5vw,2.8rem);align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:1fr}}
+.rail{position:sticky;top:4.6rem;padding:clamp(1.6rem,3.5vw,2.4rem) 0}
+@media (max-width:860px){.rail{position:static}}
+.rail h1{font-size:clamp(1.8rem,3.6vw,2.3rem);line-height:1.04}
+.rail .dates{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--ink2);margin:.55rem 0 1.1rem}
+.rail .fact{grid-template-columns:1fr;gap:.1rem;padding:.5rem 0}
+.rail .fact .v{font-size:1.02rem}
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:.55rem;padding:clamp(1.4rem,3vw,2.2rem) 0}
+.tile{position:relative}
+.tile .film{aspect-ratio:4/3}
+.tile .cap{position:absolute;left:0;right:0;bottom:0;padding:.7rem .75rem;pointer-events:none}
+.tile .cap .q{padding-right:2.9rem;font-family:"Newsreader",Georgia,serif;font-size:1rem;line-height:1.24;color:#F8F6F3;text-shadow:0 1px 14px rgba(0,0,0,.6);display:block}
+.tile .film.empty + .cap .q{color:var(--ink2);text-shadow:none}
+.tile .film.empty{aspect-ratio:4/3}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All ten layouts</a>
+  <span class="sp"></span>
+  <span class="who">07 &nbsp;&middot;&nbsp; The Wall</span>
+</div></div>
+<div class="in">
+  <div class="wrap">
+    <aside class="rail">
+      <p class="mo">A private page</p>
+      <h1>Luis James de Souza</h1>
+      <p class="dates">Born 4 Feb 1943, Bangalore &middot; 83</p>
+      <div id="facts"></div>
+    </aside>
+    <div class="wall" id="wall"></div>
+  </div>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script>
+document.getElementById("facts").innerHTML = factRows();
+document.getElementById("wall").innerHTML = LUIS.questions.map(function(x){
+  return '<div class="tile">' + film(x, {none:"To record"}) +
+         '<div class="cap"><span class="q">' + esc(x.q) + '</span></div></div>';
+}).join("");
+
+wire();
+</script>
+</body>
+</html>

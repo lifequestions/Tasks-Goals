@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>10 The Keepsake &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.book{max-width:660px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2rem)}
+.plate{text-align:center;padding:clamp(2.6rem,7vw,4.6rem) 0 clamp(1.6rem,3vw,2.2rem)}
+.plate .pt{width:clamp(150px,26vw,196px);aspect-ratio:4/5;margin:0 auto 1.6rem;border:1px solid var(--line);overflow:hidden;box-shadow:0 26px 46px -32px var(--shadow)}
+.plate .pt img{width:100%;height:100%;object-fit:cover;object-position:48% 28%}
+.plate h1{font-size:clamp(2rem,5vw,2.9rem);line-height:1.06}
+.plate .rule{width:54px;height:1px;background:var(--line);margin:1.1rem auto}
+.plate .dates{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;color:var(--ink2)}
+.opening{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.14rem,2.4vw,1.4rem);line-height:1.56;color:var(--ink2);text-align:center;margin:1.6rem auto 0;max-width:46ch}
+.mainblk{padding:clamp(1.8rem,4vw,2.6rem) 0}
+.mainblk .cap{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-top:.7rem;text-align:center}
+.tbl{border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:.4rem 0;margin:1rem 0 0}
+.tbl .fact{grid-template-columns:minmax(0,9.5rem) minmax(0,1fr);padding:.55rem 0}
+.tbl .fact .v{font-size:1.1rem}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:grid;grid-template-columns:auto minmax(0,104px) minmax(0,1fr);gap:1rem;align-items:center;padding:.8rem 0;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:0}
+.list .n{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3)}
+.list .film{aspect-ratio:16/9}
+.list .film .play{width:28px;height:28px}
+.list .film .play::after{border-left-width:9px;border-top-width:6px;border-bottom-width:6px}
+.list .film .dur,.list .film .sh{display:none}
+.list .q{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;line-height:1.28}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All ten layouts</a>
+  <span class="sp"></span>
+  <span class="who">10 &nbsp;&middot;&nbsp; The Keepsake</span>
+</div></div>
+<div class="book">
+  <header class="plate">
+    <div class="pt"><img src="dad.jpg" alt="Luis James de Souza"></div>
+    <p class="mo">In his own voice</p>
+    <h1>Luis James de Souza</h1>
+    <div class="rule"></div>
+    <p class="dates">BORN 4 FEBRUARY 1943 &nbsp;&middot;&nbsp; BANGALORE, INDIA</p>
+    <p class="opening">Recorded by his family, one question at a time, on a phone propped against a stack of books at the kitchen table.</p>
+  </header>
+  <div class="mainblk" id="main"></div>
+  <section style="border:0;padding-top:0">
+    <div class="sec-hd"><p class="mo">The record</p><h2>What we know already</h2></div>
+    <div class="tbl" id="facts"></div>
+  </section>
+  <section>
+    <div class="sec-hd"><p class="mo">The answers</p><h2>Twelve questions</h2></div>
+    <ol class="list" id="list"></ol>
+  </section>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script>
+document.getElementById("main").innerHTML = film(LUIS.main) +
+  '<p class="cap">' + esc(LUIS.main.q) + '</p>';
+document.getElementById("facts").innerHTML = factRows();
+document.getElementById("list").innerHTML = LUIS.questions.map(function(x,i){
+  return '<li><span class="n">' + ("0"+(i+1)).slice(-2) + '</span>' +
+    film(x, {none:"—"}) + '<span class="q">' + esc(x.q) + '</span></li>';
+}).join("");
+
+wire();
+</script>
+</body>
+</html>

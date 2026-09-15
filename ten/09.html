@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>09 The Deck &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.deck{min-height:calc(100vh - 3.4rem);display:flex;flex-direction:column;justify-content:center;padding:clamp(1.4rem,3vw,2.4rem) 0}
+.dots{display:flex;gap:.34rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.dots button{width:1.55rem;height:.28rem;background:var(--line);border-radius:2px}
+.dots button.on{background:var(--acc)}
+.dots button.lit{background:var(--ink3)}
+.card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.4rem,4vw,3rem);align-items:center}
+@media (max-width:820px){.card{grid-template-columns:1fr}}
+.card .n{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.15em;color:var(--acc)}
+.card h2{font-size:clamp(1.7rem,4.2vw,2.8rem);line-height:1.12;margin:.6rem 0 1rem}
+.card .note{color:var(--ink2);font-size:.98rem}
+.card .meta{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);margin-top:1rem}
+.nav{display:flex;gap:.7rem;margin-top:1.6rem;align-items:center}
+.nav .xb{border:1px solid var(--line);padding:.5rem .95rem;border-radius:2px;font-size:.86rem}
+.nav .xb:hover{border-color:var(--acc)}
+.nav .count{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--ink3)}
+.factcard .fact{grid-template-columns:minmax(0,9rem) minmax(0,1fr);padding:.5rem 0}
+.factcard .fact .v{font-size:1.06rem}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All ten layouts</a>
+  <span class="sp"></span>
+  <span class="who">09 &nbsp;&middot;&nbsp; The Deck</span>
+</div></div>
+<div class="in deck">
+  <div class="dots" id="dots"></div>
+  <div id="card"></div>
+  <div class="nav">
+    <button class="xb" id="prev">&larr;&nbsp; Back</button>
+    <button class="xb" id="next">Next &nbsp;&rarr;</button>
+    <span class="count" id="count"></span>
+  </div>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script>
+var at = 0, N = LUIS.questions.length + 1;
+function draw(){
+  var c = document.getElementById("card");
+  if(at === 0){
+    c.innerHTML = '<div class="card"><div><p class="n">CARD ZERO</p>' +
+      '<h2>Luis James de Souza</h2><p class="note">Born 4 February 1943 in Bangalore, India. ' +
+      'Eighty-three years old. Twelve cards, one question each &mdash; flick through them with him and record whichever he feels like answering.</p>' +
+      '<p class="meta">' + LUIS.recorded + ' of 12 answered</p></div>' +
+      '<div class="factcard">' + factRows() + '</div></div>';
+  } else {
+    var x = LUIS.questions[at - 1];
+    c.innerHTML = '<div class="card"><div><p class="n">CARD ' + ("0"+at).slice(-2) + '</p>' +
+      '<h2>' + esc(x.q) + '</h2>' + (x.note ? '<p class="note">' + x.note + '</p>' : "") +
+      '<p class="meta">' + (x.v ? "Recorded &middot; " + x.len : (x.easy ? "An easy one &middot; two minutes" : "Not recorded yet")) + '</p></div>' +
+      '<div>' + film(x, {none:"Nothing here yet"}) + '</div></div>';
+  }
+  document.getElementById("count").textContent = (at + 1) + " / " + N;
+  document.querySelectorAll("#dots button").forEach(function(b, i){
+    b.className = (i === at ? "on" : (i > 0 && LUIS.questions[i-1].v ? "lit" : ""));
+  });
+  wire();
+}
+document.getElementById("dots").innerHTML = Array.from({length:N}).map(function(_,i){
+  return '<button data-i="' + i + '" aria-label="Card ' + i + '"></button>'; }).join("");
+document.getElementById("dots").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if(!b) return; at = +b.getAttribute("data-i"); draw();
+});
+document.getElementById("prev").addEventListener("click", function(){ at = (at - 1 + N) % N; draw(); });
+document.getElementById("next").addEventListener("click", function(){ at = (at + 1) % N; draw(); });
+document.addEventListener("keydown", function(e){
+  if(e.key === "ArrowLeft"){ at = (at - 1 + N) % N; draw(); }
+  if(e.key === "ArrowRight"){ at = (at + 1) % N; draw(); }
+});
+draw();
+
+wire();
+</script>
+</body>
+</html>
