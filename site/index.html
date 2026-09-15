@@ -81,15 +81,26 @@ body[data-rows="2"] .track.second{display:flex}
         color:#F6F1E6;background:rgba(24,38,35,.88);border-radius:999px;padding:.34rem .5rem;
         opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;pointer-events:none}
 .pc:hover .go,.pc:focus-visible .go{opacity:1;transform:translateY(0)}
-.pc:hover{transform:translateY(-20px) scale(1.07);box-shadow:0 48px 76px -28px var(--shadow);z-index:20}
+.pc{cursor:default}
 .arw{position:absolute;top:38%;width:52px;height:52px;border-radius:50%;
      background:var(--surf);border:1px solid var(--line);color:var(--ink2);font-size:1.2rem;
      display:grid;place-content:center;box-shadow:0 12px 26px -14px var(--shadow);transition:.18s;z-index:30}
 .arw:hover{border-color:var(--acc);color:var(--acc);transform:scale(1.08)}
 .arw[disabled]{opacity:.28;cursor:default;transform:none}
+.galnote{text-align:center;color:var(--ink3);font-size:.95rem;margin-top:1.4rem;padding:0 1.2rem}
 #prevBtn{left:clamp(.6rem,2.5vw,2.4rem)}
 #nextBtn{right:clamp(.6rem,2.5vw,2.4rem)}
 @media (max-width:620px){.pc{flex:0 0 62vw}.arw{width:44px;height:44px}}
+
+
+.betagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem;margin-top:.6rem}
+.betacard{background:var(--surf);border:1px solid var(--line);border-radius:var(--r);padding:clamp(1.2rem,2.6vw,1.8rem)}
+.betacard h3{font-size:1.3rem;margin-bottom:.8rem}
+.betacard ul{margin:0;padding-left:1.1rem;color:var(--ink2)}
+.betacard li{margin-bottom:.55rem;font-size:1.02rem}
+.betacard li:last-child{margin-bottom:0}
+.betacta{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;margin-top:1.8rem}
+.betacta .fine{flex-basis:100%;color:var(--ink3);font-size:.98rem;margin-top:.2rem}
 
 /* proof strip */
 .proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--band)}
@@ -232,7 +243,7 @@ footer a:hover{color:var(--ink)}
     <a class="q" href="#reel">The answers</a>
     <a class="q" href="#how">How it works</a>
     <a class="q" href="#price">Price</a>
-    <a class="btn sm" href="#start">Start free</a>
+    <a class="btn sm" href="#start">Join the beta</a>
   </div>
 </nav>
 
@@ -243,10 +254,10 @@ footer a:hover{color:var(--ink)}
       <h1>One day you&rsquo;ll want to hear <em>their stories</em> again.</h1>
       <p class="sub">A life biography, recorded rather than written. We send the questions; they answer on your phone, at their own pace. Your mother, your father, a grandparent, an aunt &mdash; or yourself.</p>
       <div class="cta">
-        <a class="btn" href="#start">Start their page &mdash; free</a>
-        <a class="btn ghost" href="#how">See how it works</a>
+        <a class="btn" href="#start">Put your name down &mdash; ten places</a>
+        <a class="btn ghost" href="luis.html">See a finished page</a>
       </div>
-      <p class="fine">Free to start &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
+      <p class="fine">Free during the beta &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
     </div>
     <div class="gallery" id="gallery">
       <div class="viewport">
@@ -255,6 +266,7 @@ footer a:hover{color:var(--ink)}
       </div>
       <button class="arw" id="prevBtn" aria-label="Previous people">&#8592;</button>
       <button class="arw" id="nextBtn" aria-label="More people">&#8594;</button>
+      <p class="galnote">How the pages look. The first real families are being recorded now &mdash; yours could be one of them.</p>
     </div>
   </header>
 </div>
@@ -373,7 +385,7 @@ footer a:hover{color:var(--ink)}
         <li>A private link for the family</li>
         <li>Everything recorded stays watchable</li>
       </ul>
-      <a class="btn ghost" href="#start">Start their page</a>
+      <a class="btn ghost" href="#start">Join the beta</a>
     </div>
     <div class="plan lead">
       <p class="tag">Most families</p>
@@ -387,7 +399,7 @@ footer a:hover{color:var(--ink)}
         <li>Photographs, maps and papers</li>
         <li>Kept indefinitely, download any time</li>
       </ul>
-      <a class="btn" href="#start">Choose Family</a>
+      <a class="btn" href="#start">Join the beta</a>
     </div>
     <div class="plan">
       <p class="tag">Nobody pays alone</p>
@@ -399,7 +411,7 @@ footer a:hover{color:var(--ink)}
         <li>&ldquo;Twelve people helped finish this&rdquo;</li>
         <li>One person needn't carry it</li>
       </ul>
-      <a class="btn ghost" href="#start">See how</a>
+      <a class="btn ghost" href="#start">Join the beta</a>
     </div>
   </div>
   <div class="addons">
@@ -416,86 +428,41 @@ footer a:hover{color:var(--ink)}
 <div class="wrap-band" id="start">
   <div class="in sec">
     <div class="sec-hd">
-      <p class="eyebrow">Start</p>
-      <h2>Who are you recording?</h2>
-      <p>A minute to set up. Nothing is public until you send the link, and you can delete all of it whenever you like.</p>
+      <p class="eyebrow">Beta &middot; ten families</p>
+      <h2>We&rsquo;re recording the first ten families now</h2>
+      <p>The pages are built and the questions are written. What we need are ten mothers and fathers willing to answer one question a week while we find out what works.</p>
     </div>
-    <div class="start">
-      <form class="form" id="startForm">
-        <div class="field">
-          <label for="who">Their name</label>
-          <input id="who" type="text" placeholder="Luis James de Souza" required>
-        </div>
-        <div class="field">
-          <label for="dob">Their date of birth</label>
-          <input id="dob" type="text" placeholder="4 February 1943">
-        </div>
-        <div class="field">
-          <label for="email">Your email</label>
-          <input id="email" type="email" placeholder="you@example.com" required>
-        </div>
-        <div class="go"><button class="btn" type="submit">Create their page</button></div>
-      </form>
-      <div class="done" id="done">
-        <p class="eyebrow">Their page would live at</p>
-        <p class="url" id="url">lifequestions.com/</p>
-        <ol>
-          <li>The first questions arrive in your inbox, one a week, so you're never staring down sixty of them.</li>
-          <li>You film an answer on your phone and upload it. The page fills itself in.</li>
-          <li>When there's something worth seeing, you send the link. Not before.</li>
-        </ol>
-        <p class="fine2">Demo &mdash; not connected yet. Nothing has been sent or stored.</p>
+    <div class="betagrid">
+      <div class="betacard">
+        <h3>What you get</h3>
+        <ul>
+          <li>A private page for your mother or father, made for you</li>
+          <li>One question a week, sent to them on WhatsApp in your name</li>
+          <li>They answer by filming on their own phone &mdash; no app, no account, nothing to install</li>
+          <li>You do nothing after signing up. We handle the rest.</li>
+          <li>Free, for as long as the beta runs</li>
+        </ul>
       </div>
-      <p class="fine2" id="formNote">Free. No card needed.</p>
+      <div class="betacard">
+        <h3>What we ask</h3>
+        <ul>
+          <li>Twelve weeks &mdash; about three months of Sundays</li>
+          <li>Tell us honestly when it doesn&rsquo;t work, especially if they can&rsquo;t manage it</li>
+          <li>Let us learn from how it goes. Their films and their name stay yours, and are never shown to anybody without your say-so.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="betacta">
+      <a class="btn" id="joinBtn" href="#">Put your name down</a>
+      <a class="btn ghost" href="luis.html">See a finished page first</a>
+      <p class="fine">Ten places. When they&rsquo;re gone there&rsquo;s a waiting list, and no, there is nothing to pay.</p>
     </div>
   </div>
 </div>
 
-<div class="in sec">
-  <div class="sec-hd">
-    <p class="eyebrow">Straight answers</p>
-    <h2>The things people worry about</h2>
-  </div>
-  <div class="faq">
-    <div class="fq">
-      <h3>Who can actually see it?</h3>
-      <p>Only the people you send the link to. Pages are never listed or searchable, there's no directory to browse, and the videos are unlisted so they appear on no channel and in no search results.</p>
-    </div>
-    <div class="fq">
-      <h3>They hate being filmed.</h3>
-      <p>Most people do, for about four minutes. Sit off to the side so they're talking to you and not a lens, and don't call it an interview. If they really won't have it, record their voice over a photograph.</p>
-    </div>
-    <div class="fq">
-      <h3>What if they die before we finish?</h3>
-      <p>The page becomes a memorial with one change of setting. Their dates close, their best answers move to the top, and the questions they never got to stay on the page instead of being quietly deleted.</p>
-    </div>
-    <div class="fq">
-      <h3>What if you go out of business?</h3>
-      <p>You get every file, and that's written down rather than implied. You can download the whole archive &mdash; video and transcripts &mdash; at any time, without asking us.</p>
-    </div>
-    <div class="fq">
-      <h3>Will you make an AI version of them?</h3>
-      <p>No. Not now, not later, not as an upgrade. Their recordings are not training data and we won't build a chatbot that pretends to be someone you loved.</p>
-    </div>
-    <div class="fq">
-      <h3>Is it too late if they've already gone?</h3>
-      <p>Not necessarily. Families use the same pages the other way round &mdash; everyone else recording their memories of one person. Same questions, different chairs.</p>
-    </div>
-  </div>
-</div>
-
-<div class="close">
-  <div class="in">
-    <h2>Ask them this weekend.</h2>
-    <p>One question, forty minutes, a phone propped on a stack of books. It's the part nobody ever regrets.</p>
-    <a class="btn pale" href="#start">Start their page &mdash; free</a>
-  </div>
-</div>
-
-<div class="in">
-  <footer>
+<footer>
     <p>Life Questions &mdash; recorded lives, kept properly.<br>Made in Britain.</p>
-    <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Start free</a></p>
+    <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Join the beta</a></p>
   </footer>
 </div>
 
@@ -508,6 +475,21 @@ footer a:hover{color:var(--ink)}
 </div>
 
 <script>
+/* ---------------------------------------------------------------
+   Put the sign-up form's address here — a Tally or Google form is
+   plenty. Until one exists the button opens an email instead.
+   --------------------------------------------------------------- */
+var SIGNUP_URL = "";
+var CONTACT_EMAIL = "hello@lifequestions.co.uk";
+(function(){
+  var b = document.getElementById("joinBtn");
+  if(!b){ return; }
+  if(SIGNUP_URL){ b.href = SIGNUP_URL; b.target = "_blank"; b.rel = "noopener"; return; }
+  b.href = "mailto:" + CONTACT_EMAIL +
+    "?subject=" + encodeURIComponent("Life Questions \u2014 I'd like a place in the beta") +
+    "&body=" + encodeURIComponent("Who you'd like to record:\n\nTheir first name:\nRoughly how old they are:\nDo they use WhatsApp?\n\nAnything I should know:\n");
+})();
+
 /* YouTube stores the video and serves the still, so a page costs nothing to host.
    The still is only swapped for the player when someone presses play. */
 var REEL = [
@@ -587,15 +569,15 @@ var track1=document.getElementById("track1"), track2=document.getElementById("tr
     prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn");
 var at=0;
 
+/* During the beta the faces are examples of the design, not real families,
+   so they do not open anything. They go back to being links the day there
+   are real pages behind them. */
 function fill(track, list){
   list.forEach(function(p){
-    var a=document.createElement("a");
-    a.className="pc";
-    a.href=p.href;
-    a.setAttribute("aria-label","Open "+p.cap.split(",")[0]+"'s page");
-    a.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>'+
-                '<span class="go">Open their page &rarr;</span>';
-    track.appendChild(a);
+    var d=document.createElement("div");
+    d.className="pc";
+    d.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>';
+    track.appendChild(d);
   });
 }
 fill(track1, PEOPLE);
@@ -692,12 +674,5 @@ function token(){
   for(var i = 0; i < 4; i++){ s += a[Math.floor(Math.random()*a.length)]; }
   return s;
 }
-document.getElementById("startForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  var n = document.getElementById("who").value.trim() || "their name";
-  document.getElementById("url").textContent = "lifequestions.com/" + slug(n) + "-" + token();
-  document.getElementById("startForm").style.display = "none";
-  document.getElementById("formNote").style.display = "none";
-  document.getElementById("done").classList.add("on");
-});
+/* the sign-up form was replaced by the beta ask above */
 </script>

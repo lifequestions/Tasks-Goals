@@ -33,14 +33,14 @@ var LUIS = {
     { q:"Your brothers and sisters, oldest to youngest. Who were you closest to, and who did you fight with?", easy:true, v:null },
     { q:"What did your family eat, and who cooked it? What did you dread being given?",
       v:"WNfvuJr9164", len:"5:38", still:"s-room.jpg" },
-    { q:"The schools you went to. Were you happy there?", easy:true, v:null },
+    { q:"The schools you went to. Were you happy there, and were you any good at it?", easy:true, v:null },
     { q:"A teacher you still remember. What did they say to you that stuck?", v:null },
-    { q:"What did you do after school, before you were old enough to work? Where did you go when nobody knew where you were?", v:null },
     { q:"Your grandparents — what do you remember of them? What did their house smell like?", v:null },
-    { q:"Sundays, when you were a boy. What was the routine, and who came?",
+    { q:"What did you do with yourself after school? Where did you go when nobody knew where you were?", v:null },
+    { q:"Sundays, when you were a child. What was the routine, and who came?",
       v:"nVu__vyps9Q", len:"12:41", still:"s-hands.jpg" },
     { q:"The first time you remember being properly frightened. How old were you, and who came to get you?", v:null },
-    { q:"What did your parents worry about? And what did they never talk about?",
+    { q:"Your first job, and your first wage. Who taught you to do it properly?",
       v:"aJ_RVsf90xg", len:"4:29", still:"s-table.jpg" }
   ]
 };
