@@ -4,52 +4,48 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>15 Channel, banner at the top &middot; Luis James de Souza</title>
+<title>15 Banner at the top &middot; Luis James de Souza</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="yt.css">
 <style>
-.chan .stat{color:var(--ymut);font-size:.88rem;margin-top:.3rem}
 
 </style>
 </head>
 <body>
-<div class="ybar"><div class="in">
-  <a class="wm" href="index.html">Life<span>Questions</span></a>
-  <div class="search"><input placeholder="Search this family" aria-label="Search"><span class="go">&#8981;</span></div>
-  <span class="me"><img src="dad.jpg" alt=""></span>
+<div class="lbar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All the layouts</a>
+  <span class="who">15 &nbsp;&middot;&nbsp; Banner at the top</span>
 </div></div>
-<div class="ybanner"><img src="y-banner.jpg" alt=""></div>
+<div class="lbanner"><img src="y-banner.jpg" alt=""></div>
 <div class="in">
-  <div class="chan">
-    <div class="av"><img src="dad.jpg" alt="Luis James de Souza"></div>
+  <div class="lhead">
+    <div class="pt"><img src="dad.jpg" alt="Luis James de Souza"></div>
     <div>
+      <p class="mo">A private page &middot; the de Souza family</p>
       <h1>Luis James de Souza</h1>
-      <p class="handle"><b>@luisdesouza</b> <span class="sep">&middot; 12 questions &middot; 5 answered</span></p>
-      <p class="blurb">Born 4 February 1943 in Bangalore, India. Eighty-three years old. Recorded at the kitchen table by his family, one question at a time. <a href="#about">more</a></p>
-      <div class="acts">
-        <a class="ybtn" href="#films">Watch the first one</a>
-        <button class="ybtn sec">Get told when he adds one</button>
-        <button class="ybtn sec">Share the link</button>
-      </div>
+      <p class="meta">Born 4 February 1943 in Bangalore, India &nbsp;&middot;&nbsp; 83 years old</p>
+      <p class="blurb">Twelve questions, recorded at the kitchen table by his family, one at a time. Press a question to watch his answer.</p>
+      <div class="acts"><a class="btn" href="#films">Start with question one</a><button class="btn ghost">Add a question for him</button></div>
     </div>
   </div>
-  <div id="tabs"></div>
-  <div class="vgrid" id="grid"></div>
+  <div class="lmeta">
+    <span>Twelve questions</span><span><b>Five</b> recorded</span><span>Seven to go</span><span>Unlisted</span>
+  </div>
+  <div class="qgrid" id="films"></div>
   <div id="about"></div>
 </div>
-<div class="in" style="padding-top:2rem;padding-bottom:3rem;color:var(--ymut);font-size:.8rem">
-  <p>A private channel for the de Souza family. Every film is unlisted &mdash; only people with this link can watch.</p>
-  <p style="margin-top:.3rem"><a href="index.html" style="color:var(--ymut)">&larr; All the layouts</a></p>
-</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
 <script src="data.js"></script>
 <script src="map.js"></script>
 <script src="yt.js"></script>
 <script>
-document.getElementById("tabs").innerHTML = tabs("Questions");
-document.getElementById("grid").innerHTML = LUIS.questions.map(vcard).join("");
+document.getElementById("films").innerHTML = LUIS.questions.map(function(x, i){ return qcard(x, i); }).join("");
 document.getElementById("about").innerHTML = aboutBlock();
 
 wire();
