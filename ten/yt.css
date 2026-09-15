@@ -209,3 +209,53 @@
 .side > div:first-of-type,.side .namebl{text-align:center}
 .side h1,.side .dates,.side .blurb{text-align:center}
 .side .blurb{margin-left:auto;margin-right:auto}
+
+/* ---- reel cards: the title written over the still, the rest underneath ---- */
+.rgrid{display:grid;gap:1rem;padding-top:1.3rem}
+.rgrid.lg{grid-template-columns:repeat(auto-fill,minmax(238px,1fr))}
+.rgrid.md{grid-template-columns:repeat(auto-fill,minmax(232px,1fr))}
+.rgrid.sm{grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:.8rem}
+.rc{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    display:flex;flex-direction:column;text-align:left;padding:0;width:100%;transition:.2s}
+.rc.on{cursor:pointer}
+.rc.on:hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 22px 44px -30px var(--shadow)}
+.rc .thumb{position:relative;aspect-ratio:16/9;background:var(--surf2);overflow:hidden}
+.rc .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.rc .thumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.rc .ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(14,12,10,0) 34%,rgba(14,12,10,.86) 100%)}
+.rc .ovt{position:absolute;left:.85rem;right:.85rem;bottom:1.6rem;color:#F7F3EC;font-family:"Newsreader",Georgia,serif;
+         font-size:1.06rem;line-height:1.22;text-shadow:0 1px 12px rgba(0,0,0,.5)}
+.rc .ovs{position:absolute;left:.85rem;right:4.4rem;bottom:.6rem;color:rgba(247,243,236,.82);
+         font-size:.74rem;line-height:1.2}
+.rc .pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:48px;height:48px;border-radius:50%;
+        background:rgba(16,16,14,.55);display:grid;place-content:center;transition:.2s}
+.rc .pl::after{content:"";width:0;height:0;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.rc.on:hover .pl{background:var(--acc)}
+.rc .dur{position:absolute;right:.55rem;bottom:.55rem;font-family:"IBM Plex Mono",monospace;font-size:.68rem;
+         color:#F7F3EC;background:rgba(14,12,10,.78);border-radius:4px;padding:.14rem .4rem}
+.rc .body{padding:.85rem 1rem 1.05rem;display:flex;flex-direction:column;gap:.35rem}
+.rc .t{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.06rem,1.3vw,1.2rem);line-height:1.26}
+.rc .c{color:var(--ink2);font-size:.88rem}
+.rc .src{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+.rc.off{background:transparent;border-style:dashed}
+.rc.off .thumb{background:repeating-linear-gradient(135deg,var(--surf2),var(--surf2) 9px,var(--bg) 9px,var(--bg) 18px)}
+.rc.off .none{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:"IBM Plex Mono",monospace;
+              font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);
+              background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:.3rem .7rem;white-space:nowrap}
+.rc.off .t{color:var(--ink2)}
+.rgrid.sm .rc .ovt{font-size:.92rem;bottom:1.4rem}
+.rgrid.sm .rc .ovs{display:none}
+.rgrid.sm .rc .body{padding:.7rem .8rem .85rem}
+.rgrid.sm .rc .t{font-size:.98rem}
+.rgrid.sm .rc .c{display:none}
+.rc.wide{grid-column:1/-1}
+.rc.wide .thumb{aspect-ratio:21/9}
+.rc.wide .ovt{font-size:clamp(1.3rem,2.4vw,1.9rem);bottom:2rem}
+.rc.plain .ov,.rc.plain .ovt,.rc.plain .ovs{display:none}
+.rc.bare .body{display:none}
+.rc.bare .ovs{display:block}
+
+/* the reel card borrows .film for its click handling only */
+.rc{aspect-ratio:auto;background:var(--surf);border:1px solid var(--line);overflow:hidden}
+.rc.off{background:transparent}
+.rc:has(iframe) .thumb{background:#000}

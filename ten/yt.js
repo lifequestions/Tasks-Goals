@@ -66,3 +66,23 @@ function sideBlock(){
     '<div><p class="sechd">Where he&rsquo;s from</p>' + ymap() + '</div>' +
     '</div>';
 }
+
+/* A card in the manner of the homepage reel: the question written across the still,
+   the same question and its note underneath. */
+function reelCard(x, i, cls){
+  cls = cls || "";
+  var n = ("0" + (i + 1)).slice(-2);
+  var cap = x.v ? "Recorded at the kitchen table" : (x.easy ? "An easy one — two minutes" : "Waiting for a quiet afternoon");
+  var thumb = x.v
+    ? '<img src="https://i.ytimg.com/vi/' + x.v + '/hqdefault.jpg" alt="" loading="lazy" data-fb="' + (x.still || LUIS.photo) + '">' +
+      '<span class="ov"></span><span class="pl"></span>' +
+      '<span class="ovt">' + esc(x.q) + '</span><span class="ovs">' + cap + '</span>' +
+      '<span class="dur">' + x.len + '</span>'
+    : '<span class="none">Not recorded</span>';
+  var body = '<span class="body"><span class="t">' + n + '. ' + esc(x.q) + '</span>' +
+             '<span class="c">' + cap + '</span>' +
+             '<span class="src">' + (x.v ? "Example clip · borrowed while we build" : "To record") + '</span></span>';
+  if(!x.v) return '<div class="rc off ' + cls + '"><span class="thumb">' + thumb + '</span>' + body + '</div>';
+  return '<button class="film rc on ' + cls + '" data-yt="' + x.v + '" aria-label="Play: ' + esc(x.q) + '">' +
+         '<span class="thumb">' + thumb + '</span>' + body + '</button>';
+}
