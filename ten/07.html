@@ -40,7 +40,6 @@
     <div>
       <div class="films-hd" style="margin-bottom:1.1rem"><h2>Twelve questions</h2><span class="c">Five recorded</span></div>
       <div class="qgrid" id="films"></div>
-      <div class="wallmap"><p class="sechd" style="font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:.9rem">Where he&rsquo;s from</p><div id="map"></div></div>
     </div>
   </div>
 </div>
@@ -54,7 +53,6 @@
 <script>
 document.getElementById("rec").innerHTML = recRows();
 document.getElementById("films").innerHTML = LUIS.questions.map(function(x, i){ return qcard(x, i); }).join("");
-document.getElementById("map").innerHTML = ymap();
 
 wire();
 </script>

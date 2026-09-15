@@ -48,24 +48,23 @@ var FAMS = [
     ["22","Full thumbnails","Proper 16:9 stills in a grid, question and status underneath."]]],
   ["Circle portrait", [
     ["23","Centred","Round photograph over his name, then the questions as a list with small stills."],
-    ["24","With the first film","Photograph and name side by side, the first film at a modest size, then the rest."],
     ["25","Question cards","Photograph, name, then all twelve as cards with no pictures at all."]]],
   ["Keepsake &mdash; quiet, and the map up top", [
     ["10","The record and the map","Title plate, then the record and the map side by side, then the twelve."],
-    ["26","Questions beside the map","Map on the left, the twelve questions on the right, the record underneath."],
-    ["27","Map in the head","Name and map across the top, then the record and the questions in two columns."]]],
+    ["28","Small thumbnails","The same page, with a stamp-sized still beside each question."],
+    ["29","Full thumbnails","The same page, with the twelve as proper 16:9 stills in a grid."],
+    ["30","First film large","The same page, with the opening film at a good size and the eleven beneath it."]]],
   ["Wall and deck", [
     ["07","The wall","A dense grid of question cards, him and the record in a narrow column."],
-    ["09","The deck","One card at a time with arrows. Card zero is his photograph and his details."]]],
+    ["09","The deck","Three large question cards at a time, arrows to see the rest, his record underneath."]]],
   ["Photograph first", [
     ["13","With the first film","The frame whole across the top, name and record under it, then the eleven."],
     ["14","No film at the top","His name written across the photograph, the record, then all twelve as a list."]]],
   ["Library", [
-    ["15","Name plate on top","A banner carrying his name and how far they have got, then the grid."],
-    ["16","Pinned first film","One question pinned above the grid as the place to start."],
-    ["17","Watch and queue","One question big on the left, the other eleven queued down the right."],
+    ["15","Large head","A big photograph beside his name, the counts underneath, then the twelve as cards."],
+    ["16","The library","Photograph, name and details, then all twelve as question cards."],
     ["18","Playlist","Cover, play-all, a progress bar, and a numbered list of twelve."],
-    ["19","Shelves","Recorded so far, the easy ones still to do, the ones worth sitting down for."]]]
+    ["31","Playlist, map in the panel","The map moves up beside the cover; the questions and the record fill the right."]]]
 ];
 document.getElementById("fams").innerHTML = FAMS.map(function(f){
   return '<div class="fam"><p class="mo">' + f[0] + '</p>' + f[1].map(function(x){

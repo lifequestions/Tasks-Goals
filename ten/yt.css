@@ -189,9 +189,9 @@
 .kband .sechd{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
               color:var(--ink3);margin-bottom:.9rem}
 .kband .rec{display:grid;grid-template-columns:minmax(0,8.4rem) minmax(0,1fr);gap:.1rem .9rem}
-.kband .rec .k{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:.42rem 0;border-bottom:1px solid var(--line)}
-.kband .rec .v{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;line-height:1.25;padding:.42rem 0;border-bottom:1px solid var(--line)}
-.kband .rec .add{font-family:"Karla",sans-serif;font-size:.82rem;color:var(--ink3);border-bottom:1px dashed var(--line)}
+#rec-wrap .rec .k,.kband .rec .k{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:.42rem 0;border-bottom:1px solid var(--line)}
+#rec-wrap .rec .v,.kband .rec .v{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;line-height:1.25;padding:.42rem 0;border-bottom:1px solid var(--line)}
+#rec-wrap .rec .add,.kband .rec .add{font-family:"Karla",sans-serif;font-size:.82rem;color:var(--ink3);border-bottom:1px dashed var(--line)}
 .khead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:clamp(1.4rem,3.4vw,3rem);
        align-items:center;padding:clamp(1.6rem,3.6vw,2.8rem) 0}
 @media (max-width:860px){.khead{grid-template-columns:1fr}}

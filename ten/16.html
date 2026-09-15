@@ -11,11 +11,7 @@
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="yt.css">
 <style>
-.pinned{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:clamp(1.3rem,3vw,2.4rem);padding:1.6rem 0 .4rem;align-items:center}
 @media (max-width:860px){.pinned{grid-template-columns:1fr}}
-.pinned .lab{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
-.pinned h2{font-size:clamp(1.4rem,2.6vw,1.9rem);line-height:1.2;margin:.55rem 0}
-.pinned p{color:var(--ink2);font-size:.95rem}
 
 </style>
 </head>
@@ -36,7 +32,6 @@
     </div>
   </div>
   <div class="lmeta"><span>Twelve questions</span><span><b>Five</b> recorded</span><span>Unlisted</span></div>
-  <div class="pinned" id="pinned"></div>
   <div class="qgrid" id="films"></div>
   <div id="about"></div>
 </div>
@@ -48,11 +43,8 @@
 <script src="map.js"></script>
 <script src="yt.js"></script>
 <script>
-var m = LUIS.main;
-document.getElementById("pinned").innerHTML = qcard(m, 0, true) +
-  '<div><p class="lab">The one to start with</p><h2>' + esc(m.q) + '</h2><p>' + m.note + '</p></div>';
 document.getElementById("films").innerHTML =
-  LUIS.questions.map(function(x, i){ return x.main ? "" : qcard(x, i); }).join("");
+  LUIS.questions.map(function(x, i){ return qcard(x, i); }).join("");
 document.getElementById("about").innerHTML = aboutBlock();
 
 wire();
