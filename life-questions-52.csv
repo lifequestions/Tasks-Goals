@@ -1,53 +1,53 @@
-Week,Season,Question,Prompts if they dry up,Rough length,Difficulty
-1,Where you come from,"Say your full name, where you were born, and the date.",The warm-up. Deliberately trivial — it gets the first one out of the way.,1 min,Easy
-2,Where you come from,"Who were your mother and father — their names, and what they did.","Ask for their full names, and what they did for a living.",3 min,Easy
-3,Where you come from,"Your brothers and sisters, oldest to youngest.",Names and roughly when they were born. Who were you closest to?,3 min,Easy
-4,Where you come from,The house you grew up in — walk me through the front door.,What's the first thing I'd see? Which room did everyone end up in?,4 min,Easy
-5,Where you come from,"What did your family eat, and who cooked it?",What were they known for? What did you hate?,3 min,Easy
-6,Where you come from,"The schools you went to, and what they were like.",Were you happy there? Strict or not? Boarding or home?,4 min,Easy
-7,Where you come from,"A teacher you still remember, for better or worse.",What did they say to you that stuck?,3 min,Medium
-8,Where you come from,"What did you do after school, before you were old enough to work?",Where did you go when nobody knew where you were?,3 min,Easy
-9,Where you come from,Your grandparents — what do you remember of them?,What did their house smell like? What did they call you?,4 min,Medium
-10,Where you come from,"Sundays, when you were a boy.",Church? Dinner? Who came? What was the routine?,3 min,Easy
-11,Where you come from,The first time you remember being properly frightened.,How old were you? Who was there?,3 min,Medium
-12,Where you come from,What did your parents worry about?,Money? War? You? What did they never talk about?,4 min,Medium
-13,Where you come from,"Find a photograph of yourself as a child — where was it taken, and what happened that day?",Ask them to hold it up to the camera.,4 min,Easy
-14,Becoming yourself,What did you want to be at fifteen?,And what happened to that plan? Do you still think about it?,4 min,Medium
-15,Becoming yourself,"Your first job, and your first wage.",What did they actually have you doing? Who taught you to do it properly?,4 min,Easy
-16,Becoming yourself,What did you spend that first wage on?,Did you give any of it to your mother?,2 min,Easy
-17,Becoming yourself,The first time you fell in love.,Where were you standing when you realised? How did it end?,4 min,Medium
-18,Becoming yourself,"What music did you listen to, and where did you hear it?","Radio, dances, records? Sing a bit of it if you can.",3 min,Easy
-19,Becoming yourself,The first time you left home.,"Where did you go, and who saw you off?",4 min,Medium
-20,Becoming yourself,A friend from those years — what became of them?,Are they still alive? When did you last speak?,4 min,Medium
-21,Becoming yourself,Something you did that your parents never found out about.,Nothing leaves the family.,3 min,Medium
-22,Becoming yourself,The best summer you can remember.,"Who were you with, and what did you do all day?",4 min,Easy
-23,Becoming yourself,"What was the country like then, and what's changed most?","Prices, manners, work, neighbours.",5 min,Medium
-24,Becoming yourself,Did you ever get into trouble?,"Police, school, work, family — any of it.",3 min,Medium
-25,Becoming yourself,The moment you first felt like an adult.,"Was it a job, a death, a child, or something small?",4 min,Medium
-26,Becoming yourself,How you met the person you married.,What was the first thing you noticed? When did you decide?,5 min,Easy
-27,The life you built,The wedding day.,"Who was there, what went wrong, what do you remember of her face?",5 min,Easy
-28,The life you built,The first place you lived together.,"What did you have, and what did you not have?",4 min,Easy
-29,The life you built,The day each of your children was born.,Take them one at a time. What frightened you most that first month?,6 min,Medium
-30,The life you built,What kind of father did you try to be?,"Same as your own, or deliberately different?",5 min,Hard
-31,The life you built,The work you did — take me through a normal Tuesday.,What time did you start? Who did you travel with?,5 min,Easy
-32,The life you built,The thing you made or built that you're proudest of.,"Is any of it still standing, still running, still being used?",4 min,Medium
-33,The life you built,Someone you worked with who you'll never forget.,For the right reasons or the wrong ones.,4 min,Medium
-34,The life you built,"Holidays — where did you go, and what went wrong?","The car, the weather, the ferry, the hotel.",4 min,Easy
-35,The life you built,Was there ever enough money?,What did you go without? What did you never tell us?,5 min,Hard
-36,The life you built,"A street, a shop, a pub that was part of your life.",Is it still there? Who was behind the counter?,4 min,Easy
-37,The life you built,What did you do that was just yours?,"A hobby, a walk, a team, a Saturday morning.",4 min,Easy
-38,The life you built,"An illness, an accident, or a close call.","What do you remember, and who got you through it?",5 min,Hard
-39,The life you built,"The hardest year of your life, and how you got through it.","Who turned up for you, and who didn't?",6 min,Hard
-40,Looking back,"Someone you lost, and what you'd say to them now.",Take your time with this one.,5 min,Hard
-41,Looking back,What have you changed your mind about?,What did you believe firmly at thirty that you don't now?,5 min,Medium
-42,Looking back,What do you believe that you can't prove?,"God, luck, fate, people — whatever it is.",4 min,Hard
-43,Looking back,Something you'd do differently.,Only if you want to. Nothing has to be said.,5 min,Hard
-44,Looking back,The best decision you ever made.,Did you know it at the time?,4 min,Medium
-45,Looking back,The luckiest thing that ever happened to you.,The near-misses count too.,4 min,Easy
-46,Looking back,What do you know now that you wish you'd known at twenty-five?,,4 min,Medium
-47,Looking back,"What's the point of it all, as far as you can tell?",No right answer. Say whatever you actually think.,5 min,Hard
-48,Looking back,"Getting older — what's better than people say, and what's worse?",,5 min,Medium
-49,Looking back,What do you want your grandchildren to know about you?,Name them if you like. Talk to them directly.,5 min,Medium
-50,Looking back,What should happen to your things?,"The practical one. Which things matter, and who should have them?",5 min,Hard
-51,Looking back,Tell me something nobody in the family knows.,Entirely up to you.,4 min,Hard
-52,Looking back,What would you say to whoever watches this in fifty years?,Who do you imagine is watching? What should they do on your birthday?,5 min,Medium
+Week,Season,Send exactly this,Aim for,If they dry up,Difficulty,Mins (for totals)
+1,Where you come from,The house you grew up in — walk me through the front door. Which room did everybody end up in?,3–4 minutes,What could you hear from your bed at night?,Easy,4
+2,Where you come from,"Who were your mother and father — their names, and what they did. Did you get on with them?",3–4 minutes,"What did they want for themselves, before the children came along?",Easy,4
+3,Where you come from,"Your brothers and sisters, oldest to youngest. Who were you closest to, and who did you fight with?",3–4 minutes,"Where did you come in the order, and did that suit you?",Easy,4
+4,Where you come from,"What did your family eat, and who cooked it? What did you dread being given?",2–3 minutes,Was there a dish they were known for? Do you still make it?,Easy,3
+5,Where you come from,The schools you went to. Were you happy there?,3–4 minutes,Strict or not? Did you board? Were you any good at it?,Easy,4
+6,Where you come from,A teacher you still remember. What did they say to you that stuck?,2–3 minutes,For the right reasons or the wrong ones.,Medium,3
+7,Where you come from,"What did you do after school, before you were old enough to work? Where did you go when nobody knew where you were?",2–3 minutes,Who were your two closest friends then?,Easy,3
+8,Where you come from,Your grandparents — what do you remember of them? What did their house smell like?,3–4 minutes,What did they call you? What did you call them?,Medium,4
+9,Where you come from,"Sundays, when you were a boy. What was the routine, and who came?",2–3 minutes,"Church, dinner, visitors, the wireless.",Easy,3
+10,Where you come from,"The first time you remember being properly frightened. How old were you, and who came to get you?",2–3 minutes,Did you tell anybody at the time?,Medium,3
+11,Where you come from,What did your parents worry about? And what did they never talk about?,3–4 minutes,"Money, war, health, you.",Medium,4
+12,Where you come from,"Start at the beginning — where were you born, and what did they name you? Tell me about the name, if there's a story in it.",2–3 minutes,Who chose it? Were you named after somebody?,Easy,3
+13,Where you come from,"Find a photograph of yourself as a child and hold it up to the camera. Where was it taken, and what happened that day?",3–4 minutes,"Who else is in it, and what became of them?",Easy,4
+14,Becoming yourself,What did you want to be at fifteen? What happened to that plan?,3–4 minutes,When did you know it wasn't going to happen — and do you still think about it?,Medium,4
+15,Becoming yourself,"Your first job, and your first wage. Who taught you to do it properly?",3–4 minutes,What did they actually have you doing all day?,Easy,4
+16,Becoming yourself,What did you spend that first wage on? Did any of it go to your mother?,2–3 minutes,Was it worth it?,Easy,3
+17,Becoming yourself,The first time you fell in love. Where were you standing when you realised?,3–4 minutes,"What did you do about it, and how did it end?",Medium,4
+18,Becoming yourself,"What music did you listen to, and where did you hear it? Sing me a bit of it if you can.",2–3 minutes,"Dances, records, the radio. Who did you go with?",Easy,3
+19,Becoming yourself,"The first time you left home. Who saw you off, and how did that first night feel?",3–4 minutes,Did you write home? Did you want to come back?,Medium,4
+20,Becoming yourself,"A friend from those years. What became of them, and when did you last speak?",3–4 minutes,What did the two of you get up to?,Medium,4
+21,Becoming yourself,Something you did that your parents never found out about. It stays in the family.,2–3 minutes,"Would you tell them now, if you could?",Medium,3
+22,Becoming yourself,"The best summer you can remember. Who were you with, and what did you do all day?",3–4 minutes,"What year was it, roughly? What did it cost?",Easy,4
+23,Becoming yourself,What was the country like then? What's changed most — and what do you miss?,4–5 minutes,"Prices, manners, work, neighbours, safety.",Medium,5
+24,Becoming yourself,Did you ever get into real trouble? What happened?,2–3 minutes,"Police, school, work, family — any of it.",Medium,3
+25,Becoming yourself,"When did you first feel like a grown man? Was it a job, a death, a child, or something small?",3–4 minutes,Did anybody treat you differently afterwards?,Medium,4
+26,Becoming yourself,How you met the person you married. What was the first thing you noticed about them?,4–5 minutes,What did your family make of them? When did you decide?,Easy,5
+27,The life you built,"The wedding day. What went wrong, and what do you remember of their face?",4–5 minutes,"Who was there, what did it cost, where did you go afterwards?",Easy,5
+28,The life you built,"The first place you lived together. What did you have, and what did you go without?",3–4 minutes,What was the rent? What was the neighbour like?,Easy,4
+29,The life you built,The day each of your children was born — one at a time. What frightened you most in that first month?,"5–6 minutes, or split it in two",Where were you? Who did they look like?,Medium,6
+30,The life you built,"What kind of father did you try to be? The same as your own, or deliberately different?",4–5 minutes,"What did you get right, and what would you take back?",Hard,5
+31,The life you built,"The work you did. Take me through a normal Tuesday, start to finish.",4–5 minutes,What time did you leave? Who did you travel with? What did you eat?,Easy,5
+32,The life you built,The thing you made or built that you're proudest of. Is any of it still standing?,3–4 minutes,What did it cost you at home?,Medium,4
+33,The life you built,Someone you worked with who you'll never forget — for the right reasons or the wrong ones.,3–4 minutes,What did they teach you?,Medium,4
+34,The life you built,"Holidays. Where did you go, and what went wrong?",3–4 minutes,"The car, the ferry, the weather, the hotel.",Easy,4
+35,The life you built,Was there ever enough money? What did you go without that we never knew about?,4–5 minutes,Was there a year that was worse than the others?,Hard,5
+36,The life you built,"A street, a shop or a pub that was part of your life. Who was behind the counter?",3–4 minutes,Is it still there? When were you last past it?,Easy,4
+37,The life you built,What did you do that was just yours — nothing to do with work or family?,3–4 minutes,Did anybody else know about it?,Easy,4
+38,The life you built,"An illness, an accident, or a close call. Who got you through it?",4–5 minutes,What do you actually remember of it?,Hard,5
+39,The life you built,"The hardest year of your life. Who turned up for you, and who didn't?","5–6 minutes, or split it in two",What got you out of bed? What would you say now to yourself in that year?,Hard,6
+40,Looking back,"Someone you lost. What would you say to them now, if they were sitting here?",4–5 minutes,Take your time with this one.,Hard,5
+41,Looking back,What have you changed your mind about? What did you believe at thirty that you don't now?,4–5 minutes,"What changed it — a person, an event, or just time?",Medium,5
+42,Looking back,What do you believe that you can't prove?,3–4 minutes,"God, luck, fate, people. Whatever it is.",Hard,4
+43,Looking back,Is there anything you'd do differently? Only if you want to say it.,4–5 minutes,Nothing has to be said. Skip it if you'd rather.,Hard,5
+44,Looking back,The best decision you ever made. Did you know it at the time?,3–4 minutes,"Who talked you into it, or out of it?",Medium,4
+45,Looking back,The luckiest thing that ever happened to you. The near-misses count too.,3–4 minutes,Do you think of yourself as a lucky man?,Easy,4
+46,Looking back,What do you know now that you wish you'd known at twenty-five?,3–4 minutes,Would you have listened?,Medium,4
+47,Looking back,"What's the point of it all, as far as you can tell?",4–5 minutes,There's no right answer. Say what you actually think.,Hard,5
+48,Looking back,"Getting older — what's better than people say, and what's worse?",4–5 minutes,What surprised you about it?,Medium,5
+49,Looking back,"What do you want your grandchildren to know about you? Talk to them directly, by name.",4–5 minutes,What would you want them to do that you didn't?,Medium,5
+50,Looking back,"What should happen to your things? Which ones matter, and who should have them?",4–5 minutes,"The watch, the photographs, the tools, the papers.",Hard,5
+51,Looking back,Tell me something nobody in the family knows.,3–4 minutes,Entirely up to you.,Hard,4
+52,Looking back,What would you say to whoever watches this in fifty years? What should they do on your birthday?,4–5 minutes,Who do you imagine is watching?,Medium,5
