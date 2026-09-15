@@ -11,12 +11,12 @@
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="yt.css">
 <style>
-.chead.mid{padding:clamp(2.6rem,6.4vw,4.8rem) 0 clamp(1.8rem,3.6vw,2.6rem);gap:1.6rem;
-           border-bottom:1px solid var(--line);margin-bottom:clamp(1.2rem,2.6vw,1.8rem)}
-.chead.mid .circ{width:clamp(180px,23vw,320px)}
-.chead.mid h1{font-size:clamp(2.6rem,6.6vw,4.6rem);line-height:.98;margin-top:.3rem}
-.chead.mid .dates{font-size:.88rem;margin-top:1rem}
-.chead.mid .blurb{font-size:1.12rem;margin-top:1rem;max-width:44ch}
+.kplate{padding-top:clamp(2.4rem,6vw,4rem)}
+.kplate .circ{width:clamp(180px,21vw,300px);margin-bottom:1.6rem}
+.kplate h1{font-size:clamp(2.2rem,5vw,3.2rem)}
+.ymap .places{display:none}
+.kband{align-items:stretch}
+.kband .ymap,.kband .ymap .frame{height:100%}
 .films-hd h2{font-size:clamp(1.4rem,3vw,2rem)}
 </style>
 </head>
@@ -25,19 +25,29 @@
   <a class="wm" href="index.html">Life Questions</a>
   <span class="who">A private page</span>
 </div></div>
-<div class="in">
-  <div class="chead mid">
+<div class="book" style="max-width:1120px">
+  <header class="kplate">
     <div class="circ"><img id="portrait" src="" alt=""></div>
-    <div>
-      <p class="mo" id="fam">A private page</p>
-      <h1 id="name">&nbsp;</h1>
-      <p class="dates" id="dates"></p>
-      <p class="blurb" id="line"></p>
-    </div>
+    <p class="mo" id="kicker">In their own voice</p>
+    <h1 id="name">&nbsp;</h1>
+    <div class="rule"></div>
+    <p class="dates" id="dates"></p>
+    <p class="opening" id="line"></p>
+    <div id="shareTop"></div>
+  </header>
+  <div class="kband">
+    <div><p class="sechd">The record</p><div class="rec" id="rec"></div></div>
+    <div><p class="sechd">Where they&rsquo;re from</p><div id="map"></div></div>
   </div>
-  <div class="films-hd"><h2>Their Video Life Biography</h2><span class="c" id="count"></span></div>
-  <div id="films"></div>
-  <div id="about"></div>
+  <div class="kq">
+    <div class="films-hd"><h2>Their Video Life Biography</h2><span class="c" id="count"></span></div>
+    <div class="tgrid" id="films"></div>
+  </div>
+  <div class="sharefoot">
+    <h2>Send this to the rest of the family</h2>
+    <p>Anyone with the link can watch. Nobody without it can find the page &mdash; it is unlisted, and not in any search engine.</p>
+    <div id="shareBottom"></div>
+  </div>
   <div class="invite">
     <div>
       <h2>Somebody should be asking your father these questions too</h2>
@@ -57,12 +67,16 @@
 document.getElementById("portrait").src = PERSON.photo;
 document.getElementById("portrait").alt = PERSON.name;
 document.getElementById("name").textContent = PERSON.name;
-document.getElementById("fam").textContent = "A private page \u00b7 the " + PERSON.name.split(" ").pop() + " family";
-document.getElementById("dates").innerHTML = PERSON.born + " in " + PERSON.bornIn + " &nbsp;&middot;&nbsp; " + PERSON.age;
+document.getElementById("dates").innerHTML =
+  PERSON.born.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.bornIn.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.age.toUpperCase();
 document.getElementById("line").textContent = PERSON.line;
 document.getElementById("count").textContent = PERSON.recorded + " of 12 recorded";
-document.getElementById("films").innerHTML = PERSON.questions.map(thumbRow).join("");
-document.getElementById("about").innerHTML = aboutBlock();
+document.getElementById("rec").innerHTML = recRows();
+document.getElementById("map").innerHTML = ymap();
+document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).join("");
+document.getElementById("shareTop").innerHTML = shareRow();
+document.getElementById("shareBottom").innerHTML = shareRow("big");
+wireShare();
 wire();
 </script>
 </body>

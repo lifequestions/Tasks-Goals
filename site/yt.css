@@ -215,3 +215,20 @@
 .invite h2{font-size:clamp(1.2rem,2.4vw,1.55rem);line-height:1.2}
 .invite p{color:var(--ink2);font-size:.94rem;margin-top:.5rem;max-width:52ch}
 
+
+/* ---- sharing ---- */
+.share{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin-top:1.6rem}
+.share .lab{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;
+            color:var(--ink3);margin-right:.3rem}
+.share a,.share button{display:inline-flex;align-items:center;gap:.45rem;border:1px solid var(--line);
+       background:var(--surf);color:var(--ink2);border-radius:999px;padding:.5rem .95rem;font-size:.86rem;
+       text-decoration:none;transition:.16s;cursor:pointer}
+.share a:hover,.share button:hover{border-color:var(--acc);color:var(--acc);background:var(--bg)}
+.share svg{width:16px;height:16px;fill:currentColor;flex:0 0 auto}
+.share .primary{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+.share .primary:hover{background:var(--acc);color:var(--bg);opacity:.9}
+.share .done{color:var(--acc);border-color:var(--acc)}
+@media (max-width:620px){.share .t{display:none}.share a,.share button{padding:.55rem .75rem}}
+.sharefoot{border-top:1px solid var(--line);margin-top:2.4rem;padding-top:1.8rem;text-align:center}
+.sharefoot h2{font-size:clamp(1.2rem,2.4vw,1.6rem)}
+.sharefoot p{color:var(--ink2);font-size:.95rem;margin-top:.5rem;max-width:52ch;margin-left:auto;margin-right:auto}
