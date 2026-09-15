@@ -108,3 +108,24 @@ function factRows(list){
       '</div>';
   }).join("");
 }
+
+/* The birthplace map. Drawn as SVG from Natural Earth, so it needs no tiles and no
+   map provider. Pages that want it load map.js alongside this file. */
+function mapBlock(){
+  if(typeof LUIS_MAP === "undefined") return "";
+  var rows = LUIS_PLACES.map(function(p){
+    return '<li class="pl"><span class="n">' + p.i + '</span><div><span class="k">' + p.kind +
+           '</span><span class="v">' + p.name + '</span><span class="c">' + p.co + '</span></div></li>';
+  }).join("");
+  return '<div class="geo"><div class="frame">' + LUIS_MAP + '</div>' +
+         '<div><ol class="pls">' + rows + '</ol>' +
+         '<p class="m">Lucknow is 1,583 km north of Bangalore; Mussoorie another 489 km up into the hills.</p>' +
+         '</div></div>';
+}
+function mapSection(title){
+  if(typeof LUIS_MAP === "undefined") return "";
+  return '<section id="places"><div class="sec-hd"><p class="mo">Where he’s from</p><h2>' +
+         (title || "Bangalore, and two schools a long way north") + '</h2>' +
+         '<p>Three places we know without having to ask him — pinned to the town, not the country.</p></div>' +
+         mapBlock() + '</section>';
+}

@@ -32,8 +32,11 @@
       <div class="rule"><h3>Stills, not players</h3><p>Each answer shows a still pulled from YouTube. The player only loads when somebody presses it &mdash; which is why hosting stays free.</p></div>
     </div>
   </header>
-  <div class="list" id="list"></div>
-  <p class="pick">Where I would go: <strong>05 Start Here</strong> for the page a cousin opens on a phone from Facebook, with <strong>02 Record Card</strong>&rsquo;s fact panel folded into it. Tell me which two you want and I&rsquo;ll build the real one properly.</p>
+  <p class="mo" style="margin-top:2.4rem">Latest &mdash; the list of answers, with four different tops. All four carry the birthplace map</p>
+  <div class="list" id="newlist" style="margin-top:.6rem"></div>
+  <p class="mo" style="margin-top:2.6rem">The original ten</p>
+  <div class="list" id="list" style="margin-top:.6rem"></div>
+  <p class="pick">The four at the top all share 05&rsquo;s list of answers and all end with the map of Bangalore and the two schools. They differ only in the top: <strong>13</strong> and <strong>14</strong> lead with a photograph, <strong>11</strong> with the film, <strong>12</strong> with the portrait and record card. Say which and I&rsquo;ll build the real one properly.</p>
 </div>
 <footer class="in">
   <p>Five of the twelve answers currently play borrowed interview clips, so the mechanism can be seen working. They are replaced by pasting in his own video ID.</p>
@@ -51,6 +54,17 @@ var IDEAS = [
   ["09","The Deck","One question at a time, full screen, arrows to move. Card zero is his details. Made for sitting next to him and recording."],
   ["10","The Keepsake","Quiet and book-like. A title plate with his portrait, the main film, the record as a printed table, the rest as a list."]
 ];
+var NEW = [
+  ["13","Photograph first","A wide frame of him across the top, name and record under it, the main film, then the list of eleven."],
+  ["14","Photograph first, no top film","The same wide frame with his name across it, the record in two columns, then all twelve as a list \u2014 no separate film at the top."],
+  ["11","Front-page top","The big film across the top and his name underneath it, the record beside it, then the list of eleven."],
+  ["12","Record-card top","Portrait and the filled-in record card first, the main film under them, then the list of eleven."]
+];
+function rows(list){ return list.map(function(x){
+  return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
+    '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +
+    '<span class="go">Open &rarr;</span></a>'; }).join(""); }
+document.getElementById("newlist").innerHTML = rows(NEW);
 document.getElementById("list").innerHTML = IDEAS.map(function(x){
   return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
     '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +

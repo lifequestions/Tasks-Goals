@@ -50,7 +50,6 @@
     <p class="dates">BORN 4 FEBRUARY 1943 &nbsp;&middot;&nbsp; BANGALORE, INDIA</p>
     <p class="opening">Recorded by his family, one question at a time, on a phone propped against a stack of books at the kitchen table.</p>
   </header>
-  <div class="mainblk" id="main"></div>
   <section style="border:0;padding-top:0">
     <div class="sec-hd"><p class="mo">The record</p><h2>What we know already</h2></div>
     <div class="tbl" id="facts"></div>
@@ -59,16 +58,17 @@
     <div class="sec-hd"><p class="mo">The answers</p><h2>Twelve questions</h2></div>
     <ol class="list" id="list"></ol>
   </section>
+  <div id="geo"></div>
 </div>
 <footer class="in">
   <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
   <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
 </footer>
 <script src="data.js"></script>
+<script src="map.js"></script>
 <script>
-document.getElementById("main").innerHTML = film(LUIS.main) +
-  '<p class="cap">' + esc(LUIS.main.q) + '</p>';
 document.getElementById("facts").innerHTML = factRows();
+document.getElementById("geo").innerHTML = mapSection();
 document.getElementById("list").innerHTML = LUIS.questions.map(function(x,i){
   return '<li><span class="n">' + ("0"+(i+1)).slice(-2) + '</span>' +
     film(x, {none:"—"}) + '<span class="q">' + esc(x.q) + '</span></li>';

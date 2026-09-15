@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>13 Photograph first &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.banner{width:100vw;margin-left:calc(50% - 50vw);aspect-ratio:2.13/1;max-height:62vh;overflow:hidden;background:var(--surf2)}
+.banner img{width:100%;height:100%;object-fit:cover}
+.hd{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(1.6rem,4vw,3.4rem);padding:clamp(1.6rem,3.5vw,2.6rem) 0 0;align-items:start}
+@media (max-width:860px){.hd{grid-template-columns:1fr;gap:1.8rem}}
+.hd h1{font-size:clamp(2.3rem,5.6vw,3.6rem);line-height:1}
+.dates{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ink2);margin-top:.8rem}
+.lead{font-size:1.04rem;color:var(--ink2);margin-top:1rem;max-width:44ch}
+.prog{margin-top:1.2rem;max-width:22rem}
+.prog .t{height:5px;background:var(--surf2);border:1px solid var(--line);display:flex}
+.prog .t i{background:var(--acc)}
+.prog p{font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--ink3);margin-top:.45rem}
+.mainwrap{padding-top:clamp(1.8rem,4vw,2.6rem)}
+.mainwrap .cap{display:flex;gap:.9rem;align-items:baseline;margin-top:.8rem}
+.mainwrap .cap h2{font-size:1.25rem}
+.stage{padding:clamp(1.2rem,3vw,2rem) 0 clamp(1.4rem,3vw,2rem)}
+.stage .film{aspect-ratio:16/9;box-shadow:0 40px 70px -40px var(--shadow)}
+.stage .cap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1rem;align-items:end;margin-top:1.1rem}
+.stage h1{font-size:clamp(1.9rem,4.6vw,2.9rem);line-height:1.04}
+.stage .q{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.1rem,2.3vw,1.35rem);color:var(--ink2);margin-top:.5rem}
+.stage .dates{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink3);text-align:right}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:auto minmax(0,152px) minmax(0,1fr) auto;gap:1rem;align-items:center;padding:.85rem 0;border-top:1px solid var(--line)}
+@media (max-width:640px){.row{grid-template-columns:auto minmax(0,110px) minmax(0,1fr);}.row .meta{display:none}}
+.row .n{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--ink3)}
+.row .film{aspect-ratio:16/9}
+.row .film .play{width:34px;height:34px}
+.row .film .play::after{border-left-width:10px;border-top-width:7px;border-bottom-width:7px}
+.row .film .dur{display:none}
+.row .q{font-family:"Newsreader",Georgia,serif;font-size:1.1rem;line-height:1.3}
+.row .meta{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);white-space:nowrap}
+.row.lit .meta{color:var(--acc)}
+.factcols{columns:2;column-gap:2.6rem}
+@media (max-width:700px){.factcols{columns:1}}
+.factcols .fact{break-inside:avoid;grid-template-columns:minmax(0,8.5rem) minmax(0,1fr)}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All ten layouts</a>
+  <span class="sp"></span>
+  <span class="who">13 &nbsp;&middot;&nbsp; Photograph first</span>
+</div></div>
+<div class="in lede" style="padding:.9rem 0"><p class="mo">A private page &middot; the de Souza family</p></div>
+<div class="banner"><img src="s-banner.jpg" alt="Luis James de Souza"></div>
+<div class="in">
+  <div class="hd">
+    <div>
+      <h1>Luis James de Souza</h1>
+      <p class="dates">Born 4 February 1943 in Bangalore, India &nbsp;&middot;&nbsp; 83 years old</p>
+      <p class="lead">Twelve questions, asked on a phone at the kitchen table. The record beside this was typed in once and took four minutes &mdash; no camera needed.</p>
+      <div class="prog"><div class="t"><i id="fill"></i></div><p id="progt"></p></div>
+    </div>
+    <div id="facts"></div>
+  </div>
+  <div class="mainwrap" id="main"></div>
+  <section>
+    <div class="sec-hd"><p class="mo">Then, when you have time</p><h2>Eleven more</h2></div>
+    <div class="rows" id="rows"></div>
+  </section>
+  <div id="geo"></div>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script src="map.js"></script>
+<script>
+document.getElementById("facts").innerHTML = factRows();
+document.getElementById("fill").style.width = Math.round(LUIS.recorded / 12 * 100) + "%";
+document.getElementById("progt").textContent = LUIS.recorded + " of 12 answers recorded";
+document.getElementById("main").innerHTML = film(LUIS.main, {tag:"Start here"}) +
+  '<div class="cap"><p class="mo">01</p><h2>' + esc(LUIS.main.q) + '</h2></div>';
+document.getElementById("rows").innerHTML = LUIS.questions.filter(function(x){return !x.main;})
+  .map(function(x,i){
+    return '<div class="row' + (x.v ? " lit" : "") + '"><span class="n">' + ("0"+(i+2)).slice(-2) + '</span>' +
+      film(x, {none:"—"}) + '<span class="q">' + esc(x.q) + '</span>' +
+      '<span class="meta">' + (x.v ? x.len : (x.easy ? "Easy one" : "To record")) + '</span></div>';
+  }).join("");
+document.getElementById("geo").innerHTML = mapSection();
+
+wire();
+</script>
+</body>
+</html>
