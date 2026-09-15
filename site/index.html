@@ -35,16 +35,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 .btn:hover{background:var(--accDeep);border-color:var(--accDeep)}
 .btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
 .btn.ghost:hover{background:var(--band);border-color:var(--ink3)}
-.btn.sm{padding:.74rem 1.6rem;font-size:1.02rem}
+.btn.sm{padding:.92rem 1.95rem;font-size:1.12rem}
 .btn.pale{background:#FAF6EF;color:#1F4744;border-color:#FAF6EF}
 .btn.pale:hover{background:#fff;border-color:#fff}
 
 /* nav */
 .nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.nav .in{display:flex;align-items:center;gap:clamp(1.4rem,2.4vw,2.6rem);padding-top:1.35rem;padding-bottom:1.35rem}
-.wm{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.5rem,2.1vw,1.9rem);letter-spacing:-.02em;text-decoration:none}
+.nav .in{display:flex;align-items:center;gap:clamp(1.6rem,2.8vw,3rem);padding-top:1.85rem;padding-bottom:1.85rem}
+.wm{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.9rem,2.9vw,2.6rem);letter-spacing:-.02em;text-decoration:none}
 .nav .sp{flex:1}
-.nav a.q{font-size:1.08rem;color:var(--ink2);text-decoration:none}
+.nav a.q{font-size:1.16rem;color:var(--ink2);text-decoration:none}
 .nav a.q:hover{color:var(--ink)}
 @media (max-width:720px){.nav a.q{display:none}}
 
@@ -68,6 +68,7 @@ button{font:inherit;color:inherit;cursor:pointer}
           mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%)}
 .track{display:flex;gap:var(--g);transition:transform .55s cubic-bezier(.22,1,.36,1);will-change:transform}
 .track.second{margin-top:var(--g);display:none}
+body .track.second{display:flex}
 body[data-rows="2"] .track.second{display:flex}
 .pc{flex:0 0 clamp(210px,23vw,330px);background:#fff;padding:11px;border-radius:4px;
     box-shadow:0 20px 40px -22px var(--shadow);border:0;display:block;position:relative;
@@ -611,7 +612,8 @@ function slide(){
   at=Math.max(0,Math.min(at,max));
   /* held a third of a print to the left, so the row is always running off the page */
   track1.style.transform="translateX("+(-at*st - st*0.35)+"px)";
-  track2.style.transform="translateX("+(-at*st - st*0.72)+"px)";
+  /* half a print out of step, so every gap on the top row has a face beneath it */
+  track2.style.transform="translateX("+(-at*st - st*0.85)+"px)";
   prevBtn.disabled = at===0;
   nextBtn.disabled = at>=max;
 }

@@ -1,8 +1,8 @@
 /* The shape of a video library — a head, a queue, a playlist, shelves — drawn in
    Life Questions' own type and colour rather than anybody else's chrome. */
 .lbar{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px)}
-.lbar .in{display:flex;align-items:baseline;gap:.8rem;padding-top:.75rem;padding-bottom:.75rem}
-.lbar .wm{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;text-decoration:none;color:var(--ink2)}
+.lbar .in{display:flex;align-items:baseline;gap:.9rem;padding-top:1.35rem;padding-bottom:1.35rem}
+.lbar .wm{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.5rem,2.4vw,2.05rem);letter-spacing:-.015em;text-decoration:none;color:var(--ink)}
 .lbar .wm:hover{color:var(--ink)}
 .lbar .who{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
 .in{max-width:1180px}
@@ -45,7 +45,7 @@
       padding:.72rem .55rem;border-bottom:1px solid var(--line);text-align:left;width:100%;position:relative;transition:.14s}
 .qrow:last-child{border-bottom:0}
 .qrow .idx{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3);width:1.5rem;text-align:center}
-.qrow .t{font-family:"Newsreader",Georgia,serif;font-size:1.04rem;line-height:1.28}
+.qrow .t{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.18rem,1.55vw,1.42rem);line-height:1.26}
 .qrow .dur{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap}
 .qrow.on{cursor:pointer}
 .qrow.on .dur{color:var(--acc)}
@@ -133,7 +133,7 @@
 .films-hd h2{font-size:1.3rem}
 .films-hd .c{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
 /* small-thumbnail rows */
-.trow{display:grid;grid-template-columns:auto minmax(0,120px) minmax(0,1fr) auto;gap:1rem;align-items:center;
+.trow{display:grid;grid-template-columns:auto minmax(0,132px) minmax(0,1fr) auto;gap:1.1rem;align-items:center;
       width:100%;text-align:left;padding:.75rem .4rem;border-bottom:1px solid var(--line);position:relative;background:transparent;transition:.14s}
 @media (max-width:620px){.trow{grid-template-columns:auto minmax(0,92px) minmax(0,1fr)}.trow .dur{display:none}}
 .trow .idx{font-family:"IBM Plex Mono",monospace;font-size:.62rem;color:var(--ink3);width:1.4rem;text-align:center}
@@ -141,8 +141,8 @@
 .trow .film .play{width:28px;height:28px}
 .trow .film .play::after{border-left-width:9px;border-top-width:6px;border-bottom-width:6px}
 .trow .film .dur,.trow .film .sh{display:none}
-.trow .t{display:block;font-family:"Newsreader",Georgia,serif;font-size:1.06rem;line-height:1.28}
-.trow .m{display:block;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-top:.25rem}
+.trow .t{display:block;font-family:"Newsreader",Georgia,serif;font-size:clamp(1.18rem,1.55vw,1.42rem);line-height:1.26}
+.trow .m{display:block;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-top:.25rem}
 .trow .dur{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3);white-space:nowrap}
 .trow.on{cursor:pointer}
 .trow.on:hover{background:var(--surf)}
@@ -214,4 +214,4 @@
         display:flex;gap:1.4rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:2.4rem}
 .invite h2{font-size:clamp(1.2rem,2.4vw,1.55rem);line-height:1.2}
 .invite p{color:var(--ink2);font-size:.94rem;margin-top:.5rem;max-width:52ch}
-.lbar .wm{font-size:1.1rem}
+
