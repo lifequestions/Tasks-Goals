@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>17 Watch page &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="yt.css">
+<style>
+.sidehd{font-size:.92rem;font-weight:500;margin-bottom:.7rem;display:flex;align-items:center}
+.sidehd .all{margin-left:auto;color:var(--ymut);font-size:.8rem;font-weight:400}
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem 0 1rem}
+.chips span{background:var(--ychip);border-radius:8px;padding:.35rem .8rem;font-size:.82rem;white-space:nowrap}
+.chips span.on{background:var(--ytext);color:var(--ybg)}
+.desc .map{margin-top:.9rem}
+
+</style>
+</head>
+<body>
+<div class="ybar"><div class="in">
+  <a class="wm" href="index.html">Life<span>Questions</span></a>
+  <div class="search"><input placeholder="Search this family" aria-label="Search"><span class="go">&#8981;</span></div>
+  <span class="me"><img src="dad.jpg" alt=""></span>
+</div></div>
+<div class="in">
+  <div class="watch">
+    <div class="player">
+      <div id="main"></div>
+      <h1 id="title"></h1>
+      <div class="wrow">
+        <span class="av"><img src="dad.jpg" alt=""></span>
+        <div><p class="nm">Luis James de Souza</p><p class="sub">12 questions &middot; 5 answered</p></div>
+        <button class="ybtn" style="margin-left:.6rem">Tell me when he adds one</button>
+        <div class="right"><button class="ybtn sec">Share</button><button class="ybtn sec">Save</button></div>
+      </div>
+      <div class="desc">
+        <p class="hd" id="dh"></p>
+        <p style="color:var(--ymut);margin-bottom:.9rem">Recorded at the kitchen table, September 2026. He is 83. Nothing here is written by anybody but him.</p>
+        <div class="rec" id="rec"></div>
+        <div class="map" id="map"></div>
+      </div>
+    </div>
+    <aside>
+      <div class="sidehd">The other eleven <span class="all">See all</span></div>
+      <div class="chips"><span class="on">All</span><span>Recorded</span><span>Easy ones</span><span>Still to do</span></div>
+      <div class="upnext" id="up"></div>
+    </aside>
+  </div>
+</div>
+<div class="in" style="padding-top:2rem;padding-bottom:3rem;color:var(--ymut);font-size:.8rem">
+  <p>A private channel for the de Souza family. Every film is unlisted &mdash; only people with this link can watch.</p>
+  <p style="margin-top:.3rem"><a href="index.html" style="color:var(--ymut)">&larr; All the layouts</a></p>
+</div>
+<script src="data.js"></script>
+<script src="map.js"></script>
+<script src="yt.js"></script>
+<script>
+var m = LUIS.main;
+document.getElementById("main").innerHTML = film(m);
+document.getElementById("title").textContent = "01. " + m.q;
+document.getElementById("dh").textContent = m.len + " · " + when(m);
+document.getElementById("rec").innerHTML = recRows();
+document.getElementById("map").innerHTML = ymap();
+document.getElementById("up").innerHTML =
+  LUIS.questions.map(function(x,i){ return x.main ? "" : upcard(x,i); }).join("");
+
+wire();
+</script>
+</body>
+</html>

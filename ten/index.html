@@ -32,7 +32,9 @@
       <div class="rule"><h3>Stills, not players</h3><p>Each answer shows a still pulled from YouTube. The player only loads when somebody presses it &mdash; which is why hosting stays free.</p></div>
     </div>
   </header>
-  <p class="mo" style="margin-top:2.4rem">Latest &mdash; the list of answers, with four different tops. All four carry the birthplace map</p>
+  <p class="mo" style="margin-top:2.4rem">Shaped like a video channel &mdash; dark or light, whichever your machine is set to</p>
+  <div class="list" id="ytlist" style="margin-top:.6rem"></div>
+  <p class="mo" style="margin-top:2.6rem">Latest &mdash; the list of answers, with four different tops. All four carry the birthplace map</p>
   <div class="list" id="newlist" style="margin-top:.6rem"></div>
   <p class="mo" style="margin-top:2.6rem">The original ten</p>
   <div class="list" id="list" style="margin-top:.6rem"></div>
@@ -64,6 +66,14 @@ function rows(list){ return list.map(function(x){
   return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
     '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +
     '<span class="go">Open &rarr;</span></a>'; }).join(""); }
+var YT = [
+  ["15","Channel, banner on top","The full channel page: banner, round photo, @handle, the counts, tabs, and all twelve as a grid of thumbnails."],
+  ["16","Channel, no banner","Same channel, no banner art \u2014 photo, description, then one pinned film above the grid."],
+  ["17","Watch page","The player fills the left, his details sit in the description box beneath, and the other eleven queue down the right."],
+  ["18","Playlist","Twelve questions as a playlist: cover, play-all, progress, and a numbered list. The map sits under the panel."],
+  ["19","Home shelves","Rows you scroll sideways \u2014 recorded so far, the easy ones still to do, the ones worth sitting down for."]
+];
+document.getElementById("ytlist").innerHTML = rows(YT);
 document.getElementById("newlist").innerHTML = rows(NEW);
 document.getElementById("list").innerHTML = IDEAS.map(function(x){
   return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
