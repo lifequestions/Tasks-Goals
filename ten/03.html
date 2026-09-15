@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>03 The Journey &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.jtop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.6rem,4vw,3.2rem);padding:clamp(1.6rem,4vw,2.8rem) 0;align-items:center}
+@media (max-width:860px){.jtop{grid-template-columns:1fr}}
+.jtop h1{font-size:clamp(2.2rem,5.4vw,3.4rem);line-height:1}
+.jtop .dates{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ink2);margin:.7rem 0 1.1rem}
+.mapsvg .pin{cursor:pointer}
+.mapsvg .pin:hover .dot{fill:var(--ink)}
+.leg{margin-top:1.1rem;display:flex;flex-direction:column;gap:.5rem}
+.leg button{display:flex;gap:.75rem;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:.5rem;width:100%}
+.leg .n{width:1.5rem;height:1.5rem;border-radius:50%;background:var(--acc);color:var(--bg);display:grid;place-content:center;font-family:"IBM Plex Mono",monospace;font-size:.7rem;flex:0 0 auto}
+.leg button:not(:first-child) .n{background:transparent;color:var(--ink2);border:1px solid var(--line)}
+.leg .v{font-family:"Newsreader",Georgia,serif;font-size:1.15rem}
+.leg .k{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);display:block}
+.stop{border-top:1px solid var(--line);padding:clamp(1.8rem,4vw,2.6rem) 0}
+.stop .sh{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1.1rem}
+.stop h2{font-size:clamp(1.4rem,3vw,1.9rem)}
+.stop .yr{font-family:"IBM Plex Mono",monospace;font-size:.68rem;color:var(--ink3);margin-left:auto}
+.stopgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.4rem 1.1rem}
+.stopgrid .q{font-family:"Newsreader",Georgia,serif;font-size:1.08rem;line-height:1.28;display:block;margin-top:.55rem}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All ten layouts</a>
+  <span class="sp"></span>
+  <span class="who">03 &nbsp;&middot;&nbsp; The Journey</span>
+</div></div>
+<div class="in">
+  <div class="jtop">
+    <div class="frame" id="map"></div>
+    <div>
+      <p class="mo">Where it all happened</p>
+      <h1>Luis James de Souza</h1>
+      <p class="dates">Born 4 February 1943 in Bangalore &nbsp;&middot;&nbsp; 83 years old</p>
+      <p style="color:var(--ink2)">Three places to start with, and the answers filed under each one. Press a pin.</p>
+      <div class="leg" id="leg"></div>
+    </div>
+  </div>
+  <div id="stops"></div>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script src="map.js"></script>
+<script>
+document.getElementById("map").innerHTML = LUIS_MAP;
+document.getElementById("leg").innerHTML = LUIS_PLACES.map(function(p,i){
+  return '<button data-go="s' + i + '"><span class="n">' + p.i + '</span>' +
+         '<span><span class="k">' + p.kind + '</span><span class="v">' + p.name + '</span></span></button>';
+}).join("");
+
+var STOPS = [
+  { t:"Bangalore", yr:"1943 — the early years", place:"Where he was born", qs:[0,1,2,4] },
+  { t:"The schools, up north", yr:"Mussoorie and Lucknow", place:"Sent away", qs:[3,5] },
+  { t:"Everything after", yr:"Work, marriage, children", place:"The rest of it", qs:[6,7,8,9,10,11] }
+];
+document.getElementById("stops").innerHTML = STOPS.map(function(s,i){
+  return '<div class="stop" id="s' + i + '"><div class="sh"><p class="mo">' + s.place + '</p>' +
+    '<h2>' + s.t + '</h2><span class="yr">' + s.yr + '</span></div><div class="stopgrid">' +
+    s.qs.map(function(n){ var x = LUIS.questions[n];
+      return '<div>' + film(x) + '<span class="q">' + esc(x.q) + '</span></div>'; }).join("") +
+    '</div></div>';
+}).join("");
+
+document.addEventListener("click", function(ev){
+  var b = ev.target.closest ? ev.target.closest("[data-go], .mapsvg .pin") : null;
+  if(!b) return;
+  var id = b.getAttribute("data-go") || "s0";
+  var el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+wire();
+</script>
+</body>
+</html>

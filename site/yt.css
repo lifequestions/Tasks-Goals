@@ -209,3 +209,9 @@
 .side > div:first-of-type,.side .namebl{text-align:center}
 .side h1,.side .dates,.side .blurb{text-align:center}
 .side .blurb{margin-left:auto;margin-right:auto}
+
+.invite{background:var(--accSoft);border-left:3px solid var(--acc);padding:clamp(1.2rem,3vw,1.9rem);
+        display:flex;gap:1.4rem;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:2.4rem}
+.invite h2{font-size:clamp(1.2rem,2.4vw,1.55rem);line-height:1.2}
+.invite p{color:var(--ink2);font-size:.94rem;margin-top:.5rem;max-width:52ch}
+.lbar .wm{font-size:1.1rem}

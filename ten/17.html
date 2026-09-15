@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
-<title>23 Circle &middot; centred &middot; Luis James de Souza</title>
+<title>17 Watch and queue &middot; Luis James de Souza</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
@@ -17,21 +17,25 @@
 <body>
 <div class="lbar"><div class="in">
   <a class="wm" href="index.html">&larr;&nbsp; All the layouts</a>
-  <span class="who">23 &nbsp;&middot;&nbsp; Circle &middot; centred</span>
+  <span class="who">17 &nbsp;&middot;&nbsp; Watch and queue</span>
 </div></div>
 <div class="in">
-  <div class="chead mid">
-    <div class="circ"><img src="avatar.jpg" alt="Luis James de Souza"></div>
-    <div>
-      <p class="mo">A private page &middot; the de Souza family</p>
-      <h1>Luis James de Souza</h1>
-      <p class="dates">Born 4 February 1943 in Bangalore, India &nbsp;&middot;&nbsp; 83 years old</p>
-      <p class="blurb">Twelve questions, recorded at the kitchen table by his family, one at a time.</p>
+  <div class="watch">
+    <div class="player">
+      <div id="main"></div>
+      <h1 id="title"></h1>
+      <div class="wrow">
+        <span class="pt"><img src="avatar.jpg" alt=""></span>
+        <div><p class="nm">Luis James de Souza</p><p class="sub">Twelve questions &middot; five recorded</p></div>
+        <div class="right"><button class="btn ghost">Share</button><button class="btn ghost">Add a question</button></div>
+      </div>
+      <div id="about"></div>
     </div>
+    <aside>
+      <div class="sidehd"><h2>The other eleven</h2><span class="all" id="count"></span></div>
+      <div class="qrows" id="up"></div>
+    </aside>
   </div>
-  <div class="films-hd"><h2>The answers</h2><span class="c">Five of twelve recorded</span></div>
-  <div id="films"></div>
-  <div id="about"></div>
 </div>
 <footer class="in">
   <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
@@ -41,7 +45,12 @@
 <script src="map.js"></script>
 <script src="yt.js"></script>
 <script>
-document.getElementById("films").innerHTML = LUIS.questions.map(thumbRow).join("");
+var m = LUIS.main;
+document.getElementById("main").innerHTML = qcard(m, 0, true);
+document.getElementById("title").textContent = "01. " + m.q;
+document.getElementById("count").textContent = "4 recorded, 7 to go";
+document.getElementById("up").innerHTML =
+  LUIS.questions.map(function(x, i){ return x.main ? "" : qrow(x, i); }).join("");
 document.getElementById("about").innerHTML = aboutBlock();
 
 wire();

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>08 The Stages &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.shead{padding:clamp(2rem,5vw,3.4rem) 0 1.4rem;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,320px);gap:2rem;align-items:end}
+@media (max-width:760px){.shead{grid-template-columns:1fr}}
+.shead h1{font-size:clamp(2.2rem,5.6vw,3.4rem);line-height:1}
+.shead .dates{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink2);margin-top:.7rem}
+.band{border-top:1px solid var(--line);padding:clamp(1.8rem,4vw,2.6rem) 0;display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:clamp(1.3rem,3.5vw,2.8rem)}
+@media (max-width:800px){.band{grid-template-columns:1fr;gap:1.2rem}}
+.band .lab{position:sticky;top:4.6rem;align-self:start}
+@media (max-width:800px){.band .lab{position:static}}
+.band h2{font-size:clamp(1.35rem,2.8vw,1.8rem);line-height:1.15;margin-top:.3rem}
+.band .yrs{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;color:var(--ink3);margin-top:.45rem}
+.band .bf{margin-top:.9rem}
+.band .bf .fact{grid-template-columns:1fr;gap:.05rem;padding:.42rem 0}
+.band .bf .fact .v{font-size:1rem}
+.bg{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:1.3rem 1rem}
+.bg .q{font-family:"Newsreader",Georgia,serif;font-size:1.04rem;line-height:1.26;display:block;margin-top:.5rem}
+
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All ten layouts</a>
+  <span class="sp"></span>
+  <span class="who">08 &nbsp;&middot;&nbsp; The Stages</span>
+</div></div>
+<div class="in">
+  <header class="shead">
+    <div>
+      <p class="mo">Eighty-three years, in six parts</p>
+      <h1>Luis James de Souza</h1>
+      <p class="dates">Born 4 February 1943 in Bangalore, India</p>
+    </div>
+    <p style="color:var(--ink2);font-size:.95rem">Not a timeline with dates on it &mdash; nobody remembers dates. Stages. He can always say which stage something belongs to.</p>
+  </header>
+  <div id="bands"></div>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script>
+var BANDS = [
+  { t:"A house in Bangalore", y:"The beginning", qs:[0,1,2,4],
+    f:[{k:"Born",v:"4 February 1943"},{k:"Born in",v:"Bangalore, India"},{k:"Mother, father",v:null,ask:"Add their names"}] },
+  { t:"Sent up to the hills", y:"School years", qs:[3],
+    f:[{k:"School",v:"St George’s College, Mussoorie"},{k:"School",v:"La Martinière College, Lucknow"}] },
+  { t:"Out to work", y:"His twenties", qs:[5],
+    f:[{k:"First job",v:null,ask:"What it was, and what it paid"}] },
+  { t:"Meeting her", y:"Marriage", qs:[6,7],
+    f:[{k:"Married",v:null,ask:"Who, when and where"}] },
+  { t:"Children, and the working life", y:"The long middle", qs:[8,9],
+    f:[{k:"Children",v:null,ask:"Names and years"},{k:"Work",v:null,ask:"The trade, and the years in it"}] },
+  { t:"Now, looking back", y:"Eighty-three", qs:[10,11],
+    f:[{k:"Lives in",v:null,ask:"And everywhere before it"}] }
+];
+document.getElementById("bands").innerHTML = BANDS.map(function(b){
+  return '<div class="band"><div class="lab"><p class="mo">' + b.y + '</p><h2>' + b.t + '</h2>' +
+    '<div class="bf">' + factRows(b.f) + '</div></div>' +
+    '<div class="bg">' + b.qs.map(function(n){ var x = LUIS.questions[n];
+      return '<div>' + film(x) + '<span class="q">' + esc(x.q) + '</span></div>'; }).join("") + '</div></div>';
+}).join("");
+
+wire();
+</script>
+</body>
+</html>
