@@ -26,22 +26,22 @@ var LUIS = {
   questions: [
     { q:"Say your full name, where you were born, and the date.",
       note:"The warm-up. Sixty seconds, and it gets the first one out of the way.",
-      easy:true, v:"3Uz6uZC9hik", len:"8:14", main:true },
+      easy:true, v:"3Uz6uZC9hik", len:"8:14", still:"s-main.jpg", main:true },
     { q:"Who were your mother and father — their names, and what they did.",
-      easy:true, v:"BjQqDWj1LQw", len:"6:02" },
+      easy:true, v:"BjQqDWj1LQw", len:"6:02", still:"s-face.jpg" },
     { q:"Your brothers and sisters, oldest to youngest.", easy:true, v:null },
     { q:"The schools — Mussoorie and Lucknow. What were they like?", easy:true, v:null },
     { q:"The house you grew up in. Walk me through the front door.",
-      v:"WNfvuJr9164", len:"5:38" },
+      v:"WNfvuJr9164", len:"5:38", still:"s-room.jpg" },
     { q:"Your first job, and your first wage.", easy:true, v:null },
     { q:"How you met Mum.", v:null },
     { q:"The wedding day.", v:null },
     { q:"The day each of your children was born.", v:null },
     { q:"The work you did, and the thing you are proudest of making.",
-      v:"nVu__vyps9Q", len:"12:41" },
+      v:"nVu__vyps9Q", len:"12:41", still:"s-hands.jpg" },
     { q:"The hardest year of your life, and how you got through it.", v:null },
     { q:"What would you say to whoever watches this in fifty years?",
-      v:"aJ_RVsf90xg", len:"4:29" }
+      v:"aJ_RVsf90xg", len:"4:29", still:"s-table.jpg" }
   ]
 };
 LUIS.recorded = LUIS.questions.filter(function(x){ return x.v; }).length;
@@ -57,7 +57,8 @@ function film(item, opts){
     return '<span class="film empty"><span class="none">' + (opts.none || "Not recorded yet") + '</span></span>';
   }
   return '<button class="film" data-yt="' + item.v + '" aria-label="Play: ' + esc(item.q) + '">' +
-         '<img src="https://i.ytimg.com/vi/' + item.v + '/hqdefault.jpg" alt="" loading="lazy">' +
+         '<img src="https://i.ytimg.com/vi/' + item.v + '/hqdefault.jpg" alt="" loading="lazy"' +
+         (item.still ? ' data-fb="' + item.still + '"' : "") + '>' +
          '<span class="sh"></span><span class="play"></span>' +
          (item.len ? '<span class="dur">' + item.len + '</span>' : "") +
          (opts.tag ? '<span class="tag">' + opts.tag + '</span>' : "") +
@@ -83,16 +84,13 @@ function wire(){
   /* Where the still cannot load (this preview blocks every outside image), stand a
      shaded frame of him in its place so the layout can still be judged. The real
      page pulls the frame straight from YouTube. */
-  var SPOTS = ["44% 26%","52% 30%","48% 22%","40% 32%","56% 28%","46% 36%"];
   function check(img){
     if(img.naturalWidth) return;
     var w = img.parentNode; if(!w) return;
-    var i = Array.prototype.indexOf.call(document.querySelectorAll(".film"), w);
     var f = document.createElement("img");
     f.className = "fb";
-    f.src = LUIS.photo;
+    f.src = img.getAttribute("data-fb") || LUIS.photo;
     f.alt = "";
-    f.style.objectPosition = SPOTS[(i < 0 ? 0 : i) % SPOTS.length];
     w.insertBefore(f, w.firstChild);
     img.remove();
   }
