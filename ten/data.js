@@ -27,7 +27,7 @@ var LUIS = {
     { q:"Tell me about your mother and father — what were their names, and what did they do? Did you get along with them?",
       note:"The warm-up. Sixty seconds, and it gets the first one out of the way.",
       easy:true, v:"3Uz6uZC9hik", len:"8:14", still:"s-main.jpg", main:true },
-    { q:"The house you grew up in — walk me through the front door. Which room did everybody end up in?",
+    { q:"Tell me about the house that you grew up in. Do you remember the address? Walk me through the front door.",
       easy:true, v:"BjQqDWj1LQw", len:"6:02", still:"s-face.jpg" },
     { q:"Your full name, middle names and all — where did each part come from? Did you like it, and what did people actually call you?", easy:true, v:null },
     { q:"Your brothers and sisters, oldest to youngest. Who were you closest to, and who did you fight with?", easy:true, v:null },
