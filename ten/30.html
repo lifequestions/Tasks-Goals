@@ -11,7 +11,13 @@
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="yt.css">
 <style>
-#main .film{aspect-ratio:16/9;border:1px solid var(--line)}
+/* a bigger portrait, and the map without the list beneath it */
+.kplate{padding-top:clamp(2.4rem,6vw,4rem)}
+.kplate .circ{width:clamp(180px,21vw,300px);margin-bottom:1.6rem}
+.kplate h1{font-size:clamp(2.2rem,5vw,3.2rem)}
+.ymap .places{display:none}
+.kband{align-items:stretch}
+.kband .ymap,.kband .ymap .frame{height:100%}
 
 </style>
 </head>
@@ -22,7 +28,7 @@
 </div></div>
 <div class="book">
   <header class="kplate">
-    <div class="circ"><img src="avatar.jpg" alt="Luis James de Souza"></div>
+    <div class="circ"><img src="dad.jpg" alt="Luis James de Souza"></div>
     <p class="mo">In his own voice</p>
     <h1>Luis James de Souza</h1>
     <div class="rule"></div>
