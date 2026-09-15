@@ -24,7 +24,7 @@ var LUIS = {
     { k:"Lives in",       v:null, ask:"And everywhere before it" }
   ],
   questions: [
-    { q:"Who were your mother and father — their names, and what they did. Did you get on with them?",
+    { q:"Tell me about your mother and father — what were their names, and what did they do? Did you get along with them?",
       note:"The warm-up. Sixty seconds, and it gets the first one out of the way.",
       easy:true, v:"3Uz6uZC9hik", len:"8:14", still:"s-main.jpg", main:true },
     { q:"The house you grew up in — walk me through the front door. Which room did everybody end up in?",
