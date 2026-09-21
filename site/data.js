@@ -16,9 +16,10 @@ function film(item, opts){
      exactly on the footage inside those bars, so the still stays a real frame. */
   var up = item.portrait ? " up" : "";
   var src = "https://i.ytimg.com/vi/" + item.v + "/hqdefault.jpg";
-  return '<button class="film' + up + '" data-yt="' + item.v + '" aria-label="Play: ' + esc(item.q) + '">' +
-         '<img src="' + src + '" alt="" loading="lazy"' +
-         (item.still ? ' data-fb="' + item.still + '"' : "") + '>' +
+  return '<button class="film noshot' + up + '" data-yt="' + item.v + '" data-still="' + src +
+         '"' + (item.still ? ' data-fb="' + item.still + '"' : "") +
+         ' aria-label="Play: ' + esc(item.q) + '">' +
+         '<span class="plate"></span>' +
          '<span class="sh"></span><span class="play"></span>' +
          (item.len ? '<span class="dur">' + item.len + '</span>' : "") +
          (opts.tag ? '<span class="tag">' + opts.tag + '</span>' : "") +
@@ -40,36 +41,29 @@ function wire(){
     b.appendChild(f);
     b.removeAttribute("data-yt");
   }); }
-  /* Some previews block every external image. Say so rather than showing a broken icon. */
-  /* Where the still cannot load (this preview blocks every outside image), stand a
-     shaded frame of him in its place so the layout can still be judged. The real
-     page pulls the frame straight from YouTube. */
-  function check(img){
-    if(img.naturalWidth) return;
-    var w = img.parentNode; if(!w) return;
-    var fb = img.getAttribute("data-fb");
-    /* Never stand the portrait in for a frame of the film: two copies of the
-       same photograph on one page reads as a mistake, because it is one. Where
-       there is no frame to show, say so in type instead of faking a picture. */
-    if(!fb || fb === PERSON.photo){
-      var p = document.createElement("span");
-      p.className = "plate";
-      p.innerHTML = '<span>Frame not loaded</span>';
-      w.insertBefore(p, w.firstChild);
-      img.remove();
-      return;
-    }
-    var f = document.createElement("img");
-    f.className = "fb";
-    f.src = fb;
-    f.alt = "";
-    w.insertBefore(f, w.firstChild);
-    img.remove();
+  /* The still is fetched out of sight and only put into the page once it has
+     loaded. A frame that never arrives leaves the plate standing — no broken
+     icon, no flash of one, and never the portrait doing duty as a film frame. */
+  function dress(b){
+    var srcs = [b.getAttribute("data-still")];
+    var fb = b.getAttribute("data-fb");
+    if(fb && fb !== PERSON.photo) srcs.push(fb);
+    (function tryNext(){
+      var url = srcs.shift();
+      if(!url) return;
+      var probe = new Image();
+      probe.onload = function(){
+        if(!b.isConnected || !b.classList.contains("noshot")) return;
+        var img = document.createElement("img");
+        img.src = url; img.alt = "";
+        b.insertBefore(img, b.querySelector(".sh"));  /* over the plate, under the shade */
+        b.classList.remove("noshot");
+      };
+      probe.onerror = tryNext;
+      probe.src = url;
+    })();
   }
-  document.querySelectorAll(".film img").forEach(function(img){
-    img.addEventListener("error", function(){ check(img); });
-    setTimeout(function(){ check(img); }, 2500);
-  });
+  document.querySelectorAll(".film[data-still]").forEach(dress);
 }
 
 function factRows(list){
