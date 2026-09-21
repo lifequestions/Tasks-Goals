@@ -1,6 +1,12 @@
-# Publishes site/ to GitHub Pages.
+# Publishes the repository to GitHub Pages.
 #
-# Deploys from main on every push that touches site/.
+# The whole repository root is uploaded, not just site/, because this Pages
+# site already served the trackers from the root before Life Questions
+# existed. Narrowing it to site/ would take those offline:
+#
+#   /Tasks-Goals/         the Goal Tracker, as before
+#   /Tasks-Goals/expenses.html
+#   /Tasks-Goals/site/    Life Questions
 
 name: Deploy site to GitHub Pages
 
@@ -9,6 +15,7 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "*.html"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -38,7 +45,7 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: .
 
       - id: deployment
         uses: actions/deploy-pages@v4
