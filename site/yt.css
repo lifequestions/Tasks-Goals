@@ -170,8 +170,8 @@
    to do a job it is bad at: twelve blocks of it, small, at a glance. Karla —
    the same face as the body text — instead. The display serif stays for the
    name at the top, where it is one line and looks like a title. */
-.tcard .t{font-family:var(--sans);font-size:clamp(1.02rem,1.2vw,1.14rem);
-          font-weight:500;line-height:1.45;letter-spacing:-.006em;display:block;color:var(--ink)}
+.tcard .t{font-family:var(--sans);font-size:clamp(1.14rem,1.42vw,1.34rem);
+          font-weight:500;line-height:1.38;letter-spacing:-.011em;display:block;color:var(--ink)}
 .tcard .t .n{font-weight:400;color:var(--ink3)}
 /* The films sit at the foot of their cards, so they line up across a row
    however long the questions above them run. */
