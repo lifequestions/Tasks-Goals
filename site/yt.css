@@ -159,8 +159,15 @@
    a row open to the tallest card in it, leaving a hole beside every film.
    Columns let them pack. The numbering runs down one column and on to the
    next, which is how a numbered list reads anyway. */
-.tgrid{column-count:2;column-gap:1.3rem;padding-top:1.3rem}
-@media (max-width:700px){.tgrid{column-count:1}}
+/* A grid whose rows are 8px tall, with each card told how many of them it
+   spans. Cards are different heights — a filmed answer is tall, a question
+   still waiting is short — and an ordinary grid would hold every row open to
+   the tallest card in it, leaving a hole beside each film. CSS columns pack
+   them but run the numbering down one column and up the next, which makes
+   nonsense of an index. This keeps left-to-right order and still packs. */
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.3rem;
+       grid-auto-rows:8px;align-items:start;padding-top:1.3rem}
+@media (max-width:700px){.tgrid{grid-template-columns:1fr}}
 /* Every card is the shape the film plays in: upright, because that is how
    these are filmed. The empty ones keep the same box so the grid is even
    before anybody has answered anything. */
@@ -171,7 +178,7 @@
    filling the foot. The card is the unit, not the picture. */
 .tcard{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);
        padding:clamp(.85rem,1.4vw,1.15rem);transition:.16s;
-       break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:1.4rem}
+       margin-bottom:0}
 .tcard.on:hover{border-color:var(--acc);box-shadow:0 18px 34px -30px var(--shadow)}
 /* The questions are the reading on this page, and the serif was being asked
    to do a job it is bad at: twelve blocks of it, small, at a glance. Karla —
@@ -308,3 +315,12 @@
    nothing pretending to be a picture. It grows into a tall one the day it
    is filmed, which is the whole point of the page. */
 .tcard.off .m{margin-bottom:0}
+
+/* where you are in the list */
+.qindex li.here{position:relative}
+.qindex li.here a{color:var(--ink)}
+.qindex li.here .q{font-weight:500}
+.qindex li.here::before{content:"";position:absolute;left:-.75rem;top:.45rem;bottom:.45rem;
+                        width:2px;background:var(--acc)}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

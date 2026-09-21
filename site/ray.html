@@ -76,6 +76,8 @@ document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
 document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).join("");
 document.getElementById("qnav").innerHTML = qIndex();
+layoutGrid();
+spyIndex();
 document.getElementById("shareTop").innerHTML = shareRow();
 document.getElementById("shareBottom").innerHTML = shareRow("big");
 wireShare();

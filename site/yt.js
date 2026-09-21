@@ -147,3 +147,59 @@ function qIndex(){
     }).join("") + '</ol>' +
     '<p class="ifoot">' + PERSON.recorded + ' of ' + PERSON.questions.length + ' answered</p>';
 }
+
+/* Measure each card and tell the grid how many of its 8px rows it spans, so
+   cards of different heights pack without holes and still read left to right.
+   Fonts and stills land after first paint and change the answer, so it runs
+   again when they do. */
+function layoutGrid(){
+  var grid = document.querySelector(".tgrid");
+  if(!grid) return;
+  function size(){
+    var cs = getComputedStyle(grid);
+    if(cs.gridTemplateColumns.split(" ").length < 2){        /* one column: let it flow */
+      [].forEach.call(grid.children, function(c){ c.style.gridRowEnd = ""; });
+      return;
+    }
+    var row = parseFloat(cs.gridAutoRows) || 8, gap = 22;    /* the gap below a card */
+    [].forEach.call(grid.children, function(c){
+      c.style.gridRowEnd = "span " + Math.ceil((c.getBoundingClientRect().height + gap) / row);
+    });
+  }
+  size();
+  addEventListener("resize", size);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(size);
+  /* a still arriving changes nothing about the height, but a failed one does */
+  setTimeout(size, 1200); setTimeout(size, 3000);
+  return size;
+}
+
+/* Where you are in the list. With left-to-right order two cards can be level
+   with each other, so the one nearest a line across the upper third wins —
+   which is at worst its neighbour, never a jump up the page. */
+function spyIndex(){
+  var cards = [].slice.call(document.querySelectorAll(".tcard"));
+  var rows  = [].slice.call(document.querySelectorAll(".qindex li"));
+  if(!cards.length || cards.length !== rows.length) return;
+  var at = -1, queued = false;
+
+  function mark(){
+    queued = false;
+    var line = window.innerHeight * 0.3, best = -1, bestGap = Infinity;
+    for(var i = 0; i < cards.length; i++){
+      var r = cards[i].getBoundingClientRect();
+      if(r.bottom < 0 || r.top > window.innerHeight) continue;
+      var gap = Math.abs(r.top - line);
+      if(gap < bestGap){ bestGap = gap; best = i; }
+    }
+    if(best < 0 || best === at) return;
+    if(at > -1) rows[at].classList.remove("here");
+    rows[best].classList.add("here");
+    at = best;
+  }
+  function onScroll(){ if(!queued){ queued = true; requestAnimationFrame(mark); } }
+
+  addEventListener("scroll", onScroll, {passive:true});
+  addEventListener("resize", onScroll);
+  mark();
+}
