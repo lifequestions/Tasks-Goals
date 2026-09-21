@@ -1,0 +1,46 @@
+# Life Questions — polishing an answer
+
+Two small tools. They never touch the original file.
+
+## Once, to set up
+
+    brew install ffmpeg
+    pip3 install pillow
+
+## Every answer
+
+**1. Make the title card**
+
+    python3 make-card.py \
+      --name "Luis James de Souza" \
+      --question "Tell me about your mother and father — what were their names, and what did they do? Did you get along with them?" \
+      --meta "Recorded 20 September 2026   ·   Question one of twelve" \
+      --out card.png
+
+**2. Put it on the front, even out the light, level the sound**
+
+    ./polish.sh answer.mov card.png luis-01.mp4 soft
+
+The last word is the grade. Pick by eye:
+
+| grade | for |
+|---|---|
+| `soft` | the usual — a sitting room in the afternoon |
+| `bright` | a darker room |
+| `backlit` | sat in front of a window, face in shadow |
+| `none` | the light is already fine |
+
+Then upload `luis-01.mp4` to YouTube as **unlisted** and paste the video ID into his page.
+
+## What it actually does
+
+- Holds the card for four seconds, then cross-fades into the film over 0.8s
+- Lifts the shadows without blowing out the window behind him
+- Levels the voice to broadcast loudness (-16 LUFS) and cuts the rumble below 80Hz —
+  this does more for how it feels than anything done to the picture
+- Leaves the original untouched. Keep it. It is the master.
+
+## The one rule
+
+Polish the front and the sound. **Don't cut what he said.** If fifteen minutes feels
+long, that is what chapter markers in the YouTube description are for — not scissors.
