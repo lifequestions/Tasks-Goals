@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>18 The playlist &middot; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="yt.css">
+<style>
+
+</style>
+</head>
+<body>
+<div class="lbar"><div class="in">
+  <a class="wm" href="index.html">&larr;&nbsp; All the layouts</a>
+  <span class="who">18 &nbsp;&middot;&nbsp; The playlist</span>
+</div></div>
+<div class="in">
+  <div class="plist">
+    <div>
+      <div class="ppanel">
+        <div class="cover"><img src="avatar.jpg" alt="Luis James de Souza"></div>
+        <h1>Twelve questions for Dad</h1>
+        <p class="by">Luis James de Souza<br>Born 4 Feb 1943, Bangalore<br>Unlisted &middot; family only</p>
+        <div class="bar"><i id="fill"></i></div>
+        <p class="barT" id="barT"></p>
+        <div class="acts"><button class="btn">Play the first one</button><button class="btn ghost">Share</button></div>
+        <p class="desc2">Recorded by his family on a phone, one question at a time, from September 2026.</p>
+      </div>
+    </div>
+    <div>
+      <div class="qrows" id="items"></div>
+      <div id="about"></div>
+    </div>
+  </div>
+</div>
+<footer class="in">
+  <p>A private page for the de Souza family. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p>Luis James de Souza &nbsp;&middot;&nbsp; born 4 February 1943, Bangalore</p>
+</footer>
+<script src="data.js"></script>
+<script src="map.js"></script>
+<script src="yt.js"></script>
+<script>
+document.getElementById("fill").style.width = Math.round(LUIS.recorded / 12 * 100) + "%";
+document.getElementById("barT").textContent = LUIS.recorded + " of 12 recorded";
+document.getElementById("items").innerHTML = LUIS.questions.map(function(x, i){ return qrow(x, i); }).join("");
+document.getElementById("about").innerHTML = aboutBlock();
+
+wire();
+</script>
+</body>
+</html>

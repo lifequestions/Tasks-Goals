@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Archive Log, Ten Ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Libre+Baskerville:wght@400;700&display=swap">
+
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#0E0F11;font-family:"Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.chrome{position:sticky;top:0;z-index:80;background:#0E0F11;border-bottom:1px solid #24262A;color:#E9E9E7}
+.chrome-in{max-width:1400px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:.9rem;flex-wrap:wrap}
+.chrome-lbl{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;white-space:nowrap}
+.tabs{display:flex;gap:.28rem;overflow-x:auto;scrollbar-width:none;flex:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:1px solid #2C2F34;color:#9AA0A8;border-radius:2px;padding:.3rem .58rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;transition:.18s}
+.tab:hover{color:#FFF;border-color:#565B62}
+.tab[aria-pressed="true"]{background:#F2F2F0;color:#0E0F11;border-color:#F2F2F0}
+.blurb{max-width:1400px;margin:0 auto;padding:.45rem 1rem .6rem;font-family:"IBM Plex Mono",monospace;font-size:.66rem;line-height:1.6;color:#868C94;border-top:1px solid #1B1D20}
+.blurb b{color:#E9E9E7;font-weight:500}
+.scrim{position:fixed;inset:0;background:rgba(8,9,11,.86);display:none;align-items:center;justify-content:center;padding:clamp(.6rem,3vw,2rem);z-index:90;backdrop-filter:blur(4px)}
+.scrim.on{display:flex}
+.proj{background:var(--pSurf,#fff);color:var(--pInk,#111);border:1px solid var(--pLine,#ddd);border-radius:var(--pRad,2px);width:min(840px,100%);max-height:94vh;overflow-y:auto;font-family:var(--pBody,"Archivo",sans-serif)}
+.proj-top{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.75rem 1.05rem;border-bottom:1px solid var(--pLine,#ddd)}
+.proj-top .mo{color:var(--pInk2,#666)}
+.xb{background:none;border:1px solid var(--pLine,#ddd);border-radius:2px;padding:.3rem .65rem;font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pInk2,#666)}
+.xb:hover{color:var(--pInk,#111);border-color:var(--pInk,#111)}
+.screen{aspect-ratio:16/9;background:#000;position:relative}
+.screen iframe{width:100%;height:100%;border:0;display:block}
+.screen-empty{position:absolute;inset:0;display:grid;place-content:center;gap:.6rem;text-align:center;padding:2rem;background:var(--pSurf2,#f2f2f2);color:var(--pInk2,#666)}
+.pbody{padding:1.15rem 1.05rem 1.4rem;display:flex;flex-direction:column;gap:.95rem}
+.pbody h2{font-family:var(--pDisp,Georgia,serif);font-size:clamp(1.2rem,2.5vw,1.6rem);line-height:1.2;margin:0;color:var(--pInk,#111)}
+.src{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.05em;line-height:1.7;color:var(--pInk2,#666);border-left:2px solid var(--pAcc,#333);padding-left:.75rem;margin:0}
+.src a{color:var(--pAcc,#333)}
+.prompts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.prompts li{display:flex;gap:.6rem;color:var(--pInk2,#666);font-size:.9rem}
+.prompts li::before{content:"\2192";color:var(--pAcc,#333)}
+.pfoot{display:flex;flex-wrap:wrap;gap:.45rem 1.2rem;padding-top:.85rem;border-top:1px solid var(--pLine,#ddd);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.09em;text-transform:uppercase;color:var(--pInk2,#666)}
+.pnav{display:flex;justify-content:space-between;gap:.5rem;padding:.75rem 1.05rem;border-top:1px solid var(--pLine,#ddd);background:var(--pSurf2,#f2f2f2)}
+.th{width:100%;height:100%;object-fit:cover;display:block}
+.th.dead{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* optional extras */
+.xwrap{display:flex;flex-direction:column;gap:.6rem}
+.xhd{color:var(--pInk2,#666);font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;margin:0}
+.xrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem}
+.xc{display:flex;gap:.65rem;align-items:center;border:1px solid var(--pLine,#ddd);border-radius:var(--pRad,2px);padding:.45rem;background:var(--pSurf2,#f4f4f4)}
+.xc svg{width:58px;height:38px;flex:none;border:1px solid var(--pLine,#ddd)}
+.xph{width:58px;height:38px;flex:none;display:grid;place-content:center;border:1px solid var(--pLine,#ddd);background:var(--pSurf,#fff);color:var(--pInk2,#888);font-size:1.05rem}
+.xl{font-size:.76rem;line-height:1.35;color:var(--pInk,#111)}
+.xd{display:block;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.04em;color:var(--pInk2,#666);margin-top:2px}
+.xbadge{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.08em;border:1px solid currentColor;border-radius:999px;padding:0 .34rem;opacity:.75}
+/* ============ archive-log family ============ */
+.stage{
+  --bg:#0F1113;--surf:#15181B;--surf2:#1C2024;--ink:#E4E7E5;--ink2:#8A938F;--line:#242A2E;
+  --acc:#C6A24B;--rad:2px;--fd:"IBM Plex Mono",monospace;--fb:"IBM Plex Mono",monospace;--thw:74px;
+  background:var(--bg);color:var(--ink);font-family:var(--fb);padding-bottom:6rem;min-height:70vh;
+}
+.stage h1,.stage h2{font-family:var(--fd);margin:0;font-weight:500;letter-spacing:.01em}
+.stage p{margin:0}
+.in{max-width:1180px;margin:0 auto;padding:0 clamp(1rem,3.5vw,2.2rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink2)}
+.hd{padding:clamp(2.2rem,6vw,4rem) 0 clamp(1.2rem,3vw,2rem);display:flex;flex-direction:column;gap:.6rem}
+.hd h1{font-size:clamp(1.3rem,3vw,1.9rem)}
+.grp{margin-bottom:1.8rem}
+.grp-hd{display:flex;align-items:center;gap:.7rem;padding:.5rem 0;flex-wrap:wrap}
+.grp-hd h2{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--acc)}
+.grp-hd .w{font-size:.6rem;letter-spacing:.06em;color:var(--ink2)}
+.grp-hd .line{flex:1;height:1px;background:var(--line);min-width:16px}
+.rows{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.row{display:flex;align-items:center;gap:.85rem;text-align:left;color:inherit;background:none;border:0;border-bottom:1px solid var(--line);padding:.5rem .4rem;transition:background .15s,color .15s}
+.row:hover{background:var(--surf2)}
+.row:hover .rq{color:var(--acc)}
+.rn{flex:0 0 2.6rem;font-size:.68rem;color:var(--ink2)}
+.tw{position:relative;flex:0 0 var(--thw);aspect-ratio:16/9;background:var(--surf2);border:1px solid var(--line);border-radius:var(--rad);overflow:hidden}
+.pl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:22px;height:22px;border-radius:50%;background:rgba(8,10,12,.62);display:grid;place-content:center}
+.pl::after{content:"";width:0;height:0;border-left:7px solid #fff;border-top:4.5px solid transparent;border-bottom:4.5px solid transparent;margin-left:2px}
+.row:hover .pl{background:var(--acc)}
+.sealed{position:absolute;inset:0;display:grid;place-content:center;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2)}
+.rq{flex:1;min-width:0;font-size:.82rem;line-height:1.35}
+.rst{flex:0 0 auto;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2)}
+.rmeta{display:flex;gap:1.2rem;flex:0 0 auto;font-size:.62rem;letter-spacing:.06em;color:var(--ink2)}
+.rx{color:var(--acc);font-size:.6rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--acc);flex:none}
+.dot.off{background:var(--line)}
+@media (max-width:720px){
+  .rmeta{flex-direction:column;gap:.1rem;align-items:flex-end}
+  .rn{display:none}
+}
+
+/* 01 dark log — base */
+/* 02 paper log */
+[data-v="2"]{--bg:#FAFAF7;--surf:#fff;--surf2:#F0F0EB;--ink:#16181A;--ink2:#6C716F;--line:#E2E2DC;--acc:#9A3B2A}
+[data-v="2"] .row{flex-direction:row-reverse;text-align:right}
+[data-v="2"] .rq{text-align:left}
+/* 03 table */
+[data-v="3"]{--bg:#FFFFFF;--surf:#fff;--surf2:#F2F5F7;--ink:#101418;--ink2:#697079;--line:#E1E5E9;--acc:#1F5FA8;--thw:64px}
+[data-v="3"] .thead{display:flex;gap:.85rem;padding:.45rem .4rem;border-bottom:2px solid var(--ink);font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+[data-v="3"] .thead span:nth-child(1){flex:0 0 2.6rem}
+[data-v="3"] .thead span:nth-child(2){flex:0 0 var(--thw)}
+[data-v="3"] .thead span:nth-child(3){flex:1}
+[data-v="3"] .row:nth-child(even){background:var(--surf2)}
+[data-v="3"] .rows{border-top:0}
+/* 04 terminal */
+[data-v="4"]{--bg:#080B09;--surf:#0D110E;--surf2:#111713;--ink:#B8F0C8;--ink2:#5C8A6C;--line:#183020;--acc:#5EE08A;--thw:62px}
+[data-v="4"] .tw img{filter:grayscale(1) brightness(.8) sepia(.4) hue-rotate(70deg)}
+[data-v="4"] .row:hover img{filter:none}
+[data-v="4"] .rq::before{content:"$ ";color:var(--ink2)}
+/* 05 ledger */
+[data-v="5"]{--bg:#F7F2E4;--surf:#FDFAF0;--surf2:#EFE8D5;--ink:#231F16;--ink2:#6F6752;--line:#D9CFB4;--acc:#8C2B22;--fd:"Libre Baskerville",Georgia,serif;--thw:80px}
+[data-v="5"] .rq{font-family:var(--fd);font-size:.86rem}
+[data-v="5"] .rows{border-top:2px solid var(--acc)}
+[data-v="5"] .row{border-bottom:1px solid var(--line)}
+[data-v="5"] .row:nth-child(even){background:rgba(140,43,34,.035)}
+[data-v="5"] .rn{border-right:1px solid var(--line)}
+/* 06 compact */
+[data-v="6"]{--thw:44px}
+[data-v="6"] .row{padding:.3rem .35rem;gap:.6rem}
+[data-v="6"] .rq{font-size:.74rem}
+[data-v="6"] .rmeta{font-size:.56rem;gap:.8rem}
+[data-v="6"] .pl{width:16px;height:16px}
+[data-v="6"] .pl::after{border-left-width:5px;border-top-width:3.5px;border-bottom-width:3.5px}
+/* 07 row cards */
+[data-v="7"]{--bg:#101215;--surf:#181C20;--surf2:#1E2429;--ink:#E8EAEC;--ink2:#8C949B;--line:#262D33;--acc:#6FB3C9;--rad:10px;--thw:104px;--fb:"Archivo",sans-serif}
+[data-v="7"] .rows{border:0;gap:.55rem}
+[data-v="7"] .row{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:.6rem}
+[data-v="7"] .row:hover{border-color:var(--acc)}
+[data-v="7"] .rq{font-size:.9rem;font-weight:500}
+[data-v="7"] .rst{border:1px solid var(--line);border-radius:999px;padding:.15rem .55rem;font-size:.55rem}
+/* 08 split view */
+[data-v="8"]{--bg:#0E1114;--surf:#161A1E;--surf2:#1D2227;--ink:#E6E9EC;--ink2:#8A929A;--line:#232A30;--acc:#D08C3E;--thw:56px}
+[data-v="8"] .body{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:1.6rem;align-items:start}
+[data-v="8"] .prev{position:sticky;top:104px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--surf)}
+[data-v="8"] .prev .pv{aspect-ratio:16/9;background:var(--surf2);position:relative}
+[data-v="8"] .prev .pi{padding:.8rem .9rem 1rem;display:flex;flex-direction:column;gap:.4rem}
+[data-v="8"] .prev .pt{font-size:.86rem;line-height:1.35}
+@media (max-width:900px){[data-v="8"] .body{grid-template-columns:1fr}[data-v="8"] .prev{display:none}}
+/* 09 filmstrip */
+[data-v="9"]{--bg:#111110;--surf:#191917;--surf2:#20201D;--ink:#EDEBE4;--ink2:#918D82;--line:#2A2A26;--acc:#D9B45C;--thw:66px}
+[data-v="9"] .strip{display:flex;gap:2px;flex:0 0 auto;padding:2px;background:var(--surf2);border:1px solid var(--line)}
+[data-v="9"] .strip .tw{border:0;flex:0 0 var(--thw)}
+[data-v="9"] .strip .tw:nth-child(2) img,[data-v="9"] .strip .tw:nth-child(3) img{opacity:.55}
+[data-v="9"] .row:hover .strip .tw img{opacity:1}
+@media (max-width:820px){[data-v="9"] .strip .tw:nth-child(n+2){display:none}}
+/* 10 blue steel */
+[data-v="10"]{--bg:#F4F6F8;--surf:#fff;--surf2:#E9EDF1;--ink:#131A21;--ink2:#5E6B77;--line:#DCE2E8;--acc:#2E6B8F;--fb:"Archivo",sans-serif;--thw:88px;--rad:4px}
+[data-v="10"] .rq{font-size:.9rem}
+[data-v="10"] .rmeta,[data-v="10"] .rst,[data-v="10"] .rn{font-family:"IBM Plex Mono",monospace}
+[data-v="10"] .row:nth-child(odd){background:var(--surf)}
+</style>
+
+<div class="chrome">
+  <div class="chrome-in">
+    <span class="chrome-lbl" id="famlbl">Variations</span>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <p class="blurb" id="blurb"></p>
+</div>
+<div class="stage" id="stage" data-v="1"></div>
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="pq">
+  <div class="proj" id="proj">
+    <div class="proj-top">
+      <p class="mo" id="pchap">Stage</p>
+      <button class="xb" id="closeBtn">Close &nbsp;esc</button>
+    </div>
+    <div class="screen" id="screen"></div>
+    <div class="pbody">
+      <h2 id="pq">Question</h2>
+      <p class="src" id="psrc"></p>
+      <ul class="prompts" id="pprompts"></ul>
+      <div id="pextras"></div>
+      <div class="pfoot" id="pfoot"></div>
+    </div>
+    <div class="pnav">
+      <button class="xb" id="prevBtn">&larr; Previous</button>
+      <button class="xb" id="nextBtn">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- shared: one person, fourteen windows, life stages not dates ---------- */
+var STAGES = [
+  { n:"Childhood",          w:"Ballina, the 1940s",       s:"done" },
+  { n:"Leaving home",       w:"date not recorded",        s:"vague" },
+  { n:"First job",          w:"Coventry, from 1956",      s:"done" },
+  { n:"Falling in love",    w:"a dance, mid-fifties",     s:"done" },
+  { n:"Marriage",           w:"1961",                     s:"done" },
+  { n:"Becoming a parent",  w:"1963, 1966, 1971",         s:"done" },
+  { n:"Working life",       w:"forty years of nights",    s:"done" },
+  { n:"The hard years",     w:"date not recorded",        s:"vague" },
+  { n:"Retirement",         w:"she never really did",     s:"skipped" },
+  { n:"Where she is now",   w:"still recording",          s:"open" }
+];
+
+var W = [
+  { st:0, q:"Tell me about the house you grew up in.", len:"6:12", on:"14 May 2022",
+    v:"3Uz6uZC9hik", src:"Grandma tells our story",
+    p:["Walk me through the front door.","Which room did everyone end up in?","What could you hear from your bed?"],
+    x:[{t:"map",  l:"Ballina, Co. Mayo", d:"54.1150° N, 9.1533° W"},
+       {t:"photo",l:"The house on Bury Street", d:"family photograph, undated"}] },
+  { st:0, q:"Who were your mother and father, really?", len:"8:40", on:"14 May 2022",
+    v:"BjQqDWj1LQw", src:"An interview with Grandma",
+    p:["What did they want before the children came?","What did they never talk about?","What of them do you catch yourself doing?"] },
+  { st:1, q:"The day you left home.", len:"7:18", on:"4 Jun 2022",
+    v:"nVu__vyps9Q", src:"100-year-old WWII veteran — full interview",
+    p:["Who took you to the boat?","What did you think it was going to be?","When did you know you weren't going back?"] },
+  { st:1, q:"What did you want to be at fifteen?", len:"", on:"", v:null,
+    p:["Who took you seriously?","When did you know it wasn't going to happen?"] },
+  { st:2, q:"Your first room, and your first wage.", len:"5:44", on:"11 Jun 2022",
+    v:"x3fphutRYso", src:"Albert Siewers — WWII veteran interview",
+    p:["What did it cost?","Who was the landlady?","What did you eat that first week?"],
+    x:[{t:"map",  l:"Hillfields, Coventry", d:"52.4084° N, 1.4998° W"},
+       {t:"photo",l:"Her first car — a Morris Minor", d:"1962"}] },
+  { st:2, q:"Starting at the hospital.", len:"6:30", on:"11 Jun 2022",
+    v:"KGCD1XR0WPk", src:"An Introduction to StoryCorps — Dave Isay",
+    p:["What was the first thing they had you do?","Who was kind to you?","When did you stop being frightened?"] },
+  { st:3, q:"The dance where you met Frank.", len:"6:55", on:"25 Jun 2022",
+    v:"WNfvuJr9164", src:"Danny & Annie — StoryCorps",
+    p:["What was he wearing?","What did he say?","When did you decide?"],
+    x:[{t:"photo",l:"Frank, the year they met", d:"1959"}] },
+  { st:4, q:"The wedding day, honestly.", len:"5:10", on:"9 Jul 2022",
+    v:"SUhWjJfLWXE", src:"StoryCorps Shorts: Danny and Annie — PBS POV",
+    p:["Who came over from home?","What went wrong?","What do you remember about the evening?"] },
+  { st:5, q:"The day each of us was born.", len:"9:24", on:"9 Jul 2022",
+    v:"abyMCAS4vEI", src:"A StoryCorps conversation with grandfather",
+    p:["Tell me about each one.","What frightened you?","Who did we look like?"],
+    x:[{t:"photo",l:"Anne, three days old", d:"March 1963"},
+       {t:"photo",l:"All three, Wyken Croft", d:"summer 1972"}] },
+  { st:5, q:"What did being a parent teach you?", len:"", on:"", v:null,
+    p:["What kept you awake?","What do you think you got wrong?"] },
+  { st:6, q:"Forty years of nights. Why nights?", len:"7:02", on:"6 Aug 2022",
+    v:"QzQhtsTdHhM", src:"Life lessons from 100-year-old Americans — Business Insider",
+    p:["What did a normal shift look like?","How did you sleep?","What did it cost you at home?"],
+    x:[{t:"doc",  l:"Her SRN certificate", d:"scanned document"}] },
+  { st:6, q:"The patient you never forgot.", len:"8:15", on:"6 Aug 2022",
+    v:"rZAv7uoE25Q", src:"110-year-old's words of wisdom",
+    p:["Tell me what happened.","What did you do?","Do you still think about them?"] },
+  { st:7, q:"The year Frank got ill.", len:"9:51", on:"17 Sep 2022",
+    v:"Is6WvYAM3gg", src:"100-year-olds' guide to living your best life — Allure",
+    p:["When did you know?","Who turned up, and who didn't?","What got you out of bed?"] },
+  { st:9, q:"What do you want us to do on your birthday?", len:"3:11", on:"3 Feb 2024",
+    v:"aJ_RVsf90xg", src:"Living to 100 — interviews with centenarians, TV Eye 1986",
+    p:["Where should we be?","Who should be there?","What shouldn't we do?"] }
+];
+
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function stageItems(si){ var a=[]; W.forEach(function(w,i){ if(w.st===si){ a.push(i); } }); return a; }
+function thumb(v){
+  return '<img class="th" src="https://i.ytimg.com/vi/' + v + '/mqdefault.jpg" alt="" loading="lazy" ' +
+         'onerror="this.className+=\' dead\'">';
+}
+
+/* ---------- optional extras: maps, photos, documents ---------- */
+function extraCard(x){
+  if(x.t === "map"){
+    return '<span class="xc xmap">' +
+      '<svg viewBox="0 0 120 80" aria-hidden="true">' +
+        '<rect width="120" height="80" fill="var(--surf2)"/>' +
+        '<path d="M0 54 L34 44 L62 58 L92 40 L120 50" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<path d="M18 0 L30 30 L14 52 L26 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<path d="M78 0 L70 26 L88 46 L82 80" fill="none" stroke="var(--line)" stroke-width="2"/>' +
+        '<circle cx="60" cy="36" r="14" fill="none" stroke="var(--acc)" stroke-width="1" opacity=".45"/>' +
+        '<circle cx="60" cy="36" r="5" fill="var(--acc)"/>' +
+      '</svg>' +
+      '<span class="xl">' + esc(x.l) + '<span class="xd">' + esc(x.d) + '</span></span></span>';
+  }
+  var glyph = x.t === "doc" ? "&#9776;" : "&#9635;";
+  return '<span class="xc"><span class="xph">' + glyph + '</span>' +
+    '<span class="xl">' + esc(x.l) + '<span class="xd">' + esc(x.d) + '</span></span></span>';
+}
+function extrasHTML(w){
+  if(!w.x || !w.x.length){ return ""; }
+  return '<div class="xwrap"><p class="mo xhd">Also in this window</p><div class="xrow">' +
+    w.x.map(extraCard).join("") + '</div></div>';
+}
+function extraCount(w){ return w.x ? w.x.length : 0; }
+var FAMILY = "Archive log · ten variations";
+var VARIANTS = [
+  { lay:"rows",  name:"Dark log",   note:"The original with thumbnails added — charcoal, monospace, a still for every answer." },
+  { lay:"rows",  name:"Paper log",  note:"Same log inverted onto paper, thumbnail on the right so the questions align left." },
+  { lay:"table", name:"Table",      note:"Proper column headings and zebra striping. The most spreadsheet-like of the ten." },
+  { lay:"rows",  name:"Terminal",   note:"Phosphor green on black, stills tinted to match until you hover them." },
+  { lay:"rows",  name:"Ledger",     note:"Cream ledger paper, ruled rows, serif questions, red header rule." },
+  { lay:"rows",  name:"Compact",    note:"Tiny stills and tight rows — sixty windows on one screen without scrolling." },
+  { lay:"rows",  name:"Row cards",  note:"Each row its own rounded card with a bigger still and a status pill." },
+  { lay:"split", name:"Split view", note:"List on the left, preview pane on the right that follows whatever you point at." },
+  { lay:"strip", name:"Filmstrip",  note:"Three frames per row instead of one, run together like a strip of film." },
+  { lay:"rows",  name:"Blue steel", note:"Cool slate, larger stills, sans-serif questions with monospace data columns." }
+];
+
+function rowHTML(i, v){
+  var w = W[i], lit = Boolean(w.v), n = extraCount(w);
+  var cell = function(){
+    return '<span class="tw">' + (lit ? thumb(w.v) + '<span class="pl"></span>'
+                                      : '<span class="sealed">none</span>') + '</span>';
+  };
+  var thumbs = cell();
+  if(v.lay === "strip" && lit){
+    thumbs = '<span class="strip">' + cell() + cell() + cell() + '</span>';
+  }
+  return '<button class="row" data-i="' + i + '" aria-label="' + esc(w.q) + '">' +
+    '<span class="rn">' + ("0" + (i + 1)).slice(-2) + '</span>' +
+    thumbs +
+    '<span class="rq">' + esc(w.q) + '</span>' +
+    '<span class="rmeta"><span>' + esc(STAGES[w.st].n) + '</span>' +
+      '<span>' + (lit ? w.len : "--:--") + '</span>' +
+      '<span class="rx">' + (n ? "+" + n : "") + '</span></span>' +
+    '<span class="rst"><span class="dot' + (lit ? "" : " off") + '"></span> ' + (lit ? "encoded" : "empty") + '</span>' +
+  '</button>';
+}
+
+function pageHTML(v){
+  var head = '<header class="hd">' +
+    '<p class="mo">/archive/doyle-me/ &nbsp;·&nbsp; 14 entries &nbsp;·&nbsp; 12 encoded &nbsp;·&nbsp; 5 with attachments</p>' +
+    '<h1>DOYLE, MARGARET ELLEN</h1>' +
+    '<p class="mo">Indexed by life stage &mdash; dates optional, one stage still open</p></header>';
+
+  var body = "";
+  STAGES.forEach(function(s, si){
+    var items = stageItems(si);
+    if(!items.length){ return; }
+    body += '<section class="grp"><div class="grp-hd"><h2>' + esc(s.n) + '</h2>' +
+            '<span class="w">' + esc(s.w) + '</span><span class="line"></span>' +
+            '<span class="w">' + items.length + '</span></div>';
+    if(v.lay === "table"){
+      body += '<div class="thead"><span>#</span><span>Still</span><span>Question</span><span>Stage / length</span><span>State</span></div>';
+    }
+    body += '<div class="rows">';
+    items.forEach(function(i){ body += rowHTML(i, v); });
+    body += '</div></section>';
+  });
+
+  if(v.lay === "split"){
+    var first = 0;
+    var prev = '<aside class="prev" id="prev">' +
+      '<span class="pv" id="pvThumb">' + thumb(W[first].v) + '</span>' +
+      '<span class="pi"><span class="mo" id="pvStage">' + esc(STAGES[W[first].st].n) + '</span>' +
+      '<span class="pt" id="pvQ">' + esc(W[first].q) + '</span>' +
+      '<span class="mo" id="pvMeta">' + W[first].len + ' &nbsp;·&nbsp; recorded ' + W[first].on + '</span></span></aside>';
+    return '<div class="in">' + head + '<div class="body"><div>' + body + '</div>' + prev + '</div></div>';
+  }
+
+  return '<div class="in">' + head + body + '</div>';
+}
+
+/* split-view preview follows the pointer */
+document.addEventListener("mouseover", function(e){
+  if(document.getElementById("stage").getAttribute("data-v") !== "8"){ return; }
+  var r = e.target.closest(".row");
+  if(!r){ return; }
+  var w = W[Number(r.getAttribute("data-i"))];
+  var t = document.getElementById("pvThumb");
+  if(!t){ return; }
+  t.innerHTML = w.v ? thumb(w.v) : '<span class="sealed">Not yet recorded</span>';
+  document.getElementById("pvStage").textContent = STAGES[w.st].n;
+  document.getElementById("pvQ").textContent = w.q;
+  document.getElementById("pvMeta").textContent = w.v ? w.len + " · recorded " + w.on : "no recording yet";
+});
+/* ---------- variant switcher ---------- */
+var stage = document.getElementById("stage"),
+    tabs = document.getElementById("tabs"),
+    blurb = document.getElementById("blurb");
+var active = 1;
+
+function setVariant(n){
+  active = n;
+  var v = VARIANTS[n - 1];
+  stage.setAttribute("data-v", String(n));
+  stage.innerHTML = pageHTML(v);
+  blurb.innerHTML = '<b>' + ("0" + n).slice(-2) + " · " + esc(v.name) + '</b> &nbsp;&mdash;&nbsp; ' + esc(v.note);
+  Array.prototype.forEach.call(tabs.children, function(t, i){
+    t.setAttribute("aria-pressed", String(i + 1 === n));
+  });
+}
+VARIANTS.forEach(function(v, i){
+  var b = document.createElement("button");
+  b.className = "tab";
+  b.textContent = ("0" + (i + 1)).slice(-2) + " " + v.name;
+  b.addEventListener("click", function(){ setVariant(i + 1); window.scrollTo({top:0,behavior:"smooth"}); });
+  tabs.appendChild(b);
+});
+document.getElementById("famlbl").textContent = FAMILY;
+setVariant(1);
+/* ---------- shared player ---------- */
+var scrim = document.getElementById("scrim"), screen = document.getElementById("screen");
+var current = 0, lastFocus = null;
+
+function openWindow(i){
+  var w = W[i];
+  current = i;
+  if(!scrim.classList.contains("on")){ lastFocus = document.activeElement; }
+
+  var cs = getComputedStyle(document.getElementById("stage"));
+  var proj = document.getElementById("proj");
+  [["--surf","--pSurf"],["--surf2","--pSurf2"],["--ink","--pInk"],["--ink2","--pInk2"],
+   ["--line","--pLine"],["--acc","--pAcc"],["--rad","--pRad"],["--fd","--pDisp"],["--fb","--pBody"]]
+   .forEach(function(p){ proj.style.setProperty(p[1], cs.getPropertyValue(p[0])); });
+
+  document.getElementById("pchap").textContent = STAGES[w.st].n + " · " + STAGES[w.st].w;
+  document.getElementById("pq").textContent = w.q;
+
+  var list = document.getElementById("pprompts");
+  list.innerHTML = "";
+  w.p.forEach(function(p){ var li = document.createElement("li"); li.textContent = p; list.appendChild(li); });
+
+  document.getElementById("pextras").innerHTML = extrasHTML(w);
+
+  var srcEl = document.getElementById("psrc");
+  if(w.v){
+    srcEl.innerHTML = "Placeholder clip: " + esc(w.src) +
+      ' &nbsp;·&nbsp; <a href="https://www.youtube.com/watch?v=' + w.v + '" target="_blank" rel="noopener">watch on YouTube &#8599;</a>' +
+      "<br>On the live page this is their own recording &mdash; swap the video ID.";
+    srcEl.style.display = "";
+  } else { srcEl.style.display = "none"; }
+
+  var foot = document.getElementById("pfoot");
+  foot.innerHTML = "";
+  (w.v ? ["Recorded " + w.on, "Running time " + w.len, "Asked by Anne"]
+       : ["Not yet recorded", "Question stays on the wall"]).forEach(function(t){
+    var s = document.createElement("span"); s.textContent = t; foot.appendChild(s);
+  });
+
+  screen.innerHTML = "";
+  if(w.v){
+    var f = document.createElement("iframe");
+    f.src = "https://www.youtube-nocookie.com/embed/" + w.v + "?rel=0&modestbranding=1";
+    f.title = w.q;
+    f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+    f.setAttribute("allowfullscreen","");
+    screen.appendChild(f);
+  } else {
+    var e = document.createElement("div");
+    e.className = "screen-empty";
+    var a = document.createElement("p"); a.className = "mo"; a.textContent = "Window still closed";
+    var b = document.createElement("p"); b.textContent = "No recording behind this one yet. The question stays on the wall and the window opens itself the day a video ID is added.";
+    e.appendChild(a); e.appendChild(b); screen.appendChild(e);
+  }
+
+  scrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("closeBtn").focus();
+}
+function closeWindow(){
+  scrim.classList.remove("on"); screen.innerHTML = "";
+  document.body.style.overflow = "";
+  if(lastFocus){ lastFocus.focus(); }
+}
+function step(n){ openWindow((current + n + W.length) % W.length); }
+document.getElementById("stage").addEventListener("click", function(e){
+  var t = e.target.closest("[data-i]");
+  if(t){ openWindow(Number(t.getAttribute("data-i"))); }
+});
+document.getElementById("closeBtn").addEventListener("click", closeWindow);
+document.getElementById("prevBtn").addEventListener("click", function(){ step(-1); });
+document.getElementById("nextBtn").addEventListener("click", function(){ step(1); });
+scrim.addEventListener("click", function(e){ if(e.target === scrim){ closeWindow(); } });
+document.addEventListener("keydown", function(e){
+  if(scrim.classList.contains("on")){
+    if(e.key === "Escape"){ closeWindow(); }
+    if(e.key === "ArrowRight"){ step(1); }
+    if(e.key === "ArrowLeft"){ step(-1); }
+    return;
+  }
+  if(e.key === "[" ){ setVariant(Math.max(1, active - 1)); }
+  if(e.key === "]" ){ setVariant(Math.min(VARIANTS.length, active + 1)); }
+});
+</script>
+
+</html>

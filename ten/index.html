@@ -1,0 +1,81 @@
+<title>Layouts for Luis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+.head{padding:clamp(2.2rem,5.5vw,3.6rem) 0 clamp(1.2rem,2.6vw,1.8rem)}
+.head h1{font-size:clamp(2.1rem,5.4vw,3.2rem);line-height:1.03}
+.head .stand{font-size:1.04rem;color:var(--ink2);margin-top:1rem;max-width:58ch}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem;margin-top:1.8rem;border-top:1px solid var(--line);padding-top:1.4rem}
+.rule h3{font-size:1.04rem;margin-bottom:.3rem}
+.rule p{font-size:.89rem;color:var(--ink2)}
+.fam{margin-top:2.4rem}
+.fam > .mo{padding-bottom:.55rem;border-bottom:1px solid var(--ink)}
+.row{display:grid;grid-template-columns:auto minmax(0,13.5rem) minmax(0,1fr) auto;gap:1.2rem;align-items:baseline;
+     padding:.95rem .4rem;border-bottom:1px solid var(--line);text-decoration:none;transition:.16s}
+.row:hover{background:var(--surf);padding-left:.8rem}
+@media (max-width:760px){.row{grid-template-columns:auto minmax(0,1fr)}.row .d{grid-column:2}.row .go{display:none}}
+.row .n{font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--ink3)}
+.row .t{font-family:"Newsreader",Georgia,serif;font-size:1.28rem;line-height:1.2}
+.row .d{color:var(--ink2);font-size:.92rem}
+.row .go{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
+.row:hover .go{color:var(--acc)}
+.note{background:var(--accSoft);border-left:3px solid var(--acc);padding:1rem 1.2rem;margin-top:2.4rem;max-width:66ch;font-size:.94rem;color:var(--ink2)}
+</style>
+<div class="in">
+  <header class="head">
+    <p class="mo">Luis James de Souza &middot; born 4 February 1943, Bangalore</p>
+    <h1>Layouts for his page</h1>
+    <p class="stand">Everything is live &mdash; press any question to play his answer. The ones you have ruled out are gone; what is left is the families you liked, each with a few options.</p>
+    <div class="rules">
+      <div class="rule"><h3>Questions, not thumbnails</h3><p>Most of these show the question itself. Press it and the card becomes the player &mdash; nothing loads from YouTube until somebody asks.</p></div>
+      <div class="rule"><h3>The record fills first</h3><p>Name, birthplace, parents, schools, first job. Typed in once, no camera, so the page is never empty.</p></div>
+      <div class="rule"><h3>The map</h3><p>Bangalore, La Martini&egrave;re in Lucknow, St George&rsquo;s in Mussoorie. Drawn as vectors, so it costs nothing to serve.</p></div>
+    </div>
+  </header>
+  <div id="fams"></div>
+  <p class="note">Removed as agreed: the front page, record card, journey, interview column, start-here, the people, the stages, and the two earlier tops. They are still in the repository if you want one back.</p>
+</div>
+<footer class="in">
+  <p>Five of the twelve answers currently play borrowed interview clips so the mechanism can be seen working. Each is replaced by pasting in his own video ID.</p>
+</footer>
+<script>
+var FAMS = [
+  ["Reel cards &mdash; the question written across the still", [
+    ["35","Large","Four across, the question over the picture and again underneath with its note."],
+    ["36","Medium","The same card, a size down, so more of the twelve are on screen at once."],
+    ["37","Small","Six across &mdash; the whole set visible without scrolling."],
+    ["38","Sidebar, medium cards","Him and the record down the left, the cards filling the right."],
+    ["39","Sidebar, small cards","The same, with the cards at their smallest."],
+    ["42","No writing over","Plain stills, with the question and note only underneath."],
+    ["43","Writing over only","The question sits on the picture and nowhere else. The most image-led."]]],
+  ["Circle portrait", [
+    ["23","Centred","Round photograph over his name, then the questions as a list with small stills."],
+    ["34","Centred, big head","The same, with the photograph and his name much larger."],
+    ["25","Question cards","Photograph, name, then all twelve as cards with no pictures at all."],
+    ["33","Question cards, big head","The same, with the photograph and his name at a much larger size."]]],
+  ["Keepsake &mdash; quiet, and the map up top", [
+    ["10","The record and the map","Title plate, then the record and the map side by side, then the twelve."],
+    ["28","Small thumbnails","The same page, with a stamp-sized still beside each question."],
+    ["29","Full thumbnails","The same page, with the twelve as proper 16:9 stills in a grid."],
+    ["30","First film large","The same page, with the opening film at a good size and the eleven beneath it."]]],
+  ["Wall and deck", [
+    ["07","The wall","A dense grid of question cards, him and the record in a narrow column."],
+    ["09","The deck","Three large question cards at a time, arrows to see the rest, his record underneath."]]],
+  ["Photograph first", [
+    ["13","With the first film","The frame whole across the top, name and record under it, then the eleven."],
+    ["14","No film at the top","His name written across the photograph, the record, then all twelve as a list."]]],
+  ["Library", [
+    ["15","Large head","A big photograph beside his name, the counts underneath, then the twelve as cards."],
+    ["16","The library","Photograph, name and details, then all twelve as question cards."],
+    ["18","Playlist","Cover, play-all, a progress bar, and a numbered list of twelve."],
+    ["31","Playlist, map in the panel","The map moves up beside the cover; the questions and the record fill the right."]]]
+];
+document.getElementById("fams").innerHTML = FAMS.map(function(f){
+  return '<div class="fam"><p class="mo">' + f[0] + '</p>' + f[1].map(function(x){
+    return '<a class="row" href="' + x[0] + '.html"><span class="n">' + x[0] + '</span>' +
+      '<span class="t">' + x[1] + '</span><span class="d">' + x[2] + '</span>' +
+      '<span class="go">Open &rarr;</span></a>'; }).join("") + '</div>';
+}).join("");
+</script>

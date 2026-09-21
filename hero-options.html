@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Life Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap">
+
+<style>
+:root{
+  --bg:#FAF6EF;--band:#F3EDE3;--surf:#FFFFFF;--ink:#211F1C;--ink2:#6A645C;--ink3:#9A9289;
+  --line:#E6DFD3;--acc:#2C5F5A;--accDeep:#1F4744;--accSoft:#E3EDEA;--gold:#B8873F;
+  --shadow:rgba(60,48,36,.16);--r:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#16150F;--band:#1D1C16;--surf:#211F19;--ink:#F2EDE3;--ink2:#A9A197;--ink3:#7E776D;
+    --line:#302D25;--acc:#8FC2B8;--accDeep:#7FB6AC;--accSoft:#1F2B28;--gold:#D8A85E;
+    --shadow:rgba(0,0,0,.55);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16150F;--band:#1D1C16;--surf:#211F19;--ink:#F2EDE3;--ink2:#A9A197;--ink3:#7E776D;
+  --line:#302D25;--acc:#8FC2B8;--accDeep:#7FB6AC;--accSoft:#1F2B28;--gold:#D8A85E;
+  --shadow:rgba(0,0,0,.55);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:18px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Fraunces","Iowan Old Style",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.018em;font-variation-settings:"opsz" 110}
+p{margin:0}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:4px}
+.in{max-width:1180px;margin:0 auto;padding:0 clamp(1.2rem,5vw,3rem)}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:var(--acc);margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;background:var(--acc);color:#FAF6EF;border:1px solid var(--acc);border-radius:999px;padding:.9rem 1.85rem;font-size:1rem;font-weight:700;text-decoration:none;transition:.18s}
+.btn:hover{background:var(--accDeep);border-color:var(--accDeep)}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--band);border-color:var(--ink3)}
+.btn.sm{padding:.74rem 1.6rem;font-size:1.02rem}
+.btn.pale{background:#FAF6EF;color:#1F4744;border-color:#FAF6EF}
+.btn.pale:hover{background:#fff;border-color:#fff}
+
+.switch{position:sticky;top:0;z-index:90;background:#101211;color:#E9E9E7;border-bottom:1px solid #232624}
+.switch-in{max-width:1500px;margin:0 auto;padding:.5rem 1rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.slab{font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#7C8189;font-weight:700}
+.stabs{display:flex;gap:.3rem;flex:1}
+.stab{background:none;border:1px solid #2E3230;color:#9AA0A8;border-radius:999px;padding:.28rem .9rem;font-size:.72rem;font-weight:600;cursor:pointer}
+.stab:hover{color:#fff;border-color:#5B615E}
+.stab[aria-pressed="true"]{background:#F2F2F0;color:#101211;border-color:#F2F2F0}
+.snote{max-width:1500px;margin:0 auto;padding:.35rem 1rem .6rem;font-size:.74rem;color:#8A918D;border-top:1px solid #1A1D1B}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .in{display:flex;align-items:center;gap:clamp(1.4rem,2.4vw,2.6rem);padding-top:1.35rem;padding-bottom:1.35rem}
+.wm{font-family:"Fraunces",Georgia,serif;font-size:clamp(1.5rem,2.1vw,1.9rem);letter-spacing:-.02em;text-decoration:none}
+.nav .sp{flex:1}
+.nav a.q{font-size:1.08rem;color:var(--ink2);text-decoration:none}
+.nav a.q:hover{color:var(--ink)}
+@media (max-width:720px){.nav a.q{display:none}}
+
+/* hero */
+.hero{padding:clamp(2.4rem,6vw,4.4rem) 0 clamp(2.2rem,5vw,3.6rem)}
+.top{max-width:960px;margin:0 auto;text-align:center;padding:0 clamp(1.2rem,5vw,3rem)}
+.hero h1{font-size:clamp(2.6rem,5.6vw,4.3rem);line-height:1.02;margin:1rem auto 0;max-width:18ch}
+.hero h1 em{font-style:italic;color:var(--acc)}
+.hero .sub{font-size:clamp(1.16rem,1.9vw,1.42rem);color:var(--ink2);max-width:54ch;margin:1.3rem auto 0;line-height:1.55}
+.hero .cta{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem;justify-content:center}
+.hero .fine{font-size:1rem;color:var(--ink3);margin-top:1.2rem}
+
+/* A wall of faces running off both edges of the screen and fading as it goes.
+   The prints are deliberately large; --g is the gap between them. */
+.gallery{--g:clamp(14px,1.6vw,26px);position:relative;width:100vw;margin-left:calc(50% - 50vw);
+         margin-top:clamp(2.2rem,4.5vw,3.4rem)}
+.viewport{overflow:hidden;padding:34px 0 26px;margin:-34px 0 -14px;
+  /* --fade is the width of the soft edge; smaller means a harder cut */
+  --fade:3.5%;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 var(--fade),#000 calc(100% - var(--fade)),transparent 100%)}
+.track{display:flex;gap:var(--g);transition:transform .55s cubic-bezier(.22,1,.36,1);will-change:transform}
+.track.second{margin-top:var(--g);display:none}
+body[data-rows="2"] .track.second{display:flex}
+.pc{flex:0 0 clamp(210px,23vw,330px);background:#fff;padding:11px;border-radius:4px;
+    box-shadow:0 20px 40px -22px var(--shadow);border:0;display:block;position:relative;
+    transition:transform .32s cubic-bezier(.22,1,.36,1),box-shadow .32s}
+.pc img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:2px}
+.pc .cap{display:block;text-align:center;font-family:"Fraunces",Georgia,serif;
+         font-size:1.05rem;color:var(--ink2);padding:.75rem 0 .35rem}
+.pc{text-decoration:none;color:inherit}
+.pc .go{position:absolute;left:11px;right:11px;bottom:3.1rem;text-align:center;font-size:.78rem;font-weight:600;
+        color:#F6F1E6;background:rgba(24,38,35,.88);border-radius:999px;padding:.34rem .5rem;
+        opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;pointer-events:none}
+.pc:hover .go,.pc:focus-visible .go{opacity:1;transform:translateY(0)}
+.pc:hover{transform:translateY(-20px) scale(1.07);box-shadow:0 48px 76px -28px var(--shadow);z-index:20}
+.arw{position:absolute;top:38%;width:52px;height:52px;border-radius:50%;
+     background:var(--surf);border:1px solid var(--line);color:var(--ink2);font-size:1.2rem;
+     display:grid;place-content:center;box-shadow:0 12px 26px -14px var(--shadow);transition:.18s;z-index:30}
+.arw:hover{border-color:var(--acc);color:var(--acc);transform:scale(1.08)}
+.arw[disabled]{opacity:.28;cursor:default;transform:none}
+#prevBtn{left:clamp(.6rem,2.5vw,2.4rem)}
+#nextBtn{right:clamp(.6rem,2.5vw,2.4rem)}
+@media (max-width:620px){.pc{flex:0 0 62vw}.arw{width:44px;height:44px}}
+
+/* proof strip */
+.proof{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--band)}
+.proof .in{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.4rem;padding-top:1.6rem;padding-bottom:1.6rem}
+.proof p{font-size:1.06rem;color:var(--ink2)}
+.proof b{display:block;font-family:"Fraunces",Georgia,serif;font-size:1.22rem;color:var(--ink);font-weight:500;margin-bottom:.1rem}
+
+/* the reel */
+.reelrow{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+@media (max-width:1000px){.reelrow{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.reelrow{grid-template-columns:1fr}}
+.vc{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s,border-color .18s}
+.vc:hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 20px 40px -30px var(--shadow)}
+.vthumb{position:relative;aspect-ratio:16/9;background:var(--band);overflow:hidden}
+.vthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(16,16,14,.62);display:grid;place-content:center;z-index:2;transition:background .2s}
+.vplay::after{content:"";width:0;height:0;border-left:15px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.vc:hover .vplay{background:var(--acc)}
+/* When a still cannot be fetched, the card carries the words instead of a gap */
+.poster{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:.3rem;
+        padding:1rem 1.1rem 1.1rem;background:#22312E;overflow:hidden}
+.poster-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 32%;
+            filter:grayscale(.25) brightness(.62) contrast(1.02)}
+.poster::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(18,26,24,.15) 0%,rgba(18,26,24,.55) 58%,rgba(14,22,20,.88) 100%)}
+.poster-q,.poster-w{position:relative;z-index:2}
+.poster-q{font-family:"Fraunces",Georgia,serif;font-size:1.1rem;line-height:1.22;color:#F6F1E6;
+          text-shadow:0 1px 12px rgba(0,0,0,.45)}
+.poster-w{font-size:.82rem;color:rgba(246,241,230,.72)}
+.vthumb .vplay{background:rgba(12,14,12,.5)}
+.vdur{position:absolute;right:8px;bottom:8px;z-index:2;font-size:.72rem;font-weight:600;background:rgba(16,16,14,.78);color:#fff;padding:.1rem .42rem;border-radius:4px}
+.vmeta{padding:.95rem 1.05rem 1.1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.vq{font-family:"Fraunces",Georgia,serif;font-size:1.18rem;line-height:1.25}
+.vwho{font-size:.94rem;color:var(--ink2);margin-top:auto}
+.vsrc{font-size:.76rem;color:var(--ink3)}
+.illus{text-align:center;margin-top:1.6rem;font-size:.85rem;color:var(--ink3)}
+
+/* alternating rows */
+.rows{padding:clamp(3rem,7vw,5.6rem) 0;max-width:1340px}
+.row{display:grid;grid-template-columns:minmax(0,1.32fr) minmax(0,1fr);gap:clamp(2rem,5vw,4.4rem);align-items:center;margin-bottom:clamp(3.4rem,6.5vw,5.6rem)}
+@media (max-width:860px){.row{grid-template-columns:1fr}}
+.row:last-child{margin-bottom:0}
+.row.flip .txt{order:-1}
+@media (max-width:760px){.row.flip .txt{order:0}}
+.row img{border-radius:var(--r);box-shadow:0 34px 60px -44px var(--shadow)}
+.row .txt{max-width:42ch}
+.row .n{font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--acc)}
+.row h2{font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1.1;margin:.7rem 0 .9rem}
+.row p{color:var(--ink2);font-size:1.14rem}
+.row .small{margin-top:.9rem;font-size:1.02rem;color:var(--ink3)}
+
+/* band */
+.wrap-band{background:var(--band);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.sec{padding:clamp(3rem,7vw,5.4rem) 0}
+.sec-hd{max-width:36ch;margin-bottom:clamp(1.8rem,4vw,2.8rem)}
+.sec-hd h2{font-size:clamp(1.9rem,4vw,2.9rem);line-height:1.08;margin:.7rem 0 .8rem}
+.sec-hd p{color:var(--ink2);font-size:1.16rem;max-width:52ch}
+.sec-hd.mid{margin-left:auto;margin-right:auto;text-align:center;max-width:44ch}
+.sec-hd.mid p{margin-left:auto;margin-right:auto}
+
+/* questions */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.qq{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:1.45rem 1.5rem;font-family:"Fraunces",Georgia,serif;font-size:1.34rem;line-height:1.26}
+.qnote{margin-top:1.4rem;color:var(--ink2);font-size:1rem}
+
+/* quotes */
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.1rem}
+.quote{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:1.5rem}
+.quote p{font-family:"Fraunces",Georgia,serif;font-size:1.24rem;line-height:1.42}
+.quote .who{margin-top:1rem;font-size:.9rem;color:var(--ink2)}
+.quote .tag{display:inline-block;margin-top:.9rem;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:99px;padding:.1rem .55rem}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.1rem;align-items:start}
+.plan{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:1.6rem}
+.plan.lead{border:2px solid var(--acc);box-shadow:0 26px 50px -40px var(--shadow)}
+.plan .tag{font-size:.72rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--acc)}
+.plan h3{font-size:1.4rem;margin:.5rem 0 .2rem}
+.plan .p{font-family:"Fraunces",Georgia,serif;font-size:2.6rem;line-height:1;margin:.5rem 0 1rem}
+.plan .p small{font-family:"Karla",sans-serif;font-size:.9rem;color:var(--ink3);font-weight:500}
+.plan ul{margin:0 0 1.4rem;padding:0;list-style:none;display:flex;flex-direction:column;gap:.5rem}
+.plan li{display:flex;gap:.6rem;font-size:1.05rem;color:var(--ink2)}
+.plan li::before{content:"\2713";color:var(--acc);font-weight:700;flex:none}
+.addons{margin-top:1.3rem;display:flex;flex-wrap:wrap;gap:.6rem}
+.addons span{background:var(--surf);border:1px solid var(--line);border-radius:99px;padding:.4rem 1rem;font-size:.92rem;color:var(--ink2)}
+.addons b{color:var(--ink)}
+.pledge{margin-top:1.8rem;background:var(--accSoft);border-radius:14px;padding:1.4rem 1.6rem;max-width:64ch}
+.pledge h3{font-size:1.3rem;margin-bottom:.4rem}
+.pledge p{color:var(--ink2);font-size:1rem}
+
+/* faq */
+.faq{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.6rem 3rem}
+.fq h3{font-size:1.28rem;margin-bottom:.35rem}
+.fq p{color:var(--ink2);font-size:1.08rem}
+
+/* start */
+.start{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:clamp(1.5rem,4vw,2.6rem);box-shadow:0 30px 60px -48px var(--shadow)}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;align-items:end}
+.field{display:flex;flex-direction:column;gap:.35rem}
+.field label{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+.field input{font-family:"Karla",sans-serif;font-size:1rem;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.8rem .95rem}
+.field input:focus{border-color:var(--acc);outline:none}
+.form .go{grid-column:1/-1}
+@media (min-width:760px){.form .go{grid-column:auto}}
+.done{display:none;flex-direction:column;gap:1rem}
+.done.on{display:flex}
+.done .url{font-family:"Karla",monospace;font-size:1.02rem;font-weight:600;color:var(--acc);background:var(--accSoft);border-radius:10px;padding:.85rem 1rem;word-break:break-all}
+.done ol{margin:0;padding-left:1.3rem;color:var(--ink2);display:flex;flex-direction:column;gap:.5rem;font-size:1rem}
+.fine2{margin-top:1rem;font-size:.88rem;color:var(--ink3)}
+
+/* the player */
+.vscrim{position:fixed;inset:0;background:rgba(12,12,10,.88);display:none;align-items:center;justify-content:center;padding:clamp(.7rem,3vw,2rem);z-index:90;backdrop-filter:blur(4px)}
+.vscrim.on{display:flex}
+.vbox{background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;width:min(900px,100%)}
+.vtop{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.8rem 1.1rem;border-bottom:1px solid var(--line)}
+.xb{background:none;border:1px solid var(--line);border-radius:99px;padding:.35rem .85rem;font-size:.78rem;font-weight:600;color:var(--ink2)}
+.xb:hover{border-color:var(--ink2);color:var(--ink)}
+.vscreen{aspect-ratio:16/9;background:#000}
+.vscreen iframe{width:100%;height:100%;border:0;display:block}
+.vfoot{padding:.85rem 1.1rem 1.1rem;font-size:.88rem;color:var(--ink2)}
+.vfoot a{color:var(--acc)}
+
+/* closing band */
+.close{background:var(--accDeep);color:#F6F1E6}
+.close .in{padding:clamp(3rem,7vw,5.4rem) 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.2rem}
+.close h2{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.06;max-width:20ch;color:#F6F1E6}
+.close p{max-width:46ch;color:rgba(246,241,230,.82);font-size:1.18rem}
+
+footer{padding:2.6rem 0 3.6rem;color:var(--ink3);font-size:.92rem;display:flex;flex-wrap:wrap;gap:1rem 2.4rem;justify-content:space-between}
+footer a{color:var(--ink2);text-decoration:none}
+footer a:hover{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="switch">
+  <div class="switch-in">
+    <span class="slab">Hero</span>
+    <div class="stabs">
+      <button class="stab" data-rows="1" aria-pressed="true">One line</button>
+      <button class="stab" data-rows="2" aria-pressed="false">Two lines</button>
+    </div>
+  </div>
+  <p class="snote" id="snote">One line &mdash; large prints running off both edges, fading out, arrows for the rest.</p>
+</div>
+
+<nav class="nav">
+  <div class="in">
+    <a class="wm" href="#top">Life&nbsp;Questions</a>
+    <span class="sp"></span>
+    <a class="q" href="#reel">The answers</a>
+    <a class="q" href="#how">How it works</a>
+    <a class="q" href="#price">Price</a>
+    <a class="btn sm" href="#start">Start free</a>
+  </div>
+</nav>
+
+<div class="in" id="top">
+  <header class="hero">
+    <div class="top">
+      <p class="eyebrow">Their life, in their own voice</p>
+      <h1>One day you'll want to hear them <em>tell it again</em>.</h1>
+      <p class="sub">A life biography, recorded rather than written. We send the questions; they answer on your phone, at their own kitchen table. Your mother, your father, a grandparent, an aunt &mdash; or yourself.</p>
+      <div class="cta">
+        <a class="btn" href="#start">Start their page &mdash; free</a>
+        <a class="btn ghost" href="#how">See how it works</a>
+      </div>
+      <p class="fine">Free to start &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
+    </div>
+    <div class="gallery" id="gallery">
+      <div class="viewport">
+        <div class="track" id="track1"></div>
+        <div class="track second" id="track2"></div>
+      </div>
+      <button class="arw" id="prevBtn" aria-label="Previous people">&#8592;</button>
+      <button class="arw" id="nextBtn" aria-label="More people">&#8594;</button>
+    </div>
+  </header>
+</div>
+
+<div class="proof">
+  <div class="in">
+    <p><b>Sixty questions</b>Written to get past &ldquo;it was fine&rdquo; &mdash; each with follow-ups for when they dry up.</p>
+    <p><b>Forty minutes</b>That's a first recording. Most families do three sittings and stop worrying about it.</p>
+    <p><b>Yours for good</b>Download every file whenever you like. No subscription, ever.</p>
+  </div>
+</div>
+
+
+<div class="wrap-band" id="reel">
+  <div class="in sec">
+    <div class="sec-hd mid">
+      <p class="eyebrow">What you end up with</p>
+      <h2>A reel of answers, in their own voices</h2>
+      <p>Every question becomes one short film. Press any of them &mdash; this is exactly how a finished page plays.</p>
+    </div>
+    <div class="reelrow" id="reelrow"></div>
+    <p class="illus">Example recordings, borrowed from public oral-history interviews while we build. Each is credited, and real families replace them as they join.</p>
+  </div>
+</div>
+
+<div class="in rows" id="how">
+  <div class="row">
+    <img src="question.jpg" alt="A question card: tell me about the house you grew up in">
+    <div class="txt">
+      <p class="n">Step one</p>
+      <h2>We send you the question</h2>
+      <p>One a week, or all sixty at once if you're in a hurry. Every question comes with the follow-ups that turn a thirty-second answer into a proper story &mdash; the ones you'd never think to ask in the moment.</p>
+      <p class="small">Family can add their own too, credited on the page: <em>asked by Tom, aged 9</em>.</p>
+    </div>
+  </div>
+
+  <div class="row flip">
+    <img src="phone.jpg" alt="A phone recording an answer">
+    <div class="txt">
+      <p class="n">Step two</p>
+      <h2>They answer it on a phone</h2>
+      <p>Prop it on a stack of books, sit beside it rather than behind it, ask them, then stay quiet. No app, no editing, no camera crew &mdash; and no need for them to be any good at technology, because they never touch it.</p>
+      <p class="small">Camera-shy? Record their voice over a photograph instead. It works nearly as well.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <img src="page.jpg" alt="A finished page, with a photograph and the recorded answers">
+    <div class="txt">
+      <p class="n">Step three</p>
+      <h2>It becomes their page</h2>
+      <p>Upload, and the page builds itself: their photograph, their dates, their answers, each one a window you press to hear them. One private link for the whole family &mdash; their sister, your kids, the cousins in Australia.</p>
+      <p class="small">Nothing is public. No search engine, no directory, no strangers.</p>
+    </div>
+  </div>
+</div>
+
+<div class="in sec">
+  <div class="sec-hd">
+    <p class="eyebrow">The questions</p>
+    <h2>Six of the sixty</h2>
+    <p>The easy ones come first. The ones that make people cry are near the end, once they've forgotten the camera is there.</p>
+  </div>
+  <div class="qgrid">
+    <p class="qq">Tell me about the house you grew up in.</p>
+    <p class="qq">Who were your parents, really &mdash; not as parents, but as people?</p>
+    <p class="qq">What did you want to be at fifteen, and what happened to that plan?</p>
+    <p class="qq">What was the hardest year of your life, and how did you get through it?</p>
+    <p class="qq">What have you changed your mind about?</p>
+    <p class="qq">What would you say to whoever watches this in fifty years?</p>
+  </div>
+  <p class="qnote">Every question can be swapped, skipped or reworded. It's their life, not a form.</p>
+</div>
+
+<div class="wrap-band">
+  <div class="in sec">
+    <div class="sec-hd mid">
+      <p class="eyebrow">What families say</p>
+      <h2>The same thing, every time</h2>
+      <p>That they wish they'd started ten years earlier.</p>
+    </div>
+    <div class="quotes">
+      <div class="quote">
+        <p>&ldquo;He talked for forty minutes about a shop that hasn't existed since 1961. I'd never heard any of it.&rdquo;</p>
+        <p class="who">A daughter, recording her father</p>
+        <span class="tag">Example &mdash; replace</span>
+      </div>
+      <div class="quote">
+        <p>&ldquo;My kids play the one where she does the voice. That's how they'll remember her &mdash; not a photograph.&rdquo;</p>
+        <p class="who">A son, recording his mother</p>
+        <span class="tag">Example &mdash; replace</span>
+      </div>
+      <div class="quote">
+        <p>&ldquo;We put the link on the order of service. Half the church had watched him by the evening.&rdquo;</p>
+        <p class="who">A family, six months on</p>
+        <span class="tag">Example &mdash; replace</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="in sec" id="price">
+  <div class="sec-hd">
+    <p class="eyebrow">What it costs</p>
+    <h2>Free to start. Paid once. Never a subscription.</h2>
+    <p>Nobody should have to decide, one day, whether to switch off someone they loved.</p>
+  </div>
+  <div class="plans">
+    <div class="plan">
+      <p class="tag">Start here</p>
+      <h3>Free</h3>
+      <p class="p">&pound;0</p>
+      <ul>
+        <li>Five questions</li>
+        <li>Three recordings</li>
+        <li>A private link for the family</li>
+        <li>Everything recorded stays watchable</li>
+      </ul>
+      <a class="btn ghost" href="#start">Start their page</a>
+    </div>
+    <div class="plan lead">
+      <p class="tag">Most families</p>
+      <h3>Family</h3>
+      <p class="p">&pound;79 <small>once</small></p>
+      <ul>
+        <li>All sixty questions</li>
+        <li>Unlimited recordings</li>
+        <li>Ten people can contribute</li>
+        <li>Searchable transcripts</li>
+        <li>Photographs, maps and papers</li>
+        <li>Kept indefinitely, download any time</li>
+      </ul>
+      <a class="btn" href="#start">Choose Family</a>
+    </div>
+    <div class="plan">
+      <p class="tag">Nobody pays alone</p>
+      <h3>Everyone chips in</h3>
+      <p class="p">&pound;10+ <small>from anyone</small></p>
+      <ul>
+        <li>Relatives put in what they like</li>
+        <li>Goes to the plan, or the book</li>
+        <li>&ldquo;Twelve people helped finish this&rdquo;</li>
+        <li>One person needn't carry it</li>
+      </ul>
+      <a class="btn ghost" href="#start">See how</a>
+    </div>
+  </div>
+  <div class="addons">
+    <span><b>The hardback book</b> &nbsp;&pound;59</span>
+    <span><b>Forever archive</b> &nbsp;&pound;49</span>
+    <span><b>QR cards for a funeral</b> &nbsp;&pound;29</span>
+  </div>
+  <div class="pledge">
+    <h3>Paying adds. It never unlocks.</h3>
+    <p>Every answer already recorded is free to watch, forever, for anyone with the link. We will never put someone behind a paywall and charge their sister to see them. Money buys <em>more</em> &mdash; more questions, the book, the promise it's still here in 2075.</p>
+  </div>
+</div>
+
+<div class="wrap-band" id="start">
+  <div class="in sec">
+    <div class="sec-hd">
+      <p class="eyebrow">Start</p>
+      <h2>Who are you recording?</h2>
+      <p>A minute to set up. Nothing is public until you send the link, and you can delete all of it whenever you like.</p>
+    </div>
+    <div class="start">
+      <form class="form" id="startForm">
+        <div class="field">
+          <label for="who">Their name</label>
+          <input id="who" type="text" placeholder="Luis James de Souza" required>
+        </div>
+        <div class="field">
+          <label for="dob">Their date of birth</label>
+          <input id="dob" type="text" placeholder="4 February 1943">
+        </div>
+        <div class="field">
+          <label for="email">Your email</label>
+          <input id="email" type="email" placeholder="you@example.com" required>
+        </div>
+        <div class="go"><button class="btn" type="submit">Create their page</button></div>
+      </form>
+      <div class="done" id="done">
+        <p class="eyebrow">Their page would live at</p>
+        <p class="url" id="url">lifequestions.com/</p>
+        <ol>
+          <li>The first questions arrive in your inbox, one a week, so you're never staring down sixty of them.</li>
+          <li>You film an answer on your phone and upload it. The page fills itself in.</li>
+          <li>When there's something worth seeing, you send the link. Not before.</li>
+        </ol>
+        <p class="fine2">Demo &mdash; not connected yet. Nothing has been sent or stored.</p>
+      </div>
+      <p class="fine2" id="formNote">Free. No card needed.</p>
+    </div>
+  </div>
+</div>
+
+<div class="in sec">
+  <div class="sec-hd">
+    <p class="eyebrow">Straight answers</p>
+    <h2>The things people worry about</h2>
+  </div>
+  <div class="faq">
+    <div class="fq">
+      <h3>Who can actually see it?</h3>
+      <p>Only the people you send the link to. Pages are never listed or searchable, there's no directory to browse, and the videos are unlisted so they appear on no channel and in no search results.</p>
+    </div>
+    <div class="fq">
+      <h3>They hate being filmed.</h3>
+      <p>Most people do, for about four minutes. Sit off to the side so they're talking to you and not a lens, and don't call it an interview. If they really won't have it, record their voice over a photograph.</p>
+    </div>
+    <div class="fq">
+      <h3>What if they die before we finish?</h3>
+      <p>The page becomes a memorial with one change of setting. Their dates close, their best answers move to the top, and the questions they never got to stay on the page instead of being quietly deleted.</p>
+    </div>
+    <div class="fq">
+      <h3>What if you go out of business?</h3>
+      <p>You get every file, and that's written down rather than implied. You can download the whole archive &mdash; video and transcripts &mdash; at any time, without asking us.</p>
+    </div>
+    <div class="fq">
+      <h3>Will you make an AI version of them?</h3>
+      <p>No. Not now, not later, not as an upgrade. Their recordings are not training data and we won't build a chatbot that pretends to be someone you loved.</p>
+    </div>
+    <div class="fq">
+      <h3>Is it too late if they've already gone?</h3>
+      <p>Not necessarily. Families use the same pages the other way round &mdash; everyone else recording their memories of one person. Same questions, different chairs.</p>
+    </div>
+  </div>
+</div>
+
+<div class="close">
+  <div class="in">
+    <h2>Ask them this weekend.</h2>
+    <p>One question, forty minutes, a phone propped on a stack of books. It's the part nobody ever regrets.</p>
+    <a class="btn pale" href="#start">Start their page &mdash; free</a>
+  </div>
+</div>
+
+<div class="in">
+  <footer>
+    <p>Life Questions &mdash; recorded lives, kept properly.<br>Made in Britain.</p>
+    <p><a href="#how">How it works</a> &nbsp;·&nbsp; <a href="#price">Price</a> &nbsp;·&nbsp; <a href="#start">Start free</a></p>
+  </footer>
+</div>
+
+<div class="vscrim" id="vscrim">
+  <div class="vbox">
+    <div class="vtop"><p class="eyebrow" id="vtitle">Answer</p><button class="xb" id="vclose">Close &nbsp;esc</button></div>
+    <div class="vscreen" id="vscreen"></div>
+    <p class="vfoot" id="vfoot"></p>
+  </div>
+</div>
+
+<script>
+/* YouTube stores the video and serves the still, so a page costs nothing to host.
+   The still is only swapped for the player when someone presses play. */
+var REEL = [
+  { id:"3Uz6uZC9hik", q:"Tell me about the house you grew up in.", who:"Recorded by her granddaughter", len:"8:14", src:"Grandma tells our story" },
+  { id:"WNfvuJr9164", q:"The night we met at the dance.",          who:"Danny and Annie, married 27 years", len:"5:38", src:"StoryCorps" },
+  { id:"nVu__vyps9Q", q:"The work I did, and what it cost.",       who:"A hundred years old, recorded in full", len:"12:41", src:"Veteran interview" },
+  { id:"BjQqDWj1LQw", q:"Who my mother and father really were.",   who:"Recorded at her kitchen table", len:"6:02", src:"An interview with Grandma" },
+  { id:"aJ_RVsf90xg", q:"What I have changed my mind about.",      who:"Filmed in 1986, still watched today", len:"4:29", src:"TV Eye, centenarians" },
+  { id:"x3fphutRYso", q:"My first job, and my first wage.",        who:"Recorded by his family", len:"7:22", src:"Veteran interview" },
+  { id:"abyMCAS4vEI", q:"The day each of my children was born.",   who:"A grandson asking the questions", len:"6:55", src:"StoryCorps" },
+  { id:"rZAv7uoE25Q", q:"What I would say to you in fifty years.", who:"110 years old", len:"3:47", src:"Words of wisdom" }
+];
+
+/* Inline onerror attributes are blocked by some sandboxes, so the fallback is
+   wired with addEventListener and backed by a timeout for silent blocks.
+   If the still cannot load, the embed goes in instead — it carries its own
+   poster frame, so a preview shows either way. */
+function swapToEmbed(img){
+  if(!img || img.dataset.swapped){ return; }
+  img.dataset.swapped = "1";
+  if(window.__noExternalMedia){ return placeholder(img); }
+  var id = img.getAttribute("data-yt");
+  var wrap = img.parentNode;
+  if(!wrap){ return; }
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + id + "?rel=0&modestbranding=1";
+  f.setAttribute("loading","lazy");
+  f.setAttribute("tabindex","-1");
+  f.setAttribute("allowfullscreen","");
+  f.title = "";
+  wrap.insertBefore(f, wrap.firstChild);
+  img.remove();
+}
+
+/* Some previews (this one included) block every external image and frame.
+   Rather than leaving a broken-image icon, show a tile that says so. */
+function placeholder(img){
+  var wrap = img.parentNode;
+  if(!wrap){ return; }
+  var d = document.createElement("span");
+  d.className = "poster";
+  var face = img.getAttribute("data-face");
+  d.innerHTML = (face ? '<img class="poster-img" src="' + face + '" alt="">' : "") +
+                '<span class="poster-q">' + (img.getAttribute("data-q") || "") + '</span>' +
+                '<span class="poster-w">' + (img.getAttribute("data-who") || "") + '</span>';
+  wrap.insertBefore(d, wrap.firstChild);
+  img.remove();
+}
+
+function watchPosters(root){
+  var imgs = root.querySelectorAll("img[data-yt]");
+  Array.prototype.forEach.call(imgs, function(img){
+    img.addEventListener("error", function(){ swapToEmbed(img); });
+    if(img.complete && img.naturalWidth === 0){ swapToEmbed(img); }
+  });
+  /* some blocks are silent: nothing loads and no error fires */
+  setTimeout(function(){
+    Array.prototype.forEach.call(imgs, function(img){
+      if(!img.dataset.swapped && img.naturalWidth === 0){ swapToEmbed(img); }
+    });
+  }, 2500);
+}
+
+/* The faces under the headline. Add to the list and the rows grow. */
+var PEOPLE = [
+  { img:"f1.jpg", cap:"Ray, 86",      href:"person.html?p=ray" },
+  { img:"f2.jpg", cap:"Tenzin, 79",   href:"person.html?p=tenzin" },
+  { img:"f3.jpg", cap:"Aleks, 84",    href:"person.html?p=aleks" },
+  { img:"f4.jpg", cap:"Margaret, 81", href:"person.html?p=margaret" },
+  { img:"f5.jpg", cap:"Iris, 78",     href:"person.html?p=iris" },
+  { img:"f6.jpg", cap:"Halina, 88",   href:"person.html?p=halina" },
+  { img:"f7.jpg", cap:"Shanti, 83",   href:"person.html?p=shanti" },
+  { img:"f8.jpg", cap:"Luis, 83",     href:"dad.html" }
+];
+
+var track1=document.getElementById("track1"), track2=document.getElementById("track2"),
+    prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn");
+var at=0;
+
+function fill(track, list){
+  list.forEach(function(p){
+    var a=document.createElement("a");
+    a.className="pc";
+    a.href=p.href;
+    a.setAttribute("aria-label","Open "+p.cap.split(",")[0]+"'s page");
+    a.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>'+
+                '<span class="go">Open their page &rarr;</span>';
+    track.appendChild(a);
+  });
+}
+fill(track1, PEOPLE);
+fill(track2, PEOPLE.slice(3).concat(PEOPLE.slice(0,3)));   /* offset, so rows never line up */
+
+function step(){
+  var f=track1.children[0];
+  return f ? f.getBoundingClientRect().width + parseFloat(getComputedStyle(track1).gap||0) : 0;
+}
+function slide(){
+  var st=step();
+  if(!st){ return; }
+  var max=Math.max(0, PEOPLE.length - Math.max(1, Math.floor(window.innerWidth/st)));
+  at=Math.max(0,Math.min(at,max));
+  /* held a third of a print to the left, so the row is always running off the page */
+  track1.style.transform="translateX("+(-at*st - st*0.35)+"px)";
+  track2.style.transform="translateX("+(-at*st - st*0.72)+"px)";
+  prevBtn.disabled = at===0;
+  nextBtn.disabled = at>=max;
+}
+prevBtn.addEventListener("click",function(){ at-=1; slide(); });
+nextBtn.addEventListener("click",function(){ at+=1; slide(); });
+window.addEventListener("resize",function(){ clearTimeout(window.__gt); window.__gt=setTimeout(slide,120); });
+slide();
+
+Array.prototype.forEach.call(document.querySelectorAll(".stab"), function(t){
+  t.addEventListener("click", function(){
+    var rows=t.getAttribute("data-rows");
+    document.body.setAttribute("data-rows",rows);
+    Array.prototype.forEach.call(document.querySelectorAll(".stab"),function(o){
+      o.setAttribute("aria-pressed",String(o===t));
+    });
+    document.getElementById("snote").innerHTML = rows==="1"
+      ? "One line &mdash; large prints running off both edges, fading out, arrows for the rest."
+      : "Two lines &mdash; the same prints in two rows, the second offset so the faces never line up.";
+    slide();
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+document.body.setAttribute("data-rows","1");
+
+var reelrow = document.getElementById("reelrow");
+REEL.forEach(function(v, i){
+  var b = document.createElement("button");
+  b.className = "vc";
+  b.setAttribute("data-v", i);
+  b.setAttribute("aria-label", "Play: " + v.q);
+  b.innerHTML =
+    '<span class="vthumb">' +
+      '<img data-yt="' + v.id + '" data-q="' + v.q.replace(/"/g, "&quot;") + '" data-who="' + v.who.replace(/"/g, "&quot;") + '" ' +
+           'data-face="f' + ((i % 8) + 1) + '.jpg" ' +
+           'src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy">' +
+      '<span class="vplay"></span><span class="vdur">' + v.len + '</span>' +
+    '</span>' +
+    '<span class="vmeta">' +
+      '<span class="vq">' + v.q + '</span>' +
+      '<span class="vwho">' + v.who + '</span>' +
+      '<span class="vsrc">Example clip &middot; ' + v.src + '</span>' +
+    '</span>';
+  reelrow.appendChild(b);
+});
+
+(function(){
+  /* one probe: if a YouTube still cannot load, none of them can */
+  var probe = new Image();
+  probe.onerror = function(){ window.__noExternalMedia = true; };
+  probe.src = "https://i.ytimg.com/vi/3Uz6uZC9hik/default.jpg";
+})();
+watchPosters(document);
+
+var vscrim = document.getElementById("vscrim"), vscreen = document.getElementById("vscreen");
+function playVideo(i){
+  var v = REEL[i];
+  document.getElementById("vtitle").textContent = v.who;
+  document.getElementById("vfoot").innerHTML = v.q + ' &nbsp;&middot;&nbsp; Example clip from ' + v.src +
+    ' &nbsp;&middot;&nbsp; <a href="https://www.youtube.com/watch?v=' + v.id + '" target="_blank" rel="noopener">open on YouTube &#8599;</a>';
+  vscreen.innerHTML = "";
+  var f = document.createElement("iframe");
+  f.src = "https://www.youtube-nocookie.com/embed/" + v.id + "?rel=0&modestbranding=1&autoplay=1";
+  f.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture";
+  f.setAttribute("allowfullscreen",""); f.title = v.q;
+  vscreen.appendChild(f);
+  vscrim.classList.add("on");
+  document.body.style.overflow = "hidden";
+  document.getElementById("vclose").focus();
+}
+function stopVideo(){
+  vscrim.classList.remove("on"); vscreen.innerHTML = "";
+  document.body.style.overflow = "";
+}
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-v]");
+  if(t){ playVideo(Number(t.getAttribute("data-v"))); }
+});
+document.getElementById("vclose").addEventListener("click", stopVideo);
+vscrim.addEventListener("click", function(e){ if(e.target === vscrim){ stopVideo(); } });
+document.addEventListener("keydown", function(e){
+  if(e.key === "Escape" && vscrim.classList.contains("on")){ stopVideo(); }
+});
+
+function slug(name){
+  var p = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+    .replace(/[^a-z0-9\s-]/g,"").trim().split(/\s+/).filter(Boolean);
+  if(p.length > 2){ p = [p[0]].concat(p.slice(-2)); }
+  return p.join("-") || "their-page";
+}
+function token(){
+  var a = "abcdefghijkmnpqrstuvwxyz23456789", s = "";
+  for(var i = 0; i < 4; i++){ s += a[Math.floor(Math.random()*a.length)]; }
+  return s;
+}
+document.getElementById("startForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var n = document.getElementById("who").value.trim() || "their name";
+  document.getElementById("url").textContent = "lifequestions.com/" + slug(n) + "-" + token();
+  document.getElementById("startForm").style.display = "none";
+  document.getElementById("formNote").style.display = "none";
+  document.getElementById("done").classList.add("on");
+});
+</script>
+
+</html>
