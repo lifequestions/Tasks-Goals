@@ -39,6 +39,17 @@ To overrule it, put the grade on the end:
 
 Then upload `luis-01.mp4` to YouTube as **unlisted** and paste the video ID into his page.
 
+## Checking a recording before you do anything
+
+    python3 look.py answer.mov
+
+Pulls twelve stills from across the film and reports the light (measured on their
+face, not the room), the focus, how steady it is, how far they are from the phone,
+whether they drift out of shot, and whether it was filmed upright. It writes
+`contact.jpg` — all twelve frames on one small sheet you can send to anybody — and
+prints the grade to use. Most of what it says is worth passing back to the family:
+"a lamp to one side", "prop the phone on something", "sit a bit closer".
+
 ## What it actually does
 
 - Holds the card for four seconds, then cross-fades into the film over 0.8s
