@@ -61,8 +61,10 @@ function thumbCard(x, i){
                   '" target="_blank" rel="noopener">Watch on YouTube</a>';
   var title = '<span class="t">' + ("0" + (i + 1)).slice(-2) + '. ' + esc(x.q) + '</span>' +
               '<span class="m">' + meta + '</span>';
-  return '<div class="tcard ' + (x.v ? "on" : "off") + '">' + film(x, {none:"Not recorded"}) +
-         title + '</div>';
+  /* Question first. It is what somebody is choosing between; the picture is
+     just how you press it. */
+  return '<div class="tcard ' + (x.v ? "on" : "off") + '">' + title +
+         film(x, {none:"Not recorded"}) + '</div>';
 }
 function sideBlock(){
   return '<div class="side">' +
