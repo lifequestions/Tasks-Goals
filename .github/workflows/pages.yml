@@ -43,6 +43,15 @@ jobs:
         with:
           enablement: true
 
+      # Stamp each stylesheet and script with the commit it came from. Without
+      # this a browser keeps yesterday's CSS and the change looks like it never
+      # deployed — which is exactly what it looked like.
+      - name: Version the asset links
+        run: |
+          find site -name '*.html' -print0 |
+            xargs -0 sed -i "s/?v=dev/?v=${GITHUB_SHA:0:8}/g"
+          grep -o '?v=[0-9a-f]\{8\}' site/luis.html | head -1
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
