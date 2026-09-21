@@ -324,3 +324,19 @@
                         width:2px;background:var(--acc)}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ---- the photographs -------------------------------------------------
+   A print keeps the white margin it has in life, and the caption under it is
+   in the words of whoever sent it. */
+.pgal{border-top:1px solid var(--line);margin-top:clamp(1.8rem,3.4vw,2.6rem);
+      padding-top:clamp(1.4rem,3vw,2rem)}
+.pgal[hidden]{display:none}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.8rem 1.4rem;
+       padding-top:1.4rem}
+.pgrid figure{margin:0;background:var(--surf);border:1px solid var(--line);
+              padding:clamp(.7rem,1.2vw,1rem)}
+.pgrid .print{display:block;width:100%;height:auto}
+.pgrid figcaption{font-size:.92rem;color:var(--ink2);margin-top:.75rem;line-height:1.5}
+.pgrid figcaption b{display:block;font-family:"IBM Plex Mono",monospace;font-size:.56rem;
+                    letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
+                    font-weight:400;margin-bottom:.3rem}

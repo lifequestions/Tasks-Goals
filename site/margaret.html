@@ -45,6 +45,7 @@
       <div class="tgrid" id="films"></div>
     </div>
   </div>
+  <section class="pgal" id="pgal" hidden></section>
   <div class="sharefoot">
     <h2>Send this to the rest of the family</h2>
     <p>Anyone with the link can watch. Nobody without it can find the page &mdash; it is unlisted, and not in any search engine.</p>
@@ -78,6 +79,9 @@ document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).joi
 document.getElementById("qnav").innerHTML = qIndex();
 layoutGrid();
 spyIndex();
+var pg = photoSection();
+if(pg){ document.getElementById("pgal").innerHTML = pg;
+        document.getElementById("pgal").hidden = false; }
 document.getElementById("shareTop").innerHTML = shareRow();
 document.getElementById("shareBottom").innerHTML = shareRow("big");
 wireShare();
