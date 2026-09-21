@@ -41,6 +41,14 @@
   </div>
   <div class="kq">
     <div class="films-hd"><h2>Their Video Life Biography</h2><span class="c" id="count"></span></div>
+    <div class="feat" id="feat" hidden>
+      <div class="frame" id="featFilm"></div>
+      <div>
+        <p class="no" id="featNo"></p>
+        <h2 id="featQ"></h2>
+        <p class="m" id="featM"></p>
+      </div>
+    </div>
     <div class="tgrid" id="films"></div>
   </div>
   <div class="sharefoot">
@@ -73,7 +81,22 @@ document.getElementById("line").textContent = PERSON.line;
 document.getElementById("count").textContent = PERSON.recorded + " of 12 recorded";
 document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
-document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).join("");
+/* The answer they have actually given goes above the ones still to come. */
+var rest = PERSON.questions;
+if(PERSON.main && PERSON.main.v){
+  var mi = PERSON.questions.indexOf(PERSON.main);
+  document.getElementById("feat").hidden = false;
+  document.getElementById("featFilm").innerHTML = film(PERSON.main);
+  document.getElementById("featNo").textContent = "Question " + (mi + 1);
+  document.getElementById("featQ").textContent = PERSON.main.q;
+  document.getElementById("featM").innerHTML = "<b>Recorded</b>" +
+    (PERSON.main.recorded ? " &middot; " + PERSON.main.recorded : "") +
+    (PERSON.main.len ? " &middot; " + PERSON.main.len : "");
+  rest = PERSON.questions.filter(function(x){ return x !== PERSON.main; });
+}
+document.getElementById("films").innerHTML = rest.map(function(x){
+  return thumbCard(x, PERSON.questions.indexOf(x));
+}).join("");
 document.getElementById("shareTop").innerHTML = shareRow();
 document.getElementById("shareBottom").innerHTML = shareRow("big");
 wireShare();

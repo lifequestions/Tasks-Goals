@@ -50,6 +50,28 @@ whether they drift out of shot, and whether it was filmed upright. It writes
 prints the grade to use. Most of what it says is worth passing back to the family:
 "a lamp to one side", "prop the phone on something", "sit a bit closer".
 
+## The transcript, written for you
+
+    python3 transcribe.py answer.mov
+
+Or double-click **TRANSCRIBE.command** and it finds the newest film in the folder
+by itself. It writes three files next to it:
+
+| file | what it is for |
+|---|---|
+| `…-transcript.txt` | the words, in paragraphs, with a timestamp on each |
+| `….srt` | subtitles — upload this to YouTube and the film is captioned |
+| `…-chapters.txt` | rough chapter marks to paste into the YouTube description |
+
+It runs on your own machine. The recording is not uploaded anywhere, which matters
+when the subject is somebody's family. The first run downloads a 150MB speech model;
+after that it works with the wifi off. Fifteen minutes of talking takes two or three
+minutes to transcribe.
+
+If you would rather not install anything: upload the film to YouTube, wait an hour,
+then **Subtitles → the three dots → Download → .srt**. YouTube transcribes every
+upload for free. Same result, slower, and Google keeps a copy.
+
 ## What it actually does
 
 - Holds the card for four seconds, then cross-fades into the film over 0.8s

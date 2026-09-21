@@ -11,8 +11,13 @@ function film(item, opts){
   if(!item || !item.v){
     return '<span class="film empty"><span class="none">' + (opts.none || "Not recorded yet") + '</span></span>';
   }
-  return '<button class="film" data-yt="' + item.v + '" aria-label="Play: ' + esc(item.q) + '">' +
-         '<img src="https://i.ytimg.com/vi/' + item.v + '/hqdefault.jpg" alt="" loading="lazy"' +
+  /* Films shot on a phone held upright. YouTube's own still pillarboxes those into
+     a 16:9 frame with black down both sides. An upright box cropped to 9:16 lands
+     exactly on the footage inside those bars, so the still stays a real frame. */
+  var up = item.portrait ? " up" : "";
+  var src = "https://i.ytimg.com/vi/" + item.v + "/hqdefault.jpg";
+  return '<button class="film' + up + '" data-yt="' + item.v + '" aria-label="Play: ' + esc(item.q) + '">' +
+         '<img src="' + src + '" alt="" loading="lazy"' +
          (item.still ? ' data-fb="' + item.still + '"' : "") + '>' +
          '<span class="sh"></span><span class="play"></span>' +
          (item.len ? '<span class="dur">' + item.len + '</span>' : "") +

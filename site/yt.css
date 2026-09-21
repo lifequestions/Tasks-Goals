@@ -232,3 +232,26 @@
 .sharefoot{border-top:1px solid var(--line);margin-top:2.4rem;padding-top:1.8rem;text-align:center}
 .sharefoot h2{font-size:clamp(1.2rem,2.4vw,1.6rem)}
 .sharefoot p{color:var(--ink2);font-size:.95rem;margin-top:.5rem;max-width:52ch;margin-left:auto;margin-right:auto}
+
+/* ---- upright films ----------------------------------------------------
+   Most people will film on a phone held the way they hold it to read, so the
+   answer arrives taller than it is wide. Give it a frame that fits rather
+   than a wide box with black down both sides. */
+.film.up{aspect-ratio:9/16}
+.film.up:has(iframe){aspect-ratio:9/16;background:#000}
+.tcard.up .film,.trow .film.up{aspect-ratio:9/16}
+
+/* ---- the answer that exists ------------------------------------------
+   One recorded film deserves more than a thumbnail in a grid of empty ones. */
+.feat{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:clamp(1.4rem,3.4vw,2.6rem);
+      align-items:center;border-top:1px solid var(--line);padding:clamp(1.5rem,3.4vw,2.4rem) 0}
+@media (max-width:760px){.feat{grid-template-columns:1fr;gap:1.2rem}}
+.feat .frame{width:100%;max-width:260px}
+@media (max-width:760px){.feat .frame{max-width:200px;margin:0 auto}}
+.feat .no{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;
+          text-transform:uppercase;color:var(--ink3)}
+.feat h2{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.35rem,2.6vw,1.9rem);
+         line-height:1.22;margin-top:.55rem;font-weight:400}
+.feat .m{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;
+         text-transform:uppercase;color:var(--ink3);margin-top:.9rem}
+.feat .m b{color:var(--acc);font-weight:500}
