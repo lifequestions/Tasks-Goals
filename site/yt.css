@@ -163,10 +163,10 @@
 .tcard{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);
        padding:clamp(.85rem,1.4vw,1.15rem);transition:.16s}
 .tcard.on:hover{border-color:var(--acc);box-shadow:0 18px 34px -30px var(--shadow)}
-/* The question carries the card, so give it weight as well as size: a
-   Newsreader semibold against the mono meta line and the body's Karla. */
+/* The question carries the card, so it is set larger than anything near it —
+   but at the book weight. Bold made a page of twelve of them shout. */
 .tcard .t{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.26rem,1.65vw,1.5rem);
-          font-weight:600;line-height:1.26;letter-spacing:-.005em;display:block;color:var(--ink)}
+          font-weight:400;line-height:1.26;letter-spacing:-.005em;display:block;color:var(--ink)}
 .tcard .t .n{font-weight:400;color:var(--ink3)}
 /* The films sit at the foot of their cards, so they line up across a row
    however long the questions above them run. */
