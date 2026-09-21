@@ -3,16 +3,12 @@
    pictures are empty paper at the right size and tone. The captions are his
    father's own words. */
 var PHOTOS = [
-  {src:"p-land-1.jpg", q:2, when:"c. 1950",
+  {src:"house-1.jpg", q:2, when:"The house he grew up in",
    cap:"That was the house I grew up in which we visited in 2001. It had been sold by then and the new " +
        "owner did some drastic modifications and it looked very different."},
-  {src:"p-land-2.jpg", q:2, when:"A few years later",
+  {src:"house-2.jpg", q:2, when:"A few years later",
    cap:"Another photo of the house taken a few years later. The Marli or Gardner is on the lawn. The " +
-       "veranda can also be seen and I tell you about that in the video."},
-  {src:"p-tall-1.jpg", q:null, when:"Undated", cap:"—"},
-  {src:"p-tall-2.jpg", q:null, when:"Undated", cap:"—"},
-  {src:"p-tall-3.jpg", q:null, when:"Undated", cap:"—"},
-  {src:"p-tall-4.jpg", q:null, when:"Undated", cap:"—"}
+       "veranda can also be seen and I tell you about that in the video."}
 ];
 
 function forQ(n){ return PHOTOS.filter(function(p){ return p.q === n; }); }
@@ -46,8 +42,10 @@ function modePair(){
   var card = document.getElementById("q2"); if(!card) return;
   card.insertAdjacentHTML("beforeend",
     '<div class="ppair">' +
-      '<figure><img class="print" src="' + ps[0].src + '" alt=""><figcaption><b>Then</b>The house he grew up in.</figcaption></figure>' +
-      '<figure><img class="print" src="' + ps[1].src + '" alt=""><figcaption><b>2001</b>Sold, and changed by the new owner.</figcaption></figure>' +
+      '<figure><img class="print" src="' + ps[0].src + '" alt=""><figcaption><b>' + ps[0].when +
+        '</b>Kanpur, before it was sold.</figcaption></figure>' +
+      '<figure><img class="print" src="' + ps[1].src + '" alt=""><figcaption><b>' + ps[1].when +
+        '</b>The Marli or Gardner on the lawn.</figcaption></figure>' +
     '</div>');
 }
 
