@@ -2,7 +2,7 @@
    Life Questions' own type and colour rather than anybody else's chrome. */
 .lbar{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px)}
 .lbar .in{display:flex;align-items:baseline;gap:.9rem;padding-top:1.35rem;padding-bottom:1.35rem}
-.lbar .wm{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.5rem,2.4vw,2.05rem);letter-spacing:-.015em;text-decoration:none;color:var(--ink)}
+.lbar .wm{font-family:var(--sans);font-size:clamp(1.5rem,2.4vw,2.05rem);letter-spacing:-.015em;text-decoration:none;color:var(--ink)}
 .lbar .wm:hover{color:var(--ink)}
 .lbar .who{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
 .in{max-width:1180px}
@@ -27,7 +27,7 @@
     min-height:clamp(152px,13vw,188px);background:var(--surf);border:1px solid var(--line);padding:clamp(.9rem,1.7vw,1.15rem);
     text-align:left;overflow:hidden;transition:.16s;width:100%}
 .qc .num{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;color:var(--ink3)}
-.qc .qq{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.05rem,1.35vw,1.24rem);line-height:1.28}
+.qc .qq{font-family:var(--sans);font-size:clamp(1.05rem,1.35vw,1.24rem);line-height:1.28}
 .qc .st{display:flex;align-items:center;gap:.5rem;font-family:"IBM Plex Mono",monospace;font-size:.62rem;
         letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
 .qc .tri{width:0;height:0;border-left:9px solid var(--acc);border-top:6px solid transparent;border-bottom:6px solid transparent}
@@ -45,7 +45,7 @@
       padding:.72rem .55rem;border-bottom:1px solid var(--line);text-align:left;width:100%;position:relative;transition:.14s}
 .qrow:last-child{border-bottom:0}
 .qrow .idx{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3);width:1.5rem;text-align:center}
-.qrow .t{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.18rem,1.55vw,1.42rem);line-height:1.26}
+.qrow .t{font-family:var(--sans);font-size:clamp(1.18rem,1.55vw,1.42rem);line-height:1.26}
 .qrow .dur{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap}
 .qrow.on{cursor:pointer}
 .qrow.on .dur{color:var(--acc)}
@@ -68,7 +68,7 @@
 .wrow{display:flex;align-items:center;gap:.85rem;padding:.9rem 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .wrow .pt{width:44px;height:44px;overflow:hidden;border:1px solid var(--line);flex:0 0 auto}
 .wrow .pt img{width:100%;height:100%;object-fit:cover;object-position:center}
-.wrow .nm{font-family:"Newsreader",Georgia,serif;font-size:1.05rem}
+.wrow .nm{font-family:var(--sans);font-size:1.05rem}
 .wrow .sub{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
 .wrow .right{margin-left:auto;display:flex;gap:.5rem}
 .sidehd{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.6rem}
@@ -94,15 +94,15 @@
 .about h2{font-size:1.2rem;margin-bottom:.9rem}
 .about .rec{display:grid;grid-template-columns:minmax(0,9.5rem) minmax(0,1fr);gap:.1rem .9rem;font-size:.95rem}
 .about .rec .k{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:.45rem 0;border-top:1px solid var(--line)}
-.about .rec .v{font-family:"Newsreader",Georgia,serif;font-size:1.1rem;padding:.45rem 0;border-top:1px solid var(--line)}
-.about .rec .add{font-family:"Karla",sans-serif;font-size:.86rem;color:var(--ink3);border-bottom:1px dashed var(--line);width:max-content;cursor:pointer}
+.about .rec .v{font-family:var(--sans);font-size:1.1rem;padding:.45rem 0;border-top:1px solid var(--line)}
+.about .rec .add{font-family:var(--sans);font-size:.86rem;color:var(--ink3);border-bottom:1px dashed var(--line);width:max-content;cursor:pointer}
 .ymap .frame{border:1px solid var(--line);overflow:hidden;background:var(--surf);line-height:0}
 .ymap .places{display:flex;flex-direction:column;gap:.55rem;margin-top:1rem;font-size:.95rem}
 .ymap .places .r{display:flex;gap:.7rem;align-items:baseline}
 .ymap .places .n{width:1.35rem;height:1.35rem;border-radius:50%;background:var(--acc);color:var(--bg);font-family:"IBM Plex Mono",monospace;font-size:.64rem;display:grid;place-content:center;flex:0 0 auto}
 .ymap .places .r:not(:first-child) .n{background:transparent;color:var(--ink2);border:1px solid var(--line)}
 .ymap .places .k{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);display:block}
-.ymap .places .v{font-family:"Newsreader",Georgia,serif;font-size:1.06rem}
+.ymap .places .v{font-family:var(--sans);font-size:1.06rem}
 
 /* these buttons borrow .film only for its click behaviour — undo its thumbnail styling */
 .qrow{aspect-ratio:auto;background:transparent;border:0;border-bottom:1px solid var(--line);overflow:visible}
@@ -125,8 +125,8 @@
 .side .sechd{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);padding-bottom:.5rem;border-bottom:1px solid var(--ink);margin-bottom:.2rem}
 .side .rec{display:grid;grid-template-columns:minmax(0,7.6rem) minmax(0,1fr);gap:.1rem .8rem;font-size:.9rem}
 .side .rec .k{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:.4rem 0;border-bottom:1px solid var(--line)}
-.side .rec .v{font-family:"Newsreader",Georgia,serif;font-size:1rem;line-height:1.25;padding:.4rem 0;border-bottom:1px solid var(--line)}
-.side .rec .add{font-family:"Karla",sans-serif;font-size:.8rem;color:var(--ink3);border-bottom:1px dashed var(--line)}
+.side .rec .v{font-family:var(--sans);font-size:1rem;line-height:1.25;padding:.4rem 0;border-bottom:1px solid var(--line)}
+.side .rec .add{font-family:var(--sans);font-size:.8rem;color:var(--ink3);border-bottom:1px dashed var(--line)}
 .side .ymap .places{font-size:.9rem;gap:.45rem;margin-top:.8rem}
 .side .ymap .places .v{font-size:.98rem}
 .films-hd{display:flex;align-items:baseline;gap:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--line)}
@@ -141,7 +141,7 @@
 .trow .film .play{width:28px;height:28px}
 .trow .film .play::after{border-left-width:9px;border-top-width:6px;border-bottom-width:6px}
 .trow .film .dur,.trow .film .sh{display:none}
-.trow .t{display:block;font-family:"Newsreader",Georgia,serif;font-size:clamp(1.18rem,1.55vw,1.42rem);line-height:1.26}
+.trow .t{display:block;font-family:var(--sans);font-size:clamp(1.18rem,1.55vw,1.42rem);line-height:1.26}
 .trow .m{display:block;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-top:.25rem}
 .trow .dur{font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--ink3);white-space:nowrap}
 .trow.on{cursor:pointer}
@@ -151,7 +151,10 @@
 .trow .film.empty{background:repeating-linear-gradient(135deg,var(--surf2),var(--surf2) 8px,var(--bg) 8px,var(--bg) 16px)}
 .trow .film .none{font-size:.5rem;padding:.2rem .4rem}
 /* big-thumbnail grid */
-.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.6rem 1.1rem;padding-top:1.3rem}
+/* Two across, not three. These are films of somebody's face, and at a third
+   of the width they were too small to be worth pressing. */
+.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem 1.3rem;padding-top:1.3rem}
+@media (max-width:700px){.tgrid{grid-template-columns:1fr}}
 /* Every card is the shape the film plays in: upright, because that is how
    these are filmed. The empty ones keep the same box so the grid is even
    before anybody has answered anything. */
@@ -163,10 +166,12 @@
 .tcard{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);
        padding:clamp(.85rem,1.4vw,1.15rem);transition:.16s}
 .tcard.on:hover{border-color:var(--acc);box-shadow:0 18px 34px -30px var(--shadow)}
-/* The question carries the card, so it is set larger than anything near it —
-   but at the book weight. Bold made a page of twelve of them shout. */
-.tcard .t{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.26rem,1.65vw,1.5rem);
-          font-weight:400;line-height:1.26;letter-spacing:-.005em;display:block;color:var(--ink)}
+/* The questions are the reading on this page, and the serif was being asked
+   to do a job it is bad at: twelve blocks of it, small, at a glance. Karla —
+   the same face as the body text — instead. The display serif stays for the
+   name at the top, where it is one line and looks like a title. */
+.tcard .t{font-family:var(--sans);font-size:clamp(1.02rem,1.2vw,1.14rem);
+          font-weight:500;line-height:1.45;letter-spacing:-.006em;display:block;color:var(--ink)}
 .tcard .t .n{font-weight:400;color:var(--ink3)}
 /* The films sit at the foot of their cards, so they line up across a row
    however long the questions above them run. */
@@ -198,7 +203,7 @@
 .kplate h1{font-size:clamp(2rem,4.6vw,2.9rem);line-height:1.06}
 .kplate .rule{width:54px;height:1px;background:var(--line);margin:1.1rem auto}
 .kplate .dates{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;color:var(--ink2)}
-.kplate .opening{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.1rem,2.2vw,1.32rem);line-height:1.55;
+.kplate .opening{font-family:var(--sans);font-size:clamp(1.1rem,2.2vw,1.32rem);line-height:1.55;
                  color:var(--ink2);margin:1.4rem auto 0;max-width:46ch}
 .kband{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.4rem,3vw,2.6rem);
        border-top:1px solid var(--line);padding-top:clamp(1.4rem,3vw,2.2rem);align-items:start}
@@ -207,8 +212,8 @@
               color:var(--ink3);margin-bottom:.9rem}
 .kband .rec{display:grid;grid-template-columns:minmax(0,8.4rem) minmax(0,1fr);gap:.1rem .9rem}
 #rec-wrap .rec .k,.kband .rec .k{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);padding:.42rem 0;border-bottom:1px solid var(--line)}
-#rec-wrap .rec .v,.kband .rec .v{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;line-height:1.25;padding:.42rem 0;border-bottom:1px solid var(--line)}
-#rec-wrap .rec .add,.kband .rec .add{font-family:"Karla",sans-serif;font-size:.82rem;color:var(--ink3);border-bottom:1px dashed var(--line)}
+#rec-wrap .rec .v,.kband .rec .v{font-family:var(--sans);font-size:1.05rem;line-height:1.25;padding:.42rem 0;border-bottom:1px solid var(--line)}
+#rec-wrap .rec .add,.kband .rec .add{font-family:var(--sans);font-size:.82rem;color:var(--ink3);border-bottom:1px dashed var(--line)}
 .khead{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:clamp(1.4rem,3.4vw,3rem);
        align-items:center;padding:clamp(1.6rem,3.6vw,2.8rem) 0}
 @media (max-width:860px){.khead{grid-template-columns:1fr}}
@@ -285,7 +290,7 @@
           padding:.5rem 0;text-decoration:none;color:var(--ink2);transition:.14s}
 .qindex a:hover{color:var(--acc)}
 .qindex .n{font-family:"IBM Plex Mono",monospace;font-size:.6rem;color:var(--ink3)}
-.qindex .q{font-family:"Newsreader",Georgia,serif;font-size:.92rem;line-height:1.24;
+.qindex .q{font-family:var(--sans);font-size:.86rem;line-height:1.35;
            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .qindex li.done a{color:var(--ink)}
 .qindex li.done .n{color:var(--acc)}

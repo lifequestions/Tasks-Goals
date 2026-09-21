@@ -1,4 +1,5 @@
-:root{--bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+:root{--sans:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
       --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--shadow:rgba(30,26,22,.16)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
@@ -6,8 +7,8 @@
 :root[data-theme="dark"]{--bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;
   --ink3:#7C766D;--line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--shadow:rgba(0,0,0,.55)}
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--sans);font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.028em}
 p{margin:0}img{max-width:100%;display:block}button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0;text-align:left}
 a{color:inherit}:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 .in{max-width:1120px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.6rem)}
@@ -15,7 +16,7 @@ a{color:inherit}:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 /* top bar */
 .bar{border-bottom:1px solid var(--line);position:sticky;top:0;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);z-index:40}
 .bar .in{display:flex;align-items:center;gap:.9rem;padding-top:.75rem;padding-bottom:.75rem}
-.bar .wm{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;text-decoration:none;color:var(--ink2)}
+.bar .wm{font-family:var(--sans);font-size:1.05rem;text-decoration:none;color:var(--ink2)}
 .bar .wm:hover{color:var(--ink)}
 .bar .sp{margin-left:auto}
 .bar .who{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
@@ -35,8 +36,8 @@ a{color:inherit}:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 .fact{display:grid;grid-template-columns:minmax(0,10.5rem) minmax(0,1fr);gap:1rem;padding:.72rem 0;border-bottom:1px solid var(--line);align-items:baseline}
 .fact:last-child{border-bottom:0}
 .fact .k{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink3)}
-.fact .v{font-family:"Newsreader",Georgia,serif;font-size:1.22rem;line-height:1.3}
-.fact .v.add{font-family:"Karla",sans-serif;font-size:.86rem;color:var(--ink3);border-bottom:1px dashed var(--line);cursor:pointer}
+.fact .v{font-family:var(--sans);font-size:1.22rem;line-height:1.3}
+.fact .v.add{font-family:var(--sans);font-size:.86rem;color:var(--ink3);border-bottom:1px dashed var(--line);cursor:pointer}
 .fact .v.add:hover{color:var(--acc);border-bottom-color:var(--acc)}
 .btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--acc);color:var(--bg);border:1px solid var(--acc);border-radius:2px;padding:.62rem 1.15rem;font-size:.92rem;font-weight:600;text-decoration:none;width:max-content}
 .btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
@@ -55,7 +56,7 @@ section{padding:clamp(2rem,4.5vw,3.2rem) 0;border-top:1px solid var(--line)}
 .pl .n{width:1.55rem;height:1.55rem;border-radius:50%;background:var(--acc);color:var(--bg);display:grid;place-content:center;font-family:"IBM Plex Mono",monospace;font-size:.72rem;margin-top:.2rem}
 .pl:not(:first-child) .n{background:transparent;color:var(--ink2);border:1px solid var(--line)}
 .pl .k{display:block;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
-.pl .v{display:block;font-family:"Newsreader",Georgia,serif;font-size:1.28rem;line-height:1.22}
+.pl .v{display:block;font-family:var(--sans);font-size:1.28rem;line-height:1.22}
 .pl .c{display:block;font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--ink3)}
 .geo .m{font-size:.92rem;color:var(--ink2);margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--line)}
 .mapsvg{width:100%;height:auto;display:block}
