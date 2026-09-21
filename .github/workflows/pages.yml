@@ -1,13 +1,12 @@
 # Publishes site/ to GitHub Pages.
 #
-# Deploys from the working branch rather than main, so the site can go live
-# without changing what main holds. Point `branches` at main when the work
-# moves there.
+# Deploys from main on every push that touches site/.
+
 name: Deploy site to GitHub Pages
 
 on:
   push:
-    branches: [claude/life-biography-memorial-site-7ar7bl]
+    branches: [main]
     paths:
       - "site/**"
       - ".github/workflows/pages.yml"
