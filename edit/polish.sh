@@ -2,11 +2,13 @@
 # Life Questions — put a title card on the front of an answer, even out the
 # light, and level the sound. Leaves the original file untouched.
 #
-#   ./polish.sh answer.mov card.png out.mp4 [soft|bright|backlit|none]
+#   ./polish.sh answer.mov card.png out.mp4 [auto|soft|bright|backlit|none]
+#
+# auto looks at the picture and decides for you.
 #
 set -euo pipefail
 
-IN="$1"; CARD="$2"; OUT="$3"; GRADE="${4:-soft}"
+IN="$1"; CARD="$2"; OUT="$3"; GRADE="${4:-auto}"
 FF="${FFMPEG:-ffmpeg}"
 FP="${FFPROBE:-ffprobe}"
 
@@ -29,6 +31,13 @@ fi
 [ -z "${FPS:-}" ] && FPS=30
 HAS_AUDIO=$(printf '%s' "$PROBE" | grep -c 'Stream.*Audio' || true)
 [ "$HAS_AUDIO" = "0" ] && HAS_AUDIO=""
+
+# "auto" asks look.py what the light needs
+if [ "$GRADE" = "auto" ]; then
+  GRADE=$(python3 "$(dirname "$0")/look.py" "$IN" --sheet "${OUT%.*}-contact.jpg" \
+          | awk '/^use grade:/{print $3}')
+  echo "auto grade: $GRADE"
+fi
 
 case "$GRADE" in
   # a gentle lift — the usual fix for a sitting room in the afternoon

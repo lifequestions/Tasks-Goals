@@ -19,9 +19,16 @@ Two small tools. They never touch the original file.
 
 **2. Put it on the front, even out the light, level the sound**
 
-    ./polish.sh answer.mov card.png luis-01.mp4 soft
+    ./polish.sh answer.mov card.png luis-01.mp4
 
-The last word is the grade. Pick by eye:
+That is the whole job. It looks at twelve frames from the film, works out what
+the light needs, and grades it accordingly — no judgement call from you. It also
+drops a `luis-01-contact.jpg` beside the film: twelve stills on one small sheet.
+Send that to anybody who wants to see how it looked without sending a 100MB file.
+
+To overrule it, put the grade on the end:
+
+    ./polish.sh answer.mov card.png luis-01.mp4 backlit
 
 | grade | for |
 |---|---|
