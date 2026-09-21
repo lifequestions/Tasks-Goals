@@ -59,11 +59,12 @@ function thumbCard(x, i){
      even where the embed is refused. */
   if(x.v) meta += ' &middot; <a class="out" href="https://youtu.be/' + x.v +
                   '" target="_blank" rel="noopener">Watch on YouTube</a>';
-  var title = '<span class="t">' + ("0" + (i + 1)).slice(-2) + '. ' + esc(x.q) + '</span>' +
+  var title = '<span class="t"><span class="n">' + ("0" + (i + 1)).slice(-2) + '.</span> ' +
+              esc(x.q) + '</span>' +
               '<span class="m">' + meta + '</span>';
   /* Question first. It is what somebody is choosing between; the picture is
      just how you press it. */
-  return '<div class="tcard ' + (x.v ? "on" : "off") + '">' + title +
+  return '<div class="tcard ' + (x.v ? "on" : "off") + '" id="q' + (i + 1) + '">' + title +
          film(x, {none:"Not recorded"}) + '</div>';
 }
 function sideBlock(){
@@ -130,4 +131,16 @@ function wireCopy(c){
       i.remove(); done();
     }
   });
+}
+
+/* A standing list of the twelve, so the shape of the whole thing is visible
+   without scrolling it. Each line says whether that one has been answered. */
+function qIndex(){
+  return '<p class="ihd">The questions</p><ol class="ilist">' +
+    PERSON.questions.map(function(x, i){
+      return '<li class="' + (x.v ? "done" : "") + '">' +
+        '<a href="#q' + (i + 1) + '"><span class="n">' + ("0" + (i + 1)).slice(-2) +
+        '</span><span class="q">' + esc(x.q) + '</span></a></li>';
+    }).join("") + '</ol>' +
+    '<p class="ifoot">' + PERSON.recorded + ' of ' + PERSON.questions.length + ' answered</p>';
 }

@@ -7,7 +7,7 @@
 <title>Shanti Iyer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500;6..72,600&display=swap">
 <link rel="stylesheet" href="base.css?v=dev">
 <link rel="stylesheet" href="yt.css?v=dev">
 <style>
@@ -40,7 +40,10 @@
   </div>
   <div class="kq">
     <div class="films-hd"><h2>Their Video Life Biography</h2><span class="c" id="count"></span></div>
-    <div class="tgrid" id="films"></div>
+    <div class="qwrap">
+      <nav class="qindex" id="qnav"></nav>
+      <div class="tgrid" id="films"></div>
+    </div>
   </div>
   <div class="sharefoot">
     <h2>Send this to the rest of the family</h2>
@@ -72,6 +75,7 @@ document.getElementById("count").textContent = PERSON.recorded + " of 12 recorde
 document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
 document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).join("");
+document.getElementById("qnav").innerHTML = qIndex();
 document.getElementById("shareTop").innerHTML = shareRow();
 document.getElementById("shareBottom").innerHTML = shareRow("big");
 wireShare();
