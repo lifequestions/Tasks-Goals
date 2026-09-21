@@ -64,7 +64,10 @@ function thumbCard(x, i){
               '<span class="m">' + meta + '</span>';
   /* Question first. It is what somebody is choosing between; the picture is
      just how you press it. */
-  return '<div class="tcard ' + (x.v ? "on" : "off") + '" id="q' + (i + 1) + '">' + title +
+  /* Nothing has been filmed yet, so there is nothing to show. The card is
+     the question by itself rather than a large empty picture frame. */
+  if(!x.v) return '<div class="tcard off" id="q' + (i + 1) + '">' + title + '</div>';
+  return '<div class="tcard on" id="q' + (i + 1) + '">' + title +
          film(x, {none:"Not recorded"}) + '</div>';
 }
 function sideBlock(){

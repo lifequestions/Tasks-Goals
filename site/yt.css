@@ -152,9 +152,15 @@
 .trow .film .none{font-size:.5rem;padding:.2rem .4rem}
 /* big-thumbnail grid */
 /* Two across, not three. These are films of somebody's face, and at a third
-   of the width they were too small to be worth pressing. */
-.tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem 1.3rem;padding-top:1.3rem}
-@media (max-width:700px){.tgrid{grid-template-columns:1fr}}
+   of the width they were too small to be worth pressing.
+
+   Columns rather than a grid: the cards are different heights now — a filmed
+   answer is tall, a question still waiting is short — and a grid would hold
+   a row open to the tallest card in it, leaving a hole beside every film.
+   Columns let them pack. The numbering runs down one column and on to the
+   next, which is how a numbered list reads anyway. */
+.tgrid{column-count:2;column-gap:1.3rem;padding-top:1.3rem}
+@media (max-width:700px){.tgrid{column-count:1}}
 /* Every card is the shape the film plays in: upright, because that is how
    these are filmed. The empty ones keep the same box so the grid is even
    before anybody has answered anything. */
@@ -164,7 +170,8 @@
 /* Each question sits in its own box, question at the top of it, the film
    filling the foot. The card is the unit, not the picture. */
 .tcard{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);
-       padding:clamp(.85rem,1.4vw,1.15rem);transition:.16s}
+       padding:clamp(.85rem,1.4vw,1.15rem);transition:.16s;
+       break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:1.4rem}
 .tcard.on:hover{border-color:var(--acc);box-shadow:0 18px 34px -30px var(--shadow)}
 /* The questions are the reading on this page, and the serif was being asked
    to do a job it is bad at: twelve blocks of it, small, at a glance. Karla —
@@ -296,3 +303,8 @@
 .qindex li.done .n{color:var(--acc)}
 /* the sticky masthead must not sit on top of whatever the index jumps to */
 .tcard{scroll-margin-top:5.2rem}
+
+/* An unanswered question is a short card — the question and when it is due,
+   nothing pretending to be a picture. It grows into a tall one the day it
+   is filmed, which is the whole point of the page. */
+.tcard.off .m{margin-bottom:0}
