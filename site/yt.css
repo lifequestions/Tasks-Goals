@@ -158,7 +158,11 @@
 .tcard .film{aspect-ratio:9/16;border:1px solid var(--line)}
 .tcard .film.empty{background:repeating-linear-gradient(135deg,var(--surf2),var(--surf2) 9px,var(--bg) 9px,var(--bg) 18px)}
 /* The question is the thing being read, so set it to be read. */
-.tcard{display:flex;flex-direction:column}
+/* Each question sits in its own box, question at the top of it, the film
+   filling the foot. The card is the unit, not the picture. */
+.tcard{display:flex;flex-direction:column;background:var(--surf);border:1px solid var(--line);
+       padding:clamp(.85rem,1.4vw,1.15rem);transition:.16s}
+.tcard.on:hover{border-color:var(--acc);box-shadow:0 18px 34px -30px var(--shadow)}
 /* The question carries the card, so give it weight as well as size: a
    Newsreader semibold against the mono meta line and the body's Karla. */
 .tcard .t{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.26rem,1.65vw,1.5rem);
