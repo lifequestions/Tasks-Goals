@@ -1,6 +1,6 @@
 #!/bin/bash
 # Life Questions — double-click me.
-# Put a video in this folder first. Makes contact.jpg to send to Claude.
+# Put a video in this folder first. Makes contact.jpg and still.jpg to send to Claude.
 cd "$(dirname "$0")"
 echo
 echo "  Life Questions — checking your recording"
@@ -34,7 +34,8 @@ echo
 python3 look.py "$VID" --sheet contact.jpg
 echo
 echo "  ----------------------------------------"
-echo "  Made contact.jpg — drag it into the chat."
+echo "  Made contact.jpg and still.jpg — drag both into the chat."
+echo "  still.jpg is the frame the web page uses as its thumbnail."
 echo
 command -v open >/dev/null && open . >/dev/null 2>&1
 read -p "  Press return to close. "

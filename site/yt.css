@@ -255,3 +255,9 @@
 .feat .m{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;
          text-transform:uppercase;color:var(--ink3);margin-top:.9rem}
 .feat .m b{color:var(--acc);font-weight:500}
+
+/* Where a still cannot be fetched, a quiet plate — not the portrait again. */
+.film .plate{position:absolute;inset:0;display:grid;place-content:center;padding:1rem;
+  background:repeating-linear-gradient(135deg,var(--surf2),var(--surf2) 9px,var(--bg) 9px,var(--bg) 18px)}
+.film .plate span{font-family:"IBM Plex Mono",monospace;font-size:.56rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink3);text-align:center}

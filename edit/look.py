@@ -66,6 +66,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("video")
     ap.add_argument("--sheet", default="contact.jpg")
+    ap.add_argument("--still", default="still.jpg")
     ap.add_argument("--n", type=int, default=12)
     a = ap.parse_args()
 
@@ -108,6 +109,32 @@ def main():
         for i, im in enumerate(ims):
             sheet.paste(im.resize((tw, th)), ((i % cols)*tw, (i//cols)*th))
         sheet.save(a.sheet, quality=82)
+
+        # A still for the web page. The page needs one real frame of them, and
+        # picking it by hand is one more thing to remember, so pick it here:
+        # the sharpest frame that has a face in it, skipping the first one in
+        # case they are still reaching for the phone.
+        cand = [(i, im) for i, im in enumerate(ims) if boxes[i] is not None]
+        if len(cand) > 1:
+            cand = [c for c in cand if c[0] > 0]
+        if cand:
+            def score(c):
+                i, im = c
+                x, y, fw, fh = boxes[i]
+                return sharps[i] * (fw * fh) ** 0.5
+            bi, bim = max(cand, key=score)
+            x, y, fw, fh = boxes[bi]
+            w, h = bim.size
+            # crop to the shape the page plays it in, with the face high in frame
+            tw2 = min(w, int(round(h * 9 / 16)))
+            th2 = min(h, int(round(tw2 * 16 / 9)))
+            cx = x + fw // 2
+            left = max(0, min(w - tw2, cx - tw2 // 2))
+            top = max(0, min(h - th2, y - int(th2 * 0.22)))
+            still = bim.crop((left, top, left + tw2, top + th2))
+            if still.width > 720:
+                still = still.resize((720, int(720 * still.height / still.width)), Image.LANCZOS)
+            still.save(a.still, quality=84)
 
         # where a face was found, judge the light on the face rather than the room
         if onface:
@@ -160,6 +187,8 @@ def main():
         print()
         print("grade: %s" % grade)
         print("sheet: %s" % a.sheet)
+        if os.path.exists(a.still):
+            print("still: %s  (the page's thumbnail — send this too)" % a.still)
         if notes:
             print()
             print("worth knowing:")

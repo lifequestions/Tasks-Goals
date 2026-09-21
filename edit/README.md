@@ -47,7 +47,10 @@ Pulls twelve stills from across the film and reports the light (measured on thei
 face, not the room), the focus, how steady it is, how far they are from the phone,
 whether they drift out of shot, and whether it was filmed upright. It writes
 `contact.jpg` — all twelve frames on one small sheet you can send to anybody — and
-prints the grade to use. Most of what it says is worth passing back to the family:
+`still.jpg`, the sharpest frame with a face in it, cropped to the shape the web
+page plays the film in. That one is the page's thumbnail: without it the page has
+no picture of the film and falls back to the portrait, which looks like a mistake.
+It also prints the grade to use. Most of what it says is worth passing back to the family:
 "a lamp to one side", "prop the phone on something", "sit a bit closer".
 
 ## The transcript, written for you

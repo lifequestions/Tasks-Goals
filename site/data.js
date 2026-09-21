@@ -47,9 +47,21 @@ function wire(){
   function check(img){
     if(img.naturalWidth) return;
     var w = img.parentNode; if(!w) return;
+    var fb = img.getAttribute("data-fb");
+    /* Never stand the portrait in for a frame of the film: two copies of the
+       same photograph on one page reads as a mistake, because it is one. Where
+       there is no frame to show, say so in type instead of faking a picture. */
+    if(!fb || fb === PERSON.photo){
+      var p = document.createElement("span");
+      p.className = "plate";
+      p.innerHTML = '<span>Frame not loaded</span>';
+      w.insertBefore(p, w.firstChild);
+      img.remove();
+      return;
+    }
     var f = document.createElement("img");
     f.className = "fb";
-    f.src = img.getAttribute("data-fb") || PERSON.photo;
+    f.src = fb;
     f.alt = "";
     w.insertBefore(f, w.firstChild);
     img.remove();
