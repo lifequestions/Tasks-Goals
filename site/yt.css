@@ -262,3 +262,5 @@
 .film .plate{position:absolute;inset:0;background:var(--surf2)}
 .film.noshot .sh{display:none}
 .film.noshot .play{background:var(--bg);box-shadow:none;border:1px solid var(--line)}
+.feat .m a.out{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--line)}
+.feat .m a.out:hover{border-bottom-color:var(--acc)}

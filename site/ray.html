@@ -91,7 +91,11 @@ if(PERSON.main && PERSON.main.v){
   document.getElementById("featQ").textContent = PERSON.main.q;
   document.getElementById("featM").innerHTML = "<b>Recorded</b>" +
     (PERSON.main.recorded ? " &middot; " + PERSON.main.recorded : "") +
-    (PERSON.main.len ? " &middot; " + PERSON.main.len : "");
+    (PERSON.main.len ? " &middot; " + PERSON.main.len : "") +
+    /* Some browsers and some embeds refuse to play a film in place. A plain
+       link out means pressing it always gets you to the film. */
+    ' &middot; <a class="out" href="https://youtu.be/' + PERSON.main.v +
+    '" target="_blank" rel="noopener">Watch on YouTube</a>';
   rest = PERSON.questions.filter(function(x){ return x !== PERSON.main; });
 }
 document.getElementById("films").innerHTML = rest.map(function(x){
