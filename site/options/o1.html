@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>1. In the question it answers &mdash; Luis James de Souza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="yt.css">
+<style>
+.kplate{padding-top:clamp(2.4rem,6vw,4rem)}
+.kplate .circ{width:clamp(180px,21vw,300px);margin-bottom:1.6rem}
+.kplate h1{font-size:clamp(2.2rem,5vw,3.2rem)}
+.ymap .places{display:none}
+.kband{align-items:stretch}
+.kband .ymap,.kband .ymap .frame{height:100%}
+.films-hd h2{font-size:clamp(1.4rem,3vw,2rem)}
+.obar{background:#211F1C;color:#EDEAE4;font-family:"IBM Plex Mono",monospace;font-size:.62rem;
+      letter-spacing:.1em;text-transform:uppercase;display:flex;gap:1.2rem;align-items:center;
+      justify-content:center;padding:.6rem 1rem;flex-wrap:wrap}
+.obar a{color:#9A9289;text-decoration:none}
+.obar a:hover{color:#EDEAE4}
+.obar b{color:#EDEAE4;font-weight:500}
+</style>
+</head>
+<body>
+<div class="obar"><a href="index.html">&larr; all seven</a><span><b>Option 1</b> &middot; In the question it answers</span></div>
+<div class="lbar"><div class="in">
+  <a class="wm" href="index.html">Life Questions</a>
+  <span class="who">A private page</span>
+</div></div>
+<div class="book" style="max-width:1240px">
+  <header class="kplate">
+    <div class="circ"><img id="portrait" src="" alt=""></div>
+    <p class="mo" id="kicker">In their own voice</p>
+    <h1 id="name">&nbsp;</h1>
+    <div class="rule"></div>
+    <p class="dates" id="dates"></p>
+    <div id="shareTop"></div>
+  </header>
+  <div class="kband">
+    <div><p class="sechd">The record</p><div class="rec" id="rec"></div></div>
+    <div><p class="sechd">Where they&rsquo;re from</p><div id="map"></div></div>
+  </div>
+  <div class="kq">
+    <div class="films-hd"><h2>Their Video Life Biography</h2><span class="c" id="count"></span></div>
+    <div class="qwrap">
+      <nav class="qindex" id="qnav"></nav>
+      <div class="tgrid" id="films"></div>
+    </div>
+  </div>
+  <div class="sharefoot">
+    <h2>Send this to the rest of the family</h2>
+    <p>Anyone with the link can watch. Nobody without it can find the page &mdash; it is unlisted, and not in any search engine.</p>
+    <div id="shareBottom"></div>
+  </div>
+  <div class="invite">
+    <div>
+      <h2>Somebody should be asking your father these questions too</h2>
+      <p>Forty minutes and a phone propped on a stack of books. Most people wish they had started ten years earlier.</p>
+    </div>
+    <a class="btn" href="index.html#start">Start a page for someone</a>
+  </div>
+</div>
+<footer class="in">
+  <p>A private page. The films are unlisted on YouTube &mdash; only people with this link can watch them.</p>
+  <p><a href="index.html">Life Questions</a></p>
+</footer>
+<script src="p-luis.js"></script>
+<script src="data.js"></script>
+<script src="yt.js"></script>
+<script src="photos.js"></script>
+<script>
+document.getElementById("portrait").src = PERSON.photo;
+document.getElementById("portrait").alt = PERSON.name;
+document.getElementById("name").textContent = PERSON.name;
+document.getElementById("dates").innerHTML =
+  PERSON.born.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.bornIn.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.age.toUpperCase();
+document.getElementById("count").textContent = PERSON.recorded + " of 12 recorded";
+document.getElementById("rec").innerHTML = recRows();
+document.getElementById("map").innerHTML = ymap();
+document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).join("");
+document.getElementById("qnav").innerHTML = qIndex();
+layoutGrid();
+spyIndex();
+applyPhotos(1);
+document.getElementById("shareTop").innerHTML = shareRow();
+document.getElementById("shareBottom").innerHTML = shareRow("big");
+wireShare();
+wire();
+</script>
+</body>
+</html>
