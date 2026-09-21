@@ -241,20 +241,6 @@
 .film.up:has(iframe){aspect-ratio:9/16;background:#000}
 .tcard.up .film,.trow .film.up{aspect-ratio:9/16}
 
-/* ---- the answer that exists ------------------------------------------
-   One recorded film deserves more than a thumbnail in a grid of empty ones. */
-.feat{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:clamp(1.4rem,3.4vw,2.6rem);
-      align-items:center;border-top:1px solid var(--line);padding:clamp(1.5rem,3.4vw,2.4rem) 0}
-@media (max-width:760px){.feat{grid-template-columns:1fr;gap:1.2rem}}
-.feat .frame{width:100%;max-width:260px}
-@media (max-width:760px){.feat .frame{max-width:200px;margin:0 auto}}
-.feat .no{font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.14em;
-          text-transform:uppercase;color:var(--ink3)}
-.feat h2{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.35rem,2.6vw,1.9rem);
-         line-height:1.22;margin-top:.55rem;font-weight:400}
-.feat .m{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.1em;
-         text-transform:uppercase;color:var(--ink3);margin-top:.9rem}
-.feat .m b{color:var(--acc);font-weight:500}
 
 /* Where a still cannot be fetched, hold the space quietly: the play button and
    the running time are enough. Nothing announcing itself as missing, and never
@@ -262,5 +248,15 @@
 .film .plate{position:absolute;inset:0;background:var(--surf2)}
 .film.noshot .sh{display:none}
 .film.noshot .play{background:var(--bg);box-shadow:none;border:1px solid var(--line)}
-.feat .m a.out{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--line)}
-.feat .m a.out:hover{border-bottom-color:var(--acc)}
+
+/* ---- the answer that exists ------------------------------------------
+   One recorded film among eleven empty ones earns twice the room: the film
+   upright on the left, its question beside it rather than under it. */
+.tcard.wide{grid-column:span 2;display:grid;grid-template-columns:minmax(0,148px) minmax(0,1fr);
+            gap:clamp(.9rem,2vw,1.3rem);align-items:center}
+.tcard.wide .fw{display:block;width:100%}
+.tcard.wide .t{margin-top:0}
+@media (max-width:620px){.tcard.wide{grid-column:auto;grid-template-columns:1fr}
+                         .tcard.wide .t{margin-top:.65rem}}
+.tcard .m a.out{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--line);white-space:nowrap}
+.tcard .m a.out:hover{border-bottom-color:var(--acc)}
