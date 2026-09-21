@@ -73,8 +73,6 @@ document.getElementById("line").textContent = PERSON.line;
 document.getElementById("count").textContent = PERSON.recorded + " of 12 recorded";
 document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
-/* The one answer that exists leads the grid, and takes two slots. */
-if(PERSON.main && PERSON.main.v) PERSON.main.wide = true;
 document.getElementById("films").innerHTML = PERSON.questions.map(thumbCard).join("");
 document.getElementById("shareTop").innerHTML = shareRow();
 document.getElementById("shareBottom").innerHTML = shareRow("big");

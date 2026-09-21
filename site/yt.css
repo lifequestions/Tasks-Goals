@@ -234,13 +234,11 @@
 .sharefoot p{color:var(--ink2);font-size:.95rem;margin-top:.5rem;max-width:52ch;margin-left:auto;margin-right:auto}
 
 /* ---- upright films ----------------------------------------------------
-   Most people will film on a phone held the way they hold it to read, so the
-   answer arrives taller than it is wide. Give it a frame that fits rather
-   than a wide box with black down both sides. */
-.film.up{aspect-ratio:9/16}
+   Most people will film on a phone held the way they hold it to read. The
+   thumbnail keeps the same box as every other card so the grid stays even;
+   the upright shape only matters once the film is actually playing. */
 .film.up:has(iframe){aspect-ratio:9/16;background:#000}
-.tcard.up .film,.trow .film.up{aspect-ratio:9/16}
-
+.tcard.up .film,.trow 
 
 /* Where a still cannot be fetched, hold the space quietly: the play button and
    the running time are enough. Nothing announcing itself as missing, and never
@@ -249,14 +247,5 @@
 .film.noshot .sh{display:none}
 .film.noshot .play{background:var(--bg);box-shadow:none;border:1px solid var(--line)}
 
-/* ---- the answer that exists ------------------------------------------
-   One recorded film among eleven empty ones earns twice the room: the film
-   upright on the left, its question beside it rather than under it. */
-.tcard.wide{grid-column:span 2;display:grid;grid-template-columns:minmax(0,148px) minmax(0,1fr);
-            gap:clamp(.9rem,2vw,1.3rem);align-items:center}
-.tcard.wide .fw{display:block;width:100%}
-.tcard.wide .t{margin-top:0}
-@media (max-width:620px){.tcard.wide{grid-column:auto;grid-template-columns:1fr}
-                         .tcard.wide .t{margin-top:.65rem}}
 .tcard .m a.out{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--line);white-space:nowrap}
 .tcard .m a.out:hover{border-bottom-color:var(--acc)}

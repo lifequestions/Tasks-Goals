@@ -61,10 +61,6 @@ function thumbCard(x, i){
                   '" target="_blank" rel="noopener">Watch on YouTube</a>';
   var title = '<span class="t">' + ("0" + (i + 1)).slice(-2) + '. ' + esc(x.q) + '</span>' +
               '<span class="m">' + meta + '</span>';
-  /* The answer they have actually given is worth two slots: the film upright
-     on the left, its question beside it. */
-  if(x.wide) return '<div class="tcard wide on"><span class="fw">' + film(x, {none:"Not recorded"}) +
-                    '</span><span class="body">' + title + '</span></div>';
   return '<div class="tcard ' + (x.v ? "on" : "off") + '">' + film(x, {none:"Not recorded"}) +
          title + '</div>';
 }
