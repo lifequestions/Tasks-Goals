@@ -9,7 +9,8 @@ how steady it is and how busy the background is. Writes contact.jpg — everythi
 it looked at, on one small sheet — and prints a grade for polish.sh plus a note
 you could pass back to the family.
 """
-import argparse, os, subprocess, sys, tempfile
+import argparse, os, subprocess, sys, tempfile, warnings
+warnings.filterwarnings('ignore')
 from PIL import Image, ImageStat, ImageFilter
 
 def ffmpeg():
@@ -92,7 +93,7 @@ def main():
         for i in range(1, len(ims)):
             a1 = ims[i-1].convert("L").resize((64, 36))
             a2 = ims[i].convert("L").resize((64, 36))
-            move.append(sum(abs(p-q) for p, q in zip(list(a1.getdata()), list(a2.getdata())))/(64*36))
+            move.append(sum(abs(p-q) for p, q in zip(a1.tobytes(), a2.tobytes()))/(64*36))
 
         B  = sum(whole)/len(whole)
         Mi = sum(middle)/len(middle)
