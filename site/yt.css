@@ -238,6 +238,10 @@
    thumbnail keeps the same box as every other card so the grid stays even;
    the upright shape only matters once the film is actually playing. */
 .film.up:has(iframe){aspect-ratio:9/16;background:#000}
+/* Cropping an upright frame to the grid's 16:9 box takes a band out of its
+   middle. Somebody holding a phone at arm's length sits low in frame, so
+   take that band a little below centre or the crop lands on their forehead. */
+.film.up img{object-position:center 60%}
 .tcard.up .film,.trow 
 
 /* Where a still cannot be fetched, hold the space quietly: the play button and

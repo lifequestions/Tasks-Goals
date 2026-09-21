@@ -32,7 +32,6 @@
     <h1 id="name">&nbsp;</h1>
     <div class="rule"></div>
     <p class="dates" id="dates"></p>
-    <p class="opening" id="line"></p>
     <div id="shareTop"></div>
   </header>
   <div class="kband">
@@ -69,7 +68,6 @@ document.getElementById("portrait").alt = PERSON.name;
 document.getElementById("name").textContent = PERSON.name;
 document.getElementById("dates").innerHTML =
   PERSON.born.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.bornIn.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.age.toUpperCase();
-document.getElementById("line").textContent = PERSON.line;
 document.getElementById("count").textContent = PERSON.recorded + " of 12 recorded";
 document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
