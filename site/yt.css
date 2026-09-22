@@ -131,6 +131,7 @@
 .side .ymap .places .v{font-size:.98rem}
 .films-hd{display:flex;align-items:baseline;gap:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--line)}
 .films-hd h2{font-size:1.3rem}
+.films-hd h2 .short{display:none}
 .films-hd .c{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
 /* small-thumbnail rows */
 .trow{display:grid;grid-template-columns:auto minmax(0,132px) minmax(0,1fr) auto;gap:1.1rem;align-items:center;
@@ -221,6 +222,7 @@
 .kplate .rule{width:54px;height:1px;background:var(--line);margin:1.1rem auto}
 .kplate .dates{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;
                text-transform:uppercase;color:var(--ink2)}
+.kplate .dates .short{display:none}
 .kplate .opening{font-family:var(--sans);font-size:clamp(1.1rem,2.2vw,1.32rem);line-height:1.55;
                  color:var(--ink2);margin:1.4rem auto 0;max-width:46ch}
 .kband{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.4rem,3vw,2.6rem);
@@ -353,9 +355,14 @@ html{scroll-behavior:smooth}
   /* a link inside a line of small type needs something to aim at */
   .tcard .m a.out{display:inline-block;padding:.35rem 0;margin-top:.15rem}
   /* spaced mono capitals are the wrong face for a date somebody has to read */
-  .kplate .dates{font-family:var(--sans);font-size:.95rem;letter-spacing:0;
-                 text-transform:none;color:var(--ink2)}
+  .kplate .dates{font-family:var(--sans);font-size:.92rem;letter-spacing:0;
+                 text-transform:none;color:var(--ink2);white-space:nowrap}
+  .kplate .dates .full{display:none}
+  .kplate .dates .short{display:inline}
   .pgrid{grid-template-columns:1fr;gap:1.4rem}
+  /* the long version wraps to three lines on a phone and says little more */
+  .films-hd h2 .full{display:none}
+  .films-hd h2 .short{display:inline}
   /* His films come before the paperwork. He opens this on a phone to see
      what he recorded, not to read a table about himself. */
   .book{display:flex;flex-direction:column}
@@ -366,3 +373,8 @@ html{scroll-behavior:smooth}
   .book > .sharefoot{order:5}
   .book > .invite{order:6}
 }
+
+/* His name goes back into the serif. It is the one line on the page that is
+   a name rather than an interface, and the grotesque made it look like a
+   heading in an app. Everywhere, not just the big screens. */
+.kplate h1{font-family:"Newsreader",Georgia,serif;font-weight:400;letter-spacing:-.012em}
