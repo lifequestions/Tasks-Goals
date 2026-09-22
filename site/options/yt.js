@@ -203,3 +203,18 @@ function spyIndex(){
   addEventListener("resize", onScroll);
   mark();
 }
+
+/* The photographs, in a room of their own below the films. Captions are the
+   words whoever sent them wrote — they are the half that cannot be recovered
+   later, when nobody is left who knows who is on the lawn. */
+function photoSection(){
+  var ps = PERSON.photos || [];
+  if(!ps.length) return "";
+  return '<div class="films-hd"><h2>The photographs</h2><span class="c">' +
+    ps.length + (ps.length === 1 ? " kept" : " kept") + '</span></div>' +
+    '<div class="pgrid">' + ps.map(function(p){
+      return '<figure><img class="print" src="' + p.src + '" alt="" loading="lazy">' +
+             '<figcaption><b>' + esc(p.when) + (p.where ? " \u00b7 " + esc(p.where) : "") + '</b>' +
+             esc(p.cap) + '</figcaption></figure>';
+    }).join("") + '</div>';
+}

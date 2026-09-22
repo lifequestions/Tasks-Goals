@@ -49,14 +49,9 @@ function modePair(){
     '</div>');
 }
 
-/* 4 — a section of their own */
-function modeGallery(){
-  var kq = document.querySelector(".kq");
-  kq.insertAdjacentHTML("afterend",
-    '<section class="pgal"><div class="films-hd"><h2>The photographs</h2>' +
-    '<span class="c">' + PHOTOS.length + ' kept</span></div><div class="pgrid">' +
-    PHOTOS.map(function(p){ return plate(p); }).join("") + '</div></section>');
-}
+/* 4 — a section of their own. The live page now ships this, so there is
+   nothing to add: this option is the page as it stands. */
+function modeGallery(){ }
 
 /* 5 — against the record */
 function modeRecord(){
@@ -76,7 +71,6 @@ function modeMap(){
 
 /* 7 — press one and it fills the screen */
 function modeLightbox(){
-  modeGallery();
   var box = document.createElement("div");
   box.className = "lbox"; box.hidden = true;
   box.innerHTML = '<button class="x" aria-label="Close">&times;</button>' +
@@ -113,6 +107,10 @@ function modeLightbox(){
 
 var MODES = [modeCard, modePlate, modePair, modeGallery, modeRecord, modeMap, modeLightbox];
 function applyPhotos(n){
+  /* Every option but the fourth is shown on its own, so the built-in
+     photographs section steps aside for it. */
+  var built = document.getElementById("pgal");
+  if(built && n !== 4 && n !== 7) built.hidden = true;
   try { MODES[n - 1](); } catch(e) { console.error("photo mode " + n, e); }
   if(typeof layoutGrid === "function") setTimeout(layoutGrid, 60);
 }

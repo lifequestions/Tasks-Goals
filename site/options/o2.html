@@ -7,7 +7,7 @@
 <title>2. A plate across the page &mdash; Luis James de Souza</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="yt.css">
 <style>
@@ -22,7 +22,6 @@
       letter-spacing:.1em;text-transform:uppercase;display:flex;gap:1.2rem;align-items:center;
       justify-content:center;padding:.6rem 1rem;flex-wrap:wrap}
 .obar a{color:#9A9289;text-decoration:none}
-.obar a:hover{color:#EDEAE4}
 .obar b{color:#EDEAE4;font-weight:500}
 </style>
 </head>
@@ -46,12 +45,13 @@
     <div><p class="sechd">Where they&rsquo;re from</p><div id="map"></div></div>
   </div>
   <div class="kq">
-    <div class="films-hd"><h2>Their Video Life Biography</h2><span class="c" id="count"></span></div>
+    <div class="films-hd"><h2>Video Biography</h2><span class="c" id="count"></span></div>
     <div class="qwrap">
       <nav class="qindex" id="qnav"></nav>
       <div class="tgrid" id="films"></div>
     </div>
   </div>
+  <section class="pgal" id="pgal" hidden></section>
   <div class="sharefoot">
     <h2>Send this to the rest of the family</h2>
     <p>Anyone with the link can watch. Nobody without it can find the page &mdash; it is unlisted, and not in any search engine.</p>
@@ -77,8 +77,14 @@
 document.getElementById("portrait").src = PERSON.photo;
 document.getElementById("portrait").alt = PERSON.name;
 document.getElementById("name").textContent = PERSON.name;
+/* On a phone the full strap wraps and leaves "old" stranded on a line of its
+   own. The short form drops the day and the country, both of which the record
+   below repeats in full. */
 document.getElementById("dates").innerHTML =
-  PERSON.born.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.bornIn.toUpperCase() + " &nbsp;&middot;&nbsp; " + PERSON.age.toUpperCase();
+  '<span class="full">' + PERSON.born + " &nbsp;&middot;&nbsp; " + PERSON.bornIn +
+  " &nbsp;&middot;&nbsp; " + PERSON.age + '</span>' +
+  '<span class="short">' + PERSON.born.replace(/\s\d+\s+\S+\s+(\d{4})$/, " $1") +
+  " &middot; " + PERSON.bornIn.split(",")[0] + " &middot; " + PERSON.age + '</span>';
 document.getElementById("count").textContent = PERSON.recorded + " of 12 recorded";
 document.getElementById("rec").innerHTML = recRows();
 document.getElementById("map").innerHTML = ymap();
@@ -87,6 +93,9 @@ document.getElementById("qnav").innerHTML = qIndex();
 layoutGrid();
 spyIndex();
 applyPhotos(2);
+var pg = photoSection();
+if(pg){ document.getElementById("pgal").innerHTML = pg;
+        document.getElementById("pgal").hidden = false; }
 document.getElementById("shareTop").innerHTML = shareRow();
 document.getElementById("shareBottom").innerHTML = shareRow("big");
 wireShare();

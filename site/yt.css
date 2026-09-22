@@ -131,7 +131,6 @@
 .side .ymap .places .v{font-size:.98rem}
 .films-hd{display:flex;align-items:baseline;gap:.9rem;padding-bottom:.9rem;border-bottom:1px solid var(--line)}
 .films-hd h2{font-size:1.3rem}
-.films-hd h2 .short{display:none}
 .films-hd .c{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3)}
 /* small-thumbnail rows */
 .trow{display:grid;grid-template-columns:auto minmax(0,132px) minmax(0,1fr) auto;gap:1.1rem;align-items:center;
@@ -360,9 +359,6 @@ html{scroll-behavior:smooth}
   .kplate .dates .full{display:none}
   .kplate .dates .short{display:inline}
   .pgrid{grid-template-columns:1fr;gap:1.4rem}
-  /* the long version wraps to three lines on a phone and says little more */
-  .films-hd h2 .full{display:none}
-  .films-hd h2 .short{display:inline}
   /* His films come before the paperwork. He opens this on a phone to see
      what he recorded, not to read a table about himself. */
   .book{display:flex;flex-direction:column}
