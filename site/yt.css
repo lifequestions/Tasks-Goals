@@ -167,7 +167,10 @@
    nonsense of an index. This keeps left-to-right order and still packs. */
 .tgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:1.3rem;
        grid-auto-rows:8px;align-items:start;padding-top:1.3rem}
-@media (max-width:700px){.tgrid{grid-template-columns:1fr}}
+/* One column: the 8px rows are what the two-column packing needs and would
+   otherwise give every card a row 8px tall, which is how they came to sit on
+   top of one another on a phone. Let the rows size themselves. */
+@media (max-width:700px){.tgrid{grid-template-columns:1fr;grid-auto-rows:auto;row-gap:1.4rem}}
 /* Every card is the shape the film plays in: upright, because that is how
    these are filmed. The empty ones keep the same box so the grid is even
    before anybody has answered anything. */
@@ -216,7 +219,8 @@
 .kplate .circ{margin:0 auto 1.4rem}
 .kplate h1{font-size:clamp(2rem,4.6vw,2.9rem);line-height:1.06}
 .kplate .rule{width:54px;height:1px;background:var(--line);margin:1.1rem auto}
-.kplate .dates{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;color:var(--ink2)}
+.kplate .dates{font-family:"IBM Plex Mono",monospace;font-size:.7rem;letter-spacing:.1em;
+               text-transform:uppercase;color:var(--ink2)}
 .kplate .opening{font-family:var(--sans);font-size:clamp(1.1rem,2.2vw,1.32rem);line-height:1.55;
                  color:var(--ink2);margin:1.4rem auto 0;max-width:46ch}
 .kband{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.4rem,3vw,2.6rem);
@@ -340,3 +344,25 @@ html{scroll-behavior:smooth}
 .pgrid figcaption b{display:block;font-family:"IBM Plex Mono",monospace;font-size:.56rem;
                     letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
                     font-weight:400;margin-bottom:.3rem}
+
+/* ---- on a phone ------------------------------------------------------
+   The page is mostly read on one, often by the person whose page it is. */
+@media (max-width:700px){
+  /* sharing belongs at the end, not between his name and his films */
+  .kplate .share{display:none}
+  /* a link inside a line of small type needs something to aim at */
+  .tcard .m a.out{display:inline-block;padding:.35rem 0;margin-top:.15rem}
+  /* spaced mono capitals are the wrong face for a date somebody has to read */
+  .kplate .dates{font-family:var(--sans);font-size:.95rem;letter-spacing:0;
+                 text-transform:none;color:var(--ink2)}
+  .pgrid{grid-template-columns:1fr;gap:1.4rem}
+  /* His films come before the paperwork. He opens this on a phone to see
+     what he recorded, not to read a table about himself. */
+  .book{display:flex;flex-direction:column}
+  .book > .kplate{order:1}
+  .book > .kq{order:2}
+  .book > .pgal{order:3}
+  .book > .kband{order:4}
+  .book > .sharefoot{order:5}
+  .book > .invite{order:6}
+}

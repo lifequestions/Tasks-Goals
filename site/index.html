@@ -664,7 +664,7 @@ document.addEventListener("keydown", function(e){
 });
 
 function slug(name){
-  var p = name.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+  var p = name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s-]/g,"").trim().split(/\s+/).filter(Boolean);
   if(p.length > 2){ p = [p[0]].concat(p.slice(-2)); }
   return p.join("-") || "their-page";
