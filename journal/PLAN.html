@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Undercurrent Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&display=swap">
+<style>
+:root{
+  --bg:#F8F6F3;--surf:#FFFFFF;--surf2:#EFEBE5;--ink:#1B1A18;--ink2:#6B6660;--ink3:#948E86;
+  --line:#E3DED7;--acc:#2C5F5A;--accSoft:#E4EDEB;--warn:#8A4B2A;--warnSoft:#F4E7DE;
+  --heavy:#A4553A;--even:#8C877F;--light:#3F7A5C;
+  --shadow:rgba(30,26,22,.14);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+    --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--warn:#D69A6E;--warnSoft:#2B211A;
+    --heavy:#D9936A;--even:#8A857D;--light:#8CC4A0;
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141513;--surf:#1C1E1C;--surf2:#232522;--ink:#EDEAE4;--ink2:#A09A91;--ink3:#7C766D;
+  --line:#2C2F2C;--acc:#7FB6AC;--accSoft:#1E2B29;--warn:#D69A6E;--warnSoft:#2B211A;
+  --heavy:#D9936A;--even:#8A857D;--light:#8CC4A0;
+  --shadow:rgba(0,0,0,.5);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Karla",-apple-system,sans-serif;font-size:17px;line-height:1.62;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:"Newsreader",Georgia,serif;font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.012em}
+p,ul,ol{margin:0}
+a{color:var(--acc)}
+code{font-family:"IBM Plex Mono",monospace;font-size:.84em;background:var(--surf2);padding:.08em .35em;border-radius:4px}
+.in{max-width:940px;margin:0 auto;padding:0 clamp(1.1rem,4.5vw,2.4rem)}
+.mo{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+header.top{padding:clamp(2.6rem,7vw,5rem) 0 clamp(1.6rem,4vw,2.6rem)}
+header.top h1{font-size:clamp(2.3rem,6vw,3.7rem);line-height:1.02;margin:.9rem 0 1.1rem}
+header.top h1 em{font-style:italic;color:var(--acc)}
+header.top .lede{font-size:1.1rem;color:var(--ink2);max-width:58ch}
+.stamp{display:inline-flex;gap:.5rem;align-items:center;font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:.2rem .7rem}
+
+section{padding:clamp(2.2rem,5vw,3.6rem) 0;border-top:1px solid var(--line)}
+.sec-hd{margin-bottom:1.6rem;max-width:62ch;display:flex;flex-direction:column;gap:.5rem}
+.sec-hd h2{font-size:clamp(1.5rem,3.2vw,2.05rem);line-height:1.14}
+.sec-hd p{color:var(--ink2);font-size:.98rem}
+.body-copy{display:flex;flex-direction:column;gap:1rem;max-width:66ch}
+.body-copy p{color:var(--ink2)}
+.body-copy strong{color:var(--ink);font-weight:600}
+
+.call{background:var(--accSoft);border-left:3px solid var(--acc);padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;margin:.4rem 0}
+.call.warn{background:var(--warnSoft);border-left-color:var(--warn)}
+.call h4{font-size:1.1rem}
+.call p{color:var(--ink2);font-size:.95rem;max-width:64ch}
+
+/* the loop */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem;margin-top:.6rem}
+.loop div{background:var(--surf);border:1px solid var(--line);border-radius:14px;padding:1rem;display:flex;flex-direction:column;gap:.35rem}
+.loop b{font-family:"Newsreader",serif;font-weight:400;font-size:1.25rem}
+.loop span{color:var(--ink2);font-size:.9rem;line-height:1.45}
+@media (max-width:720px){.loop{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* phones */
+.phones{display:flex;gap:1.4rem;overflow-x:auto;padding:.4rem .2rem 1.2rem;scroll-snap-type:x mandatory;margin:0 calc(-1 * clamp(1.1rem,4.5vw,2.4rem));padding-left:clamp(1.1rem,4.5vw,2.4rem);padding-right:clamp(1.1rem,4.5vw,2.4rem)}
+.phone-wrap{flex:0 0 auto;scroll-snap-align:start;display:flex;flex-direction:column;gap:.7rem;width:258px}
+.phone-wrap .cap{font-size:.88rem;color:var(--ink2);line-height:1.45}
+.phone-wrap .cap b{color:var(--ink);font-weight:600}
+.phone{width:258px;height:540px;border-radius:40px;background:#0E0F11;border:7px solid #2a2b2e;box-shadow:0 18px 40px var(--shadow);overflow:hidden;position:relative;color:#ECE9E3;font-family:-apple-system,"Karla",sans-serif}
+.phone .scr{position:absolute;inset:0;padding:38px 16px 64px;display:flex;flex-direction:column;gap:11px;overflow:hidden}
+.phone .tabs{position:absolute;left:0;right:0;bottom:0;height:56px;border-top:1px solid #222327;background:#121315;display:flex;justify-content:space-around;align-items:center;padding-bottom:6px}
+.phone .tabs i{width:18px;height:18px;border-radius:5px;background:#3a3b3f;display:block}
+.phone .tabs i.on{background:#7FB6AC}
+.ph-eb{font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;color:#6F6A63;font-weight:600}
+.ph-h{font-family:"New York","Newsreader",Georgia,serif;font-size:25px;line-height:1.1}
+.ph-card{background:#18191C;border:.5px solid #2A2B2F;border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:7px}
+.ph-q{font-family:"New York","Newsreader",Georgia,serif;font-size:16px;line-height:1.25}
+.ph-btns{display:flex;gap:6px}
+.ph-btn{font-size:10px;font-weight:600;padding:6px 11px;border-radius:99px;background:#222327;color:#ECE9E3}
+.ph-btn.p{background:#7FB6AC;color:#0E0F11}
+.ph-dots{display:flex;justify-content:space-between}
+.ph-dots i{width:10px;height:10px;border-radius:50%;display:block;border:1px solid #2A2B2F}
+.ph-txt{font-size:11px;line-height:1.45;color:#ECE9E3}
+.ph-sub{font-size:10px;color:#A19C94;line-height:1.4}
+.ph-seg{display:flex;background:#222327;border-radius:8px;padding:2px;font-size:9px}
+.ph-seg span{flex:1;text-align:center;padding:4px 0;border-radius:6px;color:#A19C94}
+.ph-seg span.on{background:#3a3b3f;color:#ECE9E3}
+.ph-chips{display:flex;gap:5px;flex-wrap:wrap}
+.ph-chip{font-size:8.5px;padding:3px 7px;border-radius:99px;background:#222327;color:#A19C94;font-weight:600}
+.ph-chip.on{background:#7FB6AC;color:#0E0F11}
+
+/* diagrams */
+.diagram{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:1.2rem;margin:.6rem 0}
+.diagram svg{width:100%;height:auto;display:block}
+.diagram .t{fill:var(--ink);font-family:Karla,sans-serif;font-size:13px}
+.diagram .s{fill:var(--ink2);font-family:Karla,sans-serif;font-size:11px}
+.diagram .box{fill:var(--surf2);stroke:var(--line)}
+.diagram .acc{fill:var(--accSoft);stroke:var(--acc)}
+.diagram .ln{stroke:var(--ink3);stroke-width:1.2;fill:none}
+
+/* idea cards */
+.ideas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media (max-width:720px){.ideas{grid-template-columns:minmax(0,1fr)}}
+.idea-group{background:var(--surf);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1.2rem 1rem;display:flex;flex-direction:column;gap:.7rem}
+.idea-group h3{font-size:1.3rem}
+.idea-group ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:.55rem}
+.idea-group li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.8rem;align-items:baseline;font-size:.93rem;color:var(--ink2);line-height:1.45}
+.idea-group li b{color:var(--ink);font-weight:600}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:.12rem .45rem;border-radius:99px;white-space:nowrap}
+.tag.built{background:var(--accSoft);color:var(--acc)}
+.tag.next{background:var(--surf2);color:var(--ink2)}
+.tag.later{border:1px solid var(--line);color:var(--ink3)}
+
+/* table */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surf)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+th,td{text-align:left;padding:.75rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:500}
+td{color:var(--ink2)}
+td b{color:var(--ink);font-weight:600}
+tr:last-child td{border-bottom:none}
+
+/* phases */
+.phases{display:flex;flex-direction:column}
+.ph{display:grid;grid-template-columns:96px minmax(0,1fr);gap:1.4rem;padding:1.4rem 0;border-bottom:1px solid var(--line)}
+.ph:last-child{border-bottom:none}
+.ph .n{font-family:"Newsreader",serif;font-size:2.4rem;line-height:1;color:var(--acc)}
+.ph h3{font-size:1.35rem;margin-bottom:.35rem}
+.ph p{color:var(--ink2);font-size:.95rem;max-width:62ch}
+.ph ul{margin-top:.5rem;padding-left:1.1rem;color:var(--ink2);font-size:.93rem;display:flex;flex-direction:column;gap:.25rem}
+@media (max-width:560px){.ph{grid-template-columns:minmax(0,1fr);gap:.4rem}}
+
+/* steps */
+ol.steps{list-style:none;counter-reset:s;padding:0;display:flex;flex-direction:column;gap:.9rem;max-width:66ch}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2rem minmax(0,1fr);gap:.6rem;color:var(--ink2)}
+ol.steps li::before{content:counter(s);font-family:"Newsreader",serif;font-size:1.3rem;color:var(--acc);line-height:1.3}
+ol.steps b{color:var(--ink);font-weight:600}
+
+.qs{display:flex;flex-direction:column;gap:.8rem;max-width:66ch;padding-left:1.1rem;color:var(--ink2)}
+.qs b{color:var(--ink);font-weight:600}
+footer{padding:2.4rem 0 4rem;border-top:1px solid var(--line);color:var(--ink3);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="in">
+    <span class="stamp">Plan · 23 September 2026</span>
+    <h1>Undercurrent — <em>a journal that notices</em></h1>
+    <p class="lede">A private journal for your iPhone that you write in or talk to. It keeps track of the people, places and themes in your life, draws them as a map, and tells you the connections you haven't spotted — every week, month, quarter and year.</p>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">01 · The idea</p>
+      <h2>Four steps, over and over</h2>
+      <p>Everything in the app is one of these four things. The name is what it looks for: the current underneath the surface of what you write.</p>
+    </div>
+    <div class="loop">
+      <div><b>Capture</b><span>Write, or tap the mic and talk. A daily question if you're stuck. Or note a quick insight: “I always feel flat after seeing Jordan.”</span></div>
+      <div><b>Read</b><span>Each entry is read for the people, places, themes and activities in it, and for how you felt about each one there.</span></div>
+      <div><b>Connect</b><span>Every mention joins the map. Plain arithmetic spots patterns; Claude spots the ones arithmetic can't.</span></div>
+      <div><b>Reflect</b><span>A written reflection for each week, month, quarter, year and the whole journal, with open questions to sit with.</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">02 · What it looks like</p>
+      <h2>Calm, dark and unhurried, like Oura and Things</h2>
+      <p>One accent colour, serif headings, lots of room. Feelings get their own colour scale, from clay (heavier) through stone to sage (lighter), and every screen uses it the same way.</p>
+    </div>
+
+    <div class="phones">
+      <div class="phone-wrap">
+        <div class="phone"><div class="scr">
+          <div class="ph-eb">Wednesday 23 September</div>
+          <div class="ph-h">Good evening.</div>
+          <div class="ph-card">
+            <div class="ph-eb">Today's question</div>
+            <div class="ph-q">Who did you think about today, and how did it feel?</div>
+            <div class="ph-btns"><span class="ph-btn p">✎ Write</span><span class="ph-btn">● Speak</span></div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-eb">Last two weeks · 6-day streak</div>
+            <div class="ph-dots">
+              <i style="background:#8CC4A0;border:0"></i><i></i><i style="background:#B4A48F;border:0"></i><i style="background:#D9936A;border:0"></i><i></i><i style="background:#9DBFA3;border:0"></i><i></i><i style="background:#8A857D;border:0"></i><i style="background:#D9936A;border:0"></i><i style="background:#8CC4A0;border:0"></i><i style="background:#9DBFA3;border:0"></i><i style="background:#B4A48F;border:0"></i><i style="background:#8CC4A0;border:0"></i><i style="background:#8CC4A0;border:0"></i>
+            </div>
+          </div>
+          <div class="ph-card">
+            <div class="ph-eb">Pattern</div>
+            <div class="ph-txt" style="font-family:'New York','Newsreader',serif;font-size:12.5px">When Jordan comes up, your entries run heavier — mostly low, against light the rest of the time.</div>
+          </div>
+        </div><div class="tabs"><i class="on"></i><i></i><i></i><i></i><i></i></div></div>
+        <p class="cap"><b>Today.</b> The day's question, write or speak, two weeks of feeling as a row of dots, and what's been noticed lately.</p>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone"><div class="scr" style="padding-left:0;padding-right:0">
+          <div style="padding:0 16px;display:flex;flex-direction:column;gap:8px">
+            <div class="ph-seg"><span>30 days</span><span class="on">90 days</span><span>Year</span><span>All</span></div>
+            <div class="ph-chips"><span class="ph-chip on">People</span><span class="ph-chip on">Places</span><span class="ph-chip on">Themes</span><span class="ph-chip">Activities</span></div>
+          </div>
+          <svg viewBox="0 0 244 300" style="width:100%;height:auto" aria-label="A map of connected people and themes">
+            <g stroke-linecap="round">
+              <line x1="122" y1="140" x2="62" y2="80" stroke="#D9936A" stroke-opacity=".6" stroke-width="3.5"/>
+              <line x1="122" y1="140" x2="60" y2="205" stroke="#D9936A" stroke-opacity=".45" stroke-width="2"/>
+              <line x1="62" y1="80" x2="60" y2="205" stroke="#D9936A" stroke-opacity=".4" stroke-width="1.6"/>
+              <line x1="122" y1="140" x2="190" y2="92" stroke="#8CC4A0" stroke-opacity=".55" stroke-width="3"/>
+              <line x1="190" y1="92" x2="200" y2="190" stroke="#8CC4A0" stroke-opacity=".5" stroke-width="2.2"/>
+              <line x1="122" y1="140" x2="200" y2="190" stroke="#8A857D" stroke-opacity=".45" stroke-width="1.6"/>
+              <line x1="122" y1="140" x2="130" y2="250" stroke="#8A857D" stroke-opacity=".4" stroke-width="1.2"/>
+              <line x1="200" y1="190" x2="130" y2="250" stroke="#8CC4A0" stroke-opacity=".4" stroke-width="1.2"/>
+              <line x1="62" y1="80" x2="110" y2="40" stroke="#D9936A" stroke-opacity=".35" stroke-width="1.2"/>
+            </g>
+            <circle cx="122" cy="140" r="26" fill="#8A857D" fill-opacity=".14"/><circle cx="122" cy="140" r="15" fill="none" stroke="#B4A48F" stroke-width="3"/>
+            <circle cx="62" cy="80" r="24" fill="#D9936A" fill-opacity=".14"/><circle cx="62" cy="80" r="14" fill="#D9936A"/>
+            <circle cx="190" cy="92" r="22" fill="#8CC4A0" fill-opacity=".14"/><circle cx="190" cy="92" r="13" fill="#8CC4A0"/>
+            <circle cx="60" cy="205" r="11" fill="none" stroke="#C98F6E" stroke-width="3"/>
+            <circle cx="200" cy="190" r="11" fill="#8CC4A0" fill-opacity=".55"/>
+            <rect x="121" y="241" width="18" height="18" rx="6" fill="#9DBFA3"/>
+            <circle cx="110" cy="40" r="8" fill="#C98F6E" fill-opacity=".55"/>
+            <g font-family="-apple-system,Karla,sans-serif" font-size="9" fill="#ECE9E3" text-anchor="middle" font-weight="500">
+              <text x="122" y="168">Work</text><text x="62" y="106">Jordan</text><text x="190" y="117">Maya</text>
+              <text x="60" y="228">Anxiety</text><text x="200" y="213">Running</text><text x="130" y="273">Brighton</text><text x="110" y="60">Drinking</text>
+            </g>
+          </svg>
+          <div style="padding:0 12px"><div class="ph-card" style="padding:10px">
+            <div class="ph-eb">person</div>
+            <div style="font-family:'New York','Newsreader',serif;font-size:17px">Jordan</div>
+            <div class="ph-sub">14 mentions · mostly low · often with Work, Anxiety, Drinking</div>
+          </div></div>
+        </div><div class="tabs"><i></i><i></i><i class="on"></i><i></i><i></i></div></div>
+        <p class="cap"><b>Connections.</b> Size is how often; colour is how it feels. Tap Jordan and everything else fades except the threads that run to Jordan.</p>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone"><div class="scr">
+          <div class="ph-seg"><span class="on">Week</span><span>Month</span><span>Quarter</span><span>Year</span><span>All</span></div>
+          <div style="text-align:center"><div style="font-family:'New York','Newsreader',serif;font-size:17px">Last week</div><div class="ph-sub">5 entries</div></div>
+          <div class="ph-card">
+            <div class="ph-eb">Reflection · by Claude</div>
+            <div style="font-family:'New York','Newsreader',serif;font-size:15px;line-height:1.2">Lighter once you stopped saying yes</div>
+            <div class="ph-txt" style="font-family:'New York','Newsreader',serif;color:#CFCAC2">You cancelled on Jordan on Tuesday, went running on Wednesday and Thursday, and those were the two lightest entries you've written this month. The heaviest, on Sunday, was about Monday — which happened four Sundays in a row.</div>
+            <div class="ph-eb" style="margin-top:3px">To sit with</div>
+            <div class="ph-txt" style="font-style:italic;color:#A19C94;font-family:'New York','Newsreader',serif">What would a Sunday that doesn't belong to Monday look like?</div>
+          </div>
+        </div><div class="tabs"><i></i><i></i><i></i><i class="on"></i><i></i></div></div>
+        <p class="cap"><b>Insights.</b> Step back through weeks, months, quarters and years. Each has its feeling chart, who came up, and a written reflection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">03 · How it finds connections</p>
+      <h2>Two readers and some arithmetic</h2>
+      <p>The part that matters most, finding the connections, works even with no internet and no AI. Claude adds depth on top.</p>
+    </div>
+
+    <div class="body-copy">
+      <p><strong>The phone reads first, instantly.</strong> Apple's language tools pick out people's names and places, a starter list of themes (work, sleep, money, anxiety…) and activities (running, drinking, scrolling…), and score how each sentence feels. It's free and private, and it's enough to draw the map.</p>
+      <p><strong>Then Claude reads it again</strong>, if you've added a key. It finds themes the starter list doesn't know, like “self-doubt” or “Dad's health”. It knows “Sam” and “Samantha” are the same person, judges how you felt about each person in <em>that</em> entry, and occasionally links it to something from weeks ago: <em>“This is the third time a visit home has been followed by a heavy Monday.”</em></p>
+      <p><strong>Arithmetic runs after every entry.</strong> It compares how entries feel when something is in them with how they feel when it isn't. That's your friend example exactly: if entries mentioning Jordan read heavier than the rest, it says so, with no AI involved. It also spots things that nearly always turn up together, days of the week that run heavy, and people who've quietly disappeared from the page.</p>
+    </div>
+
+    <div class="diagram" role="img" aria-label="Weekly and monthly reflections read entries; quarterly reads monthly reflections; yearly reads quarterly; all-time reads yearly.">
+      <svg viewBox="0 0 760 210">
+        <text class="s" x="10" y="20">Short periods read every entry in full. Long periods read the reflections inside them, plus one line per entry.</text>
+        <rect class="box" x="10" y="60" width="130" height="56" rx="10"/><text class="t" x="75" y="84" text-anchor="middle">Entries</text><text class="s" x="75" y="102" text-anchor="middle">full text</text>
+        <rect class="acc" x="175" y="36" width="110" height="44" rx="10"/><text class="t" x="230" y="63" text-anchor="middle">Week</text>
+        <rect class="acc" x="175" y="98" width="110" height="44" rx="10"/><text class="t" x="230" y="125" text-anchor="middle">Month</text>
+        <rect class="acc" x="325" y="98" width="110" height="44" rx="10"/><text class="t" x="380" y="125" text-anchor="middle">Quarter</text>
+        <rect class="acc" x="475" y="98" width="110" height="44" rx="10"/><text class="t" x="530" y="125" text-anchor="middle">Year</text>
+        <rect class="acc" x="625" y="98" width="120" height="44" rx="10"/><text class="t" x="685" y="125" text-anchor="middle">Everything</text>
+        <path class="ln" d="M140 80 L175 58"/><path class="ln" d="M140 96 L175 120"/>
+        <path class="ln" d="M285 120 L325 120"/><path class="ln" d="M435 120 L475 120"/><path class="ln" d="M585 120 L625 120"/>
+        <text class="s" x="305" y="170">3 months</text><text class="s" x="455" y="170">4 quarters</text><text class="s" x="605" y="170">each year</text>
+        <text class="s" x="10" y="200">This is what keeps a ten-year “Everything” reflection readable and cheap.</text>
+      </svg>
+    </div>
+
+    <div class="call">
+      <h4>Your own insights get checked</h4>
+      <p>When you note something like “I think I keep saying yes to Jordan out of guilt”, it's saved as your insight. Every reflection is given your insights and asked whether the entries bear them out. So the app tests your theories as well as offering its own.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">04 · Ideas</p>
+      <h2>Everything worth building, sorted</h2>
+      <p><span class="tag built">Built</span> is in the first version, in this repository. <span class="tag next">Next</span> is the obvious second round. <span class="tag later">Later</span> is worth doing once the basics have earned their keep.</p>
+    </div>
+
+    <div class="ideas">
+      <div class="idea-group">
+        <h3>Capturing</h3>
+        <ul>
+          <li><span><b>Write or dictate</b>, transcribed on the phone where possible</span><span class="tag built">Built</span></li>
+          <li><span><b>A daily question</b> when you don't know where to start</span><span class="tag built">Built</span></li>
+          <li><span><b>Quick insight</b>: one tap to note a realisation</span><span class="tag built">Built</span></li>
+          <li><span><b>Daily reminder</b> that carries the day's question</span><span class="tag built">Built</span></li>
+          <li><span><b>Lock-screen widget</b> and Action Button to start talking</span><span class="tag next">Next</span></li>
+          <li><span><b>Keep the voice recording</b> alongside the text</span><span class="tag next">Next</span></li>
+          <li><span><b>Photos</b> attached to an entry, read by Claude too</span><span class="tag later">Later</span></li>
+          <li><span><b>Apple Watch</b>: speak a thought from your wrist</span><span class="tag later">Later</span></li>
+        </ul>
+      </div>
+      <div class="idea-group">
+        <h3>Connecting</h3>
+        <ul>
+          <li><span><b>The map</b>: people, places, themes, activities, joined by shared entries</span><span class="tag built">Built</span></li>
+          <li><span><b>Feeling colour</b> on every node and thread</span><span class="tag built">Built</span></li>
+          <li><span><b>Mood effect</b>: entries with X against entries without</span><span class="tag built">Built</span></li>
+          <li><span><b>Merge and rename</b>, so Sam and Samantha become one</span><span class="tag built">Built</span></li>
+          <li><span><b>Time-lapse</b>: watch the map grow through a year</span><span class="tag next">Next</span></li>
+          <li><span><b>“What follows”</b>: what you write the day <em>after</em> seeing someone</span><span class="tag next">Next</span></li>
+          <li><span><b>Chapters</b>: Claude marks where one period of your life ends and the next begins</span><span class="tag later">Later</span></li>
+        </ul>
+      </div>
+      <div class="idea-group">
+        <h3>Reflecting</h3>
+        <ul>
+          <li><span><b>Week, month, quarter, year, everything</b>, written automatically as each ends</span><span class="tag built">Built</span></li>
+          <li><span><b>Ask your journal</b>: “When did I last feel rested?”</span><span class="tag built">Built</span></li>
+          <li><span><b>A closer reading</b> of any one person or theme</span><span class="tag built">Built</span></li>
+          <li><span><b>On this day</b>: a year ago, two years ago</span><span class="tag next">Next</span></li>
+          <li><span><b>Year in review</b>, made to look beautiful, like Spotify Wrapped</span><span class="tag next">Next</span></li>
+          <li><span><b>Letters to your future self</b>, opened on a date you pick</span><span class="tag later">Later</span></li>
+        </ul>
+      </div>
+      <div class="idea-group">
+        <h3>More context, deeper patterns</h3>
+        <ul>
+          <li><span><b>About you</b>: what it should always keep in mind</span><span class="tag built">Built</span></li>
+          <li><span><b>Personality questionnaires</b> that feed every reading</span><span class="tag built">Built</span></li>
+          <li><span><b>Apple Health</b>: sleep, steps, heart-rate variability. “You're heavier after under six hours' sleep.” Oura writes its data to Health, so it comes along too.</span><span class="tag next">Next</span></li>
+          <li><span><b>Weather and daylight</b> for each entry</span><span class="tag later">Later</span></li>
+          <li><span><b>Calendar</b>: what was on that day</span><span class="tag later">Later</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">05 · Knowing yourself</p>
+      <h2>The more you answer, the better it reads you</h2>
+      <p>Every questionnaire result goes to Claude with each reading and reflection. It's the difference between “you seemed low” and “you tend towards introversion, so three social evenings in a row may be the cause”. Only freely usable, research-backed questionnaires are included.</p>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Questionnaire</th><th>What it tells the journal</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>Big Five</b> (TIPI, 10 items)</td><td>Openness, conscientiousness, extraversion, agreeableness, emotional stability. The best-evidenced model of personality.</td><td><span class="tag built">Built</span></td></tr>
+          <tr><td><b>Chronotype</b> (from the reduced MEQ)</td><td>Morning or evening person, for making sense of heavy hours.</td><td><span class="tag built">Built</span></td></tr>
+          <tr><td><b>Big Five, full</b> (IPIP-NEO-120)</td><td>The same five traits in more detail: thirty facets.</td><td><span class="tag next">Next</span></td></tr>
+          <tr><td><b>Attachment style</b> (ECR-R)</td><td>Anxiety and avoidance in close relationships. Very useful for the people on the map.</td><td><span class="tag next">Next</span></td></tr>
+          <tr><td><b>Personal values</b> (Schwartz PVQ)</td><td>What you care about most. Useful for spotting when life and values pull apart.</td><td><span class="tag next">Next</span></td></tr>
+          <tr><td><b>Character strengths</b> (IPIP-VIA)</td><td>An open equivalent of the VIA survey, which is proprietary.</td><td><span class="tag later">Later</span></td></tr>
+          <tr><td><b>Wellbeing check-ins</b> (WHO-5, monthly)</td><td>A five-question snapshot to track alongside the journal's own sense of feeling.</td><td><span class="tag later">Later</span></td></tr>
+          <tr><td>Myers-Briggs, Enneagram</td><td>Popular, but Myers-Briggs is proprietary and neither holds up well in research. Left out.</td><td><span class="tag later">Skip</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">06 · Privacy and care</p>
+      <h2>It's your inner life, so it stays yours</h2>
+    </div>
+    <div class="body-copy">
+      <p><strong>Everything lives on your iPhone.</strong> Entries, the map and the patterns are stored in the app's own database. Dictation happens on the phone where the model supports it.</p>
+      <p><strong>Claude is optional and switchable.</strong> Your API key goes in the iPhone Keychain. “Keep everything on this iPhone” turns every call off, and the app still works. By default, Anthropic doesn't train on API data.</p>
+      <p><strong>You can take it all with you.</strong> Export produces one JSON file of every entry, mention, insight and reflection.</p>
+      <p><strong>It never diagnoses.</strong> The instructions tell Claude to observe, not judge, and to say which things are clear and which are only a hunch.</p>
+    </div>
+    <div class="call warn">
+      <h4>Still to add before anyone else uses it</h4>
+      <p>Face ID lock on open. A gentle signpost to real help if entries show signs of crisis. And a small server that holds the API key, because a key inside an app is fine for one person but not for many.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">07 · Roadmap</p>
+      <h2>Four phases</h2>
+    </div>
+    <div class="phases">
+      <div class="ph"><div class="n">1</div><div>
+        <h3>Your own journal <span class="tag built">In this repo</span></h3>
+        <p>A working SwiftUI app for iOS 17 and later, installed on your phone from Xcode. Write and dictate; phone and Claude reading; the map; patterns; the five kinds of reflection; asking your journal; two questionnaires; reminders; export; a sample journal to try it with.</p>
+      </div></div>
+      <div class="ph"><div class="n">2</div><div>
+        <h3>Living with it</h3>
+        <p>Use it daily for a month, then tune what it notices. Add the things that make it a habit.</p>
+        <ul><li>Face ID lock, widgets, Action Button</li><li>Apple Health: sleep, activity, HRV</li><li>On this day; “what follows”; the time-lapse map</li><li>iCloud sync between iPhone and iPad (the database needs small changes first)</li></ul>
+      </div></div>
+      <div class="ph"><div class="n">3</div><div>
+        <h3>Deeper self-knowledge</h3>
+        <ul><li>Attachment, values and the full Big Five</li><li>Life chapters, and a beautiful year in review</li><li>Photos and voice kept with entries</li></ul>
+      </div></div>
+      <div class="ph"><div class="n">4</div><div>
+        <h3>If you ever want to share it</h3>
+        <p>A small server to hold the key, sign in with Apple, a privacy policy, crisis signposting, TestFlight for friends, then the App Store.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">08 · Getting it on your iPhone</p>
+      <h2>About twenty minutes, once</h2>
+    </div>
+    <ol class="steps">
+      <li><span><b>Install Xcode 16 or newer</b> on a Mac, from the App Store.</span></li>
+      <li><span><b>Open <code>journal/Undercurrent.xcodeproj</code></b> from this repository.</span></li>
+      <li><span><b>Sign it.</b> Click the Undercurrent project, then the target, then <em>Signing &amp; Capabilities</em>, and choose your Apple ID as the Team. A free Apple ID works, but the app has to be reinstalled every seven days. The $99/year developer account removes that and gives you TestFlight.</span></li>
+      <li><span><b>Plug in your iPhone</b>, pick it at the top of Xcode and press Run. The first time, your iPhone will ask you to trust the developer in Settings → General → VPN &amp; Device Management.</span></li>
+      <li><span><b>Try it with made-up data.</b> In the app, go to You → Settings → <em>Load a sample journal</em>. The map fills in, and the pattern finder should spot the made-up Jordan straight away. Erase it when you're ready to start for real.</span></li>
+      <li><span><b>Add Claude.</b> Create an API key at console.anthropic.com, paste it into Settings and tap <em>Save and test</em>.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">09 · Cost</p>
+      <h2>A few dollars a month</h2>
+    </div>
+    <div class="body-copy">
+      <p>With Claude Opus 5, reading one entry costs about 4–6 cents, depending on length and how much context goes with it. Writing every day comes to <strong>roughly $2–4 a month</strong>, reflections included. Claude Sonnet 5 costs about 40% as much and is a setting away. Without a key it costs nothing.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="in">
+    <div class="sec-hd">
+      <p class="mo">10 · For you to decide</p>
+      <h2>Questions worth answering before phase 2</h2>
+    </div>
+    <ol class="qs">
+      <li><b>The name.</b> Undercurrent is a working title. Others: Threadline, Tributary, Kin, Between.</li>
+      <li><b>iPhone only, or iPad and Mac too?</b> iCloud sync is the main work either way.</li>
+      <li><b>How much should it say unprompted?</b> Right now it notices after entries and in reflections. Some people want a nudge (“You haven't mentioned Maya in a month”); others find that intrusive.</li>
+      <li><b>Apple Health?</b> It's probably the richest extra signal, especially with an Oura ring, but it's more data to trust it with.</li>
+      <li><b>Ever for other people?</b> If so, phase 4 matters earlier than it looks.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="in">The app's source is in <code>journal/Undercurrent/</code>, and how it's organised is in <code>journal/README.md</code>.</div></footer>
+</body>
+</html>
