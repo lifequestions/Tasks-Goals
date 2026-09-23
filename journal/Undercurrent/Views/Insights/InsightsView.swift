@@ -85,9 +85,9 @@ struct InsightsView: View {
                     .foregroundStyle(Palette.feeling(point.mood))
                     .symbolSize(40)
             }
-            .chartYScale(domain: -1...1)
+            .chartYScale(domain: -1.0...1.0)
             .chartYAxis {
-                AxisMarks(values: [-1, 0, 1]) { value in
+                AxisMarks(values: [-1.0, 0, 1]) { value in
                     AxisGridLine().foregroundStyle(Palette.line)
                     AxisValueLabel {
                         Text(value.as(Double.self).map { $0 < 0 ? "heavy" : $0 > 0 ? "light" : "even" } ?? "")

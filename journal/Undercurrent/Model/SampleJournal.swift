@@ -42,6 +42,7 @@ enum SampleJournal {
         "Money is tight this month. Rent went up and I keep checking my account.",
     ]
 
+    @MainActor
     static func load(into context: ModelContext, intelligence: Intelligence) {
         var rng = SeededRandom(seed: 7)
         let calendar = Calendar.current
