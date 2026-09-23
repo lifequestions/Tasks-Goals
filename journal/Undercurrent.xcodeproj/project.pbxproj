@@ -181,6 +181,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Undercurrent;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Undercurrent listens while you dictate an entry.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Undercurrent turns what you say into text, on this iPhone where it can.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -210,6 +211,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = Undercurrent;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Undercurrent listens while you dictate an entry.";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Undercurrent turns what you say into text, on this iPhone where it can.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
