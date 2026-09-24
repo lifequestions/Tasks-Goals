@@ -75,6 +75,10 @@ enum Prompts {
             let lines = recent.map { "\(dateLine($0.createdAt)) — \($0.summary ?? $0.title) [\(Feeling.word($0.mood))]" }
             parts.append("<recent_entries>\n\(lines.joined(separator: "\n"))\n</recent_entries>")
         }
+        if !entry.chosenTags.isEmpty {
+            let tags = entry.chosenTags.map { "- \($0.name) (\($0.kind.rawValue))" }.joined(separator: "\n")
+            parts.append("<tags_they_chose>\n\(tags)\nThey tagged the entry with these themselves: include each in entities, with its feeling here.\n</tags_they_chose>")
+        }
         let asked = entry.question.map { " answering=\"\($0)\"" } ?? ""
         parts.append("<entry date=\"\(dateLine(entry.createdAt))\"\(asked)>\n\(entry.text)\n</entry>")
         return parts.joined(separator: "\n\n")

@@ -9,6 +9,7 @@ struct EntryDetailView: View {
     @Environment(Intelligence.self) private var intelligence
     @State private var editing = false
     @State private var confirmDelete = false
+    @State private var addingTag = false
 
     var body: some View {
         ScrollView {
@@ -42,36 +43,41 @@ struct EntryDetailView: View {
                     .foregroundStyle(Palette.ink)
                     .textSelection(.enabled)
 
-                if !entry.mentions.isEmpty {
-                    VStack(alignment: .leading, spacing: 10) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
                         Eyebrow("In this entry")
-                        ForEach(entry.mentions.sorted { ($0.entity?.name ?? "") < ($1.entity?.name ?? "") }) { mention in
-                            if let entity = mention.entity {
-                                HStack(alignment: .top, spacing: 4) {
-                                    NavigationLink(value: entity) {
-                                        HStack(alignment: .top, spacing: 10) {
-                                            EntityChip(name: entity.name, kind: entity.kind, feeling: mention.sentiment)
-                                            Text("“\(mention.quote)”")
-                                                .font(.subheadline)
-                                                .foregroundStyle(Palette.ink2)
-                                                .lineLimit(2)
-                                                .multilineTextAlignment(.leading)
-                                            Spacer(minLength: 0)
+                        Spacer()
+                        Button { addingTag = true } label: {
+                            Label("Tag", systemImage: "plus").font(.footnote.weight(.semibold))
+                        }
+                        .foregroundStyle(Palette.accent)
+                    }
+                    ForEach(entry.mentions.sorted { ($0.entity?.name ?? "") < ($1.entity?.name ?? "") }) { mention in
+                        if let entity = mention.entity {
+                            HStack(alignment: .top, spacing: 4) {
+                                NavigationLink(value: entity) {
+                                    HStack(alignment: .top, spacing: 10) {
+                                        EntityChip(name: entity.name, kind: entity.kind, feeling: mention.sentiment)
+                                        Text("“\(mention.quote)”")
+                                            .font(.subheadline)
+                                            .foregroundStyle(Palette.ink2)
+                                            .lineLimit(2)
+                                            .multilineTextAlignment(.leading)
+                                        Spacer(minLength: 0)
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                                Menu {
+                                    Button("Not about \(entity.name)", systemImage: "minus.circle", role: .destructive) {
+                                        withAnimation {
+                                            Store.detach(mention, in: context)
+                                            intelligence.refreshPatterns(in: context)
                                         }
                                     }
-                                    .buttonStyle(.plain)
-                                    Menu {
-                                        Button("Not about \(entity.name)", systemImage: "minus.circle", role: .destructive) {
-                                            withAnimation {
-                                                Store.detach(mention, in: context)
-                                                intelligence.refreshPatterns(in: context)
-                                            }
-                                        }
-                                    } label: {
-                                        Image(systemName: "ellipsis")
-                                            .foregroundStyle(Palette.ink3)
-                                            .frame(width: 32, height: 28)
-                                    }
+                                } label: {
+                                    Image(systemName: "ellipsis")
+                                        .foregroundStyle(Palette.ink3)
+                                        .frame(width: 32, height: 28)
                                 }
                             }
                         }
@@ -98,6 +104,12 @@ struct EntryDetailView: View {
             }
         }
         .fullScreenCover(isPresented: $editing) { ComposeView(mode: .write, editing: entry) }
+        .sheet(isPresented: $addingTag) {
+            TagPicker { tag in
+                Store.addTag(tag, to: entry, in: context)
+                intelligence.refreshPatterns(in: context)
+            }
+        }
         .confirmationDialog("Delete this entry?", isPresented: $confirmDelete, titleVisibility: .visible) {
             Button("Delete", role: .destructive) {
                 // Leave the screen first so nothing reads the entry after it's gone.

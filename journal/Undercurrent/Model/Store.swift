@@ -47,6 +47,37 @@ enum Store {
             mention.entry = entry
             mention.entity = target
         }
+
+        for tag in entry.chosenTags {
+            let target = Self.entity(named: tag.name, kind: tag.kind, in: context)
+            guard seen.insert(target.key).inserted else { continue }
+            attach(target, to: entry, in: context)
+        }
+    }
+
+    /// Links an entity to an entry, quoting the sentence that names it if there is one.
+    private static func attach(_ entity: Entity, to entry: Entry, in context: ModelContext) {
+        let sentence = LocalReader.sentences(in: entry.text)
+            .first { $0.localizedCaseInsensitiveContains(entity.name) }?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        let mention = Mention(sentiment: entry.mood ?? 0, quote: String((sentence ?? entry.title).prefix(280)))
+        context.insert(mention)
+        mention.entry = entry
+        mention.entity = entity
+    }
+
+    /// You tagged this entry by hand: it stays tagged through every re-read.
+    static func addTag(_ tag: Tag, to entry: Entry, in context: ModelContext) {
+        guard !tag.name.isEmpty else { return }
+        let target = entity(named: tag.name, kind: tag.kind, in: context)
+        entry.excludedKeys = (entry.excludedKeys ?? []).filter { $0 != target.key }
+        if !entry.chosenTags.contains(where: { $0.key == target.key }) {
+            entry.chosenTags.append(Tag(target))
+        }
+        if !entry.mentions.contains(where: { $0.entity?.key == target.key }) {
+            attach(target, to: entry, in: context)
+        }
+        try? context.save()
     }
 
     /// Finds an entity by name or alias, or makes a new one.
@@ -69,6 +100,7 @@ enum Store {
     static func detach(_ mention: Mention, in context: ModelContext) {
         guard let entry = mention.entry, let entity = mention.entity else { return }
         entry.excludedKeys = (entry.excludedKeys ?? []) + [entity.key]
+        entry.chosenTags.removeAll { $0.key == entity.key }
         mention.entry = nil
         mention.entity = nil
         context.delete(mention)

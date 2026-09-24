@@ -18,6 +18,7 @@ struct EntityDetailView: View {
     @State private var renaming = false
     @State private var newName = ""
     @State private var askingForKey = false
+    @State private var writing = false
 
     var body: some View {
         ScrollView {
@@ -44,6 +45,10 @@ struct EntityDetailView: View {
             reading = latestReading
             if startReading && reading == nil { closerLook() }
         }
+        .fullScreenCover(isPresented: $writing) {
+            ComposeView(mode: .write, question: Questions.about(entity.name, kind: entity.kind),
+                        presetTags: [Tag(entity)])
+        }
         .sheet(isPresented: $askingForKey) {
             ClaudeKeySheet { closerLook() }
                 .presentationDetents([.medium, .large])
@@ -60,6 +65,11 @@ struct EntityDetailView: View {
                 .tracking(1.4)
                 .foregroundStyle(Palette.ink3)
             Text(entity.name).font(.display).foregroundStyle(Palette.ink)
+            Button { writing = true } label: {
+                Label("Write about \(entity.name)", systemImage: "pencil")
+            }
+            .buttonStyle(PillButtonStyle(prominent: false))
+            .padding(.top, 4)
         }
     }
 

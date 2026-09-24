@@ -53,6 +53,8 @@ final class Entry {
     var isSample: Bool?
     /// Entity keys you've said this entry isn't about; readings leave them out.
     var excludedKeys: [String]?
+    /// Tags you added yourself, as "kind|Name"; every reading keeps them.
+    var pinnedTags: [String]?
 
     @Relationship(deleteRule: .cascade, inverse: \Mention.entry)
     var mentions: [Mention] = []

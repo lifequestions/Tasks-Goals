@@ -13,6 +13,10 @@ struct TodayView: View {
     @State private var composing: ComposeMode?
     @State private var composingQuestion: String?
     @State private var skip = 0
+    @State private var pickedQuestion: String?
+    @State private var composingTags: [Tag] = []
+    @State private var choosingSubject = false
+    @State private var subject: Tag?
 
     var body: some View {
         NavigationStack {
@@ -32,7 +36,15 @@ struct TodayView: View {
             .screenBackground()
             .journalDestinations()
             .fullScreenCover(item: $composing) { mode in
-                ComposeView(mode: mode, question: composingQuestion)
+                ComposeView(mode: mode, question: composingQuestion, presetTags: composingTags)
+            }
+            .sheet(isPresented: $choosingSubject, onDismiss: {
+                // Open the writing screen once the picker has gone.
+                guard let tag = subject else { return }
+                subject = nil
+                compose(.write, answering: Questions.about(tag.name, kind: tag.kind), tags: [tag])
+            }) {
+                TagPicker { subject = $0 }
             }
         }
     }
@@ -48,8 +60,23 @@ struct TodayView: View {
     }
 
     private var questionCard: some View {
-        let opener = Questions.opener()
+        let opener = pickedQuestion.map { Questions.Question(text: $0) } ?? Questions.opener()
         return Card(padding: 22) {
+            HStack {
+                Spacer()
+                Menu {
+                    Section("Pick a question") {
+                        ForEach(Questions.openers, id: \.self) { q in
+                            Button(q) { withAnimation(.snappy) { pickedQuestion = q } }
+                        }
+                    }
+                    Button("About someone or something…", systemImage: "person.2") { choosingSubject = true }
+                } label: {
+                    Label("Another question", systemImage: "chevron.down.circle")
+                        .font(.footnote.weight(.semibold))
+                }
+                .foregroundStyle(Palette.accent)
+            }
             Text(opener.text)
                 .font(.headline2)
                 .foregroundStyle(Palette.ink)
@@ -185,8 +212,9 @@ struct TodayView: View {
         }
     }
 
-    private func compose(_ mode: ComposeMode, answering question: String?) {
+    private func compose(_ mode: ComposeMode, answering question: String?, tags: [Tag] = []) {
         composingQuestion = question
+        composingTags = tags
         composing = mode
     }
 

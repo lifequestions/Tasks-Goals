@@ -6,6 +6,7 @@ struct ComposeView: View {
     let mode: ComposeMode
     var question: String? = nil
     var editing: Entry? = nil
+    var presetTags: [Tag] = []
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -17,6 +18,10 @@ struct ComposeView: View {
     @State private var textBeforeDictation = ""
     @State private var usedDictation = false
     @FocusState private var focused: Bool
+    @State private var chosen: [Tag] = []
+    @State private var detected: [Tag] = []
+    @State private var dropped: Set<String> = []
+    @State private var pickingTag = false
 
     var body: some View {
         NavigationStack {
@@ -59,6 +64,7 @@ struct ComposeView: View {
                         .focused($focused)
                 }
 
+                if !isInsight { tagRow }
                 bottomBar
             }
             .screenBackground()
@@ -77,7 +83,22 @@ struct ComposeView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
         }
+        .task(id: text) {
+            // Spot people, places and themes as you write, once you pause.
+            try? await Task.sleep(for: .milliseconds(700))
+            guard !Task.isCancelled else { return }
+            detected = LocalReader().read(text).entities.compactMap { found in
+                EntityKind(rawValue: found.kind).map { Tag(name: found.name, kind: $0) }
+            }
+        }
+        .sheet(isPresented: $pickingTag) {
+            TagPicker { tag in
+                dropped.remove(tag.key)
+                if !chosen.contains(tag) { chosen.append(tag) }
+            }
+        }
         .onAppear {
+            chosen = editing?.chosenTags ?? presetTags
             if let editing { text = editing.text }
             isInsight = mode == .insight
             if mode == .speak {
@@ -92,6 +113,33 @@ struct ComposeView: View {
             text = textBeforeDictation + joiner + spoken
         }
         .onDisappear { dictation.stop() }
+    }
+
+    /// Your tags, then the ones spotted in the text (dashed), then + Tag.
+    private var tagRow: some View {
+        let chosenKeys = Set(chosen.map(\.key))
+        let suggestions = detected.filter { !chosenKeys.contains($0.key) && !dropped.contains($0.key) }
+        return ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(chosen) { tag in
+                    RemovableTag(tag: tag) { withAnimation { chosen.removeAll { $0 == tag }; dropped.insert(tag.key) } }
+                }
+                ForEach(suggestions) { tag in
+                    RemovableTag(tag: tag, suggested: true) { withAnimation { _ = dropped.insert(tag.key) } }
+                }
+                Button { pickingTag = true } label: {
+                    Label("Tag", systemImage: "plus")
+                        .font(.subheadline.weight(.semibold))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(Palette.raised))
+                }
+                .foregroundStyle(Palette.accent)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 8)
+        }
+        .animation(.snappy, value: suggestions.map(\.key))
     }
 
     private var bottomBar: some View {
@@ -166,6 +214,8 @@ struct ComposeView: View {
 
         if let editing {
             editing.text = body
+            editing.chosenTags = chosen
+            editing.excludedKeys = Array(Set(editing.excludedKeys ?? []).union(dropped).subtracting(chosen.map(\.key)))
             editing.analysedBy = nil
             editing.analysedAt = nil
             try? context.save()
@@ -173,7 +223,8 @@ struct ComposeView: View {
         } else if isInsight {
             intelligence.saveInsight(text: body, in: context)
         } else {
-            intelligence.saveEntry(text: body, dictated: usedDictation, question: question, in: context)
+            intelligence.saveEntry(text: body, dictated: usedDictation, question: question,
+                                   tags: chosen, dropped: Array(dropped), in: context)
         }
         dismiss()
     }

@@ -27,6 +27,7 @@ struct ConnectionsView: View {
     @State private var selected: Int?
     @State private var opened: Entity?
     @State private var openForReading = false
+    @State private var writingAbout: Tag?
 
     // Gesture bookkeeping.
     @State private var dragging: Int?
@@ -75,6 +76,9 @@ struct ConnectionsView: View {
                 ToolbarItem(placement: .primaryAction) { filterMenu }
             }
             .task(id: rebuildKey) { rebuild() }
+            .fullScreenCover(item: $writingAbout) { tag in
+                ComposeView(mode: .write, question: Questions.about(tag.name, kind: tag.kind), presetTags: [tag])
+            }
             .navigationDestination(item: $opened) { EntityDetailView(entity: $0, startReading: openForReading) }
             .journalDestinations()
         }
@@ -271,6 +275,10 @@ struct ConnectionsView: View {
             HStack(spacing: 10) {
                 Button { open(true) } label: { Label("Closer look", systemImage: "sparkles") }
                     .buttonStyle(PillButtonStyle())
+                Button { writingAbout = Tag(name: node.name, kind: node.kind) } label: {
+                    Label("Write", systemImage: "pencil")
+                }
+                .buttonStyle(PillButtonStyle(prominent: false))
                 Button { open(false) } label: { Text("Open") }
                     .buttonStyle(PillButtonStyle(prominent: false))
                 Spacer()

@@ -41,8 +41,11 @@ final class Intelligence {
     // MARK: Writing
 
     @discardableResult
-    func saveEntry(text: String, dictated: Bool, question: String? = nil, date: Date = .now, in context: ModelContext) -> Entry {
+    func saveEntry(text: String, dictated: Bool, question: String? = nil, tags: [Tag] = [], dropped: [String] = [],
+                   date: Date = .now, in context: ModelContext) -> Entry {
         let entry = Entry(text: text, createdAt: date, wasDictated: dictated, question: question)
+        entry.chosenTags = tags
+        entry.excludedKeys = dropped.isEmpty ? nil : dropped
         context.insert(entry)
         Store.apply(LocalReader().read(text), to: entry, by: "device", in: context)
         try? context.save()

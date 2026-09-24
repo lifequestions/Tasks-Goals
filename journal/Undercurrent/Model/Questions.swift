@@ -17,6 +17,30 @@ enum Questions {
         }
     }
 
+    /// Tapping "Another question" moves through these.
+    static let openers = [
+        "What's on your mind today?",
+        "How are you feeling right now?",
+        "What are you looking forward to?",
+        "Is anything stressing you out?",
+        "Who have you been thinking about?",
+        "What went well today?",
+        "What's taking up most of your energy?",
+    ]
+
+    static func opener(at date: Date = .now, skip: Int) -> Question {
+        skip == 0 ? opener(at: date) : Question(text: openers[skip % openers.count])
+    }
+
+    static func about(_ name: String, kind: EntityKind) -> String {
+        switch kind {
+        case .person: "What's on your mind about \(name)?"
+        case .place: "What's on your mind about \(name)?"
+        case .theme: "What's going on with \(name.lowercased()) at the moment?"
+        case .activity: "How has \(name.lowercased()) been going?"
+        }
+    }
+
     static let morning = [
         "What are you looking forward to?",
         "Is anything stressing you out?",
