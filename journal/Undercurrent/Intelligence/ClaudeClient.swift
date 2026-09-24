@@ -54,8 +54,8 @@ struct ClaudeClient {
                                   system: String,
                                   user: String,
                                   schema: [String: Any],
-                                  effort: String = "medium",
-                                  maxTokens: Int = 16_000) async throws -> T {
+                                  effort: String,
+                                  maxTokens: Int) async throws -> T {
         var body: [String: Any] = [
             "model": model,
             "max_tokens": maxTokens,
@@ -100,19 +100,5 @@ struct ClaudeClient {
         // Thinking blocks come first; the structured answer is the text block.
         guard let text = decoded.content.first(where: { $0.type == "text" })?.text else { throw Failure.empty }
         return try JSONDecoder().decode(T.self, from: Data(text.utf8))
-    }
-
-    /// A cheap round trip for the Settings screen.
-    func check() async throws {
-        struct Ok: Decodable { let ok: Bool }
-        _ = try await structured(Ok.self,
-                                 system: "Reply with ok: true.",
-                                 user: "Are you there?",
-                                 schema: ["type": "object",
-                                          "properties": ["ok": ["type": "boolean"]],
-                                          "required": ["ok"],
-                                          "additionalProperties": false],
-                                 effort: "low",
-                                 maxTokens: 2_000)
     }
 }

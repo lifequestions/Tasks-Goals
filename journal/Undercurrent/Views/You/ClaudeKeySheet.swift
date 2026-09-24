@@ -7,6 +7,7 @@ struct ClaudeKeySheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(Intelligence.self) private var intelligence
     @AppStorage(Prefs.onDeviceOnly) private var onDeviceOnly = false
+    @AppStorage(Prefs.provider) private var provider = "anthropic"
     @State private var key = ""
     @State private var checking = false
     @State private var problem: String?
@@ -16,10 +17,20 @@ struct ClaudeKeySheet: View {
             VStack(alignment: .leading, spacing: 16) {
                 Image(systemName: "sparkles").font(.title2).foregroundStyle(Palette.accent)
                 Text("Switch on Claude").font(.headline2).foregroundStyle(Palette.ink)
-                Text("Claude reads your entries properly, writes the closer looks and reflections, and suggests follow-up questions. You need an API key from console.anthropic.com — about $2–4 a month if you write daily.")
+                Text("Claude reads your entries properly, writes the closer looks and reflections, and suggests follow-up questions. Use a key from Anthropic (console.anthropic.com) or from OpenRouter (openrouter.ai/keys) if you have credits there.")
                     .font(.subheadline).foregroundStyle(Palette.ink2)
 
-                SecureField("Paste your key (sk-ant-…)", text: $key)
+                Picker("Through", selection: $provider) {
+                    Text("Anthropic").tag("anthropic")
+                    Text("OpenRouter").tag("openrouter")
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: provider) { _, _ in
+                    key = Keychain.get(keyAccount) ?? ""
+                    problem = nil
+                }
+
+                SecureField(provider == "openrouter" ? "Paste your key (sk-or-…)" : "Paste your key (sk-ant-…)", text: $key)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .padding(12)
@@ -41,7 +52,9 @@ struct ClaudeKeySheet: View {
                 .buttonStyle(PillButtonStyle())
                 .disabled(key.trimmingCharacters(in: .whitespaces).isEmpty || checking)
 
-                Text("The key stays in this iPhone's Keychain and is only ever sent to Anthropic.")
+                Text(provider == "openrouter"
+                     ? "The key stays in this iPhone's Keychain. Entries go through OpenRouter to Claude."
+                     : "The key stays in this iPhone's Keychain and is only ever sent to Anthropic.")
                     .font(.caption).foregroundStyle(Palette.ink3)
                 Spacer()
             }
@@ -51,15 +64,20 @@ struct ClaudeKeySheet: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Not now") { dismiss() } }
             }
         }
-        .onAppear { key = Keychain.get(Prefs.apiKeyAccount) ?? "" }
+        .onAppear { key = Keychain.get(keyAccount) ?? "" }
+    }
+
+    private var keyAccount: String {
+        provider == "openrouter" ? Prefs.openRouterKeyAccount : Prefs.apiKeyAccount
     }
 
     private func connect() async {
         problem = nil
         checking = true
         defer { checking = false }
-        Keychain.set(key.trimmingCharacters(in: .whitespacesAndNewlines), for: Prefs.apiKeyAccount)
+        Keychain.set(key.trimmingCharacters(in: .whitespacesAndNewlines), for: keyAccount)
         onDeviceOnly = false
+        if provider == "openrouter" { await OpenRouterClient.settleModel() }
         guard let client = intelligence.claude else {
             problem = "That key didn't save. Try pasting it again."
             return

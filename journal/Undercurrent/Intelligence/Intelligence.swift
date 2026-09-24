@@ -9,6 +9,9 @@ enum Prefs {
     static let reminderOn = "reminderOn"
     static let reminderTime = "reminderTime"
     static let apiKeyAccount = "anthropic-api-key"
+    static let provider = "aiProvider"            // "anthropic" or "openrouter"
+    static let openRouterModel = "openRouterModel"
+    static let openRouterKeyAccount = "openrouter-api-key"
 }
 
 /// The app's understanding of the journal. Every entry is read on the phone
@@ -20,8 +23,14 @@ final class Intelligence {
     var working: Set<String> = []
     var lastError: String?
 
-    var claude: ClaudeClient? {
-        if UserDefaults.standard.bool(forKey: Prefs.onDeviceOnly) { return nil }
+    var claude: (any AIClient)? {
+        let defaults = UserDefaults.standard
+        if defaults.bool(forKey: Prefs.onDeviceOnly) { return nil }
+        if defaults.string(forKey: Prefs.provider) == "openrouter" {
+            guard let key = Keychain.get(Prefs.openRouterKeyAccount), !key.isEmpty else { return nil }
+            let chosen = defaults.string(forKey: Prefs.openRouterModel) ?? ""
+            return OpenRouterClient(apiKey: key, model: chosen.isEmpty ? OpenRouterClient.defaultModel : chosen)
+        }
         guard let key = Keychain.get(Prefs.apiKeyAccount), !key.isEmpty else { return nil }
         let model = UserDefaults.standard.string(forKey: Prefs.model) ?? ClaudeClient.defaultModel
         return ClaudeClient(apiKey: key, model: model)

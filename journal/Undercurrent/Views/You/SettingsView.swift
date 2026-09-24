@@ -6,11 +6,14 @@ struct SettingsView: View {
     @Environment(Intelligence.self) private var intelligence
 
     @AppStorage(Prefs.model) private var model = ClaudeClient.defaultModel
+    @AppStorage(Prefs.provider) private var provider = "anthropic"
+    @AppStorage(Prefs.openRouterModel) private var openRouterModel = OpenRouterClient.defaultModel
     @AppStorage(Prefs.onDeviceOnly) private var onDeviceOnly = false
     @AppStorage(Prefs.reminderOn) private var reminderOn = false
     @AppStorage(Prefs.reminderTime) private var reminderTime: Double = 21 * 3600
 
     @State private var apiKey = ""
+    @State private var openRouterModels: [String] = []
     @State private var check: String?
     @State private var checking = false
     @State private var exportURL: URL?
@@ -22,13 +25,37 @@ struct SettingsView: View {
     var body: some View {
         Form {
             Section {
-                SecureField("sk-ant-…", text: $apiKey)
+                Picker("Through", selection: $provider) {
+                    Text("Anthropic").tag("anthropic")
+                    Text("OpenRouter").tag("openrouter")
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: provider) { _, _ in
+                    apiKey = Keychain.get(keyAccount) ?? ""
+                    check = nil
+                }
+                SecureField(provider == "openrouter" ? "sk-or-…" : "sk-ant-…", text: $apiKey)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
                     .onSubmit(saveKey)
                     .onChange(of: apiKey) { _, _ in check = nil }
-                Picker("Model", selection: $model) {
-                    ForEach(ClaudeClient.models) { Text($0.label).tag($0.id) }
+                if provider == "openrouter" {
+                    if openRouterModels.isEmpty {
+                        TextField("Model", text: $openRouterModel)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .font(.body.monospaced())
+                    } else {
+                        Picker("Model", selection: $openRouterModel) {
+                            ForEach(openRouterModels, id: \.self) { id in
+                                Text(id.replacingOccurrences(of: "anthropic/", with: "")).tag(id)
+                            }
+                        }
+                    }
+                } else {
+                    Picker("Model", selection: $model) {
+                        ForEach(ClaudeClient.models) { Text($0.label).tag($0.id) }
+                    }
                 }
                 HStack {
                     Button("Save and test") {
@@ -42,7 +69,9 @@ struct SettingsView: View {
             } header: {
                 Text("Claude")
             } footer: {
-                Text("Your key is kept in the iPhone Keychain and only ever sent to Anthropic. Get one at console.anthropic.com. Writing daily costs roughly $2–4 a month on Opus, less on Sonnet.")
+                Text(provider == "openrouter"
+                     ? "Uses your OpenRouter credits. Get a key at openrouter.ai/keys. The model is Claude by default; any model id from openrouter.ai/models works. Your entries pass through OpenRouter on their way to the model."
+                     : "Your key is kept in the iPhone Keychain and only ever sent to Anthropic. Get one at console.anthropic.com. Writing daily costs roughly $2–4 a month on Opus, less on Sonnet.")
             }
 
             Section {
@@ -86,7 +115,15 @@ struct SettingsView: View {
         .scrollContentBackground(.hidden)
         .screenBackground()
         .navigationTitle("Settings")
-        .onAppear { apiKey = Keychain.get(Prefs.apiKeyAccount) ?? "" }
+        .onAppear { apiKey = Keychain.get(keyAccount) ?? "" }
+        .task(id: provider) {
+            guard provider == "openrouter", openRouterModels.isEmpty else { return }
+            openRouterModels = (try? await OpenRouterClient.claudeModels()) ?? []
+            if !openRouterModels.isEmpty, !openRouterModels.contains(openRouterModel),
+               let pick = OpenRouterClient.best(of: openRouterModels) {
+                openRouterModel = pick
+            }
+        }
         .onDisappear(perform: saveKey)
         .confirmationDialog("Erase every entry, insight and reflection?", isPresented: $confirmErase, titleVisibility: .visible) {
             Button("Erase everything", role: .destructive) { Store.eraseEverything(in: context) }
@@ -103,11 +140,16 @@ struct SettingsView: View {
         }
     }
 
+    private var keyAccount: String {
+        provider == "openrouter" ? Prefs.openRouterKeyAccount : Prefs.apiKeyAccount
+    }
+
     private func saveKey() {
-        Keychain.set(apiKey.trimmingCharacters(in: .whitespacesAndNewlines), for: Prefs.apiKeyAccount)
+        Keychain.set(apiKey.trimmingCharacters(in: .whitespacesAndNewlines), for: keyAccount)
     }
 
     private func test() async {
+        if provider == "openrouter" { await OpenRouterClient.settleModel() }
         guard let client = intelligence.claude else {
             check = onDeviceOnly ? "Turn off “Keep everything on this iPhone” first." : "No key saved."
             return
