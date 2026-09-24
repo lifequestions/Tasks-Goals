@@ -30,7 +30,7 @@ enum Store {
         entry.analysedAt = .now
         if reader == "claude" {
             let next = analysis.followUp.trimmingCharacters(in: .whitespacesAndNewlines)
-            entry.followUp = next.isEmpty ? nil : next
+            entry.followUp = Questions.isUsable(next) ? next : nil
         }
 
         var seen = Set<String>()

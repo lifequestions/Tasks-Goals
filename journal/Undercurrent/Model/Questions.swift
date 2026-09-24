@@ -60,6 +60,14 @@ enum Questions {
     ]
 
     /// Everyday follow-ups, in an order that changes each day. `skip` moves through them.
+    /// A follow-up from the AI is worth showing only if it reads as a question,
+    /// not a stray comma or fragment.
+    static func isUsable(_ text: String) -> Bool {
+        let letters = text.filter(\.isLetter).count
+        let words = text.split { $0.isWhitespace }.count
+        return letters >= 10 && words >= 3
+    }
+
     static func followUp(at date: Date = .now, skip: Int = 0) -> String {
         let pool = Calendar.current.component(.hour, from: date) < 12 ? morning : evening
         let day = Calendar.current.ordinality(of: .day, in: .era, for: date) ?? 0

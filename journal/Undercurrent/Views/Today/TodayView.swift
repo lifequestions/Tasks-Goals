@@ -289,7 +289,7 @@ struct TodayView: View {
         let calendar = Calendar.current
         let answered = Set(todays.compactMap(\.question))
         if !todays.isEmpty {
-            if skip == 0, let claude = todays.compactMap(\.followUp).first, !answered.contains(claude) {
+            if skip == 0, let claude = todays.compactMap(\.followUp).first(where: Questions.isUsable), !answered.contains(claude) {
                 return (claude, true, "Following on")
             }
             for offset in 0..<8 {
@@ -298,7 +298,7 @@ struct TodayView: View {
             }
             return nil
         }
-        if let from = entries.first(where: { calendar.isDateInYesterday($0.createdAt) && $0.followUp != nil })?.followUp {
+        if let from = entries.first(where: { calendar.isDateInYesterday($0.createdAt) && Questions.isUsable($0.followUp ?? "") })?.followUp {
             return (from, true, "From yesterday")
         }
         return nil
