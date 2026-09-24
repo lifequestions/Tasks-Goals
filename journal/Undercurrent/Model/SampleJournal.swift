@@ -115,7 +115,9 @@ extension SampleJournal {
     @MainActor
     static func tagUntagged(in context: ModelContext) {
         let lines = heavyWithJordan + lightWithMaya + running + work + family + sunday + other
-        let untagged = (try? context.fetch(FetchDescriptor<Entry>(predicate: #Predicate { $0.isSample != true }))) ?? []
+        // Filtered here rather than in a predicate: older entries have no value
+        // at all, and a database "!= true" doesn't match a missing value.
+        let untagged = ((try? context.fetch(FetchDescriptor<Entry>())) ?? []).filter { $0.isSample != true }
         var changed = false
         for entry in untagged {
             guard let first = lines.first(where: { entry.text.hasPrefix($0) }) else { continue }
