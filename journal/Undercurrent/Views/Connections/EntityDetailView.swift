@@ -170,25 +170,41 @@ struct EntityDetailView: View {
             Eyebrow("Every moment")
             ForEach(moments.reversed(), id: \.persistentModelID) { mention in
                 if let entry = mention.entry {
-                    NavigationLink(value: entry) {
-                        HStack(alignment: .top, spacing: 12) {
-                            FeelingDot(value: mention.sentiment).padding(.top, 6)
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(entry.createdAt.stamp("EEEdMMMyyyy")).font(.caption).foregroundStyle(Palette.ink3)
-                                Text("“\(mention.quote)”")
-                                    .font(.system(size: 15, design: .serif))
-                                    .foregroundStyle(Palette.ink)
-                                    .multilineTextAlignment(.leading)
+                    HStack(alignment: .top, spacing: 4) {
+                        NavigationLink(value: entry) {
+                            HStack(alignment: .top, spacing: 12) {
+                                FeelingDot(value: mention.sentiment).padding(.top, 6)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(entry.createdAt.stamp("EEEdMMMyyyy")).font(.caption).foregroundStyle(Palette.ink3)
+                                    Text("“\(mention.quote)”")
+                                        .font(.system(size: 15, design: .serif))
+                                        .foregroundStyle(Palette.ink)
+                                        .multilineTextAlignment(.leading)
+                                }
+                                Spacer(minLength: 0)
                             }
-                            Spacer(minLength: 0)
+                            .padding(.vertical, 6)
                         }
-                        .padding(.vertical, 6)
+                        .buttonStyle(.plain)
+                        Menu {
+                            Button("Not about \(entity.name)", systemImage: "minus.circle", role: .destructive) {
+                                withAnimation { detach(mention) }
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis")
+                                .foregroundStyle(Palette.ink3)
+                                .frame(width: 32, height: 32)
+                        }
                     }
-                    .buttonStyle(.plain)
                     Divider().overlay(Palette.line)
                 }
             }
         }
+    }
+
+    private func detach(_ mention: Mention) {
+        Store.detach(mention, in: context)
+        intelligence.refreshPatterns(in: context)
     }
 
     private var menu: some View {

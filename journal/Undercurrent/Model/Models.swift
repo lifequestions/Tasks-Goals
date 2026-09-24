@@ -51,6 +51,8 @@ final class Entry {
     var followUp: String?
     /// Part of the sample journal, so it can be removed without touching real entries.
     var isSample: Bool?
+    /// Entity keys you've said this entry isn't about; readings leave them out.
+    var excludedKeys: [String]?
 
     @Relationship(deleteRule: .cascade, inverse: \Mention.entry)
     var mentions: [Mention] = []

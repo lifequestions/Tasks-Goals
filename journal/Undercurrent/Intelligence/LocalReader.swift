@@ -9,23 +9,23 @@ struct LocalReader {
     // A starter vocabulary. Claude finds themes freely; this only has to catch the common ones.
     static let lexicon: [(name: String, kind: EntityKind, words: [String])] = [
         ("Work", .theme, ["work", "job", "boss", "meeting", "meetings", "office", "deadline", "project", "career", "colleague", "colleagues", "manager", "client"]),
-        ("Sleep", .theme, ["sleep", "slept", "tired", "insomnia", "nap", "exhausted", "awake", "bed"]),
+        ("Sleep", .theme, ["sleep", "slept", "tired", "insomnia", "nap", "exhausted"]),
         ("Family", .theme, ["family", "mum", "mom", "dad", "mother", "father", "sister", "brother", "parents", "son", "daughter", "kids"]),
-        ("Money", .theme, ["money", "rent", "bills", "salary", "debt", "savings", "spent", "budget", "mortgage"]),
-        ("Health", .theme, ["health", "sick", "ill", "doctor", "pain", "headache", "injury", "hospital"]),
+        ("Money", .theme, ["money", "rent", "bills", "salary", "debt", "savings", "budget", "mortgage"]),
+        ("Health", .theme, ["health", "sick", "doctor", "pain", "headache", "injury", "hospital"]),
         ("Anxiety", .theme, ["anxious", "anxiety", "worried", "worry", "nervous", "panic", "stress", "stressed", "dread", "overwhelmed"]),
         ("Gratitude", .theme, ["grateful", "thankful", "gratitude", "appreciate", "lucky"]),
-        ("Love", .theme, ["love", "partner", "date", "relationship", "girlfriend", "boyfriend", "wife", "husband"]),
-        ("Creativity", .theme, ["write", "writing", "draw", "drawing", "paint", "painting", "music", "guitar", "piano", "idea", "ideas"]),
+        ("Love", .theme, ["partner", "relationship", "girlfriend", "boyfriend", "wife", "husband", "dating"]),
+        ("Creativity", .theme, ["drawing", "painting", "music", "guitar", "piano", "sketching"]),
         ("Drinking", .activity, ["drinking", "drunk", "wine", "beer", "hungover", "hangover", "pub"]),
         ("Running", .activity, ["run", "running", "ran", "jog", "jogging"]),
         ("Walking", .activity, ["walk", "walked", "walking", "hike", "hiking"]),
         ("Gym", .activity, ["gym", "lifting", "workout", "weights", "training"]),
         ("Yoga", .activity, ["yoga", "stretching", "pilates"]),
         ("Meditation", .activity, ["meditate", "meditated", "meditation", "breathing", "breathwork"]),
-        ("Reading", .activity, ["read", "reading", "book", "novel"]),
+        ("Reading", .activity, ["reading", "book", "novel"]),
         ("Cooking", .activity, ["cook", "cooked", "cooking", "baking", "baked"]),
-        ("Social media", .activity, ["instagram", "tiktok", "twitter", "scrolling", "doomscrolling", "phone"]),
+        ("Social media", .activity, ["instagram", "tiktok", "twitter", "scrolling", "doomscrolling"]),
     ]
 
     func read(_ text: String) -> EntryAnalysis {

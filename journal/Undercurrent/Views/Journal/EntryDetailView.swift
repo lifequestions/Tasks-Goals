@@ -47,18 +47,32 @@ struct EntryDetailView: View {
                         Eyebrow("In this entry")
                         ForEach(entry.mentions.sorted { ($0.entity?.name ?? "") < ($1.entity?.name ?? "") }) { mention in
                             if let entity = mention.entity {
-                                NavigationLink(value: entity) {
-                                    HStack(alignment: .top, spacing: 10) {
-                                        EntityChip(name: entity.name, kind: entity.kind, feeling: mention.sentiment)
-                                        Text("“\(mention.quote)”")
-                                            .font(.footnote)
-                                            .foregroundStyle(Palette.ink2)
-                                            .lineLimit(2)
-                                            .multilineTextAlignment(.leading)
-                                        Spacer(minLength: 0)
+                                HStack(alignment: .top, spacing: 4) {
+                                    NavigationLink(value: entity) {
+                                        HStack(alignment: .top, spacing: 10) {
+                                            EntityChip(name: entity.name, kind: entity.kind, feeling: mention.sentiment)
+                                            Text("“\(mention.quote)”")
+                                                .font(.footnote)
+                                                .foregroundStyle(Palette.ink2)
+                                                .lineLimit(2)
+                                                .multilineTextAlignment(.leading)
+                                            Spacer(minLength: 0)
+                                        }
+                                    }
+                                    .buttonStyle(.plain)
+                                    Menu {
+                                        Button("Not about \(entity.name)", systemImage: "minus.circle", role: .destructive) {
+                                            withAnimation {
+                                                Store.detach(mention, in: context)
+                                                intelligence.refreshPatterns(in: context)
+                                            }
+                                        }
+                                    } label: {
+                                        Image(systemName: "ellipsis")
+                                            .foregroundStyle(Palette.ink3)
+                                            .frame(width: 32, height: 28)
                                     }
                                 }
-                                .buttonStyle(.plain)
                             }
                         }
                     }

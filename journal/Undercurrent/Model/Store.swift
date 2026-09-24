@@ -39,7 +39,8 @@ enum Store {
             guard name.count > 1 else { continue }
             let kind = EntityKind(rawValue: found.kind.lowercased()) ?? .theme
             let target = Self.entity(named: name, kind: kind, in: context)
-            guard seen.insert(target.key).inserted else { continue }
+            guard !(entry.excludedKeys ?? []).contains(target.key),
+                  seen.insert(target.key).inserted else { continue }
 
             let mention = Mention(sentiment: clamp(found.sentiment), quote: String(found.quote.prefix(280)))
             context.insert(mention)
@@ -62,6 +63,16 @@ enum Store {
         let entity = Entity(name: name, kind: kind)
         context.insert(entity)
         return entity
+    }
+
+    /// "This entry isn't about that": removes the link and stops it coming back on a re-read.
+    static func detach(_ mention: Mention, in context: ModelContext) {
+        guard let entry = mention.entry, let entity = mention.entity else { return }
+        entry.excludedKeys = (entry.excludedKeys ?? []) + [entity.key]
+        mention.entry = nil
+        mention.entity = nil
+        context.delete(mention)
+        try? context.save()
     }
 
     /// Moves every mention of `source` onto `target` and remembers the old name.
