@@ -23,12 +23,14 @@ struct ConnectionsView: View {
     @State private var kinds: Set<EntityKind> = Set(EntityKind.allCases)
     @State private var minMentions = 2
     @State private var graph = ConnectionGraph()
+    @State private var sim = GraphSimulation()
     @State private var selected: Int?
-    @State private var zoom: CGFloat = 1
-    @State private var settledZoom: CGFloat = 1
-    @State private var pan: CGSize = .zero
-    @State private var settledPan: CGSize = .zero
     @State private var opened: Entity?
+
+    // Gesture bookkeeping.
+    @State private var dragging: Int?
+    @State private var panStart: CGSize?
+    @State private var zoomStart: CGFloat?
 
     var body: some View {
         NavigationStack {
@@ -45,7 +47,6 @@ struct ConnectionsView: View {
                     GeometryReader { geo in
                         canvas(size: geo.size)
                     }
-                    .ignoresSafeArea(edges: .bottom)
                 }
 
                 VStack(spacing: 10) {
@@ -59,23 +60,18 @@ struct ConnectionsView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 12)
             }
-            .safeAreaInset(edge: .top) { filters }
+            .safeAreaInset(edge: .top) {
+                Picker("Span", selection: $span) {
+                    ForEach(Span.allCases) { Text($0.rawValue).tag($0) }
+                }
+                .pickerStyle(.segmented)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 6)
+            }
             .navigationTitle("Connections")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Picker("Show things mentioned at least", selection: $minMentions) {
-                            Text("Once").tag(1)
-                            Text("Twice").tag(2)
-                            Text("3 times").tag(3)
-                            Text("5 times").tag(5)
-                        }
-                        Button("Reset view", systemImage: "arrow.counterclockwise") { resetView() }
-                    } label: {
-                        Image(systemName: "slider.horizontal.3")
-                    }
-                }
+                ToolbarItem(placement: .primaryAction) { filterMenu }
             }
             .task(id: rebuildKey) { rebuild() }
             .navigationDestination(item: $opened) { EntityDetailView(entity: $0) }
@@ -83,144 +79,163 @@ struct ConnectionsView: View {
         }
     }
 
-    // MARK: Drawing
+    // MARK: The living graph
 
     private func canvas(size: CGSize) -> some View {
-        let fit = fitScale(for: size)
         let focus = selected.map { graph.neighbours(of: $0).union([$0]) }
+        let feelings = RelativeFeeling(graph.nodes.map(\.feeling))
+        let labelled = Set(graph.nodes.indices.sorted { graph.nodes[$0].count > graph.nodes[$1].count }.prefix(10))
 
-        return Canvas { context, size in
-            func point(_ node: ConnectionGraph.Node) -> CGPoint {
-                screen(node.position, size: size, fit: fit)
-            }
+        return TimelineView(.animation(paused: sim.settled && dragging == nil)) { _ in
+            Canvas { context, size in
+                sim.tick()
+                sim.frame(size)
+                let n = min(graph.nodes.count, sim.x.count)
+                guard n > 0 else { return }
 
-            for edge in graph.edges {
-                let lit = focus.map { $0.contains(edge.a) && $0.contains(edge.b) } ?? true
-                var path = Path()
-                path.move(to: point(graph.nodes[edge.a]))
-                path.addLine(to: point(graph.nodes[edge.b]))
-                let opacity = lit ? min(0.18 + 0.1 * Double(edge.weight), 0.75) : 0.05
-                context.stroke(path, with: .color(Palette.feeling(edge.feeling).opacity(opacity)),
-                               lineWidth: min(0.8 + CGFloat(edge.weight) * 0.5, 5))
-            }
-
-            for (i, node) in graph.nodes.enumerated() {
-                let lit = focus?.contains(i) ?? true
-                let c = point(node)
-                let r = node.radius * max(0.7, min(zoom, 1.6))
-                let colour = Palette.feeling(node.feeling)
-                let rect = CGRect(x: c.x - r, y: c.y - r, width: r * 2, height: r * 2)
-
-                context.opacity = lit ? 1 : 0.18
-                context.fill(Path(ellipseIn: rect.insetBy(dx: -r * 0.7, dy: -r * 0.7)), with: .color(colour.opacity(0.13)))
-                switch node.kind {
-                case .person:
-                    context.fill(Path(ellipseIn: rect), with: .color(colour))
-                case .place:
-                    context.fill(Path(roundedRect: rect, cornerRadius: r * 0.35), with: .color(colour))
-                case .theme:
-                    context.stroke(Path(ellipseIn: rect.insetBy(dx: 1.5, dy: 1.5)), with: .color(colour), lineWidth: 3)
-                case .activity:
-                    context.fill(Path(ellipseIn: rect), with: .color(colour.opacity(0.55)))
-                }
-                if i == selected {
-                    context.stroke(Path(ellipseIn: rect.insetBy(dx: -5, dy: -5)), with: .color(Palette.ink), lineWidth: 1.5)
+                // Threads: faint and neutral, until you pick something —
+                // then its own threads take the colour of the days they share.
+                for edge in graph.edges where edge.a < n && edge.b < n {
+                    let lit = focus.map { $0.contains(edge.a) && $0.contains(edge.b) }
+                    var path = Path()
+                    path.move(to: sim.point(edge.a, in: size))
+                    path.addLine(to: sim.point(edge.b, in: size))
+                    let width = min(0.6 + CGFloat(edge.weight) * 0.35, 2.6)
+                    if lit == true {
+                        context.stroke(path, with: .color(Palette.feeling(feelings.relative(edge.feeling)).opacity(0.85)),
+                                       lineWidth: width + 0.6)
+                    } else {
+                        context.stroke(path, with: .color(Palette.ink.opacity(lit == false ? 0.04 : 0.13)), lineWidth: width)
+                    }
                 }
 
-                let showLabel = lit && (node.count >= labelThreshold || zoom > 1.4 || focus != nil)
-                if showLabel {
-                    context.draw(Text(node.name)
-                                    .font(.system(size: node.count >= labelThreshold * 2 ? 13 : 11, weight: .medium))
-                                    .foregroundStyle(Palette.ink),
-                                 at: CGPoint(x: c.x, y: c.y + r + 4), anchor: .top)
+                // Dots, small and clean. People are solid; everything else is a ring.
+                for i in 0..<n {
+                    let node = graph.nodes[i]
+                    let lit = focus?.contains(i) ?? true
+                    let c = sim.point(i, in: size)
+                    let r = sim.radius(i)
+                    let colour = Palette.feeling(feelings.relative(node.feeling))
+                    let rect = CGRect(x: c.x - r, y: c.y - r, width: r * 2, height: r * 2)
+
+                    context.opacity = lit ? 1 : 0.15
+                    if i == selected {
+                        context.fill(Path(ellipseIn: rect.insetBy(dx: -r * 0.9, dy: -r * 0.9)), with: .color(colour.opacity(0.22)))
+                    }
+                    if node.kind == .person {
+                        context.fill(Path(ellipseIn: rect), with: .color(colour))
+                    } else {
+                        context.fill(Path(ellipseIn: rect), with: .color(Palette.paper))
+                        context.stroke(Path(ellipseIn: rect.insetBy(dx: 1, dy: 1)), with: .color(colour), lineWidth: 2)
+                    }
+
+                    let showLabel = lit && (labelled.contains(i) || focus != nil || sim.zoom > 1.5)
+                    if showLabel {
+                        let strong = focus?.contains(i) == true
+                        context.draw(Text(node.name)
+                                        .font(.system(size: strong ? 12.5 : 11, weight: strong ? .semibold : .regular))
+                                        .foregroundStyle(strong ? Palette.ink : Palette.ink2),
+                                     at: CGPoint(x: c.x, y: c.y + r + 3), anchor: .top)
+                    }
+                    context.opacity = 1
                 }
-                context.opacity = 1
             }
         }
         .contentShape(Rectangle())
-        .gesture(
-            SimultaneousGesture(
-                MagnifyGesture()
-                    .onChanged { zoom = max(0.4, min(settledZoom * $0.magnification, 5)) }
-                    .onEnded { _ in settledZoom = zoom },
-                DragGesture()
-                    .onChanged { pan = CGSize(width: settledPan.width + $0.translation.width,
-                                              height: settledPan.height + $0.translation.height) }
-                    .onEnded { _ in settledPan = pan }
-            )
+        .gesture(dragOrPan(size: size))
+        .simultaneousGesture(
+            MagnifyGesture()
+                .onChanged { value in
+                    if zoomStart == nil { zoomStart = sim.zoom }
+                    sim.followsGraph = false
+                    sim.zoom = max(0.5, min((zoomStart ?? 1) * value.magnification, 4))
+                    sim.redraw()
+                }
+                .onEnded { _ in zoomStart = nil }
         )
-        .onTapGesture(coordinateSpace: .local) { location in
-            withAnimation(.snappy) { selected = hit(location, size: size, fit: fit) }
-        }
         .sensoryFeedback(.selection, trigger: selected)
     }
 
-    private func fitScale(for size: CGSize) -> CGFloat {
-        guard graph.bounds.width > 0, graph.bounds.height > 0 else { return 1 }
-        return min(size.width / graph.bounds.width, (size.height - 140) / graph.bounds.height, 2)
-    }
-
-    private func screen(_ p: CGPoint, size: CGSize, fit: CGFloat) -> CGPoint {
-        CGPoint(x: size.width / 2 + (p.x - graph.bounds.midX) * fit * zoom + pan.width,
-                y: size.height / 2 - 40 + (p.y - graph.bounds.midY) * fit * zoom + pan.height)
-    }
-
-    private func hit(_ location: CGPoint, size: CGSize, fit: CGFloat) -> Int? {
-        var best: (Int, CGFloat)?
-        for (i, node) in graph.nodes.enumerated() {
-            let c = screen(node.position, size: size, fit: fit)
-            let d = hypot(c.x - location.x, c.y - location.y)
-            if d <= node.radius * max(0.7, min(zoom, 1.6)) + 14, d < (best?.1 ?? .infinity) { best = (i, d) }
-        }
-        return best?.0
+    /// Touch a dot to grab it and drag it about; touch empty space to pan.
+    /// A touch that barely moves is a tap: it selects, or clears the selection.
+    private func dragOrPan(size: CGSize) -> some Gesture {
+        DragGesture(minimumDistance: 0)
+            .onChanged { value in
+                if dragging == nil && panStart == nil {
+                    if let i = sim.hit(value.startLocation, in: size) {
+                        dragging = i
+                        sim.grab(i)
+                    } else {
+                        panStart = sim.pan
+                    }
+                }
+                let moved = hypot(value.translation.width, value.translation.height) > 4
+                if let i = dragging, moved {
+                    sim.move(i, to: sim.world(value.location, in: size))
+                } else if let start = panStart, moved {
+                    sim.followsGraph = false
+                    sim.pan = CGSize(width: start.width + value.translation.width,
+                                     height: start.height + value.translation.height)
+                    sim.redraw()
+                }
+            }
+            .onEnded { value in
+                let tapped = hypot(value.translation.width, value.translation.height) <= 4
+                if tapped {
+                    withAnimation(.snappy) { selected = (dragging == selected) ? nil : dragging }
+                }
+                if dragging != nil { sim.release() }
+                dragging = nil
+                panStart = nil
+            }
     }
 
     // MARK: Chrome
 
-    private var filters: some View {
-        VStack(spacing: 10) {
-            Picker("Span", selection: $span) {
-                ForEach(Span.allCases) { Text($0.rawValue).tag($0) }
-            }
-            .pickerStyle(.segmented)
-
-            HStack(spacing: 8) {
+    private var filterMenu: some View {
+        Menu {
+            Section("Show") {
                 ForEach(EntityKind.allCases) { kind in
-                    let on = kinds.contains(kind)
-                    Button {
-                        if on, kinds.count > 1 { kinds.remove(kind) } else { kinds.insert(kind) }
-                    } label: {
+                    Toggle(isOn: Binding(
+                        get: { kinds.contains(kind) },
+                        set: { on in
+                            if on { kinds.insert(kind) } else if kinds.count > 1 { kinds.remove(kind) }
+                        })) {
                         Label(kind.plural, systemImage: kind.symbol)
-                            .font(.system(size: 12, weight: .semibold))
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 6)
-                            .foregroundStyle(on ? Palette.paper : Palette.ink2)
-                            .background(Capsule().fill(on ? Palette.accent : Palette.raised))
                     }
-                    .buttonStyle(.plain)
                 }
             }
+            Picker("Mentioned at least", selection: $minMentions) {
+                Text("Once").tag(1)
+                Text("Twice").tag(2)
+                Text("3 times").tag(3)
+                Text("5 times").tag(5)
+            }
+            Button("Fit to screen", systemImage: "arrow.down.right.and.arrow.up.left") { resetView() }
+        } label: {
+            Image(systemName: "line.3.horizontal.decrease.circle")
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 8)
-        .background(.ultraThinMaterial)
     }
 
     private var legend: some View {
         HStack(spacing: 8) {
+            Circle().fill(Palette.ink2).frame(width: 7, height: 7)
+            Text("person").font(.caption2)
+            Circle().strokeBorder(Palette.ink2, lineWidth: 1.5).frame(width: 8, height: 8)
+            Text("theme, place, activity").font(.caption2)
+            Spacer()
             Text("heavier").font(.caption2)
             Capsule()
                 .fill(LinearGradient(colors: [Palette.feeling(-1), Palette.feeling(0), Palette.feeling(1)],
                                      startPoint: .leading, endPoint: .trailing))
-                .frame(width: 90, height: 5)
+                .frame(width: 50, height: 4)
             Text("lighter").font(.caption2)
-            Spacer()
-            Text("\(graph.nodes.count) things · \(graph.edges.count) threads").font(.caption2)
         }
         .foregroundStyle(Palette.ink3)
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
         .background(Capsule().fill(.ultraThinMaterial))
+        .accessibilityLabel("Colours show whether something comes with heavier or lighter days than usual for you")
     }
 
     private func selectionCard(_ node: ConnectionGraph.Node, index: Int) -> some View {
@@ -229,6 +244,8 @@ struct ConnectionsView: View {
             .sorted { $0.weight > $1.weight }
             .prefix(4)
             .map { graph.nodes[$0.a == index ? $0.b : $0.a].name }
+        let feelings = RelativeFeeling(graph.nodes.map(\.feeling))
+        let relative = feelings.relative(node.feeling)
 
         return Button { opened = entities.first { $0.key == node.id } } label: {
             Card {
@@ -236,11 +253,11 @@ struct ConnectionsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Eyebrow(node.kind.rawValue)
                         Text(node.name).font(.headline2).foregroundStyle(Palette.ink)
-                        Text("\(node.count) mentions · mostly \(Feeling.word(node.feeling))")
+                        Text("\(node.count) mentions · \(feelings.phrase(relative))")
                             .font(.subheadline).foregroundStyle(Palette.ink2)
                     }
                     Spacer()
-                    FeelingDot(value: node.feeling, size: 14).padding(.top, 6)
+                    FeelingDot(value: relative, size: 14).padding(.top, 6)
                 }
                 if !links.isEmpty {
                     Text("Often with " + links.joined(separator: ", "))
@@ -258,11 +275,6 @@ struct ConnectionsView: View {
 
     // MARK: State
 
-    private var labelThreshold: Int {
-        let counts = graph.nodes.map(\.count).sorted(by: >)
-        return counts.count > 14 ? counts[14] : 0
-    }
-
     private var rebuildKey: String {
         let latest = entries.last?.analysedAt?.timeIntervalSince1970 ?? 0
         return "\(entries.count)-\(entities.count)-\(latest)-\(span.rawValue)-\(kinds.map(\.rawValue).sorted())-\(minMentions)"
@@ -272,14 +284,43 @@ struct ConnectionsView: View {
         let since = span.since
         let chosen = since.map { date in entries.filter { $0.createdAt >= date } } ?? entries
         graph = ConnectionGraph.build(from: chosen, kinds: kinds, minMentions: minMentions)
+        sim.load(graph)
+        sim.followsGraph = true
         selected = nil
     }
 
     private func resetView() {
-        withAnimation(.snappy) {
-            zoom = 1; settledZoom = 1
-            pan = .zero; settledPan = .zero
-            selected = nil
+        sim.zoom = 1
+        sim.pan = .zero
+        sim.followsGraph = true
+        sim.wake()
+        withAnimation(.snappy) { selected = nil }
+    }
+}
+
+/// Colours are relative to your own usual. Read on the phone, most entries
+/// come out a little heavy, so a fixed scale paints everything clay; this
+/// spreads the colours around your own average instead.
+struct RelativeFeeling {
+    let mean: Double
+    let spread: Double
+
+    init(_ values: [Double]) {
+        mean = values.isEmpty ? 0 : values.reduce(0, +) / Double(values.count)
+        spread = max(0.12, values.map { abs($0 - mean) }.max() ?? 0)
+    }
+
+    func relative(_ value: Double) -> Double {
+        max(-1, min(1, (value - mean) / spread))
+    }
+
+    func phrase(_ relative: Double) -> String {
+        switch relative {
+        case ..<(-0.45): "much heavier than usual"
+        case ..<(-0.15): "a bit heavier than usual"
+        case ..<0.15: "about your usual"
+        case ..<0.45: "a bit lighter than usual"
+        default: "much lighter than usual"
         }
     }
 }
