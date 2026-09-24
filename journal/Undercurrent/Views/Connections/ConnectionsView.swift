@@ -306,8 +306,9 @@ struct RelativeFeeling {
     let spread: Double
 
     init(_ values: [Double]) {
-        mean = values.isEmpty ? 0 : values.reduce(0, +) / Double(values.count)
-        spread = max(0.12, values.map { abs($0 - mean) }.max() ?? 0)
+        let average = values.isEmpty ? 0 : values.reduce(0, +) / Double(values.count)
+        mean = average
+        spread = max(0.12, values.map { abs($0 - average) }.max() ?? 0)
     }
 
     func relative(_ value: Double) -> Double {
