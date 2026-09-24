@@ -17,6 +17,9 @@ struct TodayView: View {
     @State private var composingTags: [Tag] = []
     @State private var choosingSubject = false
     @State private var subject: Tag?
+    /// People and subjects added on the question card, carried into what you write next.
+    @State private var cardTags: [Tag] = []
+    @State private var taggingCard = false
 
     var body: some View {
         NavigationStack {
@@ -35,7 +38,10 @@ struct TodayView: View {
             }
             .screenBackground()
             .journalDestinations()
-            .fullScreenCover(item: $composing) { mode in
+            .fullScreenCover(item: $composing, onDismiss: {
+                // Saved something just now: the card starts fresh. Cancelled: keep the tags.
+                if let latest = entries.first, latest.createdAt > .now.addingTimeInterval(-120) { cardTags = [] }
+            }) { mode in
                 ComposeView(mode: mode, question: composingQuestion, presetTags: composingTags)
             }
             .sheet(isPresented: $choosingSubject, onDismiss: {
@@ -84,6 +90,7 @@ struct TodayView: View {
             if let hint = opener.hint {
                 Text(hint).font(.callout).foregroundStyle(Palette.ink2)
             }
+            cardTagRow
             HStack(spacing: 10) {
                 Button { compose(.write, answering: opener.text) } label: { Label("Write", systemImage: "pencil") }
                     .buttonStyle(PillButtonStyle())
@@ -97,6 +104,30 @@ struct TodayView: View {
                 .accessibilityLabel("Note an insight")
             }
             .padding(.top, 6)
+        }
+    }
+
+    /// Who or what this is about, chosen before you start; + Tag adds more.
+    private var cardTagRow: some View {
+        FlowLayout(spacing: 8) {
+            ForEach(cardTags) { tag in
+                RemovableTag(tag: tag) { withAnimation(.snappy) { cardTags.removeAll { $0 == tag } } }
+            }
+            Button { taggingCard = true } label: {
+                Label(cardTags.isEmpty ? "Add a person or subject" : "Tag", systemImage: "plus")
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Capsule().fill(Palette.raised))
+            }
+            .foregroundStyle(Palette.accent)
+        }
+        .sheet(isPresented: $taggingCard) {
+            TagPicker { tag in
+                if !cardTags.contains(where: { $0.key == tag.key }) {
+                    withAnimation(.snappy) { cardTags.append(tag) }
+                }
+            }
         }
     }
 
@@ -214,7 +245,7 @@ struct TodayView: View {
 
     private func compose(_ mode: ComposeMode, answering question: String?, tags: [Tag] = []) {
         composingQuestion = question
-        composingTags = tags
+        composingTags = cardTags + tags.filter { t in !cardTags.contains { $0.key == t.key } }
         composing = mode
     }
 
