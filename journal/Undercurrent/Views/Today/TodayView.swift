@@ -11,13 +11,17 @@ struct TodayView: View {
     @Query(filter: #Predicate<Insight> { !$0.dismissed }, sort: \Insight.createdAt, order: .reverse)
     private var insights: [Insight]
     @State private var composing: ComposeMode?
+    @State private var composingQuestion: String?
+    @State private var skip = 0
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 28) {
                     header
+                    if hasSample { sampleBanner }
                     questionCard
+                    if let next = nextQuestion { followUpCard(next) }
                     if !todays.isEmpty { todaySection }
                     rhythmCard
                     if !noticed.isEmpty { noticedSection }
@@ -28,7 +32,7 @@ struct TodayView: View {
             .screenBackground()
             .journalDestinations()
             .fullScreenCover(item: $composing) { mode in
-                ComposeView(mode: mode)
+                ComposeView(mode: mode, question: composingQuestion)
             }
         }
     }
@@ -44,19 +48,22 @@ struct TodayView: View {
     }
 
     private var questionCard: some View {
-        Card(padding: 22) {
-            Eyebrow("Today's question")
-            Text(DailyQuestion.today)
+        let opener = Questions.opener()
+        return Card(padding: 22) {
+            Text(opener.text)
                 .font(.headline2)
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
+            if let hint = opener.hint {
+                Text(hint).font(.subheadline).foregroundStyle(Palette.ink2)
+            }
             HStack(spacing: 10) {
-                Button { composing = .write } label: { Label("Write", systemImage: "pencil") }
+                Button { compose(.write, answering: opener.text) } label: { Label("Write", systemImage: "pencil") }
                     .buttonStyle(PillButtonStyle())
-                Button { composing = .speak } label: { Label("Speak", systemImage: "mic.fill") }
+                Button { compose(.speak, answering: opener.text) } label: { Label("Speak", systemImage: "mic.fill") }
                     .buttonStyle(PillButtonStyle(prominent: false))
                 Spacer()
-                Button { composing = .insight } label: {
+                Button { compose(.insight, answering: nil) } label: {
                     Image(systemName: "lightbulb").font(.system(size: 17, weight: .medium))
                 }
                 .buttonStyle(PillButtonStyle(prominent: false))
@@ -64,6 +71,48 @@ struct TodayView: View {
             }
             .padding(.top, 6)
         }
+    }
+
+    /// A second, smaller question: Claude's follow-up if there is one, otherwise an everyday one.
+    private func followUpCard(_ next: (text: String, fromClaude: Bool, label: String)) -> some View {
+        Card {
+            HStack {
+                if next.fromClaude {
+                    Image(systemName: "sparkles").font(.system(size: 11, weight: .semibold)).foregroundStyle(Palette.accent)
+                }
+                Eyebrow(next.label)
+                Spacer()
+                if !next.fromClaude {
+                    Button { withAnimation(.snappy) { skip += 1 } } label: {
+                        Label("Another", systemImage: "arrow.triangle.2.circlepath").font(.caption.weight(.semibold))
+                    }
+                    .foregroundStyle(Palette.accent)
+                }
+            }
+            Text(next.text)
+                .font(.system(size: 19, design: .serif))
+                .foregroundStyle(Palette.ink)
+                .fixedSize(horizontal: false, vertical: true)
+                .contentTransition(.opacity)
+            HStack(spacing: 10) {
+                Button { compose(.write, answering: next.text) } label: { Label("Answer", systemImage: "pencil") }
+                    .buttonStyle(PillButtonStyle(prominent: false))
+                Button { compose(.speak, answering: next.text) } label: { Image(systemName: "mic.fill") }
+                    .buttonStyle(PillButtonStyle(prominent: false))
+                    .accessibilityLabel("Answer by speaking")
+            }
+        }
+    }
+
+    private var sampleBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "testtube.2").foregroundStyle(Palette.accent)
+            Text("Sample entries are showing. Remove them in You → Settings.")
+                .font(.footnote).foregroundStyle(Palette.ink2)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Palette.accentSoft))
     }
 
     private var todaySection: some View {
@@ -134,6 +183,34 @@ struct TodayView: View {
         case 17..<22: "Good evening."
         default: "Still up?"
         }
+    }
+
+    private func compose(_ mode: ComposeMode, answering question: String?) {
+        composingQuestion = question
+        composing = mode
+    }
+
+    private var hasSample: Bool { entries.contains { $0.isSample == true } }
+
+    /// After you've written today: Claude's follow-up from today, or an everyday one.
+    /// Before you've written: yesterday's follow-up from Claude, if there is one.
+    private var nextQuestion: (text: String, fromClaude: Bool, label: String)? {
+        let calendar = Calendar.current
+        let answered = Set(todays.compactMap(\.question))
+        if !todays.isEmpty {
+            if skip == 0, let claude = todays.compactMap(\.followUp).first, !answered.contains(claude) {
+                return (claude, true, "Following on")
+            }
+            for offset in 0..<8 {
+                let text = Questions.followUp(skip: skip + offset)
+                if !answered.contains(text) { return (text, false, "Another question") }
+            }
+            return nil
+        }
+        if let from = entries.first(where: { calendar.isDateInYesterday($0.createdAt) && $0.followUp != nil })?.followUp {
+            return (from, true, "From yesterday")
+        }
+        return nil
     }
 
     private var todays: [Entry] {

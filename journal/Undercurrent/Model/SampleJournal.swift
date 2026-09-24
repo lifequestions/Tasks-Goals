@@ -3,7 +3,7 @@ import SwiftData
 
 /// Three months of made-up entries, so the map, patterns and reflections have
 /// something to show on day one. Jordan is written to weigh on the writer,
-/// Maya to lift them, Sundays run heavy and running helps — the finder
+/// Maya and Sam to lift them, Dad to be mixed, Sundays to run heavy and running to help — the finder
 /// should spot all of it. Erase it from Settings when you start for real.
 enum SampleJournal {
     static let heavyWithJordan = [
@@ -28,6 +28,13 @@ enum SampleJournal {
         "Deadline at work is crushing me. Slept badly and felt anxious about the meeting with my boss.",
         "Another long day at the office. The project keeps changing and nobody decides anything.",
         "Good meeting today, actually. My manager liked the plan. Small win.",
+        "Sam from work helped me untangle the report. Felt supported for once, and we laughed a lot.",
+        "Lunch with Sam near the office. Easy company. Work feels lighter when we're on the same project.",
+    ]
+    static let family = [
+        "Long call with Dad. He's worried about his health and I felt helpless and far away.",
+        "Visited Dad in Bristol. Lovely to see him laughing again, but the drive home was heavy.",
+        "Dad sent a photo of the garden. Small thing, but it made me happy.",
     ]
     static let sunday = [
         "Sunday evening dread again. Already thinking about the week ahead and everything I haven't done.",
@@ -62,6 +69,7 @@ enum SampleJournal {
                 case 18..<34: pool = lightWithMaya
                 case 34..<50: pool = running
                 case 50..<68: pool = work
+                case 68..<80: pool = family
                 default: pool = other
                 }
             }
@@ -72,13 +80,57 @@ enum SampleJournal {
             let hour = 7 + Int(rng.next() % 15)
             let date = calendar.date(byAdding: .hour, value: hour, to: day) ?? day
             let entry = Entry(text: text, createdAt: date)
+            entry.isSample = true
             context.insert(entry)
             Store.apply(LocalReader().read(text), to: entry, by: "device", in: context)
         }
         context.insert(Insight(text: "I think I keep saying yes to Jordan out of guilt, not because I want to.", source: .mine,
-                               entityKeys: [Entity.makeKey(name: "Jordan", kind: .person)]))
+                               entityKeys: [Entity.makeKey(name: "Jordan", kind: .person)], signature: sampleSignature))
         try? context.save()
         intelligence.refreshPatterns(in: context)
+    }
+}
+
+extension SampleJournal {
+    static let sampleSignature = "sample"
+
+    /// Takes the sample journal back out, leaving everything you wrote yourself.
+    @MainActor
+    static func remove(from context: ModelContext, intelligence: Intelligence) {
+        let entries = (try? context.fetch(FetchDescriptor<Entry>(predicate: #Predicate { $0.isSample == true }))) ?? []
+        for entry in entries { context.delete(entry) }
+        let signature = sampleSignature
+        let insights = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.signature == signature }))) ?? []
+        for insight in insights { context.delete(insight) }
+        // Reflections were written from the sample; they're rewritten from your own entries as periods end.
+        try? context.delete(model: Reflection.self)
+        try? context.save()
+        Store.pruneOrphans(in: context)
+        try? context.save()
+        intelligence.refreshPatterns(in: context)
+    }
+
+    /// Sample entries loaded before they were tagged are recognised by their text
+    /// (every one is a line from the pools above, sometimes plus a line from `other`).
+    @MainActor
+    static func tagUntagged(in context: ModelContext) {
+        let lines = heavyWithJordan + lightWithMaya + running + work + family + sunday + other
+        let untagged = (try? context.fetch(FetchDescriptor<Entry>(predicate: #Predicate { $0.isSample != true }))) ?? []
+        var changed = false
+        for entry in untagged {
+            guard let first = lines.first(where: { entry.text.hasPrefix($0) }) else { continue }
+            let rest = entry.text.dropFirst(first.count).trimmingCharacters(in: .whitespaces)
+            if rest.isEmpty || other.contains(rest) {
+                entry.isSample = true
+                changed = true
+            }
+        }
+        let jordanLine = "I think I keep saying yes to Jordan out of guilt, not because I want to."
+        for insight in (try? context.fetch(FetchDescriptor<Insight>())) ?? [] where insight.text == jordanLine && insight.signature == nil {
+            insight.signature = sampleSignature
+            changed = true
+        }
+        if changed { try? context.save() }
     }
 }
 

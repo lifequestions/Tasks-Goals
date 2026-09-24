@@ -40,6 +40,9 @@ struct RootView: View {
                 .tabItem { Label("You", systemImage: "person.crop.circle") }
                 .tag(Screen.you)
         }
-        .task { await intelligence.catchUp(in: context) }
+        .task {
+            SampleJournal.tagUntagged(in: context)
+            await intelligence.catchUp(in: context)
+        }
     }
 }

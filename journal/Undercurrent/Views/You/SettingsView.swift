@@ -15,6 +15,9 @@ struct SettingsView: View {
     @State private var checking = false
     @State private var exportURL: URL?
     @State private var confirmErase = false
+    @Query(filter: #Predicate<Entry> { $0.isSample == true }) private var sampleEntries: [Entry]
+
+    private var hasSample: Bool { !sampleEntries.isEmpty }
 
     var body: some View {
         Form {
@@ -64,14 +67,20 @@ struct SettingsView: View {
                 if let exportURL {
                     ShareLink(item: exportURL) { Label("Share export", systemImage: "square.and.arrow.up") }
                 }
-                Button("Load a sample journal") {
-                    SampleJournal.load(into: context, intelligence: intelligence)
+                if hasSample {
+                    Button("Remove the sample journal", role: .destructive) {
+                        SampleJournal.remove(from: context, intelligence: intelligence)
+                    }
+                } else {
+                    Button("Load a sample journal") {
+                        SampleJournal.load(into: context, intelligence: intelligence)
+                    }
                 }
                 Button("Erase everything", role: .destructive) { confirmErase = true }
             } header: {
                 Text("Your data")
             } footer: {
-                Text("The sample journal is three months of made-up entries so you can see the map and patterns straight away. Erase it before you start for real.")
+                Text("The sample journal is three months of made-up entries so you can see the map and patterns straight away. Removing it only takes out the sample — anything you've written stays.")
             }
         }
         .scrollContentBackground(.hidden)

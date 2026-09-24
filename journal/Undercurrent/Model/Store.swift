@@ -14,6 +14,7 @@ struct EntryAnalysis: Codable {
     var summary: String
     var entities: [Found]
     var noticed: String
+    var followUp: String = ""
 }
 
 /// Writes to the journal. Views read with @Query; changes go through here.
@@ -27,6 +28,10 @@ enum Store {
         entry.summary = analysis.summary.isEmpty ? nil : analysis.summary
         entry.analysedBy = reader
         entry.analysedAt = .now
+        if reader == "claude" {
+            let next = analysis.followUp.trimmingCharacters(in: .whitespacesAndNewlines)
+            entry.followUp = next.isEmpty ? nil : next
+        }
 
         var seen = Set<String>()
         for found in analysis.entities {

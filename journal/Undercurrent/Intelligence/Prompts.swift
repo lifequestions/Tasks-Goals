@@ -25,6 +25,11 @@ enum Prompts {
     - noticed: at most one observation linking this entry to the context — a recurrence, a \
       contrast, something that has changed — only when the context genuinely supports it. \
       Otherwise an empty string. Speak to them directly, gently, in one or two sentences.
+    - followUp: one short, friendly question to ask them next, grounded in something specific \
+      they wrote here or recently — something to check back on ("You mentioned the deadline — \
+      how did it go?") or a gentle nudge to say more about a person or feeling that came up. \
+      Plain everyday words, under 15 words, nothing clinical or deep for its own sake. It may be \
+      shown later that day or the next morning, so phrase it to make sense then.
 
     Never diagnose, never moralise, never give advice in the reading.
     """
@@ -32,7 +37,7 @@ enum Prompts {
     static let readingSchema: [String: Any] = [
         "type": "object",
         "additionalProperties": false,
-        "required": ["mood", "summary", "entities", "noticed"],
+        "required": ["mood", "summary", "entities", "noticed", "followUp"],
         "properties": [
             "mood": ["type": "number", "description": "-1 very heavy … 0 even … 1 very light"],
             "summary": ["type": "string"],
@@ -51,6 +56,7 @@ enum Prompts {
                 ],
             ],
             "noticed": ["type": "string"],
+            "followUp": ["type": "string"],
         ],
     ]
 
@@ -69,7 +75,8 @@ enum Prompts {
             let lines = recent.map { "\(dateLine($0.createdAt)) — \($0.summary ?? $0.title) [\(Feeling.word($0.mood))]" }
             parts.append("<recent_entries>\n\(lines.joined(separator: "\n"))\n</recent_entries>")
         }
-        parts.append("<entry date=\"\(dateLine(entry.createdAt))\">\n\(entry.text)\n</entry>")
+        let asked = entry.question.map { " answering=\"\($0)\"" } ?? ""
+        parts.append("<entry date=\"\(dateLine(entry.createdAt))\"\(asked)>\n\(entry.text)\n</entry>")
         return parts.joined(separator: "\n\n")
     }
 

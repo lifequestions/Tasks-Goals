@@ -4,6 +4,7 @@ import SwiftData
 /// Full-screen, distraction-free writing. Type, or tap the microphone and talk.
 struct ComposeView: View {
     let mode: ComposeMode
+    var question: String? = nil
     var editing: Entry? = nil
 
     @Environment(\.dismiss) private var dismiss
@@ -28,6 +29,15 @@ struct ComposeView: View {
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 8)
+                }
+
+                if let asked, !isInsight {
+                    Text(asked)
+                        .font(.headline2)
+                        .foregroundStyle(Palette.ink)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 25)
+                        .padding(.top, 8)
                 }
 
                 ZStack(alignment: .topLeading) {
@@ -128,9 +138,13 @@ struct ComposeView: View {
         .background(Palette.paper)
     }
 
+    /// The question on screen: the one passed in, or the entry's own when editing.
+    private var asked: String? { editing?.question ?? question }
+
     private var placeholder: String {
         if isInsight { return "Something you've realised about yourself…" }
-        return mode == .speak ? "Start talking — it'll appear here." : DailyQuestion.today
+        if mode == .speak { return "Start talking — it'll appear here." }
+        return asked == nil ? Questions.opener().text : "Write as much or as little as you like."
     }
 
     private var wordCount: String {
@@ -159,7 +173,7 @@ struct ComposeView: View {
         } else if isInsight {
             intelligence.saveInsight(text: body, in: context)
         } else {
-            intelligence.saveEntry(text: body, dictated: usedDictation, in: context)
+            intelligence.saveEntry(text: body, dictated: usedDictation, question: question, in: context)
         }
         dismiss()
     }

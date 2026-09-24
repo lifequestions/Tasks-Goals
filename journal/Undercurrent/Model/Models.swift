@@ -45,12 +45,19 @@ final class Entry {
     /// "device" or "claude" — which reader last understood this entry.
     var analysedBy: String?
     var analysedAt: Date?
+    /// The question this entry was written in answer to, if any.
+    var question: String?
+    /// A question Claude suggests asking next, drawn from this entry.
+    var followUp: String?
+    /// Part of the sample journal, so it can be removed without touching real entries.
+    var isSample: Bool?
 
     @Relationship(deleteRule: .cascade, inverse: \Mention.entry)
     var mentions: [Mention] = []
 
-    init(text: String, createdAt: Date = .now, wasDictated: Bool = false) {
+    init(text: String, createdAt: Date = .now, wasDictated: Bool = false, question: String? = nil) {
         self.text = text
+        self.question = question
         self.createdAt = createdAt
         self.wasDictated = wasDictated
     }
