@@ -13,7 +13,7 @@ targets:
     sources: [Undercurrent]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: app.undercurrent.journal
+        PRODUCT_BUNDLE_IDENTIFIER: com.desouza.lifequestionsjournal
         MARKETING_VERSION: "0.1"
         CURRENT_PROJECT_VERSION: 1
         SWIFT_VERSION: "5.0"
