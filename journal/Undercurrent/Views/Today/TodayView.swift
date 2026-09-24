@@ -10,6 +10,7 @@ struct TodayView: View {
     @Query(sort: \Entry.createdAt, order: .reverse) private var entries: [Entry]
     @Query(filter: #Predicate<Insight> { !$0.dismissed }, sort: \Insight.createdAt, order: .reverse)
     private var insights: [Insight]
+    @Query private var entities: [Entity]
     @State private var composing: ComposeMode?
     @State private var composingQuestion: String?
     @State private var skip = 0
@@ -107,21 +108,36 @@ struct TodayView: View {
         }
     }
 
-    /// Who or what this is about, chosen before you start; + Tag adds more.
+    /// Who or what this is about, chosen before you start. The people and subjects
+    /// you write about most come first, then everyday ones; tap to choose, "More" to find others.
     private var cardTagRow: some View {
-        FlowLayout(spacing: 8) {
-            ForEach(cardTags) { tag in
-                RemovableTag(tag: tag) { withAnimation(.snappy) { cardTags.removeAll { $0 == tag } } }
+        let chosenKeys = Set(cardTags.map(\.key))
+        let offered = cardTags + suggestedTags.filter { !chosenKeys.contains($0.key) }
+        return ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(offered) { tag in
+                    let on = chosenKeys.contains(tag.key)
+                    Button {
+                        withAnimation(.snappy) {
+                            if on { cardTags.removeAll { $0.key == tag.key } } else { cardTags.append(tag) }
+                        }
+                    } label: {
+                        ToggleTagChip(tag: tag, on: on)
+                    }
+                    .buttonStyle(.plain)
+                }
+                Button { taggingCard = true } label: {
+                    Label("More", systemImage: "plus")
+                        .font(.subheadline.weight(.semibold))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(Palette.raised))
+                }
+                .foregroundStyle(Palette.accent)
             }
-            Button { taggingCard = true } label: {
-                Label(cardTags.isEmpty ? "Add a person or subject" : "Tag", systemImage: "plus")
-                    .font(.subheadline.weight(.semibold))
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(Capsule().fill(Palette.raised))
-            }
-            .foregroundStyle(Palette.accent)
+            .padding(.horizontal, 22)
         }
+        .padding(.horizontal, -22)
         .sheet(isPresented: $taggingCard) {
             TagPicker { tag in
                 if !cardTags.contains(where: { $0.key == tag.key }) {
@@ -129,6 +145,22 @@ struct TodayView: View {
                 }
             }
         }
+    }
+
+    /// Everyday subjects offered before the journal knows you.
+    private static let everydayTags: [Tag] = [
+        "Work", "Relationships", "Family", "Friends", "Health", "Money", "Sleep", "Anxiety", "Gratitude", "Creativity",
+    ].map { Tag(name: $0, kind: .theme) }
+
+    /// People you write about most, then your most frequent places, themes and
+    /// activities, then the everyday subjects you haven't used yet.
+    private var suggestedTags: [Tag] {
+        let used = entities.filter { !$0.hidden && !$0.mentions.isEmpty }
+            .sorted { $0.mentions.count > $1.mentions.count }
+        let people = used.filter { $0.kind == .person }.prefix(8).map(Tag.init)
+        let others = used.filter { $0.kind != .person }.prefix(8).map(Tag.init)
+        var seen = Set<String>()
+        return (people + others + Self.everydayTags).filter { seen.insert($0.key).inserted }
     }
 
     /// A second, smaller question: Claude's follow-up if there is one, otherwise an everyday one.
@@ -330,5 +362,25 @@ struct InsightCard: View {
         case .pattern: "waveform.path.ecg"
         case .claude: "sparkles"
         }
+    }
+}
+
+/// A tag you can tap on and off: filled when chosen, dashed when only offered.
+struct ToggleTagChip: View {
+    let tag: Tag
+    let on: Bool
+
+    var body: some View {
+        HStack(spacing: 5) {
+            Image(systemName: on ? "checkmark" : tag.kind.symbol).font(.caption2.weight(.semibold))
+            Text(tag.name).font(.subheadline.weight(.medium))
+        }
+        .foregroundStyle(on ? Palette.accent : Palette.ink2)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Capsule().fill(on ? Palette.accentSoft : Color.clear))
+        .overlay(Capsule().strokeBorder(on ? Color.clear : Palette.line, lineWidth: 1))
+        .contentShape(Capsule())
+        .accessibilityAddTraits(on ? .isSelected : [])
     }
 }
