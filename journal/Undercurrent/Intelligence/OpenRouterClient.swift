@@ -14,8 +14,7 @@ extension AIClient {
 
     /// A cheap round trip for Settings.
     func check() async throws {
-        struct Ok: Decodable { let ok: Bool }
-        _ = try await structured(Ok.self,
+        _ = try await structured(ConnectionCheck.self,
                                  system: "Reply with ok: true.",
                                  user: "Are you there?",
                                  schema: ["type": "object",
@@ -26,6 +25,9 @@ extension AIClient {
                                  maxTokens: 2_000)
     }
 }
+
+/// What `check()` asks for back.
+struct ConnectionCheck: Decodable { let ok: Bool }
 
 extension ClaudeClient: AIClient {}
 
