@@ -30,12 +30,12 @@ struct YouView: View {
                             HStack {
                                 Eyebrow("About you")
                                 Spacer()
-                                Image(systemName: "chevron.right").font(.caption).foregroundStyle(Palette.ink3)
+                                Image(systemName: "chevron.right").font(.footnote).foregroundStyle(Palette.ink3)
                             }
                             Text(aboutMe.isEmpty
                                  ? "Tell Undercurrent anything it should always keep in mind — your situation, what you're working on, who the important people are."
                                  : aboutMe)
-                                .font(.system(size: 15, design: .serif))
+                                .font(.system(.body, design: .serif))
                                 .foregroundStyle(aboutMe.isEmpty ? Palette.ink3 : Palette.ink)
                                 .lineLimit(4)
                                 .multilineTextAlignment(.leading)
@@ -46,7 +46,7 @@ struct YouView: View {
                     VStack(alignment: .leading, spacing: 10) {
                         Eyebrow("Understand yourself")
                         Text("Each questionnaire you take is shared with every reading and reflection, so the more you answer, the better it knows how to read you.")
-                            .font(.footnote).foregroundStyle(Palette.ink3)
+                            .font(.subheadline).foregroundStyle(Palette.ink3)
                         ForEach(Questionnaire.catalog) { test in
                             questionnaireRow(test)
                         }
@@ -73,16 +73,16 @@ struct YouView: View {
         let latest = results.first { $0.testID == test.id }
         let card = Card {
             HStack(alignment: .firstTextBaseline) {
-                Text(test.title).font(.system(size: 19, design: .serif)).foregroundStyle(Palette.ink)
+                Text(test.title).font(.system(.title3, design: .serif)).foregroundStyle(Palette.ink)
                 Spacer()
                 Text(test.isAvailable ? (latest == nil ? "\(test.minutes) min" : "Retake") : "Coming")
-                    .font(.caption.weight(.semibold))
+                    .font(.footnote.weight(.semibold))
                     .foregroundStyle(test.isAvailable ? Palette.accent : Palette.ink3)
             }
             if let latest {
                 TraitBars(test: test, scores: latest.scores)
             } else {
-                Text(test.blurb).font(.footnote).foregroundStyle(Palette.ink2)
+                Text(test.blurb).font(.subheadline).foregroundStyle(Palette.ink2)
             }
         }
         if test.isAvailable {
@@ -114,9 +114,9 @@ struct TraitBars: View {
                 let v = scores[trait.id] ?? 0.5
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(trait.name).font(.subheadline.weight(.medium)).foregroundStyle(Palette.ink)
+                        Text(trait.name).font(.callout.weight(.medium)).foregroundStyle(Palette.ink)
                         Spacer()
-                        Text("\(Int(v * 100))").font(.caption.monospacedDigit()).foregroundStyle(Palette.ink3)
+                        Text("\(Int(v * 100))").font(.footnote.monospacedDigit()).foregroundStyle(Palette.ink3)
                     }
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
@@ -130,7 +130,7 @@ struct TraitBars: View {
                         Spacer()
                         Text(trait.high)
                     }
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(Palette.ink3)
                 }
             }
@@ -144,7 +144,7 @@ struct AboutMeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Written once, remembered always. Claude reads this before every entry and reflection.")
-                .font(.footnote)
+                .font(.subheadline)
                 .foregroundStyle(Palette.ink3)
                 .padding(.horizontal, 20)
             TextEditor(text: $aboutMe)

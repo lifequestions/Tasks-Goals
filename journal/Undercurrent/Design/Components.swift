@@ -7,7 +7,7 @@ struct Eyebrow: View {
 
     var body: some View {
         Text(text.uppercased())
-            .font(.system(size: 11, weight: .semibold))
+            .font(.system(.footnote, weight: .semibold))
             .tracking(1.4)
             .foregroundStyle(Palette.ink3)
     }
@@ -77,8 +77,8 @@ struct EntityChip: View {
 
     var body: some View {
         HStack(spacing: 5) {
-            Image(systemName: kind.symbol).font(.system(size: 9, weight: .semibold))
-            Text(name).font(.system(size: 13, weight: .medium))
+            Image(systemName: kind.symbol).font(.system(.caption2, weight: .semibold))
+            Text(name).font(.system(.subheadline, weight: .medium))
         }
         .foregroundStyle(Palette.ink)
         .padding(.horizontal, 10)
@@ -107,7 +107,7 @@ struct PillButtonStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 15, weight: .semibold))
+            .font(.system(.body, weight: .semibold))
             .padding(.horizontal, 18)
             .padding(.vertical, 11)
             .foregroundStyle(prominent ? Palette.paper : Palette.ink)

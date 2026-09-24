@@ -64,7 +64,7 @@ struct SettingsView: View {
                     }
                     .disabled(apiKey.isEmpty || checking)
                     Spacer()
-                    if checking { ProgressView() } else if let check { Text(check).font(.footnote).foregroundStyle(Palette.ink2) }
+                    if checking { ProgressView() } else if let check { Text(check).font(.subheadline).foregroundStyle(Palette.ink2) }
                 }
             } header: {
                 Text("Claude")

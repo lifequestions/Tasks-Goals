@@ -134,7 +134,7 @@ struct ConnectionsView: View {
                     if showLabel {
                         let strong = focus?.contains(i) == true
                         context.draw(Text(node.name)
-                                        .font(.system(size: strong ? 12.5 : 11, weight: strong ? .semibold : .regular))
+                                        .font(strong ? .subheadline.weight(.semibold) : .footnote)
                                         .foregroundStyle(strong ? Palette.ink : Palette.ink2),
                                      at: CGPoint(x: c.x, y: c.y + r + 3), anchor: .top)
                     }
@@ -221,16 +221,16 @@ struct ConnectionsView: View {
     private var legend: some View {
         HStack(spacing: 8) {
             Circle().fill(Palette.ink2).frame(width: 7, height: 7)
-            Text("person").font(.caption2)
+            Text("person").font(.caption)
             Circle().strokeBorder(Palette.ink2, lineWidth: 1.5).frame(width: 8, height: 8)
-            Text("theme, place, activity").font(.caption2)
+            Text("theme, place, activity").font(.caption)
             Spacer()
-            Text("heavier").font(.caption2)
+            Text("heavier").font(.caption)
             Capsule()
                 .fill(LinearGradient(colors: [Palette.feeling(-1), Palette.feeling(0), Palette.feeling(1)],
                                      startPoint: .leading, endPoint: .trailing))
                 .frame(width: 50, height: 4)
-            Text("lighter").font(.caption2)
+            Text("lighter").font(.caption)
         }
         .foregroundStyle(Palette.ink3)
         .padding(.horizontal, 14)
@@ -259,14 +259,14 @@ struct ConnectionsView: View {
                     Eyebrow(node.kind.rawValue)
                     Text(node.name).font(.headline2).foregroundStyle(Palette.ink)
                     Text("\(node.count) mentions · \(feelings.phrase(relative))")
-                        .font(.subheadline).foregroundStyle(Palette.ink2)
+                        .font(.callout).foregroundStyle(Palette.ink2)
                 }
                 Spacer()
                 FeelingDot(value: relative, size: 14).padding(.top, 6)
             }
             if !links.isEmpty {
                 Text("Often with " + links.joined(separator: ", "))
-                    .font(.footnote).foregroundStyle(Palette.ink3)
+                    .font(.subheadline).foregroundStyle(Palette.ink3)
             }
             HStack(spacing: 10) {
                 Button { open(true) } label: { Label("Closer look", systemImage: "sparkles") }

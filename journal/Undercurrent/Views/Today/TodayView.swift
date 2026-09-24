@@ -55,7 +55,7 @@ struct TodayView: View {
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
             if let hint = opener.hint {
-                Text(hint).font(.subheadline).foregroundStyle(Palette.ink2)
+                Text(hint).font(.callout).foregroundStyle(Palette.ink2)
             }
             HStack(spacing: 10) {
                 Button { compose(.write, answering: opener.text) } label: { Label("Write", systemImage: "pencil") }
@@ -64,7 +64,7 @@ struct TodayView: View {
                     .buttonStyle(PillButtonStyle(prominent: false))
                 Spacer()
                 Button { compose(.insight, answering: nil) } label: {
-                    Image(systemName: "lightbulb").font(.system(size: 17, weight: .medium))
+                    Image(systemName: "lightbulb").font(.system(.body, weight: .medium))
                 }
                 .buttonStyle(PillButtonStyle(prominent: false))
                 .accessibilityLabel("Note an insight")
@@ -78,19 +78,19 @@ struct TodayView: View {
         Card {
             HStack {
                 if next.fromClaude {
-                    Image(systemName: "sparkles").font(.system(size: 11, weight: .semibold)).foregroundStyle(Palette.accent)
+                    Image(systemName: "sparkles").font(.system(.footnote, weight: .semibold)).foregroundStyle(Palette.accent)
                 }
                 Eyebrow(next.label)
                 Spacer()
                 if !next.fromClaude {
                     Button { withAnimation(.snappy) { skip += 1 } } label: {
-                        Label("Another", systemImage: "arrow.triangle.2.circlepath").font(.caption.weight(.semibold))
+                        Label("Another", systemImage: "arrow.triangle.2.circlepath").font(.footnote.weight(.semibold))
                     }
                     .foregroundStyle(Palette.accent)
                 }
             }
             Text(next.text)
-                .font(.system(size: 19, design: .serif))
+                .font(.system(.title3, design: .serif))
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
                 .contentTransition(.opacity)
@@ -108,7 +108,7 @@ struct TodayView: View {
         HStack(spacing: 10) {
             Image(systemName: "testtube.2").foregroundStyle(Palette.accent)
             Text("Sample entries are showing. Remove them in You → Settings.")
-                .font(.footnote).foregroundStyle(Palette.ink2)
+                .font(.subheadline).foregroundStyle(Palette.ink2)
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -123,7 +123,7 @@ struct TodayView: View {
                     Card {
                         HStack(alignment: .top, spacing: 12) {
                             VStack(alignment: .leading, spacing: 6) {
-                                Text(entry.createdAt.stamp("jmm")).font(.caption).foregroundStyle(Palette.ink3)
+                                Text(entry.createdAt.stamp("jmm")).font(.footnote).foregroundStyle(Palette.ink3)
                                 Text(entry.text).font(.reading).foregroundStyle(Palette.ink).lineLimit(3)
                             }
                             Spacer(minLength: 0)
@@ -145,7 +145,7 @@ struct TodayView: View {
             HStack {
                 Eyebrow("Last two weeks")
                 Spacer()
-                Text(streakText).font(.caption).foregroundStyle(Palette.ink2)
+                Text(streakText).font(.footnote).foregroundStyle(Palette.ink2)
             }
             HStack(spacing: 0) {
                 ForEach(days, id: \.self) { day in
@@ -156,7 +156,7 @@ struct TodayView: View {
                             .overlay(Circle().strokeBorder(moods.isEmpty ? Palette.line : .clear, lineWidth: 1))
                             .frame(width: 14, height: 14)
                         Text(day.stamp("EEEEE"))
-                            .font(.system(size: 9, weight: .medium))
+                            .font(.system(.caption2, weight: .medium))
                             .foregroundStyle(calendar.isDateInToday(day) ? Palette.ink : Palette.ink3)
                     }
                     .frame(maxWidth: .infinity)
@@ -242,7 +242,7 @@ struct InsightCard: View {
     var body: some View {
         Card {
             HStack(spacing: 6) {
-                Image(systemName: symbol).font(.system(size: 11, weight: .semibold)).foregroundStyle(Palette.accent)
+                Image(systemName: symbol).font(.system(.footnote, weight: .semibold)).foregroundStyle(Palette.accent)
                 Eyebrow(insight.source.label)
                 Spacer()
                 Menu {
@@ -259,7 +259,7 @@ struct InsightCard: View {
                 }
             }
             Text(insight.text)
-                .font(.system(size: 16, design: .serif))
+                .font(.system(.body, design: .serif))
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
         }

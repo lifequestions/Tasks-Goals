@@ -55,7 +55,7 @@ struct EntityDetailView: View {
     private var header: some View {
         VStack(alignment: .leading, spacing: 6) {
             Label(entity.kind.rawValue.capitalized, systemImage: entity.kind.symbol)
-                .font(.system(size: 11, weight: .semibold))
+                .font(.system(.footnote, weight: .semibold))
                 .textCase(.uppercase)
                 .tracking(1.4)
                 .foregroundStyle(Palette.ink3)
@@ -111,21 +111,21 @@ struct EntityDetailView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(Feeling.word(with.isEmpty ? nil : a).capitalized).font(.bigNumber)
                         .foregroundStyle(Palette.feeling(a))
-                    Text("when they come up").font(.caption).foregroundStyle(Palette.ink3)
+                    Text("when they come up").font(.footnote).foregroundStyle(Palette.ink3)
                 }
                 VStack(alignment: .leading, spacing: 2) {
                     Text(Feeling.word(without.isEmpty ? nil : b).capitalized).font(.bigNumber)
                         .foregroundStyle(Palette.feeling(b))
-                    Text("the rest of the time").font(.caption).foregroundStyle(Palette.ink3)
+                    Text("the rest of the time").font(.footnote).foregroundStyle(Palette.ink3)
                 }
             }
             if with.count >= 3, without.count >= 3, abs(a - b) >= 0.2 {
                 Text(a < b ? "Your entries tend to be heavier when \(entity.name) is in them."
                            : "Your entries tend to be lighter when \(entity.name) is in them.")
-                    .font(.system(size: 15, design: .serif))
+                    .font(.system(.body, design: .serif))
                     .foregroundStyle(Palette.ink)
             } else if with.count < 3 {
-                Text("A few more entries and a pattern may show.").font(.footnote).foregroundStyle(Palette.ink3)
+                Text("A few more entries and a pattern may show.").font(.subheadline).foregroundStyle(Palette.ink3)
             }
         }
     }
@@ -138,7 +138,7 @@ struct EntityDetailView: View {
                     NavigationLink(value: item.entity) {
                         HStack(spacing: 4) {
                             EntityChip(name: item.entity.name, kind: item.entity.kind, feeling: item.entity.averageFeeling)
-                            Text("\(item.count)").font(.caption2).foregroundStyle(Palette.ink3)
+                            Text("\(item.count)").font(.caption).foregroundStyle(Palette.ink3)
                         }
                     }
                     .buttonStyle(.plain)
@@ -155,16 +155,16 @@ struct EntityDetailView: View {
             }
             if let reading {
                 Text(reading)
-                    .font(.system(size: 16, design: .serif))
+                    .font(.system(.body, design: .serif))
                     .foregroundStyle(Palette.ink)
                     .fixedSize(horizontal: false, vertical: true)
             }
             if intelligence.working.contains("entity:\(entity.key)") {
-                HStack { ProgressView(); Text("Reading every mention…").font(.footnote).foregroundStyle(Palette.ink3) }
+                HStack { ProgressView(); Text("Reading every mention…").font(.subheadline).foregroundStyle(Palette.ink3) }
             } else {
                 if reading == nil {
                     Text("Claude reads every moment \(entity.name) comes up and tells you what connects them.")
-                        .font(.footnote).foregroundStyle(Palette.ink2)
+                        .font(.subheadline).foregroundStyle(Palette.ink2)
                 }
                 Button { closerLook() } label: {
                     Label(reading == nil ? "Take a closer look" : "Look again", systemImage: "sparkles")
@@ -172,7 +172,7 @@ struct EntityDetailView: View {
                 .buttonStyle(PillButtonStyle(prominent: reading == nil))
             }
             if let error = readingError {
-                Text(error).font(.footnote).foregroundStyle(Palette.feeling(-0.8))
+                Text(error).font(.subheadline).foregroundStyle(Palette.feeling(-0.8))
             }
         }
     }
@@ -187,9 +187,9 @@ struct EntityDetailView: View {
                             HStack(alignment: .top, spacing: 12) {
                                 FeelingDot(value: mention.sentiment).padding(.top, 6)
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(entry.createdAt.stamp("EEEdMMMyyyy")).font(.caption).foregroundStyle(Palette.ink3)
+                                    Text(entry.createdAt.stamp("EEEdMMMyyyy")).font(.footnote).foregroundStyle(Palette.ink3)
                                     Text("“\(mention.quote)”")
-                                        .font(.system(size: 15, design: .serif))
+                                        .font(.system(.body, design: .serif))
                                         .foregroundStyle(Palette.ink)
                                         .multilineTextAlignment(.leading)
                                 }

@@ -55,7 +55,7 @@ struct InsightsView: View {
             VStack(spacing: 2) {
                 Text(period.title(for: interval)).font(.headline2).foregroundStyle(Palette.ink)
                 Text("\(periodEntries.count) \(periodEntries.count == 1 ? "entry" : "entries")")
-                    .font(.caption).foregroundStyle(Palette.ink3)
+                    .font(.footnote).foregroundStyle(Palette.ink3)
             }
             Spacer()
             Button { interval = period.shift(interval, by: 1) } label: {
@@ -71,7 +71,7 @@ struct InsightsView: View {
             HStack {
                 Eyebrow("How it felt")
                 Spacer()
-                Text("mostly \(Feeling.word(stats.averageMood))").font(.caption).foregroundStyle(Palette.ink2)
+                Text("mostly \(Feeling.word(stats.averageMood))").font(.footnote).foregroundStyle(Palette.ink2)
             }
             Chart(moodPoints) { point in
                 AreaMark(x: .value("Date", point.date), yStart: .value("Zero", 0), yEnd: .value("Feeling", point.mood))
@@ -105,12 +105,12 @@ struct InsightsView: View {
                 NavigationLink(value: presence.entity) {
                     HStack(spacing: 10) {
                         Image(systemName: presence.entity.kind.symbol)
-                            .font(.system(size: 12))
+                            .font(.system(.subheadline))
                             .foregroundStyle(Palette.ink3)
                             .frame(width: 18)
                         Text(presence.entity.name).foregroundStyle(Palette.ink)
                         Spacer()
-                        Text("\(presence.count)").font(.subheadline.monospacedDigit()).foregroundStyle(Palette.ink3)
+                        Text("\(presence.count)").font(.callout.monospacedDigit()).foregroundStyle(Palette.ink3)
                         FeelingDot(value: presence.feeling)
                     }
                     .padding(.vertical, 3)
@@ -135,12 +135,12 @@ struct InsightsView: View {
             HStack {
                 Eyebrow("Your insights")
                 Spacer()
-                Button { composing = .insight } label: { Label("Add", systemImage: "plus").font(.caption.weight(.semibold)) }
+                Button { composing = .insight } label: { Label("Add", systemImage: "plus").font(.footnote.weight(.semibold)) }
             }
             let mine = insights.filter { $0.source == .mine }
             if mine.isEmpty {
                 Text("When something clicks — “I always feel flat after a night out” — note it here. The reflections will check it against what you write.")
-                    .font(.footnote).foregroundStyle(Palette.ink3)
+                    .font(.subheadline).foregroundStyle(Palette.ink3)
             }
             ForEach(mine) { InsightCard(insight: $0) }
         }
@@ -194,7 +194,7 @@ struct ReflectionCard: View {
                 Spacer()
                 if let reflection {
                     Text(reflection.writtenBy == "claude" ? "by Claude" : "on this phone")
-                        .font(.caption2).foregroundStyle(Palette.ink3)
+                        .font(.caption).foregroundStyle(Palette.ink3)
                 }
             }
 
@@ -202,13 +202,13 @@ struct ReflectionCard: View {
                 HStack(spacing: 10) {
                     ProgressView()
                     Text("Reading the \(period == .allTime ? "whole journal" : period.label.lowercased())…")
-                        .font(.subheadline).foregroundStyle(Palette.ink2)
+                        .font(.callout).foregroundStyle(Palette.ink2)
                 }
                 .padding(.vertical, 8)
             } else if let reflection {
                 Text(reflection.headline).font(.headline2).foregroundStyle(Palette.ink)
                 Text(reflection.body)
-                    .font(.system(size: 16, design: .serif))
+                    .font(.system(.body, design: .serif))
                     .lineSpacing(5)
                     .foregroundStyle(Palette.ink)
                     .fixedSize(horizontal: false, vertical: true)
@@ -217,29 +217,29 @@ struct ReflectionCard: View {
                     ForEach(reflection.patterns, id: \.self) { line in
                         HStack(alignment: .firstTextBaseline, spacing: 8) {
                             Circle().fill(Palette.accent).frame(width: 5, height: 5)
-                            Text(line).font(.subheadline).foregroundStyle(Palette.ink)
+                            Text(line).font(.callout).foregroundStyle(Palette.ink)
                         }
                     }
                 }
                 if !reflection.questions.isEmpty {
                     Eyebrow("To sit with").padding(.top, 6)
                     ForEach(reflection.questions, id: \.self) { q in
-                        Text(q).font(.system(size: 15, design: .serif)).italic().foregroundStyle(Palette.ink2)
+                        Text(q).font(.system(.body, design: .serif)).italic().foregroundStyle(Palette.ink2)
                     }
                 }
                 Button("Write it again") { run() }
-                    .font(.footnote.weight(.semibold))
+                    .font(.subheadline.weight(.semibold))
                     .padding(.top, 4)
             } else if hasEntries {
                 Text(intelligence.usesClaude
                      ? "Claude will read everything from this \(period == .allTime ? "journal" : period.label.lowercased()) and write back what it notices."
                      : "A short summary built on this phone. Add a Claude key in Settings for a fuller, written reflection.")
-                    .font(.subheadline).foregroundStyle(Palette.ink2)
+                    .font(.callout).foregroundStyle(Palette.ink2)
                 Button("Write this \(period == .allTime ? "reflection" : period.label.lowercased() + "'s reflection")") { run() }
                     .buttonStyle(PillButtonStyle())
             } else {
                 Text("Nothing written in this \(period.label.lowercased()) yet.")
-                    .font(.subheadline).foregroundStyle(Palette.ink3)
+                    .font(.callout).foregroundStyle(Palette.ink3)
             }
         }
     }
@@ -268,7 +268,7 @@ struct AskCard: View {
             if intelligence.usesClaude {
                 HStack {
                     TextField("When did I last feel really rested?", text: $question, axis: .vertical)
-                        .font(.system(size: 16, design: .serif))
+                        .font(.system(.body, design: .serif))
                         .onSubmit(send)
                     if intelligence.working.contains("ask") {
                         ProgressView()
@@ -279,14 +279,14 @@ struct AskCard: View {
                 }
                 if let answer {
                     Text(answer)
-                        .font(.system(size: 15, design: .serif))
+                        .font(.system(.body, design: .serif))
                         .foregroundStyle(Palette.ink)
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(.top, 4)
                 }
             } else {
                 Text("With a Claude key you can ask things like “What was I worried about in spring?” or “Who do I mention when I'm happiest?”")
-                    .font(.footnote).foregroundStyle(Palette.ink3)
+                    .font(.subheadline).foregroundStyle(Palette.ink3)
             }
         }
     }

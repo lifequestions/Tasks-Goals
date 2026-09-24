@@ -51,7 +51,7 @@ struct JournalView: View {
                     }
                 } header: {
                     Text(group.month.stamp("MMMMyyyy"))
-                        .font(.system(size: 20, design: .serif))
+                        .font(.system(.title2, design: .serif))
                         .foregroundStyle(Palette.ink)
                         .textCase(nil)
                 }
@@ -91,21 +91,21 @@ struct EntryRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 14) {
             VStack(spacing: 0) {
-                Text(entry.createdAt.stamp("d")).font(.system(size: 24, weight: .light, design: .serif))
+                Text(entry.createdAt.stamp("d")).font(.system(.title, design: .serif, weight: .light))
                 Text(entry.createdAt.stamp("EEE").uppercased())
-                    .font(.system(size: 10, weight: .semibold))
+                    .font(.system(.caption, weight: .semibold))
                     .foregroundStyle(Palette.ink3)
             }
             .frame(width: 38)
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(entry.title)
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.system(.body, weight: .medium))
                     .foregroundStyle(Palette.ink)
                     .lineLimit(2)
                 if entry.summary != nil {
                     Text(entry.text)
-                        .font(.subheadline)
+                        .font(.callout)
                         .foregroundStyle(Palette.ink2)
                         .lineLimit(2)
                 }

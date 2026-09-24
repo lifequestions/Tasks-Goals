@@ -25,14 +25,14 @@ struct EntryDetailView: View {
                         Eyebrow("How it reads")
                         Spacer()
                         Text(Feeling.word(entry.mood).capitalized)
-                            .font(.subheadline.weight(.semibold))
+                            .font(.callout.weight(.semibold))
                             .foregroundStyle(entry.mood.map(Palette.feeling) ?? Palette.ink3)
                     }
                     FeelingScale(value: entry.mood ?? 0)
                     HStack {
-                        Text("heavier").font(.caption2).foregroundStyle(Palette.ink3)
+                        Text("heavier").font(.caption).foregroundStyle(Palette.ink3)
                         Spacer()
-                        Text("lighter").font(.caption2).foregroundStyle(Palette.ink3)
+                        Text("lighter").font(.caption).foregroundStyle(Palette.ink3)
                     }
                 }
 
@@ -52,7 +52,7 @@ struct EntryDetailView: View {
                                         HStack(alignment: .top, spacing: 10) {
                                             EntityChip(name: entity.name, kind: entity.kind, feeling: mention.sentiment)
                                             Text("“\(mention.quote)”")
-                                                .font(.footnote)
+                                                .font(.subheadline)
                                                 .foregroundStyle(Palette.ink2)
                                                 .lineLimit(2)
                                                 .multilineTextAlignment(.leading)
@@ -126,7 +126,7 @@ struct EntryDetailView: View {
             Spacer()
             Text("\(entry.wordCount) words")
         }
-        .font(.caption)
+        .font(.footnote)
         .foregroundStyle(Palette.ink3)
     }
 }

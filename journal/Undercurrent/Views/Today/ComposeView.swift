@@ -67,7 +67,7 @@ struct ComposeView: View {
                     Button("Cancel") { close() }
                 }
                 ToolbarItem(placement: .principal) {
-                    Text(Date.now.stamp("EEEEdMMM")).font(.subheadline.weight(.semibold)).foregroundStyle(Palette.ink2)
+                    Text(Date.now.stamp("EEEEdMMM")).font(.callout.weight(.semibold)).foregroundStyle(Palette.ink2)
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") { save() }
@@ -97,7 +97,7 @@ struct ComposeView: View {
     private var bottomBar: some View {
         HStack(spacing: 16) {
             Text(wordCount)
-                .font(.caption.monospacedDigit())
+                .font(.footnote.monospacedDigit())
                 .foregroundStyle(Palette.ink3)
                 .frame(width: 80, alignment: .leading)
 
@@ -118,7 +118,7 @@ struct ComposeView: View {
                         .fill(dictation.isListening ? Palette.feeling(-0.6) : Palette.accent)
                         .frame(width: 58, height: 58)
                     Image(systemName: dictation.isListening ? "stop.fill" : "mic.fill")
-                        .font(.system(size: 22, weight: .semibold))
+                        .font(.system(.title2, weight: .semibold))
                         .foregroundStyle(Palette.paper)
                 }
             }
@@ -128,7 +128,7 @@ struct ComposeView: View {
             Spacer()
 
             Text(dictation.isListening ? "Listening…" : (dictation.problem ?? ""))
-                .font(.caption)
+                .font(.footnote)
                 .foregroundStyle(Palette.ink3)
                 .lineLimit(2)
                 .frame(width: 80, alignment: .trailing)

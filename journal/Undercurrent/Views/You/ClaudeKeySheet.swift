@@ -18,7 +18,7 @@ struct ClaudeKeySheet: View {
                 Image(systemName: "sparkles").font(.title2).foregroundStyle(Palette.accent)
                 Text("Switch on Claude").font(.headline2).foregroundStyle(Palette.ink)
                 Text("Claude reads your entries properly, writes the closer looks and reflections, and suggests follow-up questions. Use a key from Anthropic (console.anthropic.com) or from OpenRouter (openrouter.ai/keys) if you have credits there.")
-                    .font(.subheadline).foregroundStyle(Palette.ink2)
+                    .font(.callout).foregroundStyle(Palette.ink2)
 
                 Picker("Through", selection: $provider) {
                     Text("Anthropic").tag("anthropic")
@@ -37,7 +37,7 @@ struct ClaudeKeySheet: View {
                     .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Palette.raised))
 
                 if let problem {
-                    Text(problem).font(.footnote).foregroundStyle(Palette.feeling(-0.8))
+                    Text(problem).font(.subheadline).foregroundStyle(Palette.feeling(-0.8))
                 }
 
                 Button {
@@ -55,7 +55,7 @@ struct ClaudeKeySheet: View {
                 Text(provider == "openrouter"
                      ? "The key stays in this iPhone's Keychain. Entries go through OpenRouter to Claude."
                      : "The key stays in this iPhone's Keychain and is only ever sent to Anthropic.")
-                    .font(.caption).foregroundStyle(Palette.ink3)
+                    .font(.footnote).foregroundStyle(Palette.ink3)
                 Spacer()
             }
             .padding(24)

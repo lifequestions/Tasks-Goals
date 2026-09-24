@@ -39,7 +39,7 @@ struct QuestionnaireView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Eyebrow("\(answers.count + 1) of \(test.items.count)")
                 if !test.stem.isEmpty {
-                    Text(test.stem).font(.subheadline).foregroundStyle(Palette.ink2)
+                    Text(test.stem).font(.callout).foregroundStyle(Palette.ink2)
                 }
                 Text(item.text).font(.display).foregroundStyle(Palette.ink)
                     .fixedSize(horizontal: false, vertical: true)
@@ -55,7 +55,7 @@ struct QuestionnaireView: View {
                         if answers.count == test.items.count { finish() }
                     } label: {
                         Text(label)
-                            .font(.system(size: 15, weight: .medium))
+                            .font(.system(.body, weight: .medium))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
                             .foregroundStyle(Palette.ink)
@@ -76,7 +76,7 @@ struct QuestionnaireView: View {
                 .font(.headline2).foregroundStyle(Palette.ink)
             Card { TraitBars(test: test, scores: scores) }
             Text("A short questionnaire gives a rough sketch, not a verdict. Source: \(test.source).")
-                .font(.caption).foregroundStyle(Palette.ink3)
+                .font(.footnote).foregroundStyle(Palette.ink3)
             Button("Done") { dismiss() }.buttonStyle(PillButtonStyle())
         }
     }

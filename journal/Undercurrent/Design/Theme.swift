@@ -46,10 +46,10 @@ enum Feeling {
 }
 
 extension Font {
-    static let display   = Font.system(size: 34, weight: .regular, design: .serif)
-    static let headline2 = Font.system(size: 24, weight: .regular, design: .serif)
-    static let reading   = Font.system(size: 18, weight: .regular, design: .serif)
-    static let bigNumber = Font.system(size: 30, weight: .light, design: .rounded)
+    static let display   = Font.system(.largeTitle, design: .serif, weight: .regular)
+    static let headline2 = Font.system(.title, design: .serif, weight: .regular)
+    static let reading   = Font.system(.title3, design: .serif, weight: .regular)
+    static let bigNumber = Font.system(.title, design: .rounded, weight: .light)
 }
 
 extension Color {
