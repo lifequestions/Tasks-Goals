@@ -40,8 +40,9 @@ jobs:
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO
 
+  # Runs alongside the simulator build rather than after it: an archive that
+  # doesn't compile fails here just as well, and the upload lands sooner.
   testflight:
-    needs: build
     runs-on: macos-26
     env:
       HAS_KEY: ${{ secrets.APP_STORE_CONNECT_KEY != '' }}
