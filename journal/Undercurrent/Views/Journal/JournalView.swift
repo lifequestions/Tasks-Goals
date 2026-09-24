@@ -3,6 +3,7 @@ import SwiftData
 
 struct JournalView: View {
     @Environment(\.modelContext) private var context
+    @Environment(Intelligence.self) private var intelligence
     @Query(sort: \Entry.createdAt, order: .reverse) private var entries: [Entry]
     @State private var search = ""
     @State private var composing: ComposeMode?
@@ -45,9 +46,8 @@ struct JournalView: View {
                             .listRowSeparatorTint(Palette.line)
                     }
                     .onDelete { offsets in
-                        for i in offsets { context.delete(group.entries[i]) }
-                        Store.pruneOrphans(in: context)
-                        try? context.save()
+                        Store.delete(offsets.map { group.entries[$0] }, in: context)
+                        intelligence.refreshPatterns(in: context)
                     }
                 } header: {
                     Text(group.month.stamp("MMMMyyyy"))

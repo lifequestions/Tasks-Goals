@@ -98,15 +98,12 @@ extension SampleJournal {
     @MainActor
     static func remove(from context: ModelContext, intelligence: Intelligence) {
         let entries = (try? context.fetch(FetchDescriptor<Entry>(predicate: #Predicate { $0.isSample == true }))) ?? []
-        for entry in entries { context.delete(entry) }
         let signature = sampleSignature
         let insights = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.signature == signature }))) ?? []
         for insight in insights { context.delete(insight) }
         // Reflections were written from the sample; they're rewritten from your own entries as periods end.
         try? context.delete(model: Reflection.self)
-        try? context.save()
-        Store.pruneOrphans(in: context)
-        try? context.save()
+        Store.delete(entries, in: context)
         intelligence.refreshPatterns(in: context)
     }
 

@@ -137,6 +137,66 @@ enum Store {
         }
     }
 
+    /// Deletes entries and everything that was worked out from them: their mentions,
+    /// what Claude noticed in them, readings of people who are no longer in the journal,
+    /// and reflections of the periods they were in (those get written again).
+    static func delete(_ entries: [Entry], in context: ModelContext) {
+        guard !entries.isEmpty else { return }
+        let dates = entries.map(\.createdAt)
+        for entry in entries { context.delete(entry) }
+        try? context.save()
+
+        let reflections = (try? context.fetch(FetchDescriptor<Reflection>())) ?? []
+        for reflection in reflections where dates.contains(where: { $0 >= reflection.start && $0 < reflection.end }) {
+            context.delete(reflection)
+        }
+        pruneOrphans(in: context)
+        try? context.save()
+        pruneStaleInsights(in: context)
+        try? context.save()
+    }
+
+    /// Claude's insights about people, places and themes that have left the journal.
+    static func pruneStaleInsights(in context: ModelContext) {
+        let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
+        let known = Set(entities.flatMap { [$0.key] + $0.aliasKeys })
+        let claude = InsightSource.claude.rawValue
+        let insights = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.sourceRaw == claude }))) ?? []
+        for insight in insights where !insight.pinned && !insight.entityKeys.isEmpty
+            && !insight.entityKeys.contains(where: known.contains) {
+            context.delete(insight)
+        }
+    }
+
+    /// Once, for journals from before insights were tied to their entry: links each of
+    /// Claude's notes to the entry it came from, drops the ones whose entry is gone,
+    /// and drops reflections that counted entries which have since been deleted.
+    static func cleanUpLeftovers(in context: ModelContext) {
+        let flag = "leftoversCleaned.v1"
+        guard !UserDefaults.standard.bool(forKey: flag) else { return }
+        let entries = (try? context.fetch(FetchDescriptor<Entry>())) ?? []
+        let readByClaude = entries.filter { $0.analysedBy == "claude" && $0.analysedAt != nil }
+        let claude = InsightSource.claude.rawValue
+        let insights = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.sourceRaw == claude }))) ?? []
+        for insight in insights where insight.entry == nil {
+            // A note is written in the same moment its entry's reading is saved.
+            if let source = readByClaude.first(where: { abs(($0.analysedAt ?? .distantPast).timeIntervalSince(insight.createdAt)) < 5 }) {
+                insight.entry = source
+            } else if insight.entityKeys.count != 1 && !insight.pinned {
+                // Not a reading of one person or theme, and its entry is gone.
+                context.delete(insight)
+            }
+        }
+        for reflection in (try? context.fetch(FetchDescriptor<Reflection>())) ?? [] {
+            let count = entries.filter { $0.createdAt >= reflection.start && $0.createdAt < reflection.end }.count
+            if count < reflection.entryCount { context.delete(reflection) }
+        }
+        pruneOrphans(in: context)
+        pruneStaleInsights(in: context)
+        try? context.save()
+        UserDefaults.standard.set(true, forKey: flag)
+    }
+
     static func eraseEverything(in context: ModelContext) {
         try? context.delete(model: Mention.self)
         try? context.delete(model: Entry.self)

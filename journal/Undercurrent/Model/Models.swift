@@ -59,6 +59,10 @@ final class Entry {
     @Relationship(deleteRule: .cascade, inverse: \Mention.entry)
     var mentions: [Mention] = []
 
+    /// What Claude noticed while reading this entry; it goes when the entry does.
+    @Relationship(deleteRule: .cascade, inverse: \Insight.entry)
+    var insights: [Insight] = []
+
     init(text: String, createdAt: Date = .now, wasDictated: Bool = false, question: String? = nil) {
         self.text = text
         self.question = question
@@ -156,6 +160,8 @@ final class Insight {
     var entityKeys: [String] = []
     var pinned: Bool = false
     var dismissed: Bool = false
+    /// The entry this was noticed in, for Claude's per-entry insights.
+    var entry: Entry?
 
     init(text: String, source: InsightSource, entityKeys: [String] = [], signature: String? = nil) {
         self.text = text

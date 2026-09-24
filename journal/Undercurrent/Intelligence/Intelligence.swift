@@ -88,10 +88,14 @@ final class Intelligence {
 
                 guard !entry.isDeleted else { return }
                 Store.apply(result, to: entry, by: "claude", in: context)
+                // A re-read replaces what the last reading noticed.
+                for old in entry.insights where !old.pinned { context.delete(old) }
                 let noticed = result.noticed.trimmingCharacters(in: .whitespacesAndNewlines)
                 if !noticed.isEmpty {
                     let keys = entry.mentions.compactMap { $0.entity?.key }
-                    context.insert(Insight(text: noticed, source: .claude, entityKeys: keys))
+                    let insight = Insight(text: noticed, source: .claude, entityKeys: keys)
+                    context.insert(insight)
+                    insight.entry = entry
                 }
                 try? context.save()
             } catch {

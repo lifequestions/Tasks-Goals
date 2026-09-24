@@ -117,9 +117,7 @@ struct EntryDetailView: View {
                 dismiss()
                 Task {
                     try? await Task.sleep(for: .milliseconds(400))
-                    context.delete(doomed)
-                    Store.pruneOrphans(in: context)
-                    try? context.save()
+                    Store.delete([doomed], in: context)
                     intelligence.refreshPatterns(in: context)
                 }
             }
