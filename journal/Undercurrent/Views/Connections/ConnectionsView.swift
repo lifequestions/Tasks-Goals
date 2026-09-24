@@ -26,6 +26,7 @@ struct ConnectionsView: View {
     @State private var sim = GraphSimulation()
     @State private var selected: Int?
     @State private var opened: Entity?
+    @State private var openForReading = false
 
     // Gesture bookkeeping.
     @State private var dragging: Int?
@@ -74,7 +75,7 @@ struct ConnectionsView: View {
                 ToolbarItem(placement: .primaryAction) { filterMenu }
             }
             .task(id: rebuildKey) { rebuild() }
-            .navigationDestination(item: $opened) { EntityDetailView(entity: $0) }
+            .navigationDestination(item: $opened) { EntityDetailView(entity: $0, startReading: openForReading) }
             .journalDestinations()
         }
     }
@@ -247,30 +248,36 @@ struct ConnectionsView: View {
         let feelings = RelativeFeeling(graph.nodes.map(\.feeling))
         let relative = feelings.relative(node.feeling)
 
-        return Button { opened = entities.first { $0.key == node.id } } label: {
-            Card {
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Eyebrow(node.kind.rawValue)
-                        Text(node.name).font(.headline2).foregroundStyle(Palette.ink)
-                        Text("\(node.count) mentions · \(feelings.phrase(relative))")
-                            .font(.subheadline).foregroundStyle(Palette.ink2)
-                    }
-                    Spacer()
-                    FeelingDot(value: relative, size: 14).padding(.top, 6)
+        let open: (Bool) -> Void = { reading in
+            openForReading = reading
+            opened = entities.first { $0.key == node.id }
+        }
+
+        return Card {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Eyebrow(node.kind.rawValue)
+                    Text(node.name).font(.headline2).foregroundStyle(Palette.ink)
+                    Text("\(node.count) mentions · \(feelings.phrase(relative))")
+                        .font(.subheadline).foregroundStyle(Palette.ink2)
                 }
-                if !links.isEmpty {
-                    Text("Often with " + links.joined(separator: ", "))
-                        .font(.footnote).foregroundStyle(Palette.ink3)
-                }
-                HStack {
-                    Spacer()
-                    Label("Open", systemImage: "chevron.right").labelStyle(.titleOnly)
-                        .font(.footnote.weight(.semibold)).foregroundStyle(Palette.accent)
-                }
+                Spacer()
+                FeelingDot(value: relative, size: 14).padding(.top, 6)
+            }
+            if !links.isEmpty {
+                Text("Often with " + links.joined(separator: ", "))
+                    .font(.footnote).foregroundStyle(Palette.ink3)
+            }
+            HStack(spacing: 10) {
+                Button { open(true) } label: { Label("Closer look", systemImage: "sparkles") }
+                    .buttonStyle(PillButtonStyle())
+                Button { open(false) } label: { Text("Open") }
+                    .buttonStyle(PillButtonStyle(prominent: false))
+                Spacer()
             }
         }
-        .buttonStyle(.plain)
+        .contentShape(Rectangle())
+            .onTapGesture { open(false) }
     }
 
     // MARK: State

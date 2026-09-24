@@ -6,6 +6,8 @@ import Charts
 /// feels, what comes with it, and every moment it appears.
 struct EntityDetailView: View {
     let entity: Entity
+    /// Start the closer look as soon as the page opens.
+    var startReading = false
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -15,6 +17,7 @@ struct EntityDetailView: View {
     @State private var reading: String?
     @State private var renaming = false
     @State private var newName = ""
+    @State private var askingForKey = false
 
     var body: some View {
         ScrollView {
@@ -39,6 +42,11 @@ struct EntityDetailView: View {
         }
         .onAppear {
             reading = latestReading
+            if startReading && reading == nil { closerLook() }
+        }
+        .sheet(isPresented: $askingForKey) {
+            ClaudeKeySheet { closerLook() }
+                .presentationDetents([.medium, .large])
         }
     }
 
@@ -153,14 +161,18 @@ struct EntityDetailView: View {
             }
             if intelligence.working.contains("entity:\(entity.key)") {
                 HStack { ProgressView(); Text("Reading every mention…").font(.footnote).foregroundStyle(Palette.ink3) }
-            } else if intelligence.usesClaude {
-                Button(reading == nil ? "Ask Claude what connects these moments" : "Read again") {
-                    Task { reading = await intelligence.readEntity(entity, in: context) ?? reading }
+            } else {
+                if reading == nil {
+                    Text("Claude reads every moment \(entity.name) comes up and tells you what connects them.")
+                        .font(.footnote).foregroundStyle(Palette.ink2)
+                }
+                Button { closerLook() } label: {
+                    Label(reading == nil ? "Take a closer look" : "Look again", systemImage: "sparkles")
                 }
                 .buttonStyle(PillButtonStyle(prominent: reading == nil))
-            } else {
-                Text("Add a Claude key in You → Settings for a written reading of everything you've said about \(entity.name).")
-                    .font(.footnote).foregroundStyle(Palette.ink3)
+            }
+            if let error = readingError {
+                Text(error).font(.footnote).foregroundStyle(Palette.feeling(-0.8))
             }
         }
     }
@@ -198,6 +210,23 @@ struct EntityDetailView: View {
                     }
                     Divider().overlay(Palette.line)
                 }
+            }
+        }
+    }
+
+    @State private var readingError: String?
+
+    private func closerLook() {
+        guard intelligence.usesClaude else {
+            askingForKey = true
+            return
+        }
+        readingError = nil
+        Task {
+            if let text = await intelligence.readEntity(entity, in: context) {
+                withAnimation { reading = text }
+            } else {
+                readingError = intelligence.lastError
             }
         }
     }
