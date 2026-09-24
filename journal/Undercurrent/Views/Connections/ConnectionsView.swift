@@ -277,7 +277,7 @@ struct ConnectionsView: View {
             }
         }
         .contentShape(Rectangle())
-            .onTapGesture { open(false) }
+        .onTapGesture { open(false) }
     }
 
     // MARK: State
