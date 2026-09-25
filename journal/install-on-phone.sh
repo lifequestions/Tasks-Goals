@@ -12,9 +12,9 @@ echo "→ Getting the latest code"
 git fetch origin "$BRANCH"
 git merge --ff-only "origin/$BRANCH"
 
-if [ -n "$(git status --porcelain -- Undercurrent Undercurrent.xcodeproj)" ]; then
+if [ -n "$(git status --porcelain --untracked-files=no -- Undercurrent Undercurrent.xcodeproj)" ]; then
   echo "Note: this Mac has local edits to the app that aren't on GitHub:"
-  git status --short -- Undercurrent Undercurrent.xcodeproj
+  git status --short --untracked-files=no -- Undercurrent Undercurrent.xcodeproj
 fi
 
 echo "→ Building (1–3 minutes)"
