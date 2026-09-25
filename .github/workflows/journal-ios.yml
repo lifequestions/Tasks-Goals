@@ -66,6 +66,9 @@ jobs:
           mkdir -p ~/private_keys
           printf '%s' "$KEY" > ~/private_keys/AuthKey_$KEY_ID.p8
 
+      # Signing for distribution uses Apple's cloud-managed certificate. Signing
+      # for development instead made a new certificate on every run, until the
+      # account hit Apple's limit.
       - name: Archive, signed by Apple's cloud certificate
         if: env.HAS_KEY == 'true'
         env:
@@ -87,7 +90,8 @@ jobs:
             DEVELOPMENT_TEAM="$TEAM_ID" \
             PRODUCT_BUNDLE_IDENTIFIER="$BUNDLE_ID" \
             CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
-            CODE_SIGN_STYLE=Automatic
+            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_IDENTITY="Apple Distribution"
 
       - name: Upload to TestFlight
         if: env.HAS_KEY == 'true'
