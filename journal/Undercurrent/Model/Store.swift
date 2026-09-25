@@ -100,12 +100,13 @@ enum Store {
     }
 
     /// A reading's insights take the place of the last reading's, except the ones
-    /// you pinned. Ones you dismissed stay dismissed if the new reading finds them again.
+    /// you pinned or rated. Ones you dismissed stay dismissed if the new reading finds them again.
     static func replaceInsights(on entry: Entry, with found: [EntryAnalysis.Extracted], in context: ModelContext) {
         let old = entry.insights
         let dismissed = Set(old.filter(\.dismissed).map { $0.text.lowercased() })
-        var kept = Set(old.filter(\.pinned).map { $0.text.lowercased() })
-        for insight in old where !insight.pinned {
+        let keep: (Insight) -> Bool = { $0.pinned || $0.feedback != nil }
+        var kept = Set(old.filter(keep).map { $0.text.lowercased() })
+        for insight in old where !keep(insight) {
             insight.entry = nil
             context.delete(insight)
         }
@@ -277,7 +278,21 @@ enum Store {
         UserDefaults.standard.set(true, forKey: flag)
     }
 
+    /// Claude's journal-wide connections and the summary under them, which are
+    /// out of date once whole sets of entries go.
+    static func forgetConnections(in context: ModelContext) {
+        let all = (try? context.fetch(FetchDescriptor<Insight>())) ?? []
+        for insight in all where insight.signature?.hasPrefix("link:") == true && !insight.pinned {
+            context.delete(insight)
+        }
+        for key in [Prefs.connectionsSummary, Prefs.connectionsWrittenAt, Prefs.connectionsWrittenBy] {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+        try? context.save()
+    }
+
     static func eraseEverything(in context: ModelContext) {
+        forgetConnections(in: context)
         try? context.delete(model: Mention.self)
         try? context.delete(model: Entry.self)
         try? context.delete(model: Entity.self)

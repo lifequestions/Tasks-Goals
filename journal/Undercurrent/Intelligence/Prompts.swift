@@ -78,11 +78,13 @@ enum Prompts {
         ],
     ]
 
-    static func readingRequest(entry: Entry, known: [Entity], recent: [Entry], profile: String) -> String {
+    static func readingRequest(entry: Entry, known: [Entity], recent: [Entry], profile: String,
+                               feedback: String = "") -> String {
         var parts: [String] = []
         if !profile.isEmpty {
             parts.append("<about_them>\n\(profile)\n</about_them>")
         }
+        if !feedback.isEmpty { parts.append(feedback) }
         if !known.isEmpty {
             let lines = known.prefix(200).map { e in
                 "- \(e.name) (\(e.kindRaw), \(e.mentions.count) mentions, usually \(Feeling.word(e.averageFeeling)))"
@@ -150,9 +152,11 @@ enum Prompts {
     /// periods inside them plus one line per entry, so a year stays affordable.
     static func reflectionRequest(period: Period, interval: DateInterval, entries: [Entry],
                                   childReflections: [Reflection], previous: Reflection?,
-                                  insights: [Insight], stats: PeriodStats, profile: String) -> String {
+                                  insights: [Insight], stats: PeriodStats, profile: String,
+                                  feedback: String = "") -> String {
         var parts: [String] = []
         if !profile.isEmpty { parts.append("<about_them>\n\(profile)\n</about_them>") }
+        if !feedback.isEmpty { parts.append(feedback) }
         parts.append("<period>\(period.title(for: interval)) — \(entries.count) entries</period>")
         parts.append("<numbers>\n\(stats.describe())\n</numbers>")
 
@@ -176,6 +180,58 @@ enum Prompts {
             return full ? "### \(head)\n\(entry.text)" : "- \(head) \(entry.summary ?? entry.title)"
         }
         parts.append("<entries>\n\(text.joined(separator: full ? "\n\n" : "\n"))\n</entries>")
+        return parts.joined(separator: "\n\n")
+    }
+
+    // MARK: Connections across the journal
+
+    static let connectionsSystem = """
+    You look across someone's whole private journal for connections and correlations: \
+    people, places, activities and themes that travel together, things that come before \
+    lighter or heavier days, what has changed over time. You're given the patterns their \
+    phone has already counted, the numbers, and a line for each recent entry.
+
+    Return:
+    - connections: three to six connections, one or two sentences each, spoken to them \
+      directly. Be specific — names and rough counts — and honest about how strong each \
+      is ("clear across a dozen entries" versus "only a hunch so far"). Go beyond restating \
+      the counted patterns: link them, and find ones the counting can't (a mood that follows \
+      a kind of day, a theme that changed after an event). Don't repeat anything they've \
+      marked not helpful.
+    - summary: a short paragraph, under 90 words, drawing the connections together — what \
+      they seem to add up to. Warm, plain, no diagnosis, no advice unless a pattern strongly \
+      warrants it, and then lightly.
+    """
+
+    static let connectionsSchema: [String: Any] = [
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["connections", "summary"],
+        "properties": [
+            "connections": ["type": "array", "items": ["type": "string"]],
+            "summary": ["type": "string"],
+        ],
+    ]
+
+    struct ConnectionsDraft: Codable {
+        var connections: [String]
+        var summary: String
+    }
+
+    static func connectionsRequest(patterns: [FoundPattern], stats: PeriodStats, entries: [Entry],
+                                   profile: String, feedback: String) -> String {
+        var parts: [String] = []
+        if !profile.isEmpty { parts.append("<about_them>\n\(profile)\n</about_them>") }
+        if !feedback.isEmpty { parts.append(feedback) }
+        parts.append("<numbers>\n\(stats.describe())\n</numbers>")
+        if !patterns.isEmpty {
+            parts.append("<counted_patterns>\n\(patterns.prefix(15).map { "- \($0.text)" }.joined(separator: "\n"))\n</counted_patterns>")
+        }
+        let lines = entries.suffix(120).map { entry -> String in
+            let names = entry.entities.map(\.name).joined(separator: ", ")
+            return "- \(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))] \(entry.summary ?? entry.title)\(names.isEmpty ? "" : " — \(names)")"
+        }
+        parts.append("<entries>\n\(lines.joined(separator: "\n"))\n</entries>")
         return parts.joined(separator: "\n\n")
     }
 

@@ -28,6 +28,7 @@ struct InsightsView: View {
                                    hasEntries: !periodEntries.isEmpty)
                     if !stats.top.isEmpty { presenceCard }
                     AskCard()
+                    ConnectionsSection()
                     insightsCard
                 }
                 .padding(.horizontal, 20)
@@ -285,5 +286,105 @@ struct AskCard: View {
         let q = question.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !q.isEmpty else { return }
         Task { answer = await intelligence.ask(q, in: context) ?? intelligence.lastError }
+    }
+}
+
+/// Connections and correlations across the whole journal, each one rated helpful or
+/// not, and under them a summary of what they seem to add up to.
+struct ConnectionsSection: View {
+    @Environment(\.modelContext) private var context
+    @Environment(Intelligence.self) private var intelligence
+    @Query(filter: #Predicate<Insight> { !$0.dismissed }, sort: \Insight.createdAt, order: .reverse)
+    private var insights: [Insight]
+    @Query(sort: \Entry.createdAt, order: .reverse) private var entries: [Entry]
+    @AppStorage(Prefs.connectionsSummary) private var summary = ""
+    @AppStorage(Prefs.connectionsWrittenAt) private var writtenAt = 0.0
+    @AppStorage(Prefs.connectionsWrittenBy) private var writtenBy = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Eyebrow("Connections & correlations")
+                Spacer()
+                if working {
+                    ProgressView().controlSize(.small)
+                } else {
+                    Button { run() } label: {
+                        Label("Look again", systemImage: "arrow.clockwise").font(.footnote.weight(.semibold))
+                    }
+                    .foregroundStyle(Palette.accent)
+                }
+            }
+
+            if connections.isEmpty && !working {
+                Text("Once there are a few weeks of entries, the people, places and habits that go together — and how you feel around them — show up here.")
+                    .font(.subheadline).foregroundStyle(Palette.ink3)
+            }
+            ForEach(connections.prefix(5)) { InsightCard(insight: $0) }
+            if connections.count > 5 {
+                NavigationLink { InsightListView() } label: {
+                    Text("All \(connections.count) connections").font(.footnote.weight(.semibold))
+                }
+                .foregroundStyle(Palette.accent)
+            }
+
+            summaryCard
+        }
+        .task(id: entries.first?.analysedAt) {
+            // Written again once there's something new, at most every few hours.
+            let latest = entries.first?.createdAt.timeIntervalSince1970 ?? 0
+            let stale = summary.isEmpty || (latest > writtenAt && Date.now.timeIntervalSince1970 - writtenAt > 6 * 3600)
+            if stale && !entries.isEmpty { run() }
+        }
+    }
+
+    private var summaryCard: some View {
+        Card {
+            HStack {
+                Image(systemName: "text.quote").foregroundStyle(Palette.accent)
+                Eyebrow("What it adds up to")
+                Spacer()
+                if writtenAt > 0 {
+                    Text(writtenBy == "claude" ? "by Claude" : "on this phone")
+                        .font(.caption).foregroundStyle(Palette.ink3)
+                }
+            }
+            if working && summary.isEmpty {
+                HStack(spacing: 10) {
+                    ProgressView()
+                    Text("Looking across your journal…").font(.callout).foregroundStyle(Palette.ink2)
+                }
+            } else if summary.isEmpty {
+                Button("Find connections") { run() }.buttonStyle(PillButtonStyle())
+            } else {
+                Text(summary)
+                    .font(.system(.body, design: .serif))
+                    .lineSpacing(5)
+                    .foregroundStyle(Palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                if writtenAt > 0 {
+                    Text("Updated \(Date(timeIntervalSince1970: writtenAt).stamp("EEEdMMMjmm"))")
+                        .font(.caption).foregroundStyle(Palette.ink3)
+                }
+            }
+        }
+    }
+
+    /// Links across entries: Claude's, then the patterns counted on the phone.
+    /// Ones you marked helpful and pinned ones come first.
+    private var connections: [Insight] {
+        let links = insights.filter { $0.source == .pattern || $0.signature?.hasPrefix("link:") == true }
+        func rank(_ i: Insight) -> Int {
+            (i.pinned ? 4 : 0) + (i.feedback == 1 ? 2 : 0) + (i.source == .claude ? 1 : 0)
+        }
+        return links.enumerated()
+            .sorted { rank($0.element) != rank($1.element) ? rank($0.element) > rank($1.element) : $0.offset < $1.offset }
+            .map(\.element)
+    }
+
+    private var working: Bool { intelligence.working.contains("connections") }
+
+    private func run() {
+        Task { await intelligence.findConnections(in: context) }
     }
 }

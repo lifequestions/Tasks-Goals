@@ -347,6 +347,7 @@ struct TodayView: View {
 
 struct InsightCard: View {
     @Environment(\.modelContext) private var context
+    @Environment(Intelligence.self) private var intelligence
     let insight: Insight
 
     var body: some View {
@@ -383,6 +384,44 @@ struct InsightCard: View {
                 }
                 .buttonStyle(.plain)
             }
+            feedbackRow
+        }
+    }
+
+    /// Helpful or not: the app leans toward what you mark helpful and stops offering
+    /// the kind of thing you don't. Tap again to take the mark back.
+    private var feedbackRow: some View {
+        HStack(spacing: 6) {
+            Text(feedbackLabel).font(.footnote).foregroundStyle(Palette.ink3)
+            Spacer()
+            thumb(1, symbol: "hand.thumbsup", label: "Helpful")
+            thumb(-1, symbol: "hand.thumbsdown", label: "Not helpful")
+        }
+        .padding(.top, 2)
+    }
+
+    private func thumb(_ value: Int, symbol: String, label: String) -> some View {
+        let on = insight.feedback == value
+        return Button {
+            withAnimation(.snappy) { intelligence.rate(insight, on ? nil : value, in: context) }
+        } label: {
+            Image(systemName: on ? symbol + ".fill" : symbol)
+                .font(.system(.callout, weight: .medium))
+                .foregroundStyle(on ? Palette.accent : Palette.ink3)
+                .frame(width: 40, height: 32)
+                .background(Capsule().fill(on ? Palette.accentSoft : Palette.raised))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+        .accessibilityAddTraits(on ? .isSelected : [])
+        .sensoryFeedback(.selection, trigger: insight.feedback)
+    }
+
+    private var feedbackLabel: String {
+        switch insight.feedback {
+        case 1: "Helpful — more like this"
+        case -1: "Not helpful — fewer like this"
+        default: "Helpful?"
         }
     }
 

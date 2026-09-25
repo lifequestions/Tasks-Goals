@@ -108,6 +108,9 @@ struct PillButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(.body, weight: .semibold))
+            // A button's words never break across lines; they shrink a little first.
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
             .padding(.horizontal, 18)
             .padding(.vertical, 11)
             .foregroundStyle(prominent ? Palette.paper : Palette.ink)

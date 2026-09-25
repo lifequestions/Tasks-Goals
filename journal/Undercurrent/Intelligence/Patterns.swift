@@ -9,10 +9,33 @@ struct FoundPattern {
     var text: String
     var entityKeys: [String]
     var strength: Double
+    /// For a mood pattern, how much lighter (+) or heavier (−) things run with it.
+    var lift: Double? = nil
+    var names: [String] = []
+
+    var type: String { String(signature.split(separator: ":").first ?? "") }
 }
 
 enum PatternFinder {
-    static func find(in entries: [Entry], now: Date = .now) -> [FoundPattern] {
+    /// With `feedback`, kinds of pattern and subjects you've found helpful rank higher,
+    /// and ones you keep marking not helpful stop being offered.
+    static func find(in entries: [Entry], feedback: Feedback? = nil, now: Date = .now) -> [FoundPattern] {
+        let found = findAll(in: entries, now: now)
+        guard let feedback, !feedback.isEmpty else { return found }
+        return found
+            .map { pattern -> (FoundPattern, Double) in
+                (pattern, feedback.weight(forKind: pattern.type) * feedback.weight(forEntities: pattern.entityKeys))
+            }
+            .filter { $0.1 >= 0.4 }
+            .map { pattern, weight in
+                var weighted = pattern
+                weighted.strength *= weight
+                return weighted
+            }
+            .sorted { $0.strength > $1.strength }
+    }
+
+    private static func findAll(in entries: [Entry], now: Date) -> [FoundPattern] {
         let rated = entries.filter { $0.mood != nil }
         guard rated.count >= 6 else { return [] }
         let calendar = Calendar.current
@@ -42,7 +65,8 @@ enum PatternFinder {
                 ? "When \(name) comes up, your entries run heavier — mostly \(Feeling.word(mean(with))), against \(Feeling.word(mean(without))) the rest of the time."
                 : "Entries with \(name) in them run lighter — mostly \(Feeling.word(mean(with))), against \(Feeling.word(mean(without))) otherwise."
             out.append(FoundPattern(signature: "mood:\(key)", text: text, entityKeys: [key],
-                                    strength: abs(diff) * log(Double(with.count) + 1)))
+                                    strength: abs(diff) * log(Double(with.count) + 1),
+                                    lift: diff, names: [name]))
         }
 
         // 2. Two things that nearly always arrive together.
@@ -59,7 +83,8 @@ enum PatternFinder {
                 out.append(FoundPattern(signature: "pair:\(frequent[i])|\(frequent[j])",
                                         text: "\(a.entity.name) and \(b.entity.name) tend to turn up together — \(together) entries mention both\(feeling).",
                                         entityKeys: [frequent[i], frequent[j]],
-                                        strength: overlap * log(Double(together) + 1) * 0.8))
+                                        strength: overlap * log(Double(together) + 1) * 0.8,
+                                        names: [a.entity.name, b.entity.name]))
             }
         }
 
@@ -82,7 +107,34 @@ enum PatternFinder {
                                     entityKeys: [], strength: abs(high.value - baseline)))
         }
 
-        // 4. Something that used to come up often and has gone quiet.
+        // 4. Something on one day, and how the next day goes.
+        var moodByDay: [Date: [Double]] = [:]
+        for entry in rated { moodByDay[calendar.startOfDay(for: entry.createdAt), default: []].append(entry.mood ?? 0) }
+        var daysByKey: [String: Set<Date>] = [:]
+        for entry in entries {
+            for mention in entry.mentions {
+                guard let key = mention.entity?.key else { continue }
+                daysByKey[key, default: []].insert(calendar.startOfDay(for: entry.createdAt))
+            }
+        }
+        for (key, item) in appearances where item.entity.kind != .person {
+            let days = daysByKey[key] ?? []
+            let next = days.compactMap { calendar.date(byAdding: .day, value: 1, to: $0) }
+                .filter { !days.contains($0) }
+                .compactMap { moodByDay[$0].map(mean) }
+            guard next.count >= 3 else { continue }
+            let diff = mean(next) - baseline
+            guard abs(diff) >= 0.25 else { continue }
+            let name = item.entity.name
+            let text = diff > 0
+                ? "The day after \(name.lowercased()), you tend to write more lightly — mostly \(Feeling.word(mean(next)))."
+                : "The day after \(name.lowercased()), your entries tend to be heavier — mostly \(Feeling.word(mean(next)))."
+            out.append(FoundPattern(signature: "nextday:\(key)", text: text, entityKeys: [key],
+                                    strength: abs(diff) * log(Double(next.count) + 1) * 0.9,
+                                    lift: diff, names: [name]))
+        }
+
+        // 5. Something that used to come up often and has gone quiet.
         for (key, item) in appearances where item.ids.count >= 4 {
             guard let last = item.entity.lastMentioned,
                   let days = calendar.dateComponents([.day], from: last, to: now).day, days >= 21 else { continue }
@@ -93,6 +145,28 @@ enum PatternFinder {
         }
 
         return out.sorted { $0.strength > $1.strength }
+    }
+
+    /// A few plain lines drawing the patterns together, when Claude isn't writing it.
+    static func summary(of patterns: [FoundPattern]) -> String {
+        func list(_ names: [String]) -> String {
+            let unique = names.reduce(into: [String]()) { if !$0.contains($1) { $0.append($1) } }.prefix(4)
+            return ListFormatter.localizedString(byJoining: Array(unique))
+        }
+        let lifts = patterns.filter { ($0.lift ?? 0) > 0 }.flatMap(\.names)
+        let weighs = patterns.filter { ($0.lift ?? 0) < 0 }.flatMap(\.names)
+        let pairs = patterns.filter { $0.type == "pair" }.prefix(2)
+            .map { $0.names.joined(separator: " and ") }
+
+        var lines: [String] = []
+        if !lifts.isEmpty { lines.append("What seems to lift you: \(list(lifts)).") }
+        if !weighs.isEmpty { lines.append("What seems to weigh on you: \(list(weighs)).") }
+        if !pairs.isEmpty { lines.append("Often together: \(ListFormatter.localizedString(byJoining: pairs)).") }
+        guard !lines.isEmpty else {
+            return "Keep writing — once a few weeks are in, the links between people, places and how you feel start to show here."
+        }
+        lines.append("These are patterns in what you've written, not proof. Mark which ring true and the app will look for more like them.")
+        return lines.joined(separator: "\n\n")
     }
 
     static func mean(_ values: [Double]) -> Double {

@@ -227,8 +227,8 @@ struct ConnectionsView: View {
             Circle().fill(Palette.ink2).frame(width: 7, height: 7)
             Text("person").font(.caption)
             Circle().strokeBorder(Palette.ink2, lineWidth: 1.5).frame(width: 8, height: 8)
-            Text("theme, place, activity").font(.caption)
-            Spacer()
+            Text("everything else").font(.caption)
+            Spacer(minLength: 8)
             Text("heavier").font(.caption)
             Capsule()
                 .fill(LinearGradient(colors: [Palette.feeling(-1), Palette.feeling(0), Palette.feeling(1)],
@@ -237,6 +237,8 @@ struct ConnectionsView: View {
             Text("lighter").font(.caption)
         }
         .foregroundStyle(Palette.ink3)
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
         .background(Capsule().fill(.ultraThinMaterial))
@@ -272,16 +274,29 @@ struct ConnectionsView: View {
                 Text("Often with " + links.joined(separator: ", "))
                     .font(.subheadline).foregroundStyle(Palette.ink3)
             }
-            HStack(spacing: 10) {
-                Button { open(true) } label: { Label("Closer look", systemImage: "sparkles") }
-                    .buttonStyle(PillButtonStyle())
-                Button { writingAbout = Tag(name: node.name, kind: node.kind) } label: {
-                    Label("Write", systemImage: "pencil")
-                }
+            // One row when it fits; at larger text, Closer look on top and the others below.
+            let closer = Button { open(true) } label: { Label("Closer look", systemImage: "sparkles") }
+                .buttonStyle(PillButtonStyle())
+            let write = Button { writingAbout = Tag(name: node.name, kind: node.kind) } label: {
+                Label("Write", systemImage: "pencil")
+            }
+            .buttonStyle(PillButtonStyle(prominent: false))
+            let openButton = Button { open(false) } label: { Text("Open") }
                 .buttonStyle(PillButtonStyle(prominent: false))
-                Button { open(false) } label: { Text("Open") }
-                    .buttonStyle(PillButtonStyle(prominent: false))
-                Spacer()
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 10) {
+                    closer.fixedSize()
+                    write.fixedSize()
+                    openButton.fixedSize()
+                    Spacer(minLength: 0)
+                }
+                VStack(alignment: .leading, spacing: 10) {
+                    closer.fixedSize()
+                    HStack(spacing: 10) {
+                        write.fixedSize()
+                        openButton.fixedSize()
+                    }
+                }
             }
         }
         .contentShape(Rectangle())

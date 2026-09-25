@@ -104,6 +104,7 @@ extension SampleJournal {
         // Reflections were written from the sample; they're rewritten from your own entries as periods end.
         try? context.delete(model: Reflection.self)
         Store.delete(entries, in: context)
+        Store.forgetConnections(in: context)
         intelligence.refreshPatterns(in: context)
     }
 

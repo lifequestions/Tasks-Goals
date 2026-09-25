@@ -160,6 +160,8 @@ final class Insight {
     var entityKeys: [String] = []
     var pinned: Bool = false
     var dismissed: Bool = false
+    /// You marked it helpful (1) or not helpful (-1). Future insights lean on these.
+    var feedback: Int?
     /// The entry this was found in.
     var entry: Entry?
 

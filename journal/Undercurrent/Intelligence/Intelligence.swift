@@ -12,6 +12,9 @@ enum Prefs {
     static let provider = "aiProvider"            // "anthropic" or "openrouter"
     static let openRouterModel = "openRouterModel"
     static let openRouterKeyAccount = "openrouter-api-key"
+    static let connectionsSummary = "connections.summary"
+    static let connectionsWrittenAt = "connections.writtenAt"
+    static let connectionsWrittenBy = "connections.writtenBy"
 }
 
 /// The app's understanding of the journal. Every entry is read on the phone
@@ -83,7 +86,8 @@ final class Intelligence {
                 let result = try await claude.structured(
                     EntryAnalysis.self,
                     system: Prompts.readingSystem,
-                    user: Prompts.readingRequest(entry: entry, known: known, recent: recent, profile: profile(in: context)),
+                    user: Prompts.readingRequest(entry: entry, known: known, recent: recent, profile: profile(in: context),
+                                                 feedback: feedback(in: context).prompt),
                     schema: Prompts.readingSchema,
                     effort: "medium")
 
@@ -105,7 +109,7 @@ final class Intelligence {
 
     func refreshPatterns(in context: ModelContext) {
         let entries = (try? context.fetch(FetchDescriptor<Entry>(sortBy: [SortDescriptor(\.createdAt)]))) ?? []
-        let found = PatternFinder.find(in: entries)
+        let found = PatternFinder.find(in: entries, feedback: feedback(in: context))
         let source = InsightSource.pattern.rawValue
         let existing = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.sourceRaw == source }))) ?? []
         var bySignature: [String: Insight] = [:]
@@ -120,10 +124,78 @@ final class Intelligence {
                                        entityKeys: pattern.entityKeys, signature: pattern.signature))
             }
         }
-        for insight in existing where !current.contains(insight.signature ?? "") && !insight.pinned {
+        // Rated ones stay, so what you marked keeps teaching the app.
+        for insight in existing where !current.contains(insight.signature ?? "") && !insight.pinned && insight.feedback == nil {
             context.delete(insight)
         }
         try? context.save()
+    }
+
+    func feedback(in context: ModelContext) -> Feedback {
+        Feedback((try? context.fetch(FetchDescriptor<Insight>())) ?? [])
+    }
+
+    /// You marked an insight helpful (1), not helpful (-1), or took the mark back (nil).
+    /// Not helpful also hides it; the patterns are re-weighted straight away.
+    func rate(_ insight: Insight, _ value: Int?, in context: ModelContext) {
+        insight.feedback = value
+        insight.dismissed = value == -1
+        try? context.save()
+        refreshPatterns(in: context)
+    }
+
+    // MARK: Connections
+
+    /// Looks across the whole journal for connections and writes a summary of them.
+    /// With Claude, its connections join the list; without, the summary comes from the patterns.
+    func findConnections(in context: ModelContext) async {
+        guard !working.contains("connections") else { return }
+        working.insert("connections")
+        defer { working.remove("connections") }
+
+        refreshPatterns(in: context)
+        let entries = (try? context.fetch(FetchDescriptor<Entry>(sortBy: [SortDescriptor(\.createdAt)]))) ?? []
+        let learned = feedback(in: context)
+        let patterns = PatternFinder.find(in: entries, feedback: learned)
+        var summary = PatternFinder.summary(of: patterns)
+        var writtenBy = "device"
+
+        if let claude, entries.count >= 3 {
+            do {
+                let draft = try await claude.structured(
+                    Prompts.ConnectionsDraft.self,
+                    system: Prompts.connectionsSystem,
+                    user: Prompts.connectionsRequest(patterns: patterns, stats: PeriodStats(entries: entries),
+                                                     entries: entries, profile: profile(in: context),
+                                                     feedback: learned.prompt),
+                    schema: Prompts.connectionsSchema,
+                    effort: "high")
+                summary = draft.summary
+                writtenBy = "claude"
+
+                // Claude's connections replace its last ones, except those you pinned or rated.
+                let all = (try? context.fetch(FetchDescriptor<Insight>())) ?? []
+                let old = all.filter { $0.signature?.hasPrefix("link:") == true }
+                var seen = Set(old.filter { $0.pinned || $0.feedback != nil }.map { $0.text.lowercased() })
+                for insight in old where !insight.pinned && insight.feedback == nil { context.delete(insight) }
+                let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
+                for (i, text) in draft.connections.prefix(6).enumerated() {
+                    let clean = text.trimmingCharacters(in: .whitespacesAndNewlines)
+                    guard clean.count > 8, seen.insert(clean.lowercased()).inserted else { continue }
+                    let keys = entities.filter { clean.localizedCaseInsensitiveContains($0.name) }.map(\.key)
+                    context.insert(Insight(text: clean, source: .claude, entityKeys: keys,
+                                           signature: "link:\(Int(Date.now.timeIntervalSince1970)):\(i)"))
+                }
+                try? context.save()
+            } catch {
+                lastError = error.localizedDescription
+            }
+        }
+
+        let defaults = UserDefaults.standard
+        defaults.set(summary, forKey: Prefs.connectionsSummary)
+        defaults.set(Date.now.timeIntervalSince1970, forKey: Prefs.connectionsWrittenAt)
+        defaults.set(writtenBy, forKey: Prefs.connectionsWrittenBy)
     }
 
     // MARK: Reflections
@@ -166,7 +238,8 @@ final class Intelligence {
                     system: Prompts.reflectionSystem(for: period),
                     user: Prompts.reflectionRequest(period: period, interval: interval, entries: entries,
                                                     childReflections: children, previous: previous,
-                                                    insights: insights, stats: stats, profile: profile(in: context)),
+                                                    insights: insights, stats: stats, profile: profile(in: context),
+                                                    feedback: feedback(in: context).prompt),
                     schema: Prompts.reflectionSchema,
                     effort: "high")
                 writtenBy = "claude"
