@@ -10,11 +10,53 @@ struct EntryAnalysis: Codable {
         var quote: String
     }
 
+    /// One insight in an entry: something they realised themselves ("theirs"),
+    /// or a link to the rest of the journal the reader saw ("connection").
+    struct Extracted: Codable {
+        var text: String
+        var kind: String = "theirs"
+    }
+
     var mood: Double
     var summary: String
     var entities: [Found]
-    var noticed: String
+    var insights: [Extracted] = []
     var followUp: String = ""
+
+    init(mood: Double, summary: String, entities: [Found], insights: [Extracted] = [], followUp: String = "") {
+        self.mood = mood
+        self.summary = summary
+        self.entities = entities
+        self.insights = insights
+        self.followUp = followUp
+    }
+
+    private enum CodingKeys: String, CodingKey { case mood, summary, entities, insights, noticed, followUp }
+
+    /// Lenient, since not every model on OpenRouter returns every field.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        mood = (try? c.decode(Double.self, forKey: .mood)) ?? 0
+        summary = (try? c.decode(String.self, forKey: .summary)) ?? ""
+        entities = (try? c.decode([Found].self, forKey: .entities)) ?? []
+        insights = (try? c.decode([Extracted].self, forKey: .insights))
+            ?? (try? c.decode([String].self, forKey: .insights))?.map { Extracted(text: $0) }
+            ?? []
+        // Older replies had a single "noticed" line.
+        if let noticed = try? c.decode(String.self, forKey: .noticed), !noticed.isEmpty {
+            insights.append(Extracted(text: noticed, kind: "connection"))
+        }
+        followUp = (try? c.decode(String.self, forKey: .followUp)) ?? ""
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(mood, forKey: .mood)
+        try c.encode(summary, forKey: .summary)
+        try c.encode(entities, forKey: .entities)
+        try c.encode(insights, forKey: .insights)
+        try c.encode(followUp, forKey: .followUp)
+    }
 }
 
 /// Writes to the journal. Views read with @Query; changes go through here.
@@ -52,6 +94,30 @@ enum Store {
             let target = Self.entity(named: tag.name, kind: tag.kind, in: context)
             guard seen.insert(target.key).inserted else { continue }
             attach(target, to: entry, in: context)
+        }
+
+        replaceInsights(on: entry, with: analysis.insights, in: context)
+    }
+
+    /// A reading's insights take the place of the last reading's, except the ones
+    /// you pinned. Ones you dismissed stay dismissed if the new reading finds them again.
+    static func replaceInsights(on entry: Entry, with found: [EntryAnalysis.Extracted], in context: ModelContext) {
+        let old = entry.insights
+        let dismissed = Set(old.filter(\.dismissed).map { $0.text.lowercased() })
+        var kept = Set(old.filter(\.pinned).map { $0.text.lowercased() })
+        for insight in old where !insight.pinned {
+            insight.entry = nil
+            context.delete(insight)
+        }
+        let keys = entry.mentions.compactMap { $0.entity?.key }
+        for item in found.prefix(5) {
+            let text = item.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard text.count > 8, kept.insert(text.lowercased()).inserted else { continue }
+            let insight = Insight(text: text, source: item.kind == "connection" ? .claude : .mine, entityKeys: keys)
+            insight.createdAt = entry.createdAt
+            insight.dismissed = dismissed.contains(text.lowercased())
+            context.insert(insight)
+            insight.entry = entry
         }
     }
 
@@ -193,6 +259,20 @@ enum Store {
         }
         pruneOrphans(in: context)
         pruneStaleInsights(in: context)
+        try? context.save()
+        UserDefaults.standard.set(true, forKey: flag)
+    }
+
+    /// Once, for journals from before insights were taken from entries: finds the
+    /// ones in entries written so far, on the phone.
+    static func extractEarlierInsights(in context: ModelContext) {
+        let flag = "insightsExtracted.v1"
+        guard !UserDefaults.standard.bool(forKey: flag) else { return }
+        let entries = (try? context.fetch(FetchDescriptor<Entry>())) ?? []
+        for entry in entries where entry.insights.isEmpty {
+            let found = LocalReader.realisations(in: LocalReader.sentences(in: entry.text))
+            replaceInsights(on: entry, with: found.map { EntryAnalysis.Extracted(text: $0) }, in: context)
+        }
         try? context.save()
         UserDefaults.standard.set(true, forKey: flag)
     }

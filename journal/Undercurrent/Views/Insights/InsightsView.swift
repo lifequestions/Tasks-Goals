@@ -12,7 +12,6 @@ struct InsightsView: View {
 
     @State private var period: Period = .week
     @State private var interval = Period.week.interval(containing: .now)
-    @State private var composing: ComposeMode?
 
     var body: some View {
         NavigationStack {
@@ -29,8 +28,7 @@ struct InsightsView: View {
                                    hasEntries: !periodEntries.isEmpty)
                     if !stats.top.isEmpty { presenceCard }
                     AskCard()
-                    insightSection(title: "Noticed for you", items: insights.filter { $0.source != .mine })
-                    yourInsights
+                    insightsCard
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 40)
@@ -38,7 +36,6 @@ struct InsightsView: View {
             .screenBackground()
             .navigationTitle("Insights")
             .journalDestinations()
-            .fullScreenCover(item: $composing) { ComposeView(mode: $0) }
             .onChange(of: period) { _, p in interval = p.interval(containing: .now) }
         }
     }
@@ -120,29 +117,22 @@ struct InsightsView: View {
         }
     }
 
-    @ViewBuilder
-    private func insightSection(title: String, items: [Insight]) -> some View {
-        if !items.isEmpty {
-            VStack(alignment: .leading, spacing: 10) {
-                Eyebrow(title)
-                ForEach(items.sorted { $0.pinned && !$1.pinned }.prefix(8)) { InsightCard(insight: $0) }
-            }
-        }
-    }
-
-    private var yourInsights: some View {
+    /// The newest few insights from your entries, and the way into all of them.
+    private var insightsCard: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Eyebrow("Your insights")
+                Eyebrow("Insights")
                 Spacer()
-                Button { composing = .insight } label: { Label("Add", systemImage: "plus").font(.footnote.weight(.semibold)) }
+                NavigationLink { InsightListView() } label: {
+                    Text(insights.isEmpty ? "Open" : "See all \(insights.count)").font(.footnote.weight(.semibold))
+                }
+                .foregroundStyle(Palette.accent)
             }
-            let mine = insights.filter { $0.source == .mine }
-            if mine.isEmpty {
-                Text("When something clicks — “I always feel flat after a night out” — note it here. The reflections will check it against what you write.")
+            if insights.isEmpty {
+                Text("As you write, the things you realise about yourself — and the connections between entries — gather here as a list.")
                     .font(.subheadline).foregroundStyle(Palette.ink3)
             }
-            ForEach(mine) { InsightCard(insight: $0) }
+            ForEach(insights.sorted { $0.pinned && !$1.pinned }.prefix(4)) { InsightCard(insight: $0) }
         }
     }
 

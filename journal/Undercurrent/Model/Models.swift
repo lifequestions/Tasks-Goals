@@ -59,7 +59,7 @@ final class Entry {
     @Relationship(deleteRule: .cascade, inverse: \Mention.entry)
     var mentions: [Mention] = []
 
-    /// What Claude noticed while reading this entry; it goes when the entry does.
+    /// The insights found in this entry; they go when the entry does.
     @Relationship(deleteRule: .cascade, inverse: \Insight.entry)
     var insights: [Insight] = []
 
@@ -137,15 +137,15 @@ final class Mention {
 }
 
 enum InsightSource: String, Codable {
-    case mine      // you told the app
+    case mine      // something you realised, taken from what you wrote
     case pattern   // the on-device pattern finder
-    case claude    // Claude noticed it
+    case claude    // a connection Claude noticed
 
     var label: String {
         switch self {
-        case .mine: "Yours"
+        case .mine: "In your words"
         case .pattern: "Pattern"
-        case .claude: "Noticed"
+        case .claude: "Connection"
         }
     }
 }
@@ -160,7 +160,7 @@ final class Insight {
     var entityKeys: [String] = []
     var pinned: Bool = false
     var dismissed: Bool = false
-    /// The entry this was noticed in, for Claude's per-entry insights.
+    /// The entry this was found in.
     var entry: Entry?
 
     init(text: String, source: InsightSource, entityKeys: [String] = [], signature: String? = nil) {

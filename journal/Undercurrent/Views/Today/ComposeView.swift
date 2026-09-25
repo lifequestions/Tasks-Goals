@@ -13,7 +13,6 @@ struct ComposeView: View {
     @Environment(Intelligence.self) private var intelligence
 
     @State private var text = ""
-    @State private var isInsight = false
     @State private var dictation = Dictation()
     @State private var textBeforeDictation = ""
     @State private var usedDictation = false
@@ -26,17 +25,7 @@ struct ComposeView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                if editing == nil {
-                    Picker("Kind", selection: $isInsight) {
-                        Text("Entry").tag(false)
-                        Text("Insight").tag(true)
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 8)
-                }
-
-                if let asked, !isInsight {
+                if let asked {
                     Text(asked)
                         .font(.headline2)
                         .foregroundStyle(Palette.ink)
@@ -64,7 +53,7 @@ struct ComposeView: View {
                         .focused($focused)
                 }
 
-                if !isInsight { tagRow }
+                tagRow
                 bottomBar
             }
             .screenBackground()
@@ -100,7 +89,6 @@ struct ComposeView: View {
         .onAppear {
             chosen = editing?.chosenTags ?? presetTags
             if let editing { text = editing.text }
-            isInsight = mode == .insight
             if mode == .speak {
                 Task { await startDictation() }
             } else {
@@ -115,18 +103,16 @@ struct ComposeView: View {
         .onDisappear { dictation.stop() }
     }
 
-    /// Your tags, then the ones spotted in the text (dashed), then + Tag.
+    /// + Tag, your tags, then the ones spotted in the text (dashed), over two rows
+    /// that scroll sideways.
     private var tagRow: some View {
         let chosenKeys = Set(chosen.map(\.key))
         let suggestions = detected.filter { !chosenKeys.contains($0.key) && !dropped.contains($0.key) }
-        return ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(chosen) { tag in
-                    RemovableTag(tag: tag) { withAnimation { chosen.removeAll { $0 == tag }; dropped.insert(tag.key) } }
-                }
-                ForEach(suggestions) { tag in
-                    RemovableTag(tag: tag, suggested: true) { withAnimation { _ = dropped.insert(tag.key) } }
-                }
+        let chips = [ComposeChip.add] + chosen.map { ComposeChip.tag($0, suggested: false) }
+            + suggestions.map { ComposeChip.tag($0, suggested: true) }
+        return ChipRows(items: chips, maxRows: 2, inset: 20, length: \.length) { chip in
+            switch chip {
+            case .add:
                 Button { pickingTag = true } label: {
                     Label("Tag", systemImage: "plus")
                         .font(.subheadline.weight(.semibold))
@@ -135,11 +121,33 @@ struct ComposeView: View {
                         .background(Capsule().fill(Palette.raised))
                 }
                 .foregroundStyle(Palette.accent)
+            case .tag(let tag, let suggested):
+                RemovableTag(tag: tag, suggested: suggested) {
+                    withAnimation {
+                        if !suggested { chosen.removeAll { $0 == tag } }
+                        _ = dropped.insert(tag.key)
+                    }
+                }
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 8)
         }
-        .animation(.snappy, value: suggestions.map(\.key))
+        .padding(.vertical, 8)
+        .animation(.snappy, value: chips.map(\.id))
+    }
+
+    private enum ComposeChip: Identifiable {
+        case add, tag(Tag, suggested: Bool)
+        var id: String {
+            switch self {
+            case .add: "+tag"
+            case .tag(let tag, _): tag.key
+            }
+        }
+        var length: Int {
+            switch self {
+            case .add: 5
+            case .tag(let tag, _): tag.name.count + 5
+            }
+        }
     }
 
     private var bottomBar: some View {
@@ -190,7 +198,6 @@ struct ComposeView: View {
     private var asked: String? { editing?.question ?? question }
 
     private var placeholder: String {
-        if isInsight { return "Something you've realised about yourself…" }
         if mode == .speak { return "Start talking — it'll appear here." }
         return asked == nil ? Questions.opener().text : "Write as much or as little as you like."
     }
@@ -220,8 +227,6 @@ struct ComposeView: View {
             editing.analysedAt = nil
             try? context.save()
             Task { await intelligence.read(editing, in: context) }
-        } else if isInsight {
-            intelligence.saveInsight(text: body, in: context)
         } else {
             intelligence.saveEntry(text: body, dictated: usedDictation, question: question,
                                    tags: chosen, dropped: Array(dropped), in: context)

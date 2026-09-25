@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 enum ComposeMode: String, Identifiable {
-    case write, speak, insight
+    case write, speak
     var id: String { rawValue }
 }
 
@@ -97,35 +97,21 @@ struct TodayView: View {
                     .buttonStyle(PillButtonStyle())
                 Button { compose(.speak, answering: opener.text) } label: { Label("Speak", systemImage: "mic.fill") }
                     .buttonStyle(PillButtonStyle(prominent: false))
-                Spacer()
-                Button { compose(.insight, answering: nil) } label: {
-                    Image(systemName: "lightbulb").font(.system(.body, weight: .medium))
-                }
-                .buttonStyle(PillButtonStyle(prominent: false))
-                .accessibilityLabel("Note an insight")
             }
             .padding(.top, 6)
         }
     }
 
     /// Who or what this is about, chosen before you start. The people and subjects
-    /// you write about most come first, then everyday ones; tap to choose, "More" to find others.
+    /// you write about most come first, then everyday ones, over three rows that
+    /// scroll sideways; tap to choose, "More" to find others.
     private var cardTagRow: some View {
         let chosenKeys = Set(cardTags.map(\.key))
         let offered = cardTags + suggestedTags.filter { !chosenKeys.contains($0.key) }
-        return ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
-                ForEach(offered) { tag in
-                    let on = chosenKeys.contains(tag.key)
-                    Button {
-                        withAnimation(.snappy) {
-                            if on { cardTags.removeAll { $0.key == tag.key } } else { cardTags.append(tag) }
-                        }
-                    } label: {
-                        ToggleTagChip(tag: tag, on: on)
-                    }
-                    .buttonStyle(.plain)
-                }
+        let chips = [CardChip.more] + offered.map(CardChip.tag)
+        return ChipRows(items: chips, maxRows: 3, inset: 22, bleed: 22, length: \.length) { chip in
+            switch chip {
+            case .more:
                 Button { taggingCard = true } label: {
                     Label("More", systemImage: "plus")
                         .font(.subheadline.weight(.semibold))
@@ -134,10 +120,18 @@ struct TodayView: View {
                         .background(Capsule().fill(Palette.raised))
                 }
                 .foregroundStyle(Palette.accent)
+            case .tag(let tag):
+                let on = chosenKeys.contains(tag.key)
+                Button {
+                    withAnimation(.snappy) {
+                        if on { cardTags.removeAll { $0.key == tag.key } } else { cardTags.append(tag) }
+                    }
+                } label: {
+                    ToggleTagChip(tag: tag, on: on)
+                }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal, 22)
         }
-        .padding(.horizontal, -22)
         .sheet(isPresented: $taggingCard) {
             TagPicker { tag in
                 if !cardTags.contains(where: { $0.key == tag.key }) {
@@ -147,9 +141,26 @@ struct TodayView: View {
         }
     }
 
+    private enum CardChip: Identifiable {
+        case more, tag(Tag)
+        var id: String {
+            switch self {
+            case .more: "+more"
+            case .tag(let tag): tag.key
+            }
+        }
+        var length: Int {
+            switch self {
+            case .more: 6
+            case .tag(let tag): tag.name.count + 3
+            }
+        }
+    }
+
     /// Everyday subjects offered before the journal knows you.
     private static let everydayTags: [Tag] = [
         "Work", "Relationships", "Family", "Friends", "Health", "Money", "Sleep", "Anxiety", "Gratitude", "Creativity",
+        "Home", "Exercise", "Self-worth", "Rest", "Future", "Past",
     ].map { Tag(name: $0, kind: .theme) }
 
     /// People you write about most, then your most frequent places, themes and
@@ -157,8 +168,8 @@ struct TodayView: View {
     private var suggestedTags: [Tag] {
         let used = entities.filter { !$0.hidden && !$0.mentions.isEmpty }
             .sorted { $0.mentions.count > $1.mentions.count }
-        let people = used.filter { $0.kind == .person }.prefix(8).map(Tag.init)
-        let others = used.filter { $0.kind != .person }.prefix(8).map(Tag.init)
+        let people = used.filter { $0.kind == .person }.prefix(12).map(Tag.init)
+        let others = used.filter { $0.kind != .person }.prefix(12).map(Tag.init)
         var seen = Set<String>()
         return (people + others + Self.everydayTags).filter { seen.insert($0.key).inserted }
     }
@@ -257,7 +268,14 @@ struct TodayView: View {
 
     private var noticedSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Eyebrow("Noticed lately")
+            HStack {
+                Eyebrow("Insights lately")
+                Spacer()
+                NavigationLink { InsightListView() } label: {
+                    Text("See all \(insights.count)").font(.footnote.weight(.semibold))
+                }
+                .foregroundStyle(Palette.accent)
+            }
             ForEach(noticed.prefix(3)) { insight in
                 InsightCard(insight: insight)
             }
@@ -308,8 +326,9 @@ struct TodayView: View {
         entries.filter { Calendar.current.isDateInToday($0.createdAt) }
     }
 
+    /// The newest insights, whoever found them; pinned ones first.
     private var noticed: [Insight] {
-        insights.filter { $0.source != .mine }
+        insights.sorted { $0.pinned && !$1.pinned }
     }
 
     private var streakText: String {
@@ -353,6 +372,17 @@ struct InsightCard: View {
                 .font(.system(.body, design: .serif))
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
+            if let entry = insight.entry {
+                NavigationLink(value: entry) {
+                    HStack(spacing: 4) {
+                        Text("From \(entry.createdAt.stamp("EEEdMMM")) · \(entry.title)").lineLimit(1)
+                        Image(systemName: "chevron.right").font(.caption2.weight(.semibold))
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(Palette.ink3)
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 

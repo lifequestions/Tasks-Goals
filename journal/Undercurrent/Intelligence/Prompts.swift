@@ -22,9 +22,16 @@ enum Prompts {
       Reuse the exact name of a known entity when the entry means the same one ("Sam" when \
       "Samantha" is known and it is clearly her). Themes are short nouns ("Work", "Self-doubt", \
       "Home"), not sentences. Skip generic words that aren't really part of their life.
-    - noticed: at most one observation linking this entry to the context — a recurrence, a \
-      contrast, something that has changed — only when the context genuinely supports it. \
-      Otherwise an empty string. Speak to them directly, gently, in one or two sentences.
+    - insights: the insights in this entry, as a list they can look back over. Two kinds:
+      - "theirs": something they realised, concluded or noticed about themselves or their life \
+        in this entry — a pattern in how they act, what something means to them, what they want. \
+        One clear sentence in the first person, close to their own words ("I keep saying yes to \
+        Jordan out of guilt."). Only what they actually expressed or plainly implied; never \
+        invent one or reach.
+      - "connection": an observation linking this entry to the context — a recurrence, a \
+        contrast, something that has changed — only when the context genuinely supports it. \
+        Speak to them directly ("you"), gently, in one or two sentences. At most one.
+      Most entries have none to two. An empty list is fine; don't pad it.
     - followUp: one short, friendly question to ask them next, grounded in something specific \
       they wrote here or recently — something to check back on ("You mentioned the deadline — \
       how did it go?") or a gentle nudge to say more about a person or feeling that came up. \
@@ -37,7 +44,7 @@ enum Prompts {
     static let readingSchema: [String: Any] = [
         "type": "object",
         "additionalProperties": false,
-        "required": ["mood", "summary", "entities", "noticed", "followUp"],
+        "required": ["mood", "summary", "entities", "insights", "followUp"],
         "properties": [
             "mood": ["type": "number", "description": "-1 very heavy … 0 even … 1 very light"],
             "summary": ["type": "string"],
@@ -55,7 +62,18 @@ enum Prompts {
                     ],
                 ],
             ],
-            "noticed": ["type": "string"],
+            "insights": [
+                "type": "array",
+                "items": [
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["text", "kind"],
+                    "properties": [
+                        "text": ["type": "string"],
+                        "kind": ["type": "string", "enum": ["theirs", "connection"]],
+                    ],
+                ],
+            ],
             "followUp": ["type": "string"],
         ],
     ]

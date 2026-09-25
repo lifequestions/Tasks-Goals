@@ -53,13 +53,14 @@ final class Intelligence {
         return entry
     }
 
-    func saveInsight(text: String, in context: ModelContext) {
-        let found = LocalReader().read(text).entities
-        let keys = found.compactMap { f in
-            EntityKind(rawValue: f.kind).map { Entity.makeKey(name: f.name, kind: $0) }
+    /// Reads several entries with Claude, one at a time, newest first.
+    func readAgain(_ entries: [Entry], in context: ModelContext) async {
+        guard claude != nil, !working.contains("insights") else { return }
+        working.insert("insights")
+        defer { working.remove("insights") }
+        for entry in entries where !entry.isDeleted {
+            await read(entry, in: context)
         }
-        context.insert(Insight(text: text, source: .mine, entityKeys: keys))
-        try? context.save()
     }
 
     /// Reads (or re-reads) an entry: on the phone, then with Claude if available.
@@ -87,16 +88,8 @@ final class Intelligence {
                     effort: "medium")
 
                 guard !entry.isDeleted else { return }
+                // Replaces the mentions and insights of the last reading.
                 Store.apply(result, to: entry, by: "claude", in: context)
-                // A re-read replaces what the last reading noticed.
-                for old in entry.insights where !old.pinned { context.delete(old) }
-                let noticed = result.noticed.trimmingCharacters(in: .whitespacesAndNewlines)
-                if !noticed.isEmpty {
-                    let keys = entry.mentions.compactMap { $0.entity?.key }
-                    let insight = Insight(text: noticed, source: .claude, entityKeys: keys)
-                    context.insert(insight)
-                    insight.entry = entry
-                }
                 try? context.save()
             } catch {
                 lastError = error.localizedDescription

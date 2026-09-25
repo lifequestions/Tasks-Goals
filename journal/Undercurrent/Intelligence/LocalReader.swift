@@ -30,7 +30,7 @@ struct LocalReader {
 
     func read(_ text: String) -> EntryAnalysis {
         let sentences = Self.sentences(in: text)
-        guard !sentences.isEmpty else { return EntryAnalysis(mood: 0, summary: "", entities: [], noticed: "") }
+        guard !sentences.isEmpty else { return EntryAnalysis(mood: 0, summary: "", entities: []) }
 
         var found: [String: (name: String, kind: EntityKind, scores: [Double], quote: String)] = [:]
         var weighted = 0.0, weight = 0.0
@@ -66,7 +66,32 @@ struct LocalReader {
         }
         let first = sentences[0].trimmingCharacters(in: .whitespacesAndNewlines)
         let summary = first.count > 90 ? String(first.prefix(88)) + "…" : first
-        return EntryAnalysis(mood: mood, summary: summary, entities: entities, noticed: "")
+        let insights = Self.realisations(in: sentences).map { EntryAnalysis.Extracted(text: $0) }
+        return EntryAnalysis(mood: mood, summary: summary, entities: entities, insights: insights)
+    }
+
+    /// Phrases that usually mean you've worked something out about yourself.
+    static let realisationCues = [
+        "i realise", "i realize", "i realised", "i realized", "i've realised", "i've realized",
+        "i notice", "i noticed", "i've noticed", "i've learned", "i've learnt", "i learned", "i learnt",
+        "i think i ", "i always ", "i never ", "i tend to", "i keep ", "i'm starting to", "i am starting to",
+        "it turns out", "it hit me", "it dawned on me", "the truth is", "the thing is", "maybe i ",
+        "i feel like i ", "every time i", "whenever i", "makes me feel", "i need to stop", "i'm the kind of", "i am someone who",
+    ]
+
+    /// The sentences where you say something about yourself — the insights in an
+    /// entry, found without Claude. Claude's reading replaces these with sharper ones.
+    static func realisations(in sentences: [String]) -> [String] {
+        sentences
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { sentence in
+                let lower = " " + sentence.lowercased().replacingOccurrences(of: "’", with: "'")
+                return sentence.count >= 20 && sentence.count <= 260
+                    && !sentence.hasSuffix("?")
+                    && realisationCues.contains { lower.contains(" " + $0) }
+            }
+            .prefix(3)
+            .map { $0 }
     }
 
     static func sentences(in text: String) -> [String] {

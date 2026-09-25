@@ -43,6 +43,7 @@ struct RootView: View {
         .task {
             SampleJournal.tagUntagged(in: context)
             Store.cleanUpLeftovers(in: context)
+            Store.extractEarlierInsights(in: context)
             await intelligence.catchUp(in: context)
         }
     }

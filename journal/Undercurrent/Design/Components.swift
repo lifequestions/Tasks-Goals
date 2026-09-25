@@ -117,6 +117,47 @@ struct PillButtonStyle: ButtonStyle {
     }
 }
 
+/// Chips spread over a few rows that scroll sideways together, so many show at once.
+/// Each chip goes on whichever row is shortest so far, which keeps the first ones
+/// (the ones you use most) at the left and the rows about the same length.
+struct ChipRows<Item: Identifiable, Chip: View>: View {
+    let items: [Item]
+    var maxRows = 3
+    /// Space before the first chip, and how far the rows reach past the parent's padding.
+    var inset: CGFloat = 20
+    var bleed: CGFloat = 0
+    /// Roughly how long a chip's label is, in characters.
+    let length: (Item) -> Int
+    @ViewBuilder let chip: (Item) -> Chip
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(rows.indices, id: \.self) { i in
+                    HStack(spacing: 8) {
+                        ForEach(rows[i]) { chip($0) }
+                    }
+                }
+            }
+            .padding(.horizontal, inset)
+        }
+        .padding(.horizontal, -bleed)
+    }
+
+    private var rows: [[Item]] {
+        // About four chips before a second row is worth it.
+        let count = max(1, min(maxRows, (items.count + 3) / 4))
+        var rows = Array(repeating: [Item](), count: count)
+        var widths = Array(repeating: 0, count: count)
+        for item in items {
+            let shortest = widths.indices.min { widths[$0] < widths[$1] } ?? 0
+            rows[shortest].append(item)
+            widths[shortest] += length(item) + 6
+        }
+        return rows
+    }
+}
+
 /// Wraps children onto new lines, for rows of chips.
 struct FlowLayout: Layout {
     var spacing: CGFloat = 6
