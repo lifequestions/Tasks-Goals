@@ -12,10 +12,21 @@ echo "→ Getting the latest code"
 git fetch origin "$BRANCH"
 git merge --ff-only "origin/$BRANCH"
 
-echo "→ Building"
-xcodebuild -project Undercurrent.xcodeproj -scheme Undercurrent -configuration Debug \
+if [ -n "$(git status --porcelain -- Undercurrent Undercurrent.xcodeproj)" ]; then
+  echo "Note: this Mac has local edits to the app that aren't on GitHub:"
+  git status --short -- Undercurrent Undercurrent.xcodeproj
+fi
+
+echo "→ Building (1–3 minutes)"
+LOG="$(mktemp -t undercurrent-build)"
+if ! xcodebuild -project Undercurrent.xcodeproj -scheme Undercurrent -configuration Debug \
   -destination 'generic/platform=iOS' -derivedDataPath build \
-  -allowProvisioningUpdates -quiet build
+  -allowProvisioningUpdates build >"$LOG" 2>&1; then
+  echo "✗ The build failed. The errors:"
+  grep -E "error:|error -|No Account|provisioning profile|Signing for" "$LOG" | sort -u | head -25
+  echo "(Full log: $LOG)"
+  exit 1
+fi
 APP="build/Build/Products/Debug-iphoneos/Undercurrent.app"
 
 echo "→ Finding the iPhone"
