@@ -171,10 +171,12 @@
    otherwise give every card a row 8px tall, which is how they came to sit on
    top of one another on a phone. Let the rows size themselves. */
 @media (max-width:700px){.tgrid{grid-template-columns:1fr;grid-auto-rows:auto;row-gap:1.4rem}}
-/* Every card is the shape the film plays in: upright, because that is how
-   these are filmed. The empty ones keep the same box so the grid is even
-   before anybody has answered anything. */
-.tcard .film{aspect-ratio:9/16;border:1px solid var(--line)}
+/* Each film is the shape it was filmed in. This was locked to upright when
+   the unanswered cards still carried an empty box and the grid needed them
+   all to match; they are plain text now, so nothing is gained by making a
+   landscape film sit in an upright frame. */
+.tcard .film{aspect-ratio:16/9;border:1px solid var(--line)}
+.tcard .film.up{aspect-ratio:9/16}
 .tcard .film.empty{background:repeating-linear-gradient(135deg,var(--surf2),var(--surf2) 9px,var(--bg) 9px,var(--bg) 18px)}
 /* The question is the thing being read, so set it to be read. */
 /* Each question sits in its own box, question at the top of it, the film
@@ -374,3 +376,13 @@ html{scroll-behavior:smooth}
    a name rather than an interface, and the grotesque made it look like a
    heading in an app. Everywhere, not just the big screens. */
 .kplate h1{font-family:"Newsreader",Georgia,serif;font-weight:400;letter-spacing:-.012em}
+
+/* What they remembered after the camera was off. These arrive as a message an
+   hour later — a house name, an address, who somebody was — and they are
+   usually the detail nobody would have thought to ask for. */
+.tcard .after{display:block;background:var(--accSoft);border-left:2px solid var(--acc);
+              padding:.7rem .85rem;margin:.1rem 0 .9rem;font-size:.92rem;line-height:1.5;
+              color:var(--ink2)}
+.tcard .after b{display:block;font-family:"IBM Plex Mono",monospace;font-size:.55rem;
+                letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
+                font-weight:400;margin-bottom:.3rem}

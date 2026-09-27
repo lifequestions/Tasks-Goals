@@ -61,7 +61,12 @@ function thumbCard(x, i){
                   '" target="_blank" rel="noopener">Watch on YouTube</a>';
   var title = '<span class="t"><span class="n">' + ("0" + (i + 1)).slice(-2) + '.</span> ' +
               esc(x.q) + '</span>' +
-              '<span class="m">' + meta + '</span>';
+              '<span class="m">' + meta + '</span>' +
+              /* What they remembered afterwards, in the message they sent after
+                 the film. It is usually theone detail nobody would have thought
+                 to ask for. */
+              (x.after ? '<span class="after"><b>He added afterwards</b>' +
+                         esc(x.after) + '</span>' : "");
   /* Question first. It is what somebody is choosing between; the picture is
      just how you press it. */
   /* Nothing has been filmed yet, so there is nothing to show. The card is
