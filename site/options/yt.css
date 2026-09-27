@@ -171,12 +171,13 @@
    otherwise give every card a row 8px tall, which is how they came to sit on
    top of one another on a phone. Let the rows size themselves. */
 @media (max-width:700px){.tgrid{grid-template-columns:1fr;grid-auto-rows:auto;row-gap:1.4rem}}
-/* Each film is the shape it was filmed in. This was locked to upright when
-   the unanswered cards still carried an empty box and the grid needed them
-   all to match; they are plain text now, so nothing is gained by making a
-   landscape film sit in an upright frame. */
+/* One box for every film, whatever shape it was filmed in, so the cards line
+   up and a page of twelve reads as one thing. An upright film sits inside it
+   whole rather than being cropped to fit — which is what YouTube's own player
+   does with it, so the still matches what happens when you press it. */
 .tcard .film{aspect-ratio:16/9;border:1px solid var(--line)}
-.tcard .film.up{aspect-ratio:9/16}
+.tcard .film.up{background:#141310}
+.tcard .film.up img{object-fit:contain}
 .tcard .film.empty{background:repeating-linear-gradient(135deg,var(--surf2),var(--surf2) 9px,var(--bg) 9px,var(--bg) 18px)}
 /* The question is the thing being read, so set it to be read. */
 /* Each question sits in its own box, question at the top of it, the film
@@ -280,7 +281,7 @@
    Most people will film on a phone held the way they hold it to read. The
    thumbnail keeps the same box as every other card so the grid stays even;
    the upright shape only matters once the film is actually playing. */
-.film.up:has(iframe){aspect-ratio:9/16;background:#000}
+.film.up:has(iframe){background:#000}
 
 .tcard.up .film,.trow 
 
@@ -384,3 +385,7 @@ html{scroll-behavior:smooth}
            border:1px solid var(--line);border-radius:999px;padding:.12rem .45rem;
            margin-left:.35rem;vertical-align:.12em;white-space:nowrap}
 .rec .mapl:hover{border-color:var(--acc)}
+
+/* Hold the question to three lines' depth so the films below start at the
+   same height across a row. A longer question still takes the room it needs. */
+@media (min-width:701px){ .tcard.on .t{min-height:calc(3 * 1.38em)} }
