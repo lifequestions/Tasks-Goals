@@ -59,6 +59,10 @@ function wire(){
       if(!url) return;
       var probe = new Image();
       probe.onload = function(){
+        /* A thumbnail YouTube has not made does not 404. It answers 200 with a
+           120x90 grey placeholder, so loading successfully is not the same as
+           having a picture. Anything that small is that placeholder. */
+        if(probe.naturalWidth < 200){ tryNext(); return; }
         if(!b.isConnected || !b.classList.contains("noshot")) return;
         var img = document.createElement("img");
         img.src = url; img.alt = "";
