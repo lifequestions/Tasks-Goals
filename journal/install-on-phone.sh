@@ -17,6 +17,8 @@ if [ -n "$(git status --porcelain --untracked-files=no -- Undercurrent Undercurr
   git status --short --untracked-files=no -- Undercurrent Undercurrent.xcodeproj
 fi
 
+./pair-health-dashboard.sh
+
 echo "→ Building (1–3 minutes)"
 LOG="$(mktemp -t undercurrent-build)"
 if ! xcodebuild -project Undercurrent.xcodeproj -scheme Undercurrent -configuration Debug \

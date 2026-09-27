@@ -80,6 +80,8 @@ struct SettingsView: View {
                 Text("When on, nothing is sent to Claude. Entries are still read on the phone, the map still draws and patterns are still found — just with less depth, and reflections are built from the numbers.")
             }
 
+            HealthDashboardSection()
+
             Section("Daily reminder") {
                 Toggle("Remind me to write", isOn: $reminderOn)
                     .onChange(of: reminderOn) { _, on in Task { await updateReminder(on) } }
@@ -171,5 +173,49 @@ struct SettingsView: View {
         } else {
             Reminders.cancel()
         }
+    }
+}
+
+/// Send to Health dashboard: on by default, with a manual sync and when it last worked.
+struct HealthDashboardSection: View {
+    @Environment(\.modelContext) private var context
+    @AppStorage(Prefs.healthDashboard) private var enabled = true
+    private var dashboard: HealthDashboard { .shared }
+
+    var body: some View {
+        Section {
+            Toggle("Send to Health dashboard", isOn: $enabled)
+                .onChange(of: enabled) { _, on in if on { sync() } }
+            if enabled {
+                Button {
+                    sync()
+                } label: {
+                    HStack {
+                        Text("Sync now")
+                        Spacer()
+                        if dashboard.syncing { ProgressView() }
+                    }
+                }
+                .disabled(dashboard.syncing || !dashboard.isPaired)
+                Text(status).font(.footnote).foregroundStyle(Palette.ink2)
+            }
+        } header: {
+            Text("Health dashboard")
+        } footer: {
+            Text("Each day's mood, word count, and who and what you wrote about go to the dashboard on your Mac, so it can compare them with your sleep and energy. The words of your entries stay on this iPhone.")
+        }
+    }
+
+    private var status: String {
+        if !dashboard.isPaired { return "Not paired yet — install the app from the Mac to pair it with the dashboard." }
+        if let problem = dashboard.problem { return problem }
+        if let last = dashboard.lastSync {
+            return "Last sent \(last.formatted(.relative(presentation: .named))) · \(dashboard.lastCount) \(dashboard.lastCount == 1 ? "day" : "days")"
+        }
+        return "Not sent yet."
+    }
+
+    private func sync() {
+        Task { await dashboard.sync(in: context) }
     }
 }

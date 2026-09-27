@@ -15,6 +15,7 @@ enum Prefs {
     static let connectionsSummary = "connections.summary"
     static let connectionsWrittenAt = "connections.writtenAt"
     static let connectionsWrittenBy = "connections.writtenBy"
+    static let healthDashboard = "healthDashboard.enabled"
 }
 
 /// The app's understanding of the journal. Every entry is read on the phone
@@ -103,6 +104,7 @@ final class Intelligence {
         Store.pruneOrphans(in: context)
         try? context.save()
         refreshPatterns(in: context)
+        Task { await HealthDashboard.shared.sync(in: context) }
     }
 
     // MARK: Patterns

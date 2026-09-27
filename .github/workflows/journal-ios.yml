@@ -30,6 +30,19 @@ jobs:
     runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
+      # The real pairing file is made on the Mac and never committed; a stand-in
+      # here checks that a paired build compiles too. (TestFlight builds go unpaired.)
+      - name: Stand-in Health dashboard pairing
+        run: |
+          mkdir -p journal/Undercurrent/Generated
+          cat > journal/Undercurrent/Generated/HealthDashboardPairing.swift <<'EOF'
+          import Foundation
+          @objc(UndercurrentHealthDashboardPairing)
+          final class GeneratedHealthDashboardPairing: NSObject, HealthDashboardPairing {
+              static var url: String { "http://localhost:5181" }
+              static var token: String { "ci-stand-in" }
+          }
+          EOF
       - name: Compile for the simulator
         run: |
           sudo xcode-select -s "$(ls -d /Applications/Xcode_26*.app | sort -V | tail -1)"
