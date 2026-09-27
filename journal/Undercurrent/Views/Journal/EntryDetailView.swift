@@ -35,6 +35,8 @@ struct EntryDetailView: View {
                         Spacer()
                         Text("lighter").font(.caption).foregroundStyle(Palette.ink3)
                     }
+                    Divider().overlay(Palette.line).padding(.vertical, 4)
+                    EnergyPicker(level: energyBinding)
                 }
 
                 Text(entry.text)
@@ -122,6 +124,16 @@ struct EntryDetailView: View {
                 }
             }
         }
+    }
+
+    /// Changing the energy here re-runs the patterns and tells the dashboard.
+    private var energyBinding: Binding<Int?> {
+        Binding(get: { entry.energy }, set: { level in
+            entry.energy = level
+            try? context.save()
+            intelligence.refreshPatterns(in: context)
+            Task { await HealthDashboard.shared.sync(in: context) }
+        })
     }
 
     private var footer: some View {

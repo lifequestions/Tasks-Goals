@@ -21,6 +21,7 @@ struct ComposeView: View {
     @State private var detected: [Tag] = []
     @State private var dropped: Set<String> = []
     @State private var pickingTag = false
+    @State private var energy: Int?
 
     var body: some View {
         NavigationStack {
@@ -53,6 +54,9 @@ struct ComposeView: View {
                         .focused($focused)
                 }
 
+                EnergyPicker(level: $energy)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 6)
                 tagRow
                 bottomBar
             }
@@ -88,6 +92,7 @@ struct ComposeView: View {
         }
         .onAppear {
             chosen = editing?.chosenTags ?? presetTags
+            energy = editing?.energy
             if let editing { text = editing.text }
             if mode == .speak {
                 Task { await startDictation() }
@@ -222,6 +227,7 @@ struct ComposeView: View {
         if let editing {
             editing.text = body
             editing.chosenTags = chosen
+            editing.energy = energy
             editing.excludedKeys = Array(Set(editing.excludedKeys ?? []).union(dropped).subtracting(chosen.map(\.key)))
             editing.analysedBy = nil
             editing.analysedAt = nil
@@ -229,7 +235,7 @@ struct ComposeView: View {
             Task { await intelligence.read(editing, in: context) }
         } else {
             intelligence.saveEntry(text: body, dictated: usedDictation, question: question,
-                                   tags: chosen, dropped: Array(dropped), in: context)
+                                   tags: chosen, dropped: Array(dropped), energy: energy, in: context)
         }
         dismiss()
     }

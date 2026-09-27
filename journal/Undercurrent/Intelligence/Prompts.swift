@@ -92,14 +92,15 @@ enum Prompts {
             parts.append("<known>\n\(lines.joined(separator: "\n"))\n</known>")
         }
         if !recent.isEmpty {
-            let lines = recent.map { "\(dateLine($0.createdAt)) — \($0.summary ?? $0.title) [\(Feeling.word($0.mood))]" }
+            let lines = recent.map { "\(dateLine($0.createdAt)) — \($0.summary ?? $0.title) [\(Feeling.word($0.mood))\(Energy.note($0.energy))]" }
             parts.append("<recent_entries>\n\(lines.joined(separator: "\n"))\n</recent_entries>")
         }
         if !entry.chosenTags.isEmpty {
             let tags = entry.chosenTags.map { "- \($0.name) (\($0.kind.rawValue))" }.joined(separator: "\n")
             parts.append("<tags_they_chose>\n\(tags)\nThey tagged the entry with these themselves: include each in entities, with its feeling here.\n</tags_they_chose>")
         }
-        let asked = entry.question.map { " answering=\"\($0)\"" } ?? ""
+        let asked = (entry.question.map { " answering=\"\($0)\"" } ?? "")
+            + (entry.energy.map { " energy=\"\($0)/5 (\(Energy.word($0)))\"" } ?? "")
         parts.append("<entry date=\"\(dateLine(entry.createdAt))\"\(asked)>\n\(entry.text)\n</entry>")
         return parts.joined(separator: "\n\n")
     }
@@ -116,6 +117,7 @@ enum Prompts {
         places and dates from the material. Look for:
         - who and what came up most, and how they felt around each
         - things that travel together (a person and a mood, a place and a habit, a day and a feeling)
+        - what goes with higher or lower energy, where they rated it (1 drained … 5 full of it)
         - what changed against the previous period, including things that stopped appearing
         - anything they themselves noted as an insight, and whether the entries bear it out
 
@@ -176,7 +178,7 @@ enum Prompts {
 
         let full = period == .week || period == .month
         let text = entries.map { entry -> String in
-            let head = "\(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))]"
+            let head = "\(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))]"
             return full ? "### \(head)\n\(entry.text)" : "- \(head) \(entry.summary ?? entry.title)"
         }
         parts.append("<entries>\n\(text.joined(separator: full ? "\n\n" : "\n"))\n</entries>")
@@ -188,7 +190,8 @@ enum Prompts {
     static let connectionsSystem = """
     You look across someone's whole private journal for connections and correlations: \
     people, places, activities and themes that travel together, things that come before \
-    lighter or heavier days, what has changed over time. You're given the patterns their \
+    lighter or heavier days, what goes with higher or lower energy (they rate it 1 drained … \
+    5 full of it on some entries), what has changed over time. You're given the patterns their \
     phone has already counted, the numbers, and a line for each recent entry.
 
     Return:
@@ -229,7 +232,7 @@ enum Prompts {
         }
         let lines = entries.suffix(120).map { entry -> String in
             let names = entry.entities.map(\.name).joined(separator: ", ")
-            return "- \(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))] \(entry.summary ?? entry.title)\(names.isEmpty ? "" : " — \(names)")"
+            return "- \(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))] \(entry.summary ?? entry.title)\(names.isEmpty ? "" : " — \(names)")"
         }
         parts.append("<entries>\n\(lines.joined(separator: "\n"))\n</entries>")
         return parts.joined(separator: "\n\n")
@@ -293,7 +296,7 @@ enum Prompts {
 
     static func askRequest(question: String, entries: [Entry], reflections: [Reflection], profile: String) -> String {
         let reflectionText = reflections.map { "## \($0.period.label) from \(dateLine($0.start)): \($0.headline)\n\($0.body)" }
-        let entryText = entries.map { "### \(dateLine($0.createdAt)) [\(Feeling.word($0.mood))]\n\($0.text)" }
+        let entryText = entries.map { "### \(dateLine($0.createdAt)) [\(Feeling.word($0.mood))\(Energy.note($0.energy))]\n\($0.text)" }
         return """
         \(profile.isEmpty ? "" : "<about_them>\n\(profile)\n</about_them>\n\n")<reflections>
         \(reflectionText.joined(separator: "\n\n"))

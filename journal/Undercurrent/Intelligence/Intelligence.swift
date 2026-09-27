@@ -46,8 +46,9 @@ final class Intelligence {
 
     @discardableResult
     func saveEntry(text: String, dictated: Bool, question: String? = nil, tags: [Tag] = [], dropped: [String] = [],
-                   date: Date = .now, in context: ModelContext) -> Entry {
+                   energy: Int? = nil, date: Date = .now, in context: ModelContext) -> Entry {
         let entry = Entry(text: text, createdAt: date, wasDictated: dictated, question: question)
+        entry.energy = energy
         entry.chosenTags = tags
         entry.excludedKeys = dropped.isEmpty ? nil : dropped
         context.insert(entry)

@@ -41,6 +41,8 @@ final class Entry {
     var text: String
     var wasDictated: Bool
     var mood: Double?
+    /// How much energy you had, 1 (drained) to 5 (full of it), if you said.
+    var energy: Int?
     var summary: String?
     /// "device" or "claude" — which reader last understood this entry.
     var analysedBy: String?

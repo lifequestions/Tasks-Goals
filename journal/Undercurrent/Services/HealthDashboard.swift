@@ -130,6 +130,8 @@ final class HealthDashboard {
 
         let day: String
         let mood: Double?
+        /// Average energy you rated that day, 1 (drained) to 5 (full of it).
+        var energy: Double? = nil
         let words: Int
         let mentions: [Mention]
     }
@@ -169,6 +171,7 @@ final class HealthDashboard {
                 .sorted { $0.count > $1.count }
             return JournalDay(day: dayString(day),
                               mood: moods.isEmpty ? nil : moods.reduce(0, +) / Double(moods.count),
+                              energy: Energy.mean(entries.compactMap(\.energy)),
                               words: entries.reduce(0) { $0 + $1.wordCount },
                               mentions: mentions)
         }

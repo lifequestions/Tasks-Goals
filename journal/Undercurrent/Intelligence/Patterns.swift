@@ -69,6 +69,27 @@ enum PatternFinder {
                                     lift: diff, names: [name]))
         }
 
+        // 1b. Something that comes with more or less energy, where you rated it.
+        var energyByID: [PersistentIdentifier: Double] = [:]
+        for entry in entries { if let level = entry.energy { energyByID[entry.persistentModelID] = Double(level) } }
+        if energyByID.count >= 6 {
+            for (key, item) in appearances {
+                let with = item.ids.compactMap { energyByID[$0] }
+                let without = energyByID.filter { !item.ids.contains($0.key) }.map(\.value)
+                guard with.count >= 3, without.count >= 3 else { continue }
+                let diff = mean(with) - mean(without)
+                guard abs(diff) >= 0.6 else { continue }
+                let name = item.entity.name
+                let levels = String(format: "about %.1f out of 5, against %.1f", mean(with), mean(without))
+                let text = diff > 0
+                    ? "Your energy tends to be higher when \(name) comes up — \(levels) otherwise."
+                    : "Your energy tends to be lower when \(name) comes up — \(levels) otherwise."
+                out.append(FoundPattern(signature: "energy:\(key)", text: text, entityKeys: [key],
+                                        strength: abs(diff) / 2 * log(Double(with.count) + 1),
+                                        lift: diff, names: [name]))
+            }
+        }
+
         // 2. Two things that nearly always arrive together.
         let frequent = appearances.filter { $0.value.ids.count >= 3 }.keys.sorted()
         for i in frequent.indices {
@@ -153,14 +174,19 @@ enum PatternFinder {
             let unique = names.reduce(into: [String]()) { if !$0.contains($1) { $0.append($1) } }.prefix(4)
             return ListFormatter.localizedString(byJoining: Array(unique))
         }
-        let lifts = patterns.filter { ($0.lift ?? 0) > 0 }.flatMap(\.names)
-        let weighs = patterns.filter { ($0.lift ?? 0) < 0 }.flatMap(\.names)
+        let moodPatterns = patterns.filter { $0.type != "energy" }
+        let lifts = moodPatterns.filter { ($0.lift ?? 0) > 0 }.flatMap(\.names)
+        let weighs = moodPatterns.filter { ($0.lift ?? 0) < 0 }.flatMap(\.names)
+        let energising = patterns.filter { $0.type == "energy" && ($0.lift ?? 0) > 0 }.flatMap(\.names)
+        let draining = patterns.filter { $0.type == "energy" && ($0.lift ?? 0) < 0 }.flatMap(\.names)
         let pairs = patterns.filter { $0.type == "pair" }.prefix(2)
             .map { $0.names.joined(separator: " and ") }
 
         var lines: [String] = []
         if !lifts.isEmpty { lines.append("What seems to lift you: \(list(lifts)).") }
         if !weighs.isEmpty { lines.append("What seems to weigh on you: \(list(weighs)).") }
+        if !energising.isEmpty { lines.append("What seems to give you energy: \(list(energising)).") }
+        if !draining.isEmpty { lines.append("What seems to drain it: \(list(draining)).") }
         if !pairs.isEmpty { lines.append("Often together: \(ListFormatter.localizedString(byJoining: pairs)).") }
         guard !lines.isEmpty else {
             return "Keep writing — once a few weeks are in, the links between people, places and how you feel start to show here."
