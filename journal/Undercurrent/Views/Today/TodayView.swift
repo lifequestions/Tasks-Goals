@@ -25,6 +25,11 @@ struct TodayView: View {
     @State private var taggingCard = false
     /// Today's energy check-in; it's kept for the day and carried into what you write.
     @State private var energy: Int? = Energy.checkIn(on: .now)
+    /// Today's check-in habits: the list, and which are ticked.
+    @State private var habits: [String] = CheckIn.habits
+    @State private var habitsDone: [String] = CheckIn.done(on: .now)
+    @State private var addingHabit = false
+    @State private var newHabit = ""
 
     var body: some View {
         NavigationStack {
@@ -44,7 +49,11 @@ struct TodayView: View {
             .screenBackground()
             .journalDestinations()
             // A new day starts with no check-in.
-            .onAppear { energy = Energy.checkIn(on: .now) }
+            .onAppear {
+                energy = Energy.checkIn(on: .now)
+                habits = CheckIn.habits
+                habitsDone = CheckIn.done(on: .now)
+            }
             .fullScreenCover(item: $composing, onDismiss: {
                 // Saved something just now: the card starts fresh. Cancelled: keep the tags.
                 if let latest = entries.first, latest.createdAt > .now.addingTimeInterval(-120) { cardTags = [] }
@@ -104,6 +113,9 @@ struct TodayView: View {
                     intelligence.refreshPatterns(in: context)
                     Task { await HealthDashboard.shared.sync(in: context) }
                 }
+            habitRow
+            Text("Writing about").font(.caption.weight(.semibold)).foregroundStyle(Palette.ink3)
+                .padding(.top, 2)
             cardTagRow
             HStack(spacing: 10) {
                 Button { compose(.write, answering: opener.text) } label: { Label("Write", systemImage: "pencil") }
@@ -150,6 +162,84 @@ struct TodayView: View {
                 if !cardTags.contains(where: { $0.key == tag.key }) {
                     withAnimation(.snappy) { cardTags.append(tag) }
                 }
+            }
+        }
+    }
+
+    /// One tap for each thing you track daily; kept for the day even if you don't write.
+    /// Hold one to take it off the list; + adds your own.
+    private var habitRow: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Did today").font(.caption.weight(.semibold)).foregroundStyle(Palette.ink3)
+            ChipRows(items: habits.map(HabitChip.habit) + [.add], maxRows: 2, inset: 22, bleed: 22,
+                     length: \.length) { chip in
+                switch chip {
+                case .habit(let name):
+                    let on = habitsDone.contains(name)
+                    Button {
+                        withAnimation(.snappy) {
+                            CheckIn.toggle(name, on: .now)
+                            habitsDone = CheckIn.done(on: .now)
+                        }
+                        intelligence.refreshPatterns(in: context)
+                        Task { await HealthDashboard.shared.sync(in: context) }
+                    } label: {
+                        HStack(spacing: 5) {
+                            Image(systemName: on ? "checkmark.circle.fill" : "circle")
+                                .font(.caption.weight(.semibold))
+                            Text(name).font(.subheadline.weight(.medium))
+                        }
+                        .foregroundStyle(on ? Palette.accent : Palette.ink2)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Capsule().fill(on ? Palette.accentSoft : Palette.raised))
+                        .contentShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .sensoryFeedback(.selection, trigger: on)
+                    .accessibilityAddTraits(on ? .isSelected : [])
+                    .contextMenu {
+                        Button("Remove from check-in", systemImage: "minus.circle", role: .destructive) {
+                            CheckIn.remove(name)
+                            habits = CheckIn.habits
+                        }
+                    }
+                case .add:
+                    Button { addingHabit = true } label: {
+                        Image(systemName: "plus")
+                            .font(.subheadline.weight(.semibold))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 7)
+                            .background(Capsule().strokeBorder(Palette.line, lineWidth: 1))
+                    }
+                    .foregroundStyle(Palette.accent)
+                    .accessibilityLabel("Add something to check in on")
+                }
+            }
+        }
+        .alert("Check in on something new", isPresented: $addingHabit) {
+            TextField("e.g. Cold shower", text: $newHabit)
+            Button("Add") {
+                CheckIn.add(newHabit)
+                habits = CheckIn.habits
+                newHabit = ""
+            }
+            Button("Cancel", role: .cancel) { newHabit = "" }
+        }
+    }
+
+    private enum HabitChip: Identifiable {
+        case habit(String), add
+        var id: String {
+            switch self {
+            case .habit(let name): "habit:" + name
+            case .add: "+habit"
+            }
+        }
+        var length: Int {
+            switch self {
+            case .habit(let name): name.count + 3
+            case .add: 3
             }
         }
     }
@@ -443,6 +533,7 @@ struct InsightCard: View {
         case .mine: "lightbulb.fill"
         case .pattern: "waveform.path.ecg"
         case .claude: "sparkles"
+        case .health: "heart.text.square"
         }
     }
 }

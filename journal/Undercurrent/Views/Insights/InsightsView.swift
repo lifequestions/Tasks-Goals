@@ -28,6 +28,7 @@ struct InsightsView: View {
                                    hasEntries: !periodEntries.isEmpty)
                     if !stats.top.isEmpty { presenceCard }
                     AskCard()
+                    healthSection
                     ConnectionsSection()
                     insightsCard
                 }
@@ -114,6 +115,27 @@ struct InsightsView: View {
                     .padding(.vertical, 3)
                 }
                 .buttonStyle(.plain)
+            }
+        }
+    }
+
+    /// What the Health dashboard has found between your body and what you write.
+    @ViewBuilder
+    private var healthSection: some View {
+        let fromHealth = insights.filter { $0.source == .health }
+        if !fromHealth.isEmpty {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Image(systemName: "heart.text.square").foregroundStyle(Palette.accent)
+                    Eyebrow("From your health")
+                }
+                ForEach(fromHealth.sorted { $0.pinned && !$1.pinned }.prefix(5)) { InsightCard(insight: $0) }
+                if fromHealth.count > 5 {
+                    NavigationLink { InsightListView() } label: {
+                        Text("All \(fromHealth.count)").font(.footnote.weight(.semibold))
+                    }
+                    .foregroundStyle(Palette.accent)
+                }
             }
         }
     }

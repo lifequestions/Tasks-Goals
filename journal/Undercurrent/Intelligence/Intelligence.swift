@@ -89,7 +89,8 @@ final class Intelligence {
                     EntryAnalysis.self,
                     system: Prompts.readingSystem,
                     user: Prompts.readingRequest(entry: entry, known: known, recent: recent, profile: profile(in: context),
-                                                 feedback: feedback(in: context).prompt),
+                                                 feedback: feedback(in: context).prompt,
+                                                 health: HealthDashboard.shared.health),
                     schema: Prompts.readingSchema,
                     effort: "medium")
 
@@ -170,7 +171,8 @@ final class Intelligence {
                     system: Prompts.connectionsSystem,
                     user: Prompts.connectionsRequest(patterns: patterns, stats: PeriodStats(entries: entries),
                                                      entries: entries, profile: profile(in: context),
-                                                     feedback: learned.prompt),
+                                                     feedback: learned.prompt,
+                                                     health: HealthDashboard.shared.health),
                     schema: Prompts.connectionsSchema,
                     effort: "high")
                 summary = draft.summary
@@ -242,7 +244,8 @@ final class Intelligence {
                     user: Prompts.reflectionRequest(period: period, interval: interval, entries: entries,
                                                     childReflections: children, previous: previous,
                                                     insights: insights, stats: stats, profile: profile(in: context),
-                                                    feedback: feedback(in: context).prompt),
+                                                    feedback: feedback(in: context).prompt,
+                                                    health: HealthDashboard.shared.health),
                     schema: Prompts.reflectionSchema,
                     effort: "high")
                 writtenBy = "claude"

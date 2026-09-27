@@ -44,6 +44,7 @@ struct RootView: View {
             SampleJournal.tagUntagged(in: context)
             Store.cleanUpLeftovers(in: context)
             Store.extractEarlierInsights(in: context)
+            HealthDashboard.shared.intelligence = intelligence
             Task { await HealthDashboard.shared.sync(in: context) }
             await intelligence.catchUp(in: context)
         }

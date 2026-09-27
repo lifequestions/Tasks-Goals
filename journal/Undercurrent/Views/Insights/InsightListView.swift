@@ -12,17 +12,32 @@ struct InsightListView: View {
     @State private var showDismissed = false
 
     enum Filter: String, CaseIterable, Identifiable {
-        case all = "All", yours = "Yours", connections = "Connections", patterns = "Patterns"
+        case all = "All", yours = "Yours", connections = "Connections", patterns = "Patterns", health = "From your health"
         var id: String { rawValue }
     }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 22) {
-                Picker("Show", selection: $filter) {
-                    ForEach(Filter.allCases) { Text($0.rawValue).tag($0) }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 8) {
+                        ForEach(Filter.allCases) { option in
+                            let on = filter == option
+                            Button { withAnimation(.snappy) { filter = option } } label: {
+                                Text(option.rawValue)
+                                    .font(.subheadline.weight(.medium))
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 7)
+                                    .foregroundStyle(on ? Palette.paper : Palette.ink2)
+                                    .background(Capsule().fill(on ? Palette.accent : Palette.raised))
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityAddTraits(on ? .isSelected : [])
+                        }
+                    }
+                    .padding(.horizontal, 20)
                 }
-                .pickerStyle(.segmented)
+                .padding(.horizontal, -20)
 
                 if !pinned.isEmpty {
                     section(title: "Pinned", items: pinned)
@@ -90,6 +105,7 @@ struct InsightListView: View {
             case .yours: return insight.source == .mine
             case .connections: return insight.source == .claude
             case .patterns: return insight.source == .pattern
+            case .health: return insight.source == .health
             }
         }
     }

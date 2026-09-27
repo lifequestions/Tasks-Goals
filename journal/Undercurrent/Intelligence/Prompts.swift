@@ -38,6 +38,11 @@ enum Prompts {
       Plain everyday words, under 15 words, nothing clinical or deep for its own sake. It may be \
       shown later that day or the next morning, so phrase it to make sense then.
 
+    If <health_that_day> is given, it's what their Health dashboard knows about that day \
+    and the night before (sleep, HRV, workouts, tags like alcohol or sauna). Where it plainly \
+    bears on the entry, say so in an insight — "you wrote this after five hours' sleep" — \
+    plainly, as context, never as advice.
+
     Never diagnose, never moralise, never give advice in the reading.
     """
 
@@ -79,7 +84,7 @@ enum Prompts {
     ]
 
     static func readingRequest(entry: Entry, known: [Entity], recent: [Entry], profile: String,
-                               feedback: String = "") -> String {
+                               feedback: String = "", health: HealthData? = nil) -> String {
         var parts: [String] = []
         if !profile.isEmpty {
             parts.append("<about_them>\n\(profile)\n</about_them>")
@@ -98,6 +103,9 @@ enum Prompts {
         if !entry.chosenTags.isEmpty {
             let tags = entry.chosenTags.map { "- \($0.name) (\($0.kind.rawValue))" }.joined(separator: "\n")
             parts.append("<tags_they_chose>\n\(tags)\nThey tagged the entry with these themselves: include each in entities, with its feeling here.\n</tags_they_chose>")
+        }
+        if let health, let block = healthThatDay(entry.createdAt, health: health) {
+            parts.append(block)
         }
         let asked = (entry.question.map { " answering=\"\($0)\"" } ?? "")
             + (entry.energy.map { " energy=\"\($0)/5 (\(Energy.word($0)))\"" } ?? "")
@@ -118,6 +126,9 @@ enum Prompts {
         - who and what came up most, and how they felt around each
         - things that travel together (a person and a mood, a place and a habit, a day and a feeling)
         - what goes with higher or lower energy, where they rated it (1 drained … 5 full of it)
+        - how their body lined up with what they wrote, where <health_by_day> is given: sleep, \
+          HRV, workouts, and tags like alcohol or sauna — e.g. heavier entries following alcohol \
+          days. Sleep and HRV are filed under the morning they woke up.
         - what changed against the previous period, including things that stopped appearing
         - anything they themselves noted as an insight, and whether the entries bear it out
 
@@ -155,7 +166,7 @@ enum Prompts {
     static func reflectionRequest(period: Period, interval: DateInterval, entries: [Entry],
                                   childReflections: [Reflection], previous: Reflection?,
                                   insights: [Insight], stats: PeriodStats, profile: String,
-                                  feedback: String = "") -> String {
+                                  feedback: String = "", health: HealthData? = nil) -> String {
         var parts: [String] = []
         if !profile.isEmpty { parts.append("<about_them>\n\(profile)\n</about_them>") }
         if !feedback.isEmpty { parts.append(feedback) }
@@ -177,6 +188,10 @@ enum Prompts {
         }
 
         let full = period == .week || period == .month
+        if let health, full, let block = healthByDay(interval, health: health) {
+            parts.append(block)
+        }
+        if let health, let block = healthPatterns(health) { parts.append(block) }
         let text = entries.map { entry -> String in
             let head = "\(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))]"
             return full ? "### \(head)\n\(entry.text)" : "- \(head) \(entry.summary ?? entry.title)"
@@ -222,7 +237,7 @@ enum Prompts {
     }
 
     static func connectionsRequest(patterns: [FoundPattern], stats: PeriodStats, entries: [Entry],
-                                   profile: String, feedback: String) -> String {
+                                   profile: String, feedback: String, health: HealthData? = nil) -> String {
         var parts: [String] = []
         if !profile.isEmpty { parts.append("<about_them>\n\(profile)\n</about_them>") }
         if !feedback.isEmpty { parts.append(feedback) }
@@ -230,12 +245,63 @@ enum Prompts {
         if !patterns.isEmpty {
             parts.append("<counted_patterns>\n\(patterns.prefix(15).map { "- \($0.text)" }.joined(separator: "\n"))\n</counted_patterns>")
         }
+        if let health {
+            let end = Date.now
+            let start = Calendar.current.date(byAdding: .day, value: -60, to: end) ?? end
+            if let block = healthByDay(DateInterval(start: start, end: end), health: health) { parts.append(block) }
+            if let block = healthPatterns(health) { parts.append(block) }
+        }
         let lines = entries.suffix(120).map { entry -> String in
             let names = entry.entities.map(\.name).joined(separator: ", ")
             return "- \(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))] \(entry.summary ?? entry.title)\(names.isEmpty ? "" : " — \(names)")"
         }
         parts.append("<entries>\n\(lines.joined(separator: "\n"))\n</entries>")
         return parts.joined(separator: "\n\n")
+    }
+
+    // MARK: Health, from the dashboard
+
+    /// The day an entry was written and the day before: body numbers and what they did.
+    static func healthThatDay(_ date: Date, health: HealthData) -> String? {
+        let before = Calendar.current.date(byAdding: .day, value: -1, to: date) ?? date
+        var lines: [String] = []
+        for (label, day) in [("This day", date), ("The day before", before)] {
+            var parts: [String] = []
+            if let known = health.describe(Energy.day(day)) { parts.append(known) }
+            let did = CheckIn.done(on: day)
+            if !did.isEmpty { parts.append("checked in: " + did.joined(separator: ", ")) }
+            if !parts.isEmpty { lines.append("- \(label) (\(dateLine(day))): " + parts.joined(separator: "; ")) }
+        }
+        guard !lines.isEmpty else { return nil }
+        return "<health_that_day>\nSleep, HRV and bedtime are for the night before each day.\n"
+            + lines.joined(separator: "\n") + "\n</health_that_day>"
+    }
+
+    static func healthByDay(_ interval: DateInterval, health: HealthData) -> String? {
+        var lines: [String] = []
+        var day = Calendar.current.startOfDay(for: interval.start)
+        while day < interval.end {
+            var parts: [String] = []
+            if let known = health.describe(Energy.day(day)) { parts.append(known) }
+            let did = CheckIn.done(on: day)
+            if !did.isEmpty { parts.append("checked in: " + did.joined(separator: ", ")) }
+            if !parts.isEmpty { lines.append("- \(dateLine(day)): " + parts.joined(separator: "; ")) }
+            guard let next = Calendar.current.date(byAdding: .day, value: 1, to: day) else { break }
+            day = next
+        }
+        guard !lines.isEmpty else { return nil }
+        return "<health_by_day>\nSleep, HRV and bedtime are for the night before each day.\n"
+            + lines.joined(separator: "\n") + "\n</health_by_day>"
+    }
+
+    static func healthPatterns(_ health: HealthData) -> String? {
+        guard !health.journalPatterns.isEmpty else { return nil }
+        let lines = health.journalPatterns.prefix(15).map { pattern -> String in
+            let days = pattern.days.map { ", over \($0) days" } ?? ""
+            return "- \(pattern.sentence)\(days)"
+        }
+        return "<health_patterns>\nWhat their Health dashboard has found between their body and the journal:\n"
+            + lines.joined(separator: "\n") + "\n</health_patterns>"
     }
 
     // MARK: One entity

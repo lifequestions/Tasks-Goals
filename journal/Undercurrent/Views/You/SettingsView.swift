@@ -128,7 +128,10 @@ struct SettingsView: View {
         }
         .onDisappear(perform: saveKey)
         .confirmationDialog("Erase every entry, insight and reflection?", isPresented: $confirmErase, titleVisibility: .visible) {
-            Button("Erase everything", role: .destructive) { Store.eraseEverything(in: context) }
+            Button("Erase everything", role: .destructive) {
+                Store.eraseEverything(in: context)
+                HealthDashboard.shared.eraseHealth()
+            }
         } message: {
             Text("This can't be undone. Export first if you might want it back.")
         }
@@ -198,11 +201,14 @@ struct HealthDashboardSection: View {
                 }
                 .disabled(dashboard.syncing || !dashboard.isPaired)
                 Text(status).font(.footnote).foregroundStyle(Palette.ink2)
+                if dashboard.isPaired {
+                    Text(healthStatus).font(.footnote).foregroundStyle(Palette.ink2)
+                }
             }
         } header: {
             Text("Health dashboard")
         } footer: {
-            Text("Each day's mood, word count, and who and what you wrote about go to the dashboard on your Mac, so it can compare them with your sleep and energy. The words of your entries stay on this iPhone.")
+            Text("Each day's mood, energy, check-ins, word count, and who and what you wrote about go to the dashboard on your Mac; its sleep, HRV, workouts and patterns come back, for your entries, reflections and insights. The words of your entries stay on this iPhone.")
         }
     }
 
@@ -213,6 +219,15 @@ struct HealthDashboardSection: View {
             return "Last sent \(last.formatted(.relative(presentation: .named))) · \(dashboard.lastCount) \(dashboard.lastCount == 1 ? "day" : "days")"
         }
         return "Not sent yet."
+    }
+
+    /// What's come back the other way: the dashboard's daily numbers and patterns.
+    private var healthStatus: String {
+        if let problem = dashboard.healthProblem { return problem }
+        guard let updated = dashboard.health.updatedAt else { return "No health numbers received yet." }
+        let days = dashboard.health.days.count
+        let patterns = dashboard.health.journalPatterns.count
+        return "Received \(days) days of health numbers and \(patterns) \(patterns == 1 ? "pattern" : "patterns") · \(updated.formatted(.relative(presentation: .named)))"
     }
 
     private func sync() {

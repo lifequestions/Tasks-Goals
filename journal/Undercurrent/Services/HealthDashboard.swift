@@ -27,6 +27,11 @@ final class HealthDashboard {
     private(set) var lastSync: Date?
     private(set) var lastCount = 0
     private(set) var problem: String?
+    /// The daily numbers the dashboard shares back, for the journal's own patterns.
+    private(set) var health = HealthData.load()
+    private(set) var healthProblem: String?
+    /// Re-runs the patterns when new health numbers arrive.
+    weak var intelligence: Intelligence?
     private var again = false
 
     private init() {
@@ -73,7 +78,8 @@ final class HealthDashboard {
         let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
         let windowStart = since.map(Energy.day)
         let checkIns = Energy.checkIns.filter { day, _ in windowStart.map { day >= $0 } ?? true }
-        var days = Self.rollup(entries, entities: entities, checkIns: checkIns)
+        let logged = CheckIn.loggedDays.filter { day in windowStart.map { day >= $0 } ?? true }
+        var days = Self.rollup(entries, entities: entities, checkIns: checkIns, logged: logged)
 
         // Days sent before that have no entries now (deleted since) go as empty, to clear them.
         let sent = Set(defaults.stringArray(forKey: Self.sentDaysKey) ?? [])
@@ -111,7 +117,45 @@ final class HealthDashboard {
             problem = nil
         } catch {
             problem = "Couldn't reach the Mac. It'll try again next time."
+            return
         }
+
+        await pull(from: base, token: pairing.token, in: context)
+    }
+
+    // MARK: Receiving
+
+    /// The dashboard's last 60 days — sleep, HRV, workouts, tags — and the patterns it
+    /// has found with the journal. Only tried once the Mac has answered the send above.
+    private func pull(from base: URL, token: String, in context: ModelContext) async {
+        var url = base.appending(path: "api/export/daily")
+        url.append(queryItems: [URLQueryItem(name: "days", value: "60")])
+        var request = URLRequest(url: url, timeoutInterval: 15)
+        request.setValue(token, forHTTPHeaderField: "X-App-Token")
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+            guard (200..<300).contains(status) else {
+                healthProblem = status == 404
+                    ? "The dashboard doesn't share its numbers yet."
+                    : "The dashboard's numbers couldn't be fetched (\(status))."
+                return
+            }
+            try health.merge(data)
+            health.save()
+            healthProblem = nil
+            Store.syncHealthPatterns(health.journalPatterns, in: context)
+            intelligence?.refreshPatterns(in: context)
+        } catch is DecodingError {
+            healthProblem = "The dashboard's numbers came in a shape the app doesn't read."
+        } catch {
+            healthProblem = nil   // Unreachable just now; the send above already says so.
+        }
+    }
+
+    func eraseHealth() {
+        HealthData.erase()
+        health = HealthData()
     }
 
     // MARK: The rollup
@@ -133,6 +177,8 @@ final class HealthDashboard {
         let mood: Double?
         /// Average energy you rated that day, 1 (drained) to 5 (full of it).
         var energy: Double? = nil
+        /// Each check-in habit on a day you checked in: done or not.
+        var habits: [String: Bool]? = nil
         let words: Int
         let mentions: [Mention]
     }
@@ -142,8 +188,9 @@ final class HealthDashboard {
     /// times and how it felt on average. Old names count toward the entity they were
     /// merged into; hidden entities and links you removed from an entry are left out.
     /// Energy is the day's check-in from Today together with any entries you rated;
-    /// a day with only a check-in is sent too.
-    static func rollup(_ entries: [Entry], entities: [Entity], checkIns: [String: Int] = [:]) -> [JournalDay] {
+    /// habits are what you ticked on Today. A day with only a check-in is sent too.
+    static func rollup(_ entries: [Entry], entities: [Entity], checkIns: [String: Int] = [:],
+                       logged: Set<String> = []) -> [JournalDay] {
         var main: [String: Entity] = [:]
         for entity in entities { main[entity.key] = entity }
         for entity in entities {
@@ -180,8 +227,11 @@ final class HealthDashboard {
                               mentions: mentions)
         }
         let written = Set(days.map(\.day))
-        for (day, level) in checkIns where !written.contains(day) {
-            days.append(JournalDay(day: day, mood: nil, energy: Double(level), words: 0, mentions: []))
+        for day in logged.union(checkIns.keys) where !written.contains(day) {
+            days.append(JournalDay(day: day, mood: nil, energy: checkIns[day].map { Double($0) }, words: 0, mentions: []))
+        }
+        for i in days.indices where logged.contains(days[i].day) {
+            days[i].habits = CheckIn.habitMap(for: days[i].day)
         }
         return days.sorted { $0.day < $1.day }
     }

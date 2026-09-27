@@ -12,6 +12,8 @@ struct FoundPattern {
     /// For a mood pattern, how much lighter (+) or heavier (−) things run with it.
     var lift: Double? = nil
     var names: [String] = []
+    /// A short phrase for the summary, e.g. "Sauna (more sleep)".
+    var detail: String? = nil
 
     var type: String { String(signature.split(separator: ":").first ?? "") }
 }
@@ -20,7 +22,9 @@ enum PatternFinder {
     /// With `feedback`, kinds of pattern and subjects you've found helpful rank higher,
     /// and ones you keep marking not helpful stop being offered.
     static func find(in entries: [Entry], feedback: Feedback? = nil, now: Date = .now) -> [FoundPattern] {
-        let found = findAll(in: entries, now: now)
+        // Entry by entry, then day by day (check-ins and the dashboard's numbers).
+        let found = (findAll(in: entries, now: now) + DayPatterns.find(in: entries))
+            .sorted { $0.strength > $1.strength }
         guard let feedback, !feedback.isEmpty else { return found }
         return found
             .map { pattern -> (FoundPattern, Double) in
@@ -177,11 +181,14 @@ enum PatternFinder {
             let unique = names.reduce(into: [String]()) { if !$0.contains($1) { $0.append($1) } }.prefix(4)
             return ListFormatter.localizedString(byJoining: Array(unique))
         }
-        let moodPatterns = patterns.filter { $0.type != "energy" }
+        let moodPatterns = patterns.filter { ["mood", "nextday", "daymood"].contains($0.type) }
+        let energyPatterns = patterns.filter { ["energy", "dayenergy"].contains($0.type) }
         let lifts = moodPatterns.filter { ($0.lift ?? 0) > 0 }.flatMap(\.names)
         let weighs = moodPatterns.filter { ($0.lift ?? 0) < 0 }.flatMap(\.names)
-        let energising = patterns.filter { $0.type == "energy" && ($0.lift ?? 0) > 0 }.flatMap(\.names)
-        let draining = patterns.filter { $0.type == "energy" && ($0.lift ?? 0) < 0 }.flatMap(\.names)
+        let energising = energyPatterns.filter { ($0.lift ?? 0) > 0 }.flatMap(\.names)
+        let draining = energyPatterns.filter { ($0.lift ?? 0) < 0 }.flatMap(\.names)
+        let body = patterns.filter { $0.type == "dayhealth" }.compactMap(\.detail)
+        let bedtime = patterns.first { $0.type == "bedtime" }
         let pairs = patterns.filter { $0.type == "pair" }.prefix(2)
             .map { $0.names.joined(separator: " and ") }
 
@@ -190,6 +197,8 @@ enum PatternFinder {
         if !weighs.isEmpty { lines.append("What seems to weigh on you: \(list(weighs)).") }
         if !energising.isEmpty { lines.append("What seems to give you energy: \(list(energising)).") }
         if !draining.isEmpty { lines.append("What seems to drain it: \(list(draining)).") }
+        if !body.isEmpty { lines.append("Showing up in your health numbers: \(list(body)).") }
+        if let bedtime { lines.append(bedtime.text) }
         if !pairs.isEmpty { lines.append("Often together: \(ListFormatter.localizedString(byJoining: pairs)).") }
         guard !lines.isEmpty else {
             return "Keep writing — once a few weeks are in, the links between people, places and how you feel start to show here."

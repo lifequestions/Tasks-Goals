@@ -19,6 +19,14 @@ struct EntryDetailView: View {
                     if let summary = entry.summary {
                         Text(summary).font(.headline2).foregroundStyle(Palette.ink)
                     }
+                    // Last night and the day, from the Health dashboard and Today's check-in.
+                    if let body = HealthDashboard.shared.health.line(for: Energy.day(entry.createdAt),
+                                                                     alsoDid: CheckIn.done(on: entry.createdAt)) {
+                        Label(body, systemImage: "heart.text.square")
+                            .font(.footnote)
+                            .foregroundStyle(Palette.ink2)
+                            .padding(.top, 2)
+                    }
                 }
 
                 Card {

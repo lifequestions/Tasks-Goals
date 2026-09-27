@@ -142,12 +142,14 @@ enum InsightSource: String, Codable {
     case mine      // something you realised, taken from what you wrote
     case pattern   // the on-device pattern finder
     case claude    // a connection Claude noticed
+    case health    // a pattern the Health dashboard found between your body and the journal
 
     var label: String {
         switch self {
         case .mine: "In your words"
         case .pattern: "Pattern"
         case .claude: "Connection"
+        case .health: "From your health"
         }
     }
 }

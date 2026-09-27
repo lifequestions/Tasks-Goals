@@ -278,6 +278,35 @@ enum Store {
         UserDefaults.standard.set(true, forKey: flag)
     }
 
+    /// The Health dashboard's patterns between your body and the journal, as insights.
+    /// New ones are added, changed wording updates in place, and ones it no longer finds
+    /// go — unless you pinned or rated them.
+    static func syncHealthPatterns(_ patterns: [HealthData.JournalPattern], in context: ModelContext) {
+        let source = InsightSource.health.rawValue
+        let existing = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.sourceRaw == source }))) ?? []
+        var bySignature: [String: Insight] = [:]
+        for insight in existing { bySignature[insight.signature ?? ""] = insight }
+        let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
+
+        var current = Set<String>()
+        for pattern in patterns {
+            let text = pattern.sentence.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !text.isEmpty else { continue }
+            let signature = "health:" + text.lowercased().filter { $0.isLetter || $0.isNumber }
+            current.insert(signature)
+            if let insight = bySignature[signature] {
+                insight.text = text
+            } else {
+                let keys = entities.filter { text.localizedCaseInsensitiveContains($0.name) }.map(\.key)
+                context.insert(Insight(text: text, source: .health, entityKeys: keys, signature: signature))
+            }
+        }
+        for insight in existing where !current.contains(insight.signature ?? "") && !insight.pinned && insight.feedback == nil {
+            context.delete(insight)
+        }
+        try? context.save()
+    }
+
     /// Claude's journal-wide connections and the summary under them, which are
     /// out of date once whole sets of entries go.
     static func forgetConnections(in context: ModelContext) {
@@ -294,6 +323,8 @@ enum Store {
     static func eraseEverything(in context: ModelContext) {
         forgetConnections(in: context)
         Energy.clearCheckIns()
+        CheckIn.clear()
+        HealthData.erase()
         try? context.delete(model: Mention.self)
         try? context.delete(model: Entry.self)
         try? context.delete(model: Entity.self)
