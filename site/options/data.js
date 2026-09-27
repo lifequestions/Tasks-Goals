@@ -11,17 +11,18 @@ function film(item, opts){
   if(!item || !item.v){
     return '<span class="film empty"><span class="none">' + (opts.none || "Not recorded yet") + '</span></span>';
   }
-  /* YouTube's hqdefault is always 4:3, so a widescreen film comes back with
-     black bands baked into it and an upright one with bars down the sides.
-     hq720 is a true 16:9 frame with no bands, but it does not exist for every
-     upload, so the 4:3 one stays behind it as a fallback. For an upright film
-     the 4:3 frame is the right one: the 9:16 box crops it to the footage. */
+  /* hqdefault, and only hqdefault. It is the one thumbnail YouTube makes for
+     every upload. The 720 version has no black bands, but YouTube does not
+     always make it, and when it has not it answers 200 with a grey placeholder
+     rather than an error — so there is no way to ask for it and know what came
+     back. hqdefault is 4:3 whatever shape the film is, which leaves bands
+     above and below a widescreen film and beside an upright one. The frame
+     crops them off: a 16:9 box takes the middle 270 rows of 360, which is
+     exactly the picture, and a 9:16 box the middle 202 columns of 480. */
   var up = item.portrait ? " up" : "";
-  var four3 = "https://i.ytimg.com/vi/" + item.v + "/hqdefault.jpg";
-  var src = item.portrait ? four3 : "https://i.ytimg.com/vi/" + item.v + "/hq720.jpg";
+  var src = "https://i.ytimg.com/vi/" + item.v + "/hqdefault.jpg";
   return '<button class="film noshot' + up + '" data-yt="' + item.v + '" data-still="' + src +
-         '"' + (src === four3 ? "" : ' data-yt2="' + four3 + '"') +
-         (item.still ? ' data-fb="' + item.still + '"' : "") +
+         '"' + (item.still ? ' data-fb="' + item.still + '"' : "") +
          ' aria-label="Play: ' + esc(item.q) + '">' +
          '<span class="plate"></span>' +
          '<span class="sh"></span><span class="play"></span>' +
@@ -50,8 +51,6 @@ function wire(){
      icon, no flash of one, and never the portrait doing duty as a film frame. */
   function dress(b){
     var srcs = [b.getAttribute("data-still")];
-    var yt2 = b.getAttribute("data-yt2");
-    if(yt2) srcs.push(yt2);
     var fb = b.getAttribute("data-fb");
     if(fb && fb !== PERSON.photo) srcs.push(fb);
     (function tryNext(){
