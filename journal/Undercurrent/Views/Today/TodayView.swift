@@ -7,6 +7,8 @@ enum ComposeMode: String, Identifiable {
 }
 
 struct TodayView: View {
+    @Environment(\.modelContext) private var context
+    @Environment(Intelligence.self) private var intelligence
     @Query(sort: \Entry.createdAt, order: .reverse) private var entries: [Entry]
     @Query(filter: #Predicate<Insight> { !$0.dismissed }, sort: \Insight.createdAt, order: .reverse)
     private var insights: [Insight]
@@ -21,6 +23,8 @@ struct TodayView: View {
     /// People and subjects added on the question card, carried into what you write next.
     @State private var cardTags: [Tag] = []
     @State private var taggingCard = false
+    /// Today's energy check-in; it's kept for the day and carried into what you write.
+    @State private var energy: Int? = Energy.checkIn(on: .now)
 
     var body: some View {
         NavigationStack {
@@ -39,11 +43,13 @@ struct TodayView: View {
             }
             .screenBackground()
             .journalDestinations()
+            // A new day starts with no check-in.
+            .onAppear { energy = Energy.checkIn(on: .now) }
             .fullScreenCover(item: $composing, onDismiss: {
                 // Saved something just now: the card starts fresh. Cancelled: keep the tags.
                 if let latest = entries.first, latest.createdAt > .now.addingTimeInterval(-120) { cardTags = [] }
             }) { mode in
-                ComposeView(mode: mode, question: composingQuestion, presetTags: composingTags)
+                ComposeView(mode: mode, question: composingQuestion, presetTags: composingTags, presetEnergy: energy)
             }
             .sheet(isPresented: $choosingSubject, onDismiss: {
                 // Open the writing screen once the picker has gone.
@@ -91,6 +97,13 @@ struct TodayView: View {
             if let hint = opener.hint {
                 Text(hint).font(.callout).foregroundStyle(Palette.ink2)
             }
+            EnergyPicker(level: $energy)
+                .padding(.top, 2)
+                .onChange(of: energy) { _, level in
+                    Energy.setCheckIn(level, on: .now)
+                    intelligence.refreshPatterns(in: context)
+                    Task { await HealthDashboard.shared.sync(in: context) }
+                }
             cardTagRow
             HStack(spacing: 10) {
                 Button { compose(.write, answering: opener.text) } label: { Label("Write", systemImage: "pencil") }

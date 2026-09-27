@@ -293,6 +293,7 @@ enum Store {
 
     static func eraseEverything(in context: ModelContext) {
         forgetConnections(in: context)
+        Energy.clearCheckIns()
         try? context.delete(model: Mention.self)
         try? context.delete(model: Entry.self)
         try? context.delete(model: Entity.self)

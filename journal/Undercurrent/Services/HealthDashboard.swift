@@ -71,12 +71,13 @@ final class HealthDashboard {
         let entries = ((try? context.fetch(FetchDescriptor<Entry>())) ?? [])
             .filter { entry in entry.isSample != true && entry.createdAt >= (since ?? .distantPast) }
         let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
-        var days = Self.rollup(entries, entities: entities)
+        let windowStart = since.map(Energy.day)
+        let checkIns = Energy.checkIns.filter { day, _ in windowStart.map { day >= $0 } ?? true }
+        var days = Self.rollup(entries, entities: entities, checkIns: checkIns)
 
         // Days sent before that have no entries now (deleted since) go as empty, to clear them.
         let sent = Set(defaults.stringArray(forKey: Self.sentDaysKey) ?? [])
         let current = Set(days.map(\.day))
-        let windowStart = since.map(Self.dayString)
         for day in sent.subtracting(current) where windowStart.map({ day >= $0 }) ?? true {
             days.append(JournalDay(day: day, mood: nil, words: 0, mentions: []))
         }
@@ -140,7 +141,9 @@ final class HealthDashboard {
     /// total words, and each person, place, theme or activity that came up — how many
     /// times and how it felt on average. Old names count toward the entity they were
     /// merged into; hidden entities and links you removed from an entry are left out.
-    static func rollup(_ entries: [Entry], entities: [Entity]) -> [JournalDay] {
+    /// Energy is the day's check-in from Today together with any entries you rated;
+    /// a day with only a check-in is sent too.
+    static func rollup(_ entries: [Entry], entities: [Entity], checkIns: [String: Int] = [:]) -> [JournalDay] {
         var main: [String: Entity] = [:]
         for entity in entities { main[entity.key] = entity }
         for entity in entities {
@@ -149,7 +152,7 @@ final class HealthDashboard {
 
         let calendar = Calendar.current
         let byDay = Dictionary(grouping: entries) { calendar.startOfDay(for: $0.createdAt) }
-        return byDay.map { day, entries in
+        var days: [JournalDay] = byDay.map { day, entries in
             let moods = entries.compactMap(\.mood)
             var tally: [String: (entity: Entity, count: Int, total: Double)] = [:]
             for entry in entries {
@@ -169,21 +172,17 @@ final class HealthDashboard {
                 .map { JournalDay.Mention(key: $0.entity.key, name: $0.entity.name, kind: $0.entity.kindRaw,
                                           count: $0.count, feeling: $0.total / Double($0.count)) }
                 .sorted { $0.count > $1.count }
-            return JournalDay(day: dayString(day),
+            let key = Energy.day(day)
+            return JournalDay(day: key,
                               mood: moods.isEmpty ? nil : moods.reduce(0, +) / Double(moods.count),
-                              energy: Energy.mean(entries.compactMap(\.energy)),
+                              energy: Energy.mean(entries.compactMap(\.energy) + [checkIns[key]].compactMap { $0 }),
                               words: entries.reduce(0) { $0 + $1.wordCount },
                               mentions: mentions)
         }
-        .sorted { $0.day < $1.day }
-    }
-
-    static func dayString(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .gregorian)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = .current
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: date)
+        let written = Set(days.map(\.day))
+        for (day, level) in checkIns where !written.contains(day) {
+            days.append(JournalDay(day: day, mood: nil, energy: Double(level), words: 0, mentions: []))
+        }
+        return days.sorted { $0.day < $1.day }
     }
 }

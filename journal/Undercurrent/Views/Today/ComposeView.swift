@@ -7,6 +7,7 @@ struct ComposeView: View {
     var question: String? = nil
     var editing: Entry? = nil
     var presetTags: [Tag] = []
+    var presetEnergy: Int? = nil
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -92,7 +93,7 @@ struct ComposeView: View {
         }
         .onAppear {
             chosen = editing?.chosenTags ?? presetTags
-            energy = editing?.energy
+            energy = editing == nil ? presetEnergy : editing?.energy
             if let editing { text = editing.text }
             if mode == .speak {
                 Task { await startDictation() }

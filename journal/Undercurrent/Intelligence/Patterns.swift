@@ -71,7 +71,10 @@ enum PatternFinder {
 
         // 1b. Something that comes with more or less energy, where you rated it.
         var energyByID: [PersistentIdentifier: Double] = [:]
-        for entry in entries { if let level = entry.energy { energyByID[entry.persistentModelID] = Double(level) } }
+        let checkIns = Energy.checkIns
+        for entry in entries {
+            if let level = Energy.level(of: entry, checkIns: checkIns) { energyByID[entry.persistentModelID] = Double(level) }
+        }
         if energyByID.count >= 6 {
             for (key, item) in appearances {
                 let with = item.ids.compactMap { energyByID[$0] }
