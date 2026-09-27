@@ -11,13 +11,17 @@ function film(item, opts){
   if(!item || !item.v){
     return '<span class="film empty"><span class="none">' + (opts.none || "Not recorded yet") + '</span></span>';
   }
-  /* Films shot on a phone held upright. YouTube's own still pillarboxes those into
-     a 16:9 frame with black down both sides. An upright box cropped to 9:16 lands
-     exactly on the footage inside those bars, so the still stays a real frame. */
+  /* YouTube's hqdefault is always 4:3, so a widescreen film comes back with
+     black bands baked into it and an upright one with bars down the sides.
+     hq720 is a true 16:9 frame with no bands, but it does not exist for every
+     upload, so the 4:3 one stays behind it as a fallback. For an upright film
+     the 4:3 frame is the right one: the 9:16 box crops it to the footage. */
   var up = item.portrait ? " up" : "";
-  var src = "https://i.ytimg.com/vi/" + item.v + "/hqdefault.jpg";
+  var four3 = "https://i.ytimg.com/vi/" + item.v + "/hqdefault.jpg";
+  var src = item.portrait ? four3 : "https://i.ytimg.com/vi/" + item.v + "/hq720.jpg";
   return '<button class="film noshot' + up + '" data-yt="' + item.v + '" data-still="' + src +
-         '"' + (item.still ? ' data-fb="' + item.still + '"' : "") +
+         '"' + (src === four3 ? "" : ' data-yt2="' + four3 + '"') +
+         (item.still ? ' data-fb="' + item.still + '"' : "") +
          ' aria-label="Play: ' + esc(item.q) + '">' +
          '<span class="plate"></span>' +
          '<span class="sh"></span><span class="play"></span>' +
@@ -46,6 +50,8 @@ function wire(){
      icon, no flash of one, and never the portrait doing duty as a film frame. */
   function dress(b){
     var srcs = [b.getAttribute("data-still")];
+    var yt2 = b.getAttribute("data-yt2");
+    if(yt2) srcs.push(yt2);
     var fb = b.getAttribute("data-fb");
     if(fb && fb !== PERSON.photo) srcs.push(fb);
     (function tryNext(){
