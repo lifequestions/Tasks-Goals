@@ -91,7 +91,7 @@ function mapBlock(){
   }).join("");
   return '<div class="geo"><div class="frame">' + PERSON_MAP + '</div>' +
          '<div><ol class="pls">' + rows + '</ol>' +
-         '<p class="m">Lucknow is 1,583 km north of Bangalore; Mussoorie another 489 km up into the hills.</p>' +
+         '<p class="m">Allahabad is about 1,450 km north of Bangalore; Mussoorie another 670 km up into the hills.</p>' +
          '</div></div>';
 }
 function mapSection(title){
