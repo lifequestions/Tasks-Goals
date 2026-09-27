@@ -377,15 +377,6 @@ html{scroll-behavior:smooth}
    heading in an app. Everywhere, not just the big screens. */
 .kplate h1{font-family:"Newsreader",Georgia,serif;font-weight:400;letter-spacing:-.012em}
 
-/* What they remembered after the camera was off. These arrive as a message an
-   hour later — a house name, an address, who somebody was — and they are
-   usually the detail nobody would have thought to ask for. */
-.tcard .after{display:block;background:var(--accSoft);border-left:2px solid var(--acc);
-              padding:.7rem .85rem;margin:.1rem 0 .9rem;font-size:.92rem;line-height:1.5;
-              color:var(--ink2)}
-.tcard .after b{display:block;font-family:"IBM Plex Mono",monospace;font-size:.55rem;
-                letter-spacing:.13em;text-transform:uppercase;color:var(--ink3);
-                font-weight:400;margin-bottom:.3rem}
 
 /* a place you can go and look at */
 .rec .mapl{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.54rem;
