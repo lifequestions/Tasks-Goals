@@ -3,9 +3,15 @@ function when(x){ return x.v ? "Recorded · September 2026" : "Not recorded yet"
 
 function recRows(){
   return PERSON.facts.map(function(f){
+    /* An address is worth looking at. The pin is a search, not a survey — the
+       street is right, the house number may be a hundred years out of date. */
+    var v = f.v ? esc(f.v) : null;
+    if(v && f.map) v += ' <a class="mapl" target="_blank" rel="noopener" href="' +
+      'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(f.map) +
+      '" aria-label="Find ' + esc(f.map) + ' on a map">Map</a>';
     return '<span class="k">' + f.k + '</span>' +
-      (f.v ? '<span class="v">' + f.v + '</span>'
-           : '<span class="v"><span class="add" role="button" tabindex="0">' + f.ask + '</span></span>');
+      (v ? '<span class="v">' + v + '</span>'
+         : '<span class="v"><span class="add" role="button" tabindex="0">' + f.ask + '</span></span>');
   }).join("");
 }
 function ymap(){
