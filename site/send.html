@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Send sheet &mdash; Life Questions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="base.css?v=dev">
+<link rel="stylesheet" href="yt.css?v=dev">
+<link rel="stylesheet" href="send.css?v=dev">
+</head>
+<body>
+<div class="lbar"><div class="in">
+  <a class="wm" href="index.html">Life Questions</a>
+  <span class="who">Send sheet</span>
+</div></div>
+
+<div class="in sendwrap">
+  <header class="sendhd">
+    <p class="mo" id="today">Sunday</p>
+    <h1>This week&rsquo;s question</h1>
+    <p>One card for each person. Press the button and WhatsApp opens with the
+       message already written &mdash; nothing to copy, nothing to retype. Mark it
+       sent, and when the video comes back, mark it answered and the card moves
+       on to the next question.</p>
+  </header>
+
+  <p class="privacy">
+    <span><b>Nothing about anyone is stored here.</b> Phone numbers and email
+    addresses you type in stay in this browser and are never sent anywhere or
+    saved to the site. Open this page on a different phone and you will have to
+    type them again. The page itself is on the open web, so it shows first names
+    and the questions, and nothing else.</span>
+  </p>
+
+  <div id="list"></div>
+</div>
+
+<footer class="in">
+  <span>Life Questions &mdash; send sheet</span>
+  <span>People and questions come from tracker.csv and life&#8209;questions&#8209;52.csv.</span>
+</footer>
+
+<script src="send-data.js?v=dev"></script>
+<script src="send.js?v=dev"></script>
+</body>
+</html>
