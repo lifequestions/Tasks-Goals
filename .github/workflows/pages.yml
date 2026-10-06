@@ -1,12 +1,13 @@
-# Publishes the repository to GitHub Pages.
+# Publishes the site to GitHub Pages.
 #
-# The whole repository root is uploaded, not just site/, because this Pages
-# site already served the trackers from the root before Life Questions
-# existed. Narrowing it to site/ would take those offline:
+# edit/build-pages.sh assembles what gets uploaded. It puts Life Questions at
+# the root of the domain, moves the Goal Tracker to /goals.html to make room,
+# leaves the Expense Tracker where it has always been, and leaves a redirect at
+# every old /site/… address — Dad has /site/luis.html in a WhatsApp message and
+# that link has to keep working.
 #
-#   /Tasks-Goals/         the Goal Tracker, as before
-#   /Tasks-Goals/expenses.html
-#   /Tasks-Goals/site/    Life Questions
+# The spreadsheets, the originals of Dad's photographs and the editing kit are
+# no longer published. They were going out with everything else.
 
 name: Deploy site to GitHub Pages
 
@@ -16,6 +17,7 @@ on:
     paths:
       - "site/**"
       - "*.html"
+      - "edit/build-pages.sh"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -43,18 +45,21 @@ jobs:
         with:
           enablement: true
 
+      - name: Assemble the site
+        run: bash edit/build-pages.sh _pub
+
       # Stamp each stylesheet and script with the commit it came from. Without
       # this a browser keeps yesterday's CSS and the change looks like it never
       # deployed — which is exactly what it looked like.
       - name: Version the asset links
         run: |
-          find site -name '*.html' -print0 |
+          find _pub -name '*.html' -print0 |
             xargs -0 sed -i "s/?v=dev/?v=${GITHUB_SHA:0:8}/g"
-          grep -o '?v=[0-9a-f]\{8\}' site/luis.html | head -1
+          grep -o '?v=[0-9a-f]\{8\}' _pub/luis.html | head -1
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _pub
 
       - id: deployment
         uses: actions/deploy-pages@v4
