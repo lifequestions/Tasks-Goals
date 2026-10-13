@@ -10,6 +10,7 @@ struct InsightListView: View {
     @Query private var entries: [Entry]
     @State private var filter: Filter = .all
     @State private var showDismissed = false
+    @State private var writing = false
 
     enum Filter: String, CaseIterable, Identifiable {
         case all = "All", yours = "Yours", connections = "Connections", patterns = "Patterns", health = "From your health"
@@ -60,12 +61,15 @@ struct InsightListView: View {
         .screenBackground()
         .navigationTitle("Insights")
         .toolbar {
+            Button { writing = true } label: { Image(systemName: "square.and.pencil") }
+                .accessibilityLabel("Write an insight")
             Menu {
                 Toggle("Show dismissed", isOn: $showDismissed)
             } label: {
                 Image(systemName: "line.3.horizontal.decrease.circle")
             }
         }
+        .sheet(isPresented: $writing) { InsightComposer() }
     }
 
     private func section(title: String, items: [Insight]) -> some View {

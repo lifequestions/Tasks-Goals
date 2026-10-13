@@ -278,6 +278,28 @@ enum Store {
         UserDefaults.standard.set(true, forKey: flag)
     }
 
+    /// An insight you wrote yourself, new or changed. It's linked to the people and
+    /// things it names, so it shows with them and counts toward their patterns.
+    static func saveYourInsight(_ text: String, editing: Insight?, in context: ModelContext) {
+        let clean = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !clean.isEmpty else { return }
+        let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
+        var keys = entities.filter { !$0.hidden && clean.localizedCaseInsensitiveContains($0.name) }.map(\.key)
+        for found in LocalReader().read(clean).entities {
+            guard let kind = EntityKind(rawValue: found.kind) else { continue }
+            let key = Entity.makeKey(name: found.name, kind: kind)
+            if !keys.contains(key) { keys.append(key) }
+        }
+        if let editing {
+            editing.text = clean
+            editing.entityKeys = keys
+        } else {
+            context.insert(Insight(text: clean, source: .mine, entityKeys: keys,
+                                   signature: Insight.yoursPrefix + UUID().uuidString))
+        }
+        try? context.save()
+    }
+
     /// The Health dashboard's patterns between your body and the journal, as insights.
     /// New ones are added, changed wording updates in place, and ones it no longer finds
     /// go — unless you pinned or rated them.

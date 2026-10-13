@@ -178,6 +178,13 @@ final class Insight {
     }
 
     var source: InsightSource { InsightSource(rawValue: sourceRaw) ?? .mine }
+
+    static let yoursPrefix = "yours:"
+
+    /// Written by you on the Insights tab, rather than taken from an entry.
+    var isWrittenByYou: Bool { signature?.hasPrefix(Self.yoursPrefix) == true }
+
+    var label: String { isWrittenByYou ? "Your insight" : source.label }
 }
 
 @Model

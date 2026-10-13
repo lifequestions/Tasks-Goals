@@ -452,21 +452,30 @@ struct InsightCard: View {
     @Environment(\.modelContext) private var context
     @Environment(Intelligence.self) private var intelligence
     let insight: Insight
+    @State private var editing = false
 
     var body: some View {
         Card {
             HStack(spacing: 6) {
                 Image(systemName: symbol).font(.system(.footnote, weight: .semibold)).foregroundStyle(Palette.accent)
-                Eyebrow(insight.source.label)
+                Eyebrow(insight.label)
                 Spacer()
                 Menu {
                     Button(insight.pinned ? "Unpin" : "Pin", systemImage: insight.pinned ? "pin.slash" : "pin") {
                         insight.pinned.toggle()
                         try? context.save()
                     }
-                    Button("Dismiss", systemImage: "xmark", role: .destructive) {
-                        insight.dismissed = true
-                        try? context.save()
+                    if insight.isWrittenByYou {
+                        Button("Edit", systemImage: "pencil") { editing = true }
+                        Button("Delete", systemImage: "trash", role: .destructive) {
+                            context.delete(insight)
+                            try? context.save()
+                        }
+                    } else {
+                        Button("Dismiss", systemImage: "xmark", role: .destructive) {
+                            insight.dismissed = true
+                            try? context.save()
+                        }
                     }
                 } label: {
                     Image(systemName: "ellipsis").foregroundStyle(Palette.ink3).frame(width: 28, height: 20)
@@ -487,8 +496,10 @@ struct InsightCard: View {
                 }
                 .buttonStyle(.plain)
             }
-            feedbackRow
+            // Rating is for what the app finds; your own insights are yours.
+            if !insight.isWrittenByYou { feedbackRow }
         }
+        .sheet(isPresented: $editing) { InsightComposer(editing: insight) }
     }
 
     /// Helpful or not: the app leans toward what you mark helpful and stops offering

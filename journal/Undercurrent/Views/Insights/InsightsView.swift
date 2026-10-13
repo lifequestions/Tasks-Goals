@@ -12,6 +12,7 @@ struct InsightsView: View {
 
     @State private var period: Period = .week
     @State private var interval = Period.week.interval(containing: .now)
+    @State private var writingInsight = false
 
     var body: some View {
         NavigationStack {
@@ -28,6 +29,7 @@ struct InsightsView: View {
                                    hasEntries: !periodEntries.isEmpty)
                     if !stats.top.isEmpty { presenceCard }
                     AskCard()
+                    yourInsights
                     healthSection
                     ConnectionsSection()
                     insightsCard
@@ -37,6 +39,13 @@ struct InsightsView: View {
             }
             .screenBackground()
             .navigationTitle("Insights")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button { writingInsight = true } label: { Image(systemName: "square.and.pencil") }
+                        .accessibilityLabel("Write an insight")
+                }
+            }
+            .sheet(isPresented: $writingInsight) { InsightComposer() }
             .journalDestinations()
             .onChange(of: period) { _, p in interval = p.interval(containing: .now) }
         }
@@ -115,6 +124,33 @@ struct InsightsView: View {
                     .padding(.vertical, 3)
                 }
                 .buttonStyle(.plain)
+            }
+        }
+    }
+
+    /// The ones you've written yourself, and the way to write another.
+    private var yourInsights: some View {
+        let yours = insights.filter(\.isWrittenByYou).sorted { $0.pinned && !$1.pinned }
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Image(systemName: "lightbulb").foregroundStyle(Palette.accent)
+                Eyebrow("Your insights")
+                Spacer()
+                Button { writingInsight = true } label: {
+                    Label("Write one", systemImage: "plus").font(.footnote.weight(.semibold))
+                }
+                .foregroundStyle(Palette.accent)
+            }
+            if yours.isEmpty {
+                Text("When something clicks about yourself — “I always feel flat after a night out” — write it here. Claude will keep it in mind and tell you whether your entries bear it out.")
+                    .font(.subheadline).foregroundStyle(Palette.ink3)
+            }
+            ForEach(yours.prefix(5)) { InsightCard(insight: $0) }
+            if yours.count > 5 {
+                NavigationLink { InsightListView() } label: {
+                    Text("All \(yours.count) of yours").font(.footnote.weight(.semibold))
+                }
+                .foregroundStyle(Palette.accent)
             }
         }
     }

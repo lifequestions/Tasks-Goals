@@ -375,6 +375,14 @@ final class Intelligence {
             guard let test = Questionnaire.catalog.first(where: { $0.id == result.testID }) else { continue }
             parts.append(test.describe(result.scores))
         }
+        // What they've realised about themselves, in their own words.
+        let yours = ((try? context.fetch(FetchDescriptor<Insight>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)]))) ?? [])
+            .filter { $0.isWrittenByYou && !$0.dismissed }
+            .prefix(20)
+        if !yours.isEmpty {
+            parts.append("Things they've realised about themselves, in their own words (keep these in mind, and say plainly when entries bear one out or go against it):\n"
+                + yours.map { "- \($0.text)" }.joined(separator: "\n"))
+        }
         return parts.joined(separator: "\n\n")
     }
 }
