@@ -1,13 +1,14 @@
 # Publishes the site to GitHub Pages.
 #
-# edit/build-pages.sh assembles what gets uploaded. It puts Life Questions at
-# the root of the domain, moves the Goal Tracker to /goals.html to make room,
-# leaves the Expense Tracker where it has always been, and leaves a redirect at
-# every old /site/… address — Dad has /site/luis.html in a WhatsApp message and
-# that link has to keep working.
+# The site lives at the repository root, so what the repository holds is what
+# the domain serves. edit/build-pages.sh only drops the parts that should not
+# be on the open web: the spreadsheets, the originals of Dad's photographs and
+# the editing kit. _config.yml does the same for GitHub's own branch builder.
 #
-# The spreadsheets, the originals of Dad's photographs and the editing kit are
-# no longer published. They were going out with everything else.
+# Those two builders both deploy, and whichever finishes last wins. That race
+# is why a restructure that lived only in this workflow served a 404: the
+# branch builder published the repository root, which did not have the pages
+# in it. Settings → Pages → Source: GitHub Actions ends the race for good.
 
 name: Deploy site to GitHub Pages
 
@@ -15,8 +16,13 @@ on:
   push:
     branches: [main]
     paths:
-      - "site/**"
       - "*.html"
+      - "*.css"
+      - "*.js"
+      - "*.jpg"
+      - "options/**"
+      - "site/**"
+      - "_config.yml"
       - "edit/build-pages.sh"
       - ".github/workflows/pages.yml"
   workflow_dispatch:

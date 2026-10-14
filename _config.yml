@@ -1,0 +1,10 @@
+# The repository is also served by GitHub's own branch builder, which runs
+# Jekyll over the root. This keeps it in step with edit/build-pages.sh: the
+# spreadsheets, the originals of Dad's photographs and the editing kit are not
+# published.
+exclude:
+  - edit
+  - photos-original
+  - ten
+  - "*.csv"
+  - README.md
