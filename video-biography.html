@@ -81,7 +81,8 @@ body[data-rows="2"] .track.second{display:flex}
         color:#F6F1E6;background:rgba(24,38,35,.88);border-radius:999px;padding:.34rem .5rem;
         opacity:0;transform:translateY(6px);transition:opacity .22s,transform .22s;pointer-events:none}
 .pc:hover .go,.pc:focus-visible .go{opacity:1;transform:translateY(0)}
-.pc{cursor:default}
+.pc{cursor:pointer}
+.pc:hover{transform:translateY(-4px);box-shadow:0 26px 48px -22px var(--shadow)}
 .arw{position:absolute;top:38%;width:52px;height:52px;border-radius:50%;
      background:var(--surf);border:1px solid var(--line);color:var(--ink2);font-size:1.2rem;
      display:grid;place-content:center;box-shadow:0 12px 26px -14px var(--shadow);transition:.18s;z-index:30}
@@ -254,7 +255,7 @@ footer a:hover{color:var(--ink)}
       <h1>One day you&rsquo;ll want to hear <em>their stories</em> again.</h1>
       <p class="sub">A life biography, recorded rather than written. We send the questions; they answer on your phone, at their own pace. Your mother, your father, a grandparent, an aunt &mdash; or yourself.</p>
       <div class="cta">
-        <a class="btn" href="#start">Put your name down &mdash; ten places</a>
+        <a class="btn" href="#start">Put your name down &mdash; only 10 places</a>
         <a class="btn ghost" href="luis.html">See a finished page</a>
       </div>
       <p class="fine">Free during the beta &nbsp;·&nbsp; No app to install &nbsp;·&nbsp; Private unless you share it</p>
@@ -266,7 +267,7 @@ footer a:hover{color:var(--ink)}
       </div>
       <button class="arw" id="prevBtn" aria-label="Previous people">&#8592;</button>
       <button class="arw" id="nextBtn" aria-label="More people">&#8594;</button>
-      <p class="galnote">How the pages look. The first real families are being recorded now &mdash; yours could be one of them.</p>
+      <p class="galnote">Press any card to open a finished page. Luis is 83, started in September and answers one question a week; the other faces show the design while the first families record.</p>
     </div>
   </header>
 </div>
@@ -285,10 +286,10 @@ footer a:hover{color:var(--ink)}
     <div class="sec-hd mid">
       <p class="eyebrow">What you end up with</p>
       <h2>A reel of answers, in their own voices</h2>
-      <p>Every question becomes one short film. Press any of them &mdash; this is exactly how a finished page plays.</p>
+      <p>Every question becomes one short film. These four are Luis&rsquo;s, filmed on his own phone in England &mdash; press any of them.</p>
     </div>
     <div class="reelrow" id="reelrow"></div>
-    <p class="illus">Example recordings, borrowed from public oral-history interviews while we build. Each is credited, and real families replace them as they join.</p>
+    <p class="illus">Luis is 83. He started in September and answers one question a week. <a href="luis.html">His page</a> is what yours would look like.</p>
   </div>
 </div>
 
@@ -455,7 +456,7 @@ footer a:hover{color:var(--ink)}
     <div class="betacta">
       <a class="btn" id="joinBtn" href="#">Put your name down</a>
       <a class="btn ghost" href="luis.html">See a finished page first</a>
-      <p class="fine">Ten places. When they&rsquo;re gone there&rsquo;s a waiting list, and no, there is nothing to pay.</p>
+      <p class="fine">Only 10 places. When they&rsquo;re gone there&rsquo;s a waiting list, and no, there is nothing to pay.</p>
     </div>
   </div>
 </div>
@@ -493,14 +494,10 @@ var CONTACT_EMAIL = "hello@lifequestions.co.uk";
 /* YouTube stores the video and serves the still, so a page costs nothing to host.
    The still is only swapped for the player when someone presses play. */
 var REEL = [
-  { id:"3Uz6uZC9hik", q:"Tell me about the house you grew up in.", who:"Recorded by her granddaughter", len:"8:14", src:"Grandma tells our story" },
-  { id:"WNfvuJr9164", q:"The night we met at the dance.",          who:"Danny and Annie, married 27 years", len:"5:38", src:"StoryCorps" },
-  { id:"nVu__vyps9Q", q:"The work I did, and what it cost.",       who:"A hundred years old, recorded in full", len:"12:41", src:"Veteran interview" },
-  { id:"BjQqDWj1LQw", q:"Who my mother and father really were.",   who:"Recorded at her kitchen table", len:"6:02", src:"An interview with Grandma" },
-  { id:"aJ_RVsf90xg", q:"What I have changed my mind about.",      who:"Filmed in 1986, still watched today", len:"4:29", src:"TV Eye, centenarians" },
-  { id:"x3fphutRYso", q:"My first job, and my first wage.",        who:"Recorded by his family", len:"7:22", src:"Veteran interview" },
-  { id:"abyMCAS4vEI", q:"The day each of my children was born.",   who:"A grandson asking the questions", len:"6:55", src:"StoryCorps" },
-  { id:"rZAv7uoE25Q", q:"What I would say to you in fifty years.", who:"110 years old", len:"3:47", src:"Words of wisdom" }
+  { id:"Tojcfx1yFlA", q:"What\u2019s your full name, and is there a story to it?", who:"Recorded 5 October", len:"", src:"" },
+  { id:"fJTe2TrBCT4", q:"Tell me about your mother and father.",                  who:"Recorded 20 September"  , len:"15:45", src:"" },
+  { id:"tqL_qQ_h0bU", q:"Tell me about the house that you grew up in.",           who:"Recorded 27 September"  , len:"12:48", src:"" },
+  { id:"zNhFnlClfGg", q:"Tell us about your brothers and sisters.",               who:"Recorded 14 October", len:"", src:"" }
 ];
 
 /* Inline onerror attributes are blocked by some sandboxes, so the fallback is
@@ -569,14 +566,16 @@ var track1=document.getElementById("track1"), track2=document.getElementById("tr
     prevBtn=document.getElementById("prevBtn"), nextBtn=document.getElementById("nextBtn");
 var at=0;
 
-/* During the beta the faces are examples of the design, not real families,
-   so they do not open anything. They go back to being links the day there
-   are real pages behind them. */
+/* Every card opens Luis's page, because his is the one real page there is.
+   The rest of the faces are photographs of the design, not of members, and
+   the line under the gallery says so. */
 function fill(track, list){
   list.forEach(function(p){
-    var d=document.createElement("div");
+    var d=document.createElement("a");
     d.className="pc";
-    d.innerHTML='<img src="'+p.img+'" alt=""><span class="cap">'+p.cap+'</span>';
+    d.href="luis.html";
+    d.setAttribute("aria-label","See a finished page");
+    d.innerHTML='<img src="'+p.img+'" alt=""><span class="go">See a finished page</span><span class="cap">'+p.cap+'</span>';
     track.appendChild(d);
   });
 }
@@ -613,14 +612,13 @@ REEL.forEach(function(v, i){
   b.innerHTML =
     '<span class="vthumb">' +
       '<img data-yt="' + v.id + '" data-q="' + v.q.replace(/"/g, "&quot;") + '" data-who="' + v.who.replace(/"/g, "&quot;") + '" ' +
-           'data-face="f' + ((i % 8) + 1) + '.jpg" ' +
+           'data-face="a8.jpg" ' +
            'src="https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg" alt="" loading="lazy">' +
       '<span class="vplay"></span><span class="vdur">' + v.len + '</span>' +
     '</span>' +
     '<span class="vmeta">' +
       '<span class="vq">' + v.q + '</span>' +
       '<span class="vwho">' + v.who + '</span>' +
-      '<span class="vsrc">Example clip &middot; ' + v.src + '</span>' +
     '</span>';
   reelrow.appendChild(b);
 });
@@ -637,7 +635,7 @@ var vscrim = document.getElementById("vscrim"), vscreen = document.getElementByI
 function playVideo(i){
   var v = REEL[i];
   document.getElementById("vtitle").textContent = v.who;
-  document.getElementById("vfoot").innerHTML = v.q + ' &nbsp;&middot;&nbsp; Example clip from ' + v.src +
+  document.getElementById("vfoot").innerHTML = v.q + ' &nbsp;&middot;&nbsp; From Luis\u2019s page' +
     ' &nbsp;&middot;&nbsp; <a href="https://www.youtube.com/watch?v=' + v.id + '" target="_blank" rel="noopener">open on YouTube &#8599;</a>';
   vscreen.innerHTML = "";
   var f = document.createElement("iframe");
