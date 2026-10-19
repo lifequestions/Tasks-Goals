@@ -48,7 +48,8 @@ button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;paddin
 .city .art svg{width:100%;height:100%;display:block}
 
 /* the invitation to host one */
-.invite{background:var(--band);border-radius:4px;padding:clamp(1.1rem,2.6vw,1.6rem);
+#host{border-top:1px solid var(--line);padding-top:clamp(2rem,4.5vw,3rem)}
+.invite{background:var(--band);border-radius:4px;padding:clamp(1.2rem,3vw,2rem);max-width:720px;
   display:flex;flex-direction:column;gap:.5rem;align-items:flex-start}
 .invite h2{margin-bottom:.1rem}
 .invite .lead{color:var(--ink);font-size:1.12rem}
@@ -112,6 +113,14 @@ section p{color:var(--ink2)}
 
 .under{display:flex;flex-wrap:wrap;align-items:center;gap:.9rem 1.4rem;margin-top:1.2rem}
 .empty{border:1px dashed var(--line);border-radius:4px;padding:1.4rem;color:var(--ink3)}
+
+/* the film, given the middle of the page */
+.filmwide{max-width:880px;margin-left:auto;margin-right:auto;text-align:center;
+  border-top:1px solid var(--line);padding-top:clamp(2rem,4.5vw,3rem)}
+.filmwide h2{font-family:var(--serif);font-weight:400;letter-spacing:-.012em;
+  font-size:clamp(1.6rem,3.6vw,2.4rem);margin-bottom:1rem}
+.filmwide .filmcap{text-align:center}
+.under.centre{justify-content:center;margin-top:.9rem}
 
 /* two columns: host, and the film */
 .two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.4rem,4vw,3rem);
