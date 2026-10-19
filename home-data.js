@@ -41,4 +41,4 @@ var SOCIAL = [
   { name:"TikTok",    icon:"tiktok",    url:"https://www.tiktok.com/@crowdwisdom" }
 ];
 
-var CONTACT = { email:"" };
+var CONTACT = { email:"david@desouza.me" };
