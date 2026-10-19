@@ -33,10 +33,12 @@ var TEAM = [
   // { name:"", role:"", photo:"", bio:"" },
 ];
 
+/* `icon` picks a mark from icons.js: instagram, x, tiktok, youtube. */
 var SOCIAL = [
-  { name:"Instagram", url:"https://www.instagram.com/crowdwisdomco/" },
-  { name:"X",         url:"https://x.com/CrowdWisdomCo" },
-  { name:"TikTok",    url:"https://www.tiktok.com/@crowdwisdom" }
+  { name:"YouTube",   icon:"youtube",   url:"" },
+  { name:"Instagram", icon:"instagram", url:"https://www.instagram.com/crowdwisdomco/" },
+  { name:"X",         icon:"x",         url:"https://x.com/CrowdWisdomCo" },
+  { name:"TikTok",    icon:"tiktok",    url:"https://www.tiktok.com/@crowdwisdom" }
 ];
 
 var CONTACT = { email:"" };

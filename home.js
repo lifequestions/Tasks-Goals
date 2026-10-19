@@ -37,8 +37,12 @@ function drawCities(){
     el.className = "city" + (has(c.photo) ? "" : " flat");
     if(has(c.link)){ el.href = c.link; el.target = "_blank"; el.rel = "noopener"; }
 
+    var slug = c.city.toLowerCase().replace(/\s+/g, "-");
+    var art  = (typeof CITY_ART !== "undefined") ? CITY_ART[slug] : null;
+
     var inner = "";
     if(has(c.photo)) inner += '<img src="' + esc(asset(c.photo)) + '" alt="' + esc(c.city) + '" loading="lazy">';
+    else if(art)     inner += '<span class="art">' + art + "</span>";
     inner += '<span class="veil"></span><span class="txt">';
     if(has(c.country)) inner += '<span class="co">' + esc(c.country) + "</span>";
     inner += "<h3>" + esc(c.city) + "</h3>";
@@ -48,10 +52,12 @@ function drawCities(){
     inner += "</span>";
     el.innerHTML = inner;
 
+    /* A photograph that never arrives gives way to the drawing. */
     var img = el.querySelector("img");
     if(img) img.addEventListener("error", function(){
       img.remove();
       el.classList.add("flat");
+      if(art) el.insertAdjacentHTML("afterbegin", '<span class="art">' + art + "</span>");
     });
 
     g.appendChild(el);
@@ -153,8 +159,10 @@ function drawSocial(){
   var list = (typeof SOCIAL !== "undefined" ? SOCIAL : []).filter(function(a){ return has(a.url); });
   if(!list.length){ host.style.display = "none"; return; }
   host.innerHTML = list.map(function(a){
-    return '<a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.name) + "</a>";
-  }).join(" &nbsp;·&nbsp; ");
+    var mark = (typeof iconSvg === "function") ? iconSvg(a.icon || a.name) : "";
+    return '<a href="' + esc(a.url) + '" target="_blank" rel="noopener" title="' + esc(a.name) +
+           '" aria-label="' + esc(a.name) + '">' + (mark || esc(a.name)) + "</a>";
+  }).join("");
 }
 
 /* ---- where the evenings are booked ---- */
