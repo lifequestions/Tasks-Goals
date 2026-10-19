@@ -10,30 +10,53 @@ function esc(t){
 }
 function has(v){ return typeof v === "string" ? v.trim() !== "" : !!v; }
 
-/* ---- cities ---- */
+/* Pages in a sub-folder — /events/ — set ASSET_BASE to "../" so that the file
+   names in home-data.js keep resolving against the root of the site. */
+function asset(f){
+  var base = (typeof ASSET_BASE === "string") ? ASSET_BASE : "";
+  return /^(https?:)?\/\//.test(f) ? f : base + f;
+}
+
+/* ---- cities ----
+   A photograph of the place, the name over it, and the next date. If the
+   photograph is missing, or fails to load, the card falls back to the name on
+   a tint rather than showing a broken image. */
 function drawCities(){
   var host = document.getElementById("cityList");
   if(!host) return;
   var live = (typeof CITIES !== "undefined" ? CITIES : []).filter(function(c){ return has(c.city); });
   if(!live.length){
-    host.innerHTML = '<p class="empty">No cities listed yet. The first evenings are being arranged ' +
-      '&mdash; if you would like one where you live, that is what the next section is for.</p>';
+    host.innerHTML = '<p class="empty">No cities listed yet.</p>';
     return;
   }
   var g = document.createElement("div");
   g.className = "cities";
+
   live.forEach(function(c){
-    var el = document.createElement("article");
-    el.className = "city";
-    var h = "<h3>" + esc(c.city) + "</h3>";
-    if(has(c.country)) h += '<p class="co">' + esc(c.country) + "</p>";
-    h += '<p class="next">' + (has(c.next) ? esc(c.next) : "Next date to be announced") + "</p>";
-    if(has(c.where)) h += '<p class="where">' + esc(c.where) + "</p>";
-    if(has(c.host))  h += '<p class="host">Run by ' + esc(c.host) + "</p>";
-    if(has(c.link))  h += '<a class="go" href="' + esc(c.link) + '" target="_blank" rel="noopener">Book a place &rarr;</a>';
-    el.innerHTML = h;
+    var el = document.createElement(has(c.link) ? "a" : "div");
+    el.className = "city" + (has(c.photo) ? "" : " flat");
+    if(has(c.link)){ el.href = c.link; el.target = "_blank"; el.rel = "noopener"; }
+
+    var inner = "";
+    if(has(c.photo)) inner += '<img src="' + esc(asset(c.photo)) + '" alt="' + esc(c.city) + '" loading="lazy">';
+    inner += '<span class="veil"></span><span class="txt">';
+    if(has(c.country)) inner += '<span class="co">' + esc(c.country) + "</span>";
+    inner += "<h3>" + esc(c.city) + "</h3>";
+    inner += '<span class="next">' + (has(c.next) ? esc(c.next) : "Next date to be announced") + "</span>";
+    if(has(c.where)) inner += '<span class="next">' + esc(c.where) + "</span>";
+    if(has(c.link))  inner += '<span class="go">Book a place &rarr;</span>';
+    inner += "</span>";
+    el.innerHTML = inner;
+
+    var img = el.querySelector("img");
+    if(img) img.addEventListener("error", function(){
+      img.remove();
+      el.classList.add("flat");
+    });
+
     g.appendChild(el);
   });
+
   host.innerHTML = "";
   host.appendChild(g);
 }
@@ -87,7 +110,7 @@ function drawTeam(){
     var initials = p.name.split(/\s+/).map(function(w){ return w.charAt(0); }).join("").slice(0,2);
     el.innerHTML =
       '<div class="face">' + (has(p.photo)
-        ? '<img src="' + esc(p.photo) + '" alt="' + esc(p.name) + '">'
+        ? '<img src="' + esc(asset(p.photo)) + '" alt="' + esc(p.name) + '">'
         : esc(initials.toUpperCase())) + "</div>" +
       "<h3>" + esc(p.name) + "</h3>" +
       (has(p.role) ? '<p class="role">' + esc(p.role) + "</p>" : "") +

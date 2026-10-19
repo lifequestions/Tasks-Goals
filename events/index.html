@@ -11,54 +11,42 @@
 <link rel="stylesheet" href="../home.css?v=dev">
 </head>
 <body>
+<div class="in page">
 
-<nav class="nav"><div class="in">
-  <a class="wm" href="../index.html">Life&nbsp;Questions</a>
-  <span class="sp"></span>
-  <a class="q" href="#cities">Cities</a>
-  <a class="q" href="#host">Host one</a>
-  <a class="q" href="../video-biography.html">Video Biography</a>
-</div></nav>
-
-<div class="in">
   <header class="hero">
-    <p class="eyebrow">Events</p>
+    <p class="eyebrow"><a href="../index.html" style="color:inherit;text-decoration:none">Life Questions Academy</a></p>
     <h1>No small talk.</h1>
-    <p class="sub">Deep conversations on thought-provoking topics, with curious and kind people. Here is where we are meeting.</p>
+    <p class="sub">Deep conversations on thought-provoking topics, with curious and kind people. Here is where we meet.</p>
   </header>
-</div>
 
-<section class="band" id="cities">
-  <div class="in">
-    <div class="sec-hd">
-      <p class="eyebrow">Where we meet</p>
-      <h2>Cities with an evening running</h2>
-    </div>
+  <section id="cities">
     <div id="cityList"></div>
-    <p style="margin-top:1.4rem"><a class="btn" data-meetup href="#">See every date on Meetup</a></p>
-  </div>
-</section>
+    <p class="under">
+      <a class="btn" data-meetup href="#">Every date on Meetup</a>
+      <a class="lnk" href="#host">Not your city?</a>
+    </p>
+  </section>
 
-<section id="host">
-  <div class="in">
-    <div class="sec-hd">
-      <p class="eyebrow">Anywhere else</p>
-      <h2>Host one in your city</h2>
-      <p>It takes a room and six people. We give you the questions and the running order; you pick the date. Nothing to pay, nothing to sign.</p>
+  <section id="host" class="two">
+    <div>
+      <h2>Host one where you live</h2>
+      <p>A room and six people is enough. We send the questions and how to run the evening; you pick the date. Nothing to pay, nothing to sign.</p>
+      <p><a class="btn ghost" id="hostMail" href="#">Email us about your city</a></p>
     </div>
-    <a class="btn" id="hostMail" href="#">Email us about your city</a>
-  </div>
-</section>
+    <div>
+      <h2>Forty-six seconds of one</h2>
+      <div id="filmBox"></div>
+      <p><a class="lnk" id="channelLink" href="#">More on the channel &rarr;</a></p>
+    </div>
+  </section>
 
-<div class="in"><footer>
-  <p>Life Questions Academy<br><span id="social"></span></p>
-  <p>
-    <a href="../index.html">Home</a> &nbsp;·&nbsp;
-    <a href="../video-biography.html">Video Biography</a> &nbsp;·&nbsp;
-    <a id="footMail" href="#">Email</a>
-  </p>
-</footer></div>
+  <footer>
+    <p>Life Questions Academy<br><span id="social"></span></p>
+    <p><a href="../index.html">Home</a> &nbsp;·&nbsp; <a href="../video-biography.html">Video Biography</a> &nbsp;·&nbsp; <a id="footMail" href="#">Email</a></p>
+  </footer>
 
+</div>
+<script>var ASSET_BASE = "../";</script>
 <script src="../home-data.js?v=dev"></script>
 <script src="../home.js?v=dev"></script>
 </body>

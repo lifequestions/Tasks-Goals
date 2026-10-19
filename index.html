@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Life Questions</title>
-<meta name="description" content="No small talk — just deep conversations on thought-provoking topics. Life Questions Academy is a global community of curious and kind people, meeting in a handful of cities.">
+<meta name="description" content="No small talk — just deep conversations on thought-provoking topics. Life Questions Academy meets in Amsterdam, Lisbon and Gran Canaria, and helps people start an evening anywhere else.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400&display=swap">
@@ -12,111 +12,52 @@
 </head>
 <body>
 
-<nav class="nav"><div class="in">
-  <a class="wm" href="#top">Life&nbsp;Questions</a>
-  <span class="sp"></span>
-  <a class="q" href="#cities">Cities</a>
-  <a class="q" href="#host">Host one</a>
-  <a class="q" href="#biography">Video Biography</a>
-  <a class="q" href="#who">Who we are</a>
-</div></nav>
+<div class="in page">
 
-<div class="in" id="top">
   <header class="hero">
     <p class="eyebrow">Life Questions Academy</p>
     <h1>No small talk.</h1>
     <p class="sub">A global community of curious and kind people, meeting for an evening of thought-provoking questions. Open exchange of ideas and experiences &mdash; and the growth that comes of it.</p>
-    <div class="cta">
-      <a class="btn" href="#cities">Find an evening near you</a>
-      <a class="btn ghost" href="#host">Start one where you live</a>
-    </div>
   </header>
-</div>
 
-<section class="band" id="cities">
-  <div class="in">
-    <div class="sec-hd">
-      <p class="eyebrow">Where we meet</p>
-      <h2>Cities with an evening running</h2>
-      <p>Each one is run by somebody who lives there. If yours isn&rsquo;t on the list, it can be.</p>
-    </div>
+  <section id="cities">
     <div id="cityList"></div>
-    <p style="margin-top:1.4rem"><a class="btn" data-meetup href="#">See every date on Meetup</a></p>
-  </div>
-</section>
+    <p class="under">
+      <a class="btn" data-meetup href="#">Every date on Meetup</a>
+      <a class="lnk" href="#host">Not your city?</a>
+    </p>
+  </section>
 
-<section id="host">
-  <div class="in">
-    <div class="sec-hd">
-      <p class="eyebrow">Anywhere else</p>
-      <h2>Host one in your city</h2>
-      <p>It takes a room and six people. We give you the questions, the running order and whatever else we have learned from doing it; you pick the date.</p>
+  <section id="host" class="two">
+    <div>
+      <h2>Host one where you live</h2>
+      <p>A room and six people is enough. We send the questions and how to run the evening; you pick the date. Nothing to pay, nothing to sign &mdash; we&rsquo;d rather there were evenings in twenty cities than a business in one.</p>
+      <p><a class="btn ghost" id="hostMail" href="#">Email us about your city</a></p>
     </div>
-    <div class="host">
-      <ol>
-        <li><b>Tell us where you are.</b> One email. We&rsquo;ll say what has worked in a city that size.</li>
-        <li><b>Pick a room and a date.</b> A back room, a front room, a table in a quiet pub. Six people is enough.</li>
-        <li><b>We send you the questions</b> and how to run the evening, so you aren&rsquo;t making it up on the night.</li>
-        <li><b>Your city goes on this page</b> so people nearby can find it.</li>
-      </ol>
-      <div>
-        <p style="color:var(--ink2);margin-bottom:1rem">There&rsquo;s nothing to pay and nothing to sign. We&rsquo;d rather there were evenings running in twenty cities than a business in one.</p>
-        <a class="btn" id="hostMail" href="#">Email us about your city</a>
-      </div>
+    <div>
+      <h2>Forty-six seconds of one</h2>
+      <div id="filmBox"></div>
+      <p><a class="lnk" id="channelLink" href="#">More on the channel &rarr;</a></p>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="band" id="film">
-  <div class="in">
-    <div class="sec-hd">
-      <p class="eyebrow">What it looks like</p>
-      <h2>Rather than describe it</h2>
-      <p>Forty-six seconds of an evening.</p>
-    </div>
-    <div id="filmBox"></div>
-    <p style="margin-top:1.1rem"><a class="btn ghost" id="channelLink" href="#">Watch the channel</a></p>
-  </div>
-</section>
+  <section id="who"><div class="team" id="teamList"></div></section>
 
-<section id="biography">
-  <div class="in">
-    <div class="cross">
+  <section id="biography" class="cross">
+    <div>
       <p class="eyebrow">The other thing we do</p>
-      <h2>Life Questions Video Biography</h2>
-      <p>The same questions, asked of one person over a year. We send your mother or father one question a week; they answer by filming on their own phone, and it becomes a page the whole family can watch.</p>
-      <a class="btn ghost" href="video-biography.html">See how it works</a>
+      <h2>Video Biography</h2>
+      <p>The same questions, asked of one person over a year. Your mother or father answers one a week by filming on their phone, and it becomes a page the family can watch.</p>
     </div>
-  </div>
-</section>
+    <a class="btn ghost" href="video-biography.html">See how it works</a>
+  </section>
 
-<section class="band" id="who">
-  <div class="in">
-    <div class="sec-hd">
-      <p class="eyebrow">Who we are</p>
-      <h2>Two of us started it</h2>
-    </div>
-    <div class="team" id="teamList"></div>
-  </div>
-</section>
+  <footer>
+    <p>Life Questions Academy<br><span id="social"></span></p>
+    <p><a id="footMail" href="#">Email</a></p>
+  </footer>
 
-<div class="close">
-  <div class="in">
-    <h2>Come to one, or start one.</h2>
-    <p>Either way it begins with an email, and we answer them ourselves.</p>
-    <a class="btn" id="closeMail" href="#">Email us</a>
-  </div>
 </div>
-
-<div class="in"><footer>
-  <p>Life Questions Academy<br><span id="social"></span></p>
-  <p>
-    <a href="#cities">Cities</a> &nbsp;·&nbsp;
-    <a href="#host">Host one</a> &nbsp;·&nbsp;
-    <a href="video-biography.html">Video Biography</a> &nbsp;·&nbsp;
-    <a id="footMail" href="#">Email</a>
-  </p>
-</footer></div>
 
 <script src="home-data.js?v=dev"></script>
 <script src="home.js?v=dev"></script>

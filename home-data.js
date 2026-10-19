@@ -7,11 +7,14 @@
    of the events video. */
 
 /* `next` is free text — "Thursday 6 November, 7pm" or "Monthly, first
-   Tuesday" — and `link` is where to book, or "" for none. */
+   Tuesday" — and `link` is where to book, or "" for none.
+   `photo` is a file in this folder. Drop a photograph in with the name
+   below and it appears — no code change needed. Something from a past
+   evening, or the street the evening is held on, beats a stock skyline. */
 var CITIES = [
-  { city:"Amsterdam",    country:"Netherlands", next:"", where:"", link:"", host:"" },
-  { city:"Lisbon",       country:"Portugal",    next:"", where:"", link:"", host:"" },
-  { city:"Gran Canaria", country:"Spain",       next:"", where:"", link:"", host:"" }
+  { city:"Amsterdam",    country:"Netherlands", photo:"city-amsterdam.jpg",    next:"", where:"", link:"" },
+  { city:"Lisbon",       country:"Portugal",    photo:"city-lisbon.jpg",       next:"", where:"", link:"" },
+  { city:"Gran Canaria", country:"Spain",       photo:"city-gran-canaria.jpg", next:"", where:"", link:"" }
 ];
 
 /* The film that shows what an evening is like. `id` is the part of a YouTube
