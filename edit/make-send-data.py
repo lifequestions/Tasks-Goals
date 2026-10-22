@@ -14,7 +14,7 @@ typed into the page once and kept in the browser that typed them.
 import csv, json, os, re
 
 HERE  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SITE  = os.path.join(HERE, "site")
+SITE  = HERE                       # the site lives at the repository root
 
 def rows(name):
     with open(os.path.join(HERE, name), newline="", encoding="utf-8") as f:
