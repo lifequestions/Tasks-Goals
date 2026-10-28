@@ -82,7 +82,7 @@ final class Intelligence {
             do {
                 let known = try context.fetch(FetchDescriptor<Entity>()).sorted { $0.mentions.count > $1.mentions.count }
                 var recentQuery = FetchDescriptor<Entry>(sortBy: [SortDescriptor(\.createdAt, order: .reverse)])
-                recentQuery.fetchLimit = 12
+                recentQuery.fetchLimit = 30
                 let recent = try context.fetch(recentQuery).filter { $0.persistentModelID != entry.persistentModelID }
 
                 let result = try await claude.structured(
@@ -90,7 +90,8 @@ final class Intelligence {
                     system: Prompts.readingSystem,
                     user: Prompts.readingRequest(entry: entry, known: known, recent: recent, profile: profile(in: context),
                                                  feedback: feedback(in: context).prompt,
-                                                 health: HealthDashboard.shared.health),
+                                                 health: HealthDashboard.shared.health,
+                                                 patterns: patternsSoFar(in: context)),
                     schema: Prompts.readingSchema,
                     effort: "medium")
 
@@ -119,13 +120,18 @@ final class Intelligence {
         var bySignature: [String: Insight] = [:]
         for insight in existing { bySignature[insight.signature ?? ""] = insight }
 
-        let current = Set(found.map(\.signature))
-        for pattern in found.prefix(20) {
+        // Only the strongest few are kept; the rest are mostly noise.
+        let kept = Array(found.prefix(12))
+        let current = Set(kept.map(\.signature))
+        for pattern in kept {
             if let insight = bySignature[pattern.signature] {
                 insight.text = pattern.text
+                insight.score = pattern.strength
             } else {
-                context.insert(Insight(text: pattern.text, source: .pattern,
-                                       entityKeys: pattern.entityKeys, signature: pattern.signature))
+                let insight = Insight(text: pattern.text, source: .pattern,
+                                      entityKeys: pattern.entityKeys, signature: pattern.signature)
+                insight.score = pattern.strength
+                context.insert(insight)
             }
         }
         // Rated ones stay, so what you marked keeps teaching the app.
@@ -133,6 +139,16 @@ final class Intelligence {
             context.delete(insight)
         }
         try? context.save()
+    }
+
+    /// The strongest patterns counted so far, for Claude to connect a new entry to.
+    func patternsSoFar(in context: ModelContext) -> [String] {
+        let source = InsightSource.pattern.rawValue
+        let patterns = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.sourceRaw == source }))) ?? []
+        return patterns.filter { !$0.dismissed }
+            .sorted { ($0.score ?? 0) > ($1.score ?? 0) }
+            .prefix(8)
+            .map(\.text)
     }
 
     func feedback(in context: ModelContext) -> Feedback {
@@ -178,18 +194,26 @@ final class Intelligence {
                 summary = draft.summary
                 writtenBy = "claude"
 
-                // Claude's connections replace its last ones, except those you pinned or rated.
+                // Claude's findings replace its last ones, except those you pinned or rated.
                 let all = (try? context.fetch(FetchDescriptor<Insight>())) ?? []
                 let old = all.filter { $0.signature?.hasPrefix("link:") == true }
                 var seen = Set(old.filter { $0.pinned || $0.feedback != nil }.map { $0.text.lowercased() })
                 for insight in old where !insight.pinned && insight.feedback == nil { context.delete(insight) }
                 let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
-                for (i, text) in draft.connections.prefix(6).enumerated() {
-                    let clean = text.trimmingCharacters(in: .whitespacesAndNewlines)
-                    guard clean.count > 8, seen.insert(clean.lowercased()).inserted else { continue }
-                    let keys = entities.filter { clean.localizedCaseInsensitiveContains($0.name) }.map(\.key)
-                    context.insert(Insight(text: clean, source: .claude, entityKeys: keys,
-                                           signature: "link:\(Int(Date.now.timeIntervalSince1970)):\(i)"))
+                let stamp = Int(Date.now.timeIntervalSince1970)
+                for (i, finding) in draft.findings.prefix(3).enumerated() {
+                    let headline = finding.headline.trimmingCharacters(in: .whitespacesAndNewlines)
+                    guard headline.count > 3, seen.insert(headline.lowercased()).inserted else { continue }
+                    var detail = finding.evidence.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let experiment = finding.experiment.trimmingCharacters(in: .whitespacesAndNewlines)
+                    if !experiment.isEmpty { detail += "\n\nTry: " + experiment }
+                    let both = headline + " " + detail
+                    let keys = entities.filter { both.localizedCaseInsensitiveContains($0.name) }.map(\.key)
+                    let insight = Insight(text: headline, source: .claude, entityKeys: keys, signature: "link:\(stamp):\(i)")
+                    insight.detail = detail
+                    insight.strength = finding.strength
+                    insight.score = Double(3 - i)
+                    context.insert(insight)
                 }
                 try? context.save()
             } catch {

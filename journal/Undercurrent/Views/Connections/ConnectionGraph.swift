@@ -28,7 +28,7 @@ struct ConnectionGraph {
     var nodes: [Node] = []
     var edges: [Edge] = []
 
-    static func build(from entries: [Entry], kinds: Set<EntityKind>, minMentions: Int, maxNodes: Int = 120) -> ConnectionGraph {
+    static func build(from entries: [Entry], kinds: Set<EntityKind>, minMentions: Int, maxNodes: Int = 40) -> ConnectionGraph {
         var tally: [String: (entity: Entity, count: Int, feeling: Double)] = [:]
         for entry in entries {
             for mention in entry.mentions {
@@ -67,8 +67,18 @@ struct ConnectionGraph {
                 }
             }
         }
-        graph.edges = pairs.map { Edge(a: $0.key.a, b: $0.key.b, weight: $0.value.count,
-                                       feeling: $0.value.mood / Double($0.value.count)) }
+        let all = pairs.map { Edge(a: $0.key.a, b: $0.key.b, weight: $0.value.count,
+                                   feeling: $0.value.mood / Double($0.value.count)) }
+        // Only the threads that matter: once the map is busy, a link needs two entries
+        // behind it, and each dot keeps just its three strongest.
+        let candidates = graph.nodes.count > 12 ? all.filter { $0.weight >= 2 } : all
+        var perNode: [Int: Int] = [:]
+        graph.edges = candidates.sorted { $0.weight > $1.weight }.filter { edge in
+            guard perNode[edge.a, default: 0] < 3 || perNode[edge.b, default: 0] < 3 else { return false }
+            perNode[edge.a, default: 0] += 1
+            perNode[edge.b, default: 0] += 1
+            return true
+        }
         return graph
     }
 

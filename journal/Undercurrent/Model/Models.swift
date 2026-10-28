@@ -166,6 +166,12 @@ final class Insight {
     var dismissed: Bool = false
     /// You marked it helpful (1) or not helpful (-1). Future insights lean on these.
     var feedback: Int?
+    /// For a finding: the evidence behind it, and anything to try.
+    var detail: String?
+    /// For a finding: "clear", "emerging" or "hunch".
+    var strength: String?
+    /// For a counted pattern: how strong it is, so the strongest show first.
+    var score: Double?
     /// The entry this was found in.
     var entry: Entry?
 
@@ -184,7 +190,11 @@ final class Insight {
     /// Written by you on the Insights tab, rather than taken from an entry.
     var isWrittenByYou: Bool { signature?.hasPrefix(Self.yoursPrefix) == true }
 
-    var label: String { isWrittenByYou ? "Your insight" : source.label }
+    var label: String {
+        if isWrittenByYou { return "Your insight" }
+        if signature?.hasPrefix("link:") == true { return "Finding" }
+        return source.label
+    }
 }
 
 @Model

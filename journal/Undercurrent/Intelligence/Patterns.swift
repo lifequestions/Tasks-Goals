@@ -61,9 +61,9 @@ enum PatternFinder {
         for (key, item) in appearances {
             let with = item.ids.compactMap { moodByID[$0] }
             let without = moodByID.filter { !item.ids.contains($0.key) }.map(\.value)
-            guard with.count >= 3, without.count >= 3 else { continue }
+            guard with.count >= 4, without.count >= 4 else { continue }
             let diff = mean(with) - mean(without)
-            guard abs(diff) >= 0.2 else { continue }
+            guard abs(diff) >= 0.3 else { continue }
             let name = item.entity.name
             let text = diff < 0
                 ? "When \(name) comes up, your entries run heavier — mostly \(Feeling.word(mean(with))), against \(Feeling.word(mean(without))) the rest of the time."
@@ -83,7 +83,7 @@ enum PatternFinder {
             for (key, item) in appearances {
                 let with = item.ids.compactMap { energyByID[$0] }
                 let without = energyByID.filter { !item.ids.contains($0.key) }.map(\.value)
-                guard with.count >= 3, without.count >= 3 else { continue }
+                guard with.count >= 4, without.count >= 4 else { continue }
                 let diff = mean(with) - mean(without)
                 guard abs(diff) >= 0.6 else { continue }
                 let name = item.entity.name
@@ -103,7 +103,7 @@ enum PatternFinder {
             for j in frequent.indices where j > i {
                 guard let a = appearances[frequent[i]], let b = appearances[frequent[j]] else { continue }
                 let together = a.ids.intersection(b.ids).count
-                guard together >= 3 else { continue }
+                guard together >= 4 else { continue }
                 let overlap = Double(together) / Double(a.ids.union(b.ids).count)
                 guard overlap >= 0.5 else { continue }
                 let togetherMoods = a.ids.intersection(b.ids).compactMap { moodByID[$0] }

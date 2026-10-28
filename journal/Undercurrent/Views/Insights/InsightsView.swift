@@ -32,7 +32,17 @@ struct InsightsView: View {
                     yourInsights
                     healthSection
                     ConnectionsSection()
-                    insightsCard
+                    NavigationLink { InsightListView() } label: {
+                        HStack {
+                            Text("All insights").font(.callout.weight(.semibold))
+                            Spacer()
+                            Text("\(insights.count)").font(.callout.monospacedDigit()).foregroundStyle(Palette.ink3)
+                            Image(systemName: "chevron.right").font(.footnote.weight(.semibold)).foregroundStyle(Palette.ink3)
+                        }
+                        .foregroundStyle(Palette.ink)
+                        .padding(.vertical, 4)
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 20)
                 .padding(.bottom, 40)
@@ -165,33 +175,14 @@ struct InsightsView: View {
                     Image(systemName: "heart.text.square").foregroundStyle(Palette.accent)
                     Eyebrow("From your health")
                 }
-                ForEach(fromHealth.sorted { $0.pinned && !$1.pinned }.prefix(5)) { InsightCard(insight: $0) }
-                if fromHealth.count > 5 {
+                ForEach(fromHealth.sorted { $0.pinned && !$1.pinned }.prefix(3)) { InsightCard(insight: $0) }
+                if fromHealth.count > 3 {
                     NavigationLink { InsightListView() } label: {
                         Text("All \(fromHealth.count)").font(.footnote.weight(.semibold))
                     }
                     .foregroundStyle(Palette.accent)
                 }
             }
-        }
-    }
-
-    /// The newest few insights from your entries, and the way into all of them.
-    private var insightsCard: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Eyebrow("Insights")
-                Spacer()
-                NavigationLink { InsightListView() } label: {
-                    Text(insights.isEmpty ? "Open" : "See all \(insights.count)").font(.footnote.weight(.semibold))
-                }
-                .foregroundStyle(Palette.accent)
-            }
-            if insights.isEmpty {
-                Text("As you write, the things you realise about yourself — and the connections between entries — gather here as a list.")
-                    .font(.subheadline).foregroundStyle(Palette.ink3)
-            }
-            ForEach(insights.sorted { $0.pinned && !$1.pinned }.prefix(4)) { InsightCard(insight: $0) }
         }
     }
 
@@ -358,11 +349,13 @@ struct ConnectionsSection: View {
     @AppStorage(Prefs.connectionsSummary) private var summary = ""
     @AppStorage(Prefs.connectionsWrittenAt) private var writtenAt = 0.0
     @AppStorage(Prefs.connectionsWrittenBy) private var writtenBy = ""
+    /// Bumped when the findings change shape, so they're written again once.
+    @AppStorage("connections.format") private var format = 0
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                Eyebrow("Connections & correlations")
+                Eyebrow("What stands out")
                 Spacer()
                 if working {
                     ProgressView().controlSize(.small)
@@ -374,14 +367,14 @@ struct ConnectionsSection: View {
                 }
             }
 
-            if connections.isEmpty && !working {
-                Text("Once there are a few weeks of entries, the people, places and habits that go together — and how you feel around them — show up here.")
+            if findings.isEmpty && !working {
+                Text("Once there are a few weeks of entries and check-ins, the two or three things that matter most — what lifts you, what costs you — show up here.")
                     .font(.subheadline).foregroundStyle(Palette.ink3)
             }
-            ForEach(connections.prefix(5)) { InsightCard(insight: $0) }
-            if connections.count > 5 {
+            ForEach(findings) { InsightCard(insight: $0) }
+            if patternCount > 0 {
                 NavigationLink { InsightListView() } label: {
-                    Text("All \(connections.count) connections").font(.footnote.weight(.semibold))
+                    Text("Everything counted (\(patternCount))").font(.footnote.weight(.semibold))
                 }
                 .foregroundStyle(Palette.accent)
             }
@@ -391,8 +384,12 @@ struct ConnectionsSection: View {
         .task(id: entries.first?.analysedAt) {
             // Written again once there's something new, at most every few hours.
             let latest = entries.first?.createdAt.timeIntervalSince1970 ?? 0
-            let stale = summary.isEmpty || (latest > writtenAt && Date.now.timeIntervalSince1970 - writtenAt > 6 * 3600)
-            if stale && !entries.isEmpty { run() }
+            let stale = summary.isEmpty || format < 2
+                || (latest > writtenAt && Date.now.timeIntervalSince1970 - writtenAt > 6 * 3600)
+            if stale && !entries.isEmpty {
+                format = 2
+                run()
+            }
         }
     }
 
@@ -430,15 +427,18 @@ struct ConnectionsSection: View {
 
     /// Links across entries: Claude's, then the patterns counted on the phone.
     /// Ones you marked helpful and pinned ones come first.
-    private var connections: [Insight] {
-        let links = insights.filter { $0.source == .pattern || $0.signature?.hasPrefix("link:") == true }
-        func rank(_ i: Insight) -> Int {
-            (i.pinned ? 4 : 0) + (i.feedback == 1 ? 2 : 0) + (i.source == .claude ? 1 : 0)
+    /// At most three: Claude's findings, or without Claude the strongest counted
+    /// patterns. Pinned and helpful ones first.
+    private var findings: [Insight] {
+        let fromClaude = insights.filter { $0.signature?.hasPrefix("link:") == true }
+        let pool = fromClaude.isEmpty ? insights.filter { $0.source == .pattern } : fromClaude
+        func rank(_ i: Insight) -> Double {
+            (i.pinned ? 100 : 0) + (i.feedback == 1 ? 50 : 0) + (i.score ?? 0)
         }
-        return links.enumerated()
-            .sorted { rank($0.element) != rank($1.element) ? rank($0.element) > rank($1.element) : $0.offset < $1.offset }
-            .map(\.element)
+        return Array(pool.sorted { rank($0) > rank($1) }.prefix(3))
     }
+
+    private var patternCount: Int { insights.filter { $0.source == .pattern }.count }
 
     private var working: Bool { intelligence.working.contains("connections") }
 

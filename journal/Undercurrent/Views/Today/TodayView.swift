@@ -459,6 +459,14 @@ struct InsightCard: View {
             HStack(spacing: 6) {
                 Image(systemName: symbol).font(.system(.footnote, weight: .semibold)).foregroundStyle(Palette.accent)
                 Eyebrow(insight.label)
+                if let strength = insight.strength {
+                    Text(strength)
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 2)
+                        .foregroundStyle(strength == "clear" ? Palette.accent : Palette.ink2)
+                        .background(Capsule().fill(strength == "clear" ? Palette.accentSoft : Palette.raised))
+                }
                 Spacer()
                 Menu {
                     Button(insight.pinned ? "Unpin" : "Pin", systemImage: insight.pinned ? "pin.slash" : "pin") {
@@ -482,9 +490,15 @@ struct InsightCard: View {
                 }
             }
             Text(insight.text)
-                .font(.system(.body, design: .serif))
+                .font(insight.detail == nil ? .system(.body, design: .serif) : .system(.title3, design: .serif, weight: .medium))
                 .foregroundStyle(Palette.ink)
                 .fixedSize(horizontal: false, vertical: true)
+            if let detail = insight.detail {
+                Text(detail)
+                    .font(.callout)
+                    .foregroundStyle(Palette.ink2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if let entry = insight.entry {
                 NavigationLink(value: entry) {
                     HStack(spacing: 4) {

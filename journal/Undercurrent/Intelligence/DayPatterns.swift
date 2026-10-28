@@ -104,14 +104,16 @@ enum DayPatterns {
         var counts: [String: Int] = [:]
         for day in days.values { for factor in day.factors { counts[factor, default: 0] += 1 } }
 
-        for (factor, count) in counts where count >= 3 {
+        // Five days either way at least, and a difference of most of a typical swing:
+        // anything less is mostly coincidence and only adds to the noise.
+        for (factor, count) in counts where count >= 5 {
             let isHabit = factor.hasPrefix("habit:")
             // A habit counts as not done only on days you checked in; a subject as
             // not there only on days you wrote.
             let eligible = days.filter { isHabit ? $0.value.logged : $0.value.wrote }
             let with = eligible.filter { $0.value.factors.contains(factor) }.map(\.key)
             let without = eligible.filter { !$0.value.factors.contains(factor) }.map(\.key)
-            guard with.count >= 3, without.count >= 3 else { continue }
+            guard with.count >= 5, without.count >= 5 else { continue }
 
             // Subjects against mood and energy are already covered entry by entry.
             var outcomes: [Outcome] = metrics.sorted().map { .metric($0) }
@@ -126,12 +128,12 @@ enum DayPatterns {
                 for lag in lags {
                     let a = with.compactMap { shift($0, by: lag) }.compactMap { value(outcome, on: $0) }
                     let b = without.compactMap { shift($0, by: lag) }.compactMap { value(outcome, on: $0) }
-                    guard a.count >= 3, b.count >= 3 else { continue }
+                    guard a.count >= 5, b.count >= 5 else { continue }
                     let spread = deviation(a + b)
                     guard spread > 0 else { continue }
                     let diff = PatternFinder.mean(a) - PatternFinder.mean(b)
                     let effect = diff / spread
-                    guard abs(effect) >= 0.5 else { continue }
+                    guard abs(effect) >= 0.7 else { continue }
                     let name = names[factor] ?? factor
                     found.append((effect, describe(name: name, factor: factor, isHabit: isHabit, outcome: outcome,
                                                    lag: lag, with: PatternFinder.mean(a), without: PatternFinder.mean(b),
@@ -139,7 +141,8 @@ enum DayPatterns {
                                                    health: health)))
                 }
             }
-            out += found.sorted { abs($0.effect) > abs($1.effect) }.prefix(2).map(\.pattern)
+            // The single clearest effect of each thing, not every variation of it.
+            out += found.sorted { abs($0.effect) > abs($1.effect) }.prefix(1).map(\.pattern)
         }
 
         if let bedtime = bestBedtime(health: health, value: value) { out.append(bedtime) }

@@ -22,16 +22,15 @@ enum Prompts {
       Reuse the exact name of a known entity when the entry means the same one ("Sam" when \
       "Samantha" is known and it is clearly her). Themes are short nouns ("Work", "Self-doubt", \
       "Home"), not sentences. Skip generic words that aren't really part of their life.
-    - insights: the insights in this entry, as a list they can look back over. Two kinds:
-      - "theirs": something they realised, concluded or noticed about themselves or their life \
-        in this entry — a pattern in how they act, what something means to them, what they want. \
-        One clear sentence in the first person, close to their own words ("I keep saying yes to \
-        Jordan out of guilt."). Only what they actually expressed or plainly implied; never \
-        invent one or reach.
-      - "connection": an observation linking this entry to the context — a recurrence, a \
-        contrast, something that has changed — only when the context genuinely supports it. \
-        Speak to them directly ("you"), gently, in one or two sentences. At most one.
-      Most entries have none to two. An empty list is fine; don't pad it.
+    - insights: zero to two things this entry shows that they probably haven't seen for \
+      themselves. Never restate, summarise or paraphrase what they wrote — if they said it, \
+      it is not an insight. An insight connects this entry to something outside it: earlier \
+      entries (the third time this month, a change since the summer, a contradiction with \
+      something they said before), the patterns already counted, their health that day, or \
+      the things they've realised about themselves. Name the evidence briefly ("the last three \
+      times Jordan came up, the next entry was heavier too"). Speak to them directly, one or \
+      two plain sentences each. If nothing reaches that bar, return an empty list — for most \
+      short entries that is the right answer.
     - followUp: one short, friendly question to ask them next, grounded in something specific \
       they wrote here or recently — something to check back on ("You mentioned the deadline — \
       how did it go?") or a gentle nudge to say more about a person or feeling that came up. \
@@ -75,7 +74,7 @@ enum Prompts {
                     "required": ["text", "kind"],
                     "properties": [
                         "text": ["type": "string"],
-                        "kind": ["type": "string", "enum": ["theirs", "connection"]],
+                        "kind": ["type": "string", "enum": ["connection"]],
                     ],
                 ],
             ],
@@ -84,8 +83,12 @@ enum Prompts {
     ]
 
     static func readingRequest(entry: Entry, known: [Entity], recent: [Entry], profile: String,
-                               feedback: String = "", health: HealthData? = nil) -> String {
+                               feedback: String = "", health: HealthData? = nil, patterns: [String] = []) -> String {
         var parts: [String] = []
+        if !patterns.isEmpty {
+            parts.append("<patterns_so_far>\nCounted across their journal so far:\n"
+                + patterns.map { "- \($0)" }.joined(separator: "\n") + "\n</patterns_so_far>")
+        }
         if !profile.isEmpty {
             parts.append("<about_them>\n\(profile)\n</about_them>")
         }
@@ -203,36 +206,62 @@ enum Prompts {
     // MARK: Connections across the journal
 
     static let connectionsSystem = """
-    You look across someone's whole private journal for connections and correlations: \
-    people, places, activities and themes that travel together, things that come before \
-    lighter or heavier days, what goes with higher or lower energy (they rate it 1 drained … \
-    5 full of it on some entries), what has changed over time. You're given the patterns their \
-    phone has already counted, the numbers, and a line for each recent entry.
+    You look across someone's whole private journal, their daily check-ins and their health \
+    numbers, and tell them the few things that matter most. They have told you the long lists \
+    of correlations were too much to make sense of — so pick, don't list.
+
+    You're given the patterns their phone has already counted (many are noise: small samples, \
+    coincidences, the same effect seen twice), the numbers, their health by day, and a line \
+    for each recent entry.
 
     Return:
-    - connections: three to six connections, one or two sentences each, spoken to them \
-      directly. Be specific — names and rough counts — and honest about how strong each \
-      is ("clear across a dozen entries" versus "only a hunch so far"). Go beyond restating \
-      the counted patterns: link them, and find ones the counting can't (a mood that follows \
-      a kind of day, a theme that changed after an event). Don't repeat anything they've \
-      marked not helpful.
-    - summary: a short paragraph, under 90 words, drawing the connections together — what \
-      they seem to add up to. Warm, plain, no diagnosis, no advice unless a pattern strongly \
-      warrants it, and then lightly.
+    - findings: at most three, the most important first. Each is something they can act on or \
+      watch for, not a statistic. Merge counted patterns that are really one story ("alcohol, \
+      late bedtimes and heavy Mondays are the same thing"). Prefer findings that hold across \
+      many days; leave out anything resting on two or three. For each:
+      - headline: under 12 words, plain, about their life ("Late nights cost you the next day").
+      - evidence: one sentence with the numbers that back it, rounded and readable \
+        ("Your energy is about 1 point lower after bedtimes past midnight — 9 of the last 12 times").
+      - strength: "clear" (holds across many days), "emerging" (consistent but early) or \
+        "hunch" (worth watching).
+      - experiment: one small, concrete thing they could try for a week to test it, or an empty \
+        string if none fits. Never medical advice.
+      Don't repeat anything they've marked not helpful. Fewer is better than padded.
+    - summary: two or three sentences, under 60 words, on what it all adds up to. Warm and \
+      plain, no diagnosis.
     """
 
     static let connectionsSchema: [String: Any] = [
         "type": "object",
         "additionalProperties": false,
-        "required": ["connections", "summary"],
+        "required": ["findings", "summary"],
         "properties": [
-            "connections": ["type": "array", "items": ["type": "string"]],
+            "findings": [
+                "type": "array",
+                "items": [
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["headline", "evidence", "strength", "experiment"],
+                    "properties": [
+                        "headline": ["type": "string"],
+                        "evidence": ["type": "string"],
+                        "strength": ["type": "string", "enum": ["clear", "emerging", "hunch"]],
+                        "experiment": ["type": "string"],
+                    ],
+                ],
+            ],
             "summary": ["type": "string"],
         ],
     ]
 
     struct ConnectionsDraft: Codable {
-        var connections: [String]
+        struct Finding: Codable {
+            var headline: String
+            var evidence: String
+            var strength: String
+            var experiment: String
+        }
+        var findings: [Finding]
         var summary: String
     }
 

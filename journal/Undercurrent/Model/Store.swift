@@ -264,15 +264,17 @@ enum Store {
         UserDefaults.standard.set(true, forKey: flag)
     }
 
-    /// Once, for journals from before insights were taken from entries: finds the
-    /// ones in entries written so far, on the phone.
-    static func extractEarlierInsights(in context: ModelContext) {
-        let flag = "insightsExtracted.v1"
+    /// Once: clears out the insights that only repeated what an entry said — the phone's
+    /// "I realised…" sentences and Claude's old first-person ones — unless you pinned or rated them.
+    static func clearRestatedInsights(in context: ModelContext) {
+        let flag = "restatedInsightsCleared.v1"
         guard !UserDefaults.standard.bool(forKey: flag) else { return }
-        let entries = (try? context.fetch(FetchDescriptor<Entry>())) ?? []
-        for entry in entries where entry.insights.isEmpty {
-            let found = LocalReader.realisations(in: LocalReader.sentences(in: entry.text))
-            replaceInsights(on: entry, with: found.map { EntryAnalysis.Extracted(text: $0) }, in: context)
+        let mine = InsightSource.mine.rawValue
+        let insights = (try? context.fetch(FetchDescriptor<Insight>(predicate: #Predicate { $0.sourceRaw == mine }))) ?? []
+        for insight in insights where insight.entry != nil && !insight.isWrittenByYou
+            && !insight.pinned && insight.feedback == nil {
+            insight.entry = nil
+            context.delete(insight)
         }
         try? context.save()
         UserDefaults.standard.set(true, forKey: flag)
