@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject private var bike: BikeManager
+    @StateObject private var speed = SpeedMonitor()
 
     @State private var boost: Boost = .fifteen
     @State private var keepAfterLock = false
@@ -12,6 +13,7 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Form {
+                speedSection
                 bikeSection
                 if bike.isConnected {
                     unleashSection
@@ -30,6 +32,8 @@ struct ContentView: View {
             }
             .navigationTitle("Open Range")
         }
+        .onAppear { speed.start() }
+        .onDisappear { speed.stop() }
         .confirmationDialog("Remove the speed limit?", isPresented: $confirmUnleash, titleVisibility: .visible) {
             Button("Unleash for private land") { unleash() }
             Button("Cancel", role: .cancel) {}
@@ -41,6 +45,41 @@ struct ContentView: View {
     }
 
     // MARK: Sections
+
+    private var speedSection: some View {
+        Section {
+            if speed.denied {
+                Label("Allow location in Settings → Open Range to see your speed.", systemImage: "location.slash")
+            } else {
+                VStack(spacing: 4) {
+                    Text(speed.kmh.map { String(format: "%.0f", $0) } ?? "–")
+                        .font(.system(size: 88, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle((speed.kmh ?? 0) > 25 ? Color.orange : Color.primary)
+                    Text("km/h · GPS").font(.headline).foregroundStyle(.secondary)
+                    if (speed.kmh ?? 0) > 25 {
+                        Text("Above the 25 km/h road limit")
+                            .font(.caption.bold())
+                            .foregroundStyle(.orange)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                HStack {
+                    Text("Top speed")
+                    Spacer()
+                    Text(String(format: "%.1f km/h", speed.topKmh)).monospacedDigit()
+                    Button("Reset") { speed.resetTop() }
+                        .buttonStyle(.borderless)
+                        .padding(.leading, 8)
+                }
+            }
+        } header: {
+            Text("Speed")
+        } footer: {
+            Text("Measured by your phone's GPS, so you can compare it with the speed in the Cowboy app. GPS lags about a second and can be off by 1–2 km/h.")
+        }
+    }
 
     private var bikeSection: some View {
         Section {

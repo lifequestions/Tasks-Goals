@@ -1,7 +1,7 @@
 # Open Range
 
 An iPhone and iPad app that lifts the 25 km/h speed limit on a Cowboy e-bike
-(C1+, C2, C3) for riding on private land, with safety rules built in.
+(C1+, C2, C3) for riding on private land, with safety rules built in and a live GPS speedometer.
 
 It sends the same Bluetooth commands documented by
 [Cowboy Untamed](https://github.com/Imaginous/Cowboy_Untamed/blob/main/IOS.md).
@@ -12,7 +12,8 @@ The command bytes were checked against every value in that guide.
 - **Rules screen on first launch.** The rider has to agree to private land only before the app opens.
 - **Temporary by default.** The change lasts until the bike is locked, then the 25 km/h limit comes back.
   "Keep after locking" is off by default and asks for confirmation.
-- **No maximum setting.** Extra speed tops out at 18%. The guide's 25% "absolute maximum" isn't offered.
+- **No maximum setting.** Extra speed tops out at 20%. The guide's 25% "absolute maximum" isn't offered.
+- **Live speed.** A GPS speedometer with top speed, turning orange above 25 km/h, to compare with the Cowboy app.
 - **One-tap restore.** "Restore road-legal settings" puts the factory settings back and saves them to the bike.
 
 ## Put it on your phone

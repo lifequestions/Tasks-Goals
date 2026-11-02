@@ -28,7 +28,8 @@ let package = Package(
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
             ],
             capabilities: [
-                .bluetoothAlways(purposeString: "Open Range connects to your Cowboy bike over Bluetooth to change its motor settings.")
+                .bluetoothAlways(purposeString: "Open Range connects to your Cowboy bike over Bluetooth to change its motor settings."),
+                .locationWhenInUse(purposeString: "Open Range uses GPS to show how fast you're riding.")
             ]
         )
     ],

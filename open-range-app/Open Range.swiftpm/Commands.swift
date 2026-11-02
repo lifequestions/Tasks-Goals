@@ -60,7 +60,7 @@ enum BikeCommands {
 
 /// Field weakening choices. The guide's 25% "absolute maximum" is left out on purpose.
 enum Boost: Int, CaseIterable, Identifiable {
-    case off = 0, ten = 10, fifteen = 15, eighteen = 18
+    case off = 0, ten = 10, fifteen = 15, eighteen = 18, twenty = 20
 
     var id: Int { rawValue }
 
@@ -70,6 +70,7 @@ enum Boost: Int, CaseIterable, Identifiable {
         case .ten: return "10% – gentle"
         case .fifteen: return "15% – recommended for C3"
         case .eighteen: return "18% – recommended for C1+ / C2"
+        case .twenty: return "20% – highest"
         }
     }
 }
