@@ -3,25 +3,29 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject private var bike: BikeManager
     @StateObject private var speed = SpeedMonitor()
+    @StateObject private var history = History()
 
     @State private var boost: Boost = .fifteen
     @State private var keepAfterLock = false
     @State private var confirmUnleash = false
     @State private var confirmKeep = false
     @AppStorage("lastApplied") private var lastApplied = ""
+    /// What the bike was last set to by this app: "", "legal", "unleashed", "unleashedKept" or "refused".
+    @AppStorage("bikeMode") private var bikeMode = ""
+    @AppStorage("bikeBoost") private var bikeBoost = 0
+    @AppStorage("bikeModeSince") private var bikeModeSince = 0.0
 
     var body: some View {
         NavigationStack {
             Form {
+                modeSection
                 speedSection
                 bikeSection
                 if bike.isConnected {
                     unleashSection
                     restoreSection
                 }
-                if !lastApplied.isEmpty {
-                    Section("Last change") { Text(lastApplied) }
-                }
+                historySection
                 if !bike.log.isEmpty {
                     Section("Activity") {
                         ForEach(bike.log, id: \.self) { line in
@@ -32,8 +36,14 @@ struct ContentView: View {
             }
             .navigationTitle("Open Range")
         }
-        .onAppear { speed.start() }
+        .onAppear {
+            speed.start()
+            migrateLastApplied()
+        }
         .onDisappear { speed.stop() }
+        .onChange(of: speed.kmh) { _, kmh in
+            if let kmh { history.recordSpeed(kmh) }
+        }
         .confirmationDialog("Remove the speed limit?", isPresented: $confirmUnleash, titleVisibility: .visible) {
             Button("Unleash for private land") { unleash() }
             Button("Cancel", role: .cancel) {}
@@ -45,6 +55,56 @@ struct ContentView: View {
     }
 
     // MARK: Sections
+
+    /// A glanceable on/off line at the top, so the rider can see the setting while riding.
+    private var modeSection: some View {
+        Section {
+            switch bikeMode {
+            case "unleashed", "unleashedKept":
+                modeRow(icon: "bolt.fill", color: .orange, title: "Unleashed",
+                        detail: (bikeBoost == 0 ? "No 25 km/h cut-off" : "No 25 km/h cut-off · \(bikeBoost)% extra speed") +
+                            (bikeMode == "unleashedKept" ? " · stays on after locking" : " · until the bike is locked"))
+            case "legal":
+                modeRow(icon: "checkmark.shield.fill", color: .green, title: "Road-legal",
+                        detail: "25 km/h limit, factory settings")
+            case "refused":
+                modeRow(icon: "exclamationmark.triangle.fill", color: .red, title: "Not sure",
+                        detail: "The bike refused part of the last change. Tap Restore road-legal settings to be safe.")
+            default:
+                modeRow(icon: "questionmark.circle", color: .secondary, title: "Not set yet",
+                        detail: "Not changed with this app yet")
+            }
+        } header: {
+            Text("Bike setting")
+        } footer: {
+            VStack(alignment: .leading, spacing: 4) {
+                if bikeModeSince > 0 {
+                    Text("Since \(Date(timeIntervalSince1970: bikeModeSince).formatted(date: .abbreviated, time: .shortened)).")
+                }
+                if bikeMode == "unleashed" {
+                    Text("If you've locked the bike since then, it's back to road-legal.")
+                }
+                if let latest = history.entries.first {
+                    Text(confirmation(of: latest) + ".")
+                }
+                Text("This is the last change made with this app. Changes made elsewhere don't show here.")
+            }
+        }
+    }
+
+    private func modeRow(icon: String, color: Color, title: String, detail: String) -> some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.title)
+                .foregroundStyle(color)
+                .frame(width: 36)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.title2.bold()).foregroundStyle(color == .secondary ? Color.primary : color)
+                Text(detail).font(.subheadline).foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
 
     private var speedSection: some View {
         Section {
@@ -168,14 +228,115 @@ struct ContentView: View {
     private func unleash() {
         var commands = [BikeCommands.speedLimit(on: false), BikeCommands.fieldWeakening(percent: boost.rawValue)]
         if keepAfterLock { commands += BikeCommands.saveToBike }
-        let summary = "Unleashed, extra speed \(boost.rawValue)%, " +
-            (keepAfterLock ? "kept after locking" : "until the bike is locked")
-        bike.send(commands) { lastApplied = summary }
+        let mode = keepAfterLock ? "unleashedKept" : "unleashed"
+        let level = boost.rawValue
+        bike.send(commands) { result in record(result, mode: mode, boost: level) }
     }
 
     private func restore() {
         let commands = [BikeCommands.speedLimit(on: true), BikeCommands.fieldWeakening(percent: 0)] + BikeCommands.saveToBike
-        bike.send(commands) { lastApplied = "Road-legal: 25 km/h limit, factory settings" }
+        bike.send(commands) { result in record(result, mode: "legal", boost: 0) }
         keepAfterLock = false
+    }
+
+    private func record(_ result: BikeManager.SendResult, mode: String, boost level: Int) {
+        let finalMode = result.ok ? mode : "refused"
+        setMode(finalMode, boost: level)
+        bikeModeSince = Date().timeIntervalSince1970
+        history.add(mode: finalMode, boost: level, sent: result.sent, accepted: result.accepted)
+    }
+
+    private func setMode(_ mode: String, boost level: Int) {
+        bikeMode = mode
+        bikeBoost = level
+    }
+
+    /// Earlier versions only saved a text summary. Turn it into the on/off status once.
+    private func migrateLastApplied() {
+        guard bikeMode.isEmpty, !lastApplied.isEmpty else { return }
+        if lastApplied.hasPrefix("Unleashed") {
+            let level = lastApplied.range(of: "\\d+(?=%)", options: .regularExpression)
+                .flatMap { Int(lastApplied[$0]) } ?? 0
+            setMode(lastApplied.contains("kept after locking") ? "unleashedKept" : "unleashed", boost: level)
+        } else if lastApplied.hasPrefix("Road-legal") {
+            setMode("legal", boost: 0)
+        }
+        lastApplied = ""
+    }
+
+    // MARK: History
+
+    private var historySection: some View {
+        Section {
+            if history.entries.isEmpty {
+                Text("Changes you make will be listed here.").foregroundStyle(.secondary)
+            }
+            ForEach(history.entries) { entry in
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack {
+                        Text(title(of: entry)).font(.headline).foregroundStyle(color(of: entry))
+                        Spacer()
+                        Text(entry.date.formatted(date: .abbreviated, time: .shortened))
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                    Text(confirmation(of: entry)).font(.subheadline)
+                    Text(duration(of: entry)).font(.subheadline).foregroundStyle(.secondary)
+                    if entry.topKmh > 0 {
+                        Text(String(format: "Top GPS speed %.1f km/h (includes pedalling)", entry.topKmh))
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+            if !history.entries.isEmpty {
+                Button("Clear history", role: .destructive) { history.clear() }
+            }
+        } header: {
+            Text("History")
+        } footer: {
+            Text("\"Bike confirmed\" means the bike itself answered that it accepted the change. Top speed is only measured while this app is open on screen.")
+        }
+    }
+
+    private func title(of entry: ModeChange) -> String {
+        switch entry.mode {
+        case "unleashed", "unleashedKept":
+            return entry.boost == 0 ? "Unleashed" : "Unleashed · \(entry.boost)%"
+        case "legal": return "Road-legal"
+        default: return "Refused"
+        }
+    }
+
+    private func color(of entry: ModeChange) -> Color {
+        switch entry.mode {
+        case "unleashed", "unleashedKept": return .orange
+        case "legal": return .green
+        default: return .red
+        }
+    }
+
+    private func confirmation(of entry: ModeChange) -> String {
+        if entry.mode == "refused" {
+            return "Bike refused it (\(entry.accepted) of \(entry.sent) confirmed)"
+        }
+        if entry.accepted == 0 {
+            return "Sent, but the bike didn't confirm it"
+        }
+        return entry.accepted >= entry.sent
+            ? "✓ Bike confirmed all \(entry.sent) commands"
+            : "Bike confirmed \(entry.accepted) of \(entry.sent) commands"
+    }
+
+    private func duration(of entry: ModeChange) -> String {
+        let end = history.end(of: entry)
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute]
+        formatter.unitsStyle = .abbreviated
+        let length = formatter.string(from: entry.date, to: end ?? Date()) ?? ""
+        let lockNote = entry.mode == "unleashed" ? ", or until the bike was locked" : ""
+        if end == nil {
+            return entry.mode == "refused" ? "Latest change" : "Current setting · \(length) so far\(lockNote)"
+        }
+        return "Lasted \(length)\(lockNote)"
     }
 }

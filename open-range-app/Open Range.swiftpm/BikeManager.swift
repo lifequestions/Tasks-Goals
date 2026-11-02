@@ -27,6 +27,8 @@ final class BikeManager: NSObject, ObservableObject {
     private var central: CBCentralManager!
     private var bike: CBPeripheral?
     private var rx: CBCharacteristic?
+    private var failedInSend = false
+    private var acceptedInSend = 0
 
     override init() {
         super.init()
@@ -62,12 +64,22 @@ final class BikeManager: NSObject, ObservableObject {
     }
 
     /// Sends commands one by one with a short gap so the controller can keep up.
-    func send(_ commands: [Command], then done: (() -> Void)? = nil) {
+    struct SendResult {
+        let sent: Int
+        /// How many commands the bike answered with "accepted".
+        let accepted: Int
+        /// False if the bike refused a command or a write failed.
+        let ok: Bool
+    }
+
+    func send(_ commands: [Command], then done: ((SendResult) -> Void)? = nil) {
         guard let bike, let rx, status == .ready else {
             note("Not connected to a bike.")
             return
         }
         status = .sending
+        failedInSend = false
+        acceptedInSend = 0
         let type: CBCharacteristicWriteType =
             rx.properties.contains(.writeWithoutResponse) ? .withoutResponse : .withResponse
         for (index, command) in commands.enumerated() {
@@ -76,8 +88,12 @@ final class BikeManager: NSObject, ObservableObject {
                 bike.writeValue(command.data, for: rx, type: type)
                 self.note("Sent: \(command.label)")
                 if index == commands.count - 1 {
-                    self.status = .ready
-                    done?()
+                    // Give the bike a moment to answer the last command.
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                        guard let self else { return }
+                        if self.status == .sending { self.status = .ready }
+                        done?(SendResult(sent: commands.count, accepted: self.acceptedInSend, ok: !self.failedInSend))
+                    }
                 }
             }
         }
@@ -162,11 +178,11 @@ extension BikeManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         guard let bytes = characteristic.value.map({ [UInt8]($0) }), bytes.count >= 2, bytes[0] == 0x01 else { return }
         // The controller echoes 0x10 when a write worked and 0x90 when it refused one.
-        if bytes[1] == 0x10 { note("Bike accepted the change.") }
-        if bytes[1] == 0x90 { note("Bike refused the change.") }
+        if bytes[1] == 0x10 { acceptedInSend += 1; note("Bike accepted the change.") }
+        if bytes[1] == 0x90 { failedInSend = true; note("Bike refused the change.") }
     }
 
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        if let error { note("Write failed: \(error.localizedDescription)") }
+        if let error { failedInSend = true; note("Write failed: \(error.localizedDescription)") }
     }
 }
