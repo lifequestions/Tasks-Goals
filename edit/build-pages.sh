@@ -14,7 +14,7 @@ out="${1:-_pub}"
 rm -rf "$out"; mkdir -p "$out"
 tar -cf - \
   --exclude='./.git' --exclude='./.github' --exclude="./$out" \
-  --exclude='./edit' --exclude='./photos-original' --exclude='./ten' \
+  --exclude='./edit' --exclude='./photos-original' --exclude='./ten' --exclude='./open-range-app' \
   --exclude='*.csv' --exclude='.DS_Store' --exclude='./_config.yml' \
   . | ( cd "$out" && tar -xf - )
 echo "built $out: $(find "$out" -type f | wc -l) files"

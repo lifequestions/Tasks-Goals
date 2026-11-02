@@ -6,5 +6,6 @@ exclude:
   - edit
   - photos-original
   - ten
+  - open-range-app
   - "*.csv"
   - README.md
