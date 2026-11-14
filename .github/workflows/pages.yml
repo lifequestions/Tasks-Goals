@@ -58,11 +58,14 @@ jobs:
       # Stamp each stylesheet and script with the commit it came from. Without
       # this a browser keeps yesterday's CSS and the change looks like it never
       # deployed — which is exactly what it looked like.
+      # edit/stamp.py already writes a fresh token into the committed HTML, so
+      # both builders serve a cache-busting URL. This narrows it further to the
+      # exact commit, for whichever build does win the race.
       - name: Version the asset links
         run: |
           find _pub -name '*.html' -print0 |
-            xargs -0 sed -i "s/?v=dev/?v=${GITHUB_SHA:0:8}/g"
-          grep -o '?v=[0-9a-f]\{8\}' _pub/luis.html | head -1
+            xargs -0 sed -i -E "s/(\.(css|js))\?v=[A-Za-z0-9._-]*/\1?v=${GITHUB_SHA:0:8}/g"
+          grep -o 'yt\.js?v=[0-9a-f]\{8\}' _pub/luis.html | head -1
 
       - uses: actions/upload-pages-artifact@v3
         with:
