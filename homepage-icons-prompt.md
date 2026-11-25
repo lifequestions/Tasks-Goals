@@ -180,6 +180,7 @@ still be recognisable as a 41px watermark at half opacity.
 50. **Hyperbolic Discounting** — Preferring smaller immediate rewards over larger future ones, disproportionately.
 51. **Choice Overload** — Past a certain point, more options make it harder to pick any of them.
 52. **Zero-Risk Bias** — Wiping out one small risk entirely beats halving a much bigger one.
+
 ## How to hand it back
 
 One fenced JavaScript block, nothing else inside it, in exactly this shape so I can
