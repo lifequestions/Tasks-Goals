@@ -384,10 +384,10 @@ struct ConnectionsSection: View {
         .task(id: entries.first?.analysedAt) {
             // Written again once there's something new, at most every few hours.
             let latest = entries.first?.createdAt.timeIntervalSince1970 ?? 0
-            let stale = summary.isEmpty || format < 2
+            let stale = summary.isEmpty || format < 3
                 || (latest > writtenAt && Date.now.timeIntervalSince1970 - writtenAt > 6 * 3600)
             if stale && !entries.isEmpty {
-                format = 2
+                format = 3
                 run()
             }
         }

@@ -19,6 +19,14 @@ struct HealthData: Codable {
         var rho: Double?
         var days: Int?
         var q: Double?
+
+        /// Worth showing: a real correlation over enough days, not likely chance.
+        /// ("0.03 lower" over a few weeks is noise, however it's worded.)
+        var isMeaningful: Bool {
+            (rho.map { abs($0) >= 0.3 } ?? false)
+                && (q.map { $0 <= 0.1 } ?? true)
+                && (days.map { $0 >= 14 } ?? true)
+        }
     }
 
     var units: [String: String] = [:]

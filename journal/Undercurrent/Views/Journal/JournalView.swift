@@ -27,6 +27,9 @@ struct JournalView: View {
             .navigationTitle("Journal")
             .searchable(text: $search, prompt: "Search your entries")
             .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    NavigationLink { DaysView() } label: { Label("Every day", systemImage: "calendar") }
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button { composing = .write } label: { Image(systemName: "square.and.pencil") }
                 }

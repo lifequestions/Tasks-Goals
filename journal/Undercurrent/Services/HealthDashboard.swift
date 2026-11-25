@@ -129,7 +129,10 @@ final class HealthDashboard {
     /// has found with the journal. Only tried once the Mac has answered the send above.
     private func pull(from base: URL, token: String, in context: ModelContext) async {
         var url = base.appending(path: "api/export/daily")
-        url.append(queryItems: [URLQueryItem(name: "days", value: "60")])
+        // Everything the dashboard has the first time, then the last 60 days.
+        let fullKey = "healthDashboard.fullHealthHistory.v1"
+        let full = !UserDefaults.standard.bool(forKey: fullKey)
+        url.append(queryItems: [URLQueryItem(name: "days", value: full ? "3650" : "60")])
         var request = URLRequest(url: url, timeoutInterval: 15)
         request.setValue(token, forHTTPHeaderField: "X-App-Token")
         do {
@@ -143,6 +146,7 @@ final class HealthDashboard {
             }
             try health.merge(data)
             health.save()
+            if full { UserDefaults.standard.set(true, forKey: fullKey) }
             healthProblem = nil
             Store.syncHealthPatterns(health.journalPatterns, in: context)
             intelligence?.refreshPatterns(in: context)

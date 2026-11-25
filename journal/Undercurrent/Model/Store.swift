@@ -313,7 +313,7 @@ enum Store {
         let entities = (try? context.fetch(FetchDescriptor<Entity>())) ?? []
 
         var current = Set<String>()
-        for pattern in patterns {
+        for pattern in patterns where pattern.isMeaningful {
             let text = pattern.sentence.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !text.isEmpty else { continue }
             let signature = "health:" + text.lowercased().filter { $0.isLetter || $0.isNumber }

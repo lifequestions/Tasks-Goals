@@ -169,7 +169,7 @@ enum Prompts {
     static func reflectionRequest(period: Period, interval: DateInterval, entries: [Entry],
                                   childReflections: [Reflection], previous: Reflection?,
                                   insights: [Insight], stats: PeriodStats, profile: String,
-                                  feedback: String = "", health: HealthData? = nil) -> String {
+                                  feedback: String = "", health: HealthData? = nil, dayTable: String = "") -> String {
         var parts: [String] = []
         if !profile.isEmpty { parts.append("<about_them>\n\(profile)\n</about_them>") }
         if !feedback.isEmpty { parts.append(feedback) }
@@ -195,6 +195,8 @@ enum Prompts {
             parts.append(block)
         }
         if let health, let block = healthPatterns(health) { parts.append(block) }
+        // Longer periods get every day's numbers, since their entries come as one line each.
+        if !full, !dayTable.isEmpty { parts.append(dayTable) }
         let text = entries.map { entry -> String in
             let head = "\(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))]"
             return full ? "### \(head)\n\(entry.text)" : "- \(head) \(entry.summary ?? entry.title)"
@@ -210,9 +212,27 @@ enum Prompts {
     numbers, and tell them the few things that matter most. They have told you the long lists \
     of correlations were too much to make sense of — so pick, don't list.
 
-    You're given the patterns their phone has already counted (many are noise: small samples, \
-    coincidences, the same effect seen twice), the numbers, their health by day, and a line \
-    for each recent entry.
+    You're given everything: one line for every day they've logged (mood, energy, sleep, HRV, \
+    bedtime, workouts, what they did, who and what they wrote about), the full text of their \
+    recent entries, what has changed in the last two weeks, what came before their best and \
+    worst days, and the patterns their phone has counted (many are noise: small samples, \
+    coincidences, the same effect seen twice).
+
+    They have said the trends so far are superficial. "Mood is slightly higher on days you \
+    write about running" is exactly what they don't want. Work from the day lines yourself and \
+    look for what actually changes their days:
+    - what reliably comes one or two days before their best and worst days — check the \
+      best/worst lists, then confirm against every other time it happened
+    - combinations (alcohol plus a late bedtime; a hard work day without exercise)
+    - their body against their writing: what their sleep and HRV look like before entries \
+      about a person or a worry, and after
+    - what has shifted over the weeks, and what came before the shift
+    - where what they believe about themselves (their own insights) is borne out or contradicted
+    - themes that run through the writing itself, not just the tags
+    Ignore any difference too small to feel in daily life (a mood change under about 0.15, \
+    sleep under 20 minutes, energy under half a point) and anything resting on fewer than \
+    six days. A surprising finding beats an obvious one. If the data isn't there yet, say what \
+    to keep logging to find out, as one of the findings.
 
     Return:
     - findings: at most three, the most important first. Each is something they can act on or \
@@ -266,7 +286,8 @@ enum Prompts {
     }
 
     static func connectionsRequest(patterns: [FoundPattern], stats: PeriodStats, entries: [Entry],
-                                   profile: String, feedback: String, health: HealthData? = nil) -> String {
+                                   profile: String, feedback: String, health: HealthData? = nil,
+                                   dayTable: String = "", recentWriting: String = "", trends: String = "") -> String {
         var parts: [String] = []
         if !profile.isEmpty { parts.append("<about_them>\n\(profile)\n</about_them>") }
         if !feedback.isEmpty { parts.append(feedback) }
@@ -274,17 +295,17 @@ enum Prompts {
         if !patterns.isEmpty {
             parts.append("<counted_patterns>\n\(patterns.prefix(15).map { "- \($0.text)" }.joined(separator: "\n"))\n</counted_patterns>")
         }
-        if let health {
-            let end = Date.now
-            let start = Calendar.current.date(byAdding: .day, value: -60, to: end) ?? end
-            if let block = healthByDay(DateInterval(start: start, end: end), health: health) { parts.append(block) }
-            if let block = healthPatterns(health) { parts.append(block) }
+        if let health, let block = healthPatterns(health) { parts.append(block) }
+        if !trends.isEmpty { parts.append(trends) }
+        if !dayTable.isEmpty {
+            parts.append(dayTable)
+        } else {
+            let lines = entries.map { entry -> String in
+                "- \(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))] \(entry.summary ?? entry.title)"
+            }
+            parts.append("<entries>\n\(lines.joined(separator: "\n"))\n</entries>")
         }
-        let lines = entries.suffix(120).map { entry -> String in
-            let names = entry.entities.map(\.name).joined(separator: ", ")
-            return "- \(dateLine(entry.createdAt)) [\(Feeling.word(entry.mood))\(Energy.note(entry.energy))] \(entry.summary ?? entry.title)\(names.isEmpty ? "" : " — \(names)")"
-        }
-        parts.append("<entries>\n\(lines.joined(separator: "\n"))\n</entries>")
+        if !recentWriting.isEmpty { parts.append(recentWriting) }
         return parts.joined(separator: "\n\n")
     }
 
@@ -324,8 +345,9 @@ enum Prompts {
     }
 
     static func healthPatterns(_ health: HealthData) -> String? {
-        guard !health.journalPatterns.isEmpty else { return nil }
-        let lines = health.journalPatterns.prefix(15).map { pattern -> String in
+        let meaningful = health.journalPatterns.filter(\.isMeaningful)
+        guard !meaningful.isEmpty else { return nil }
+        let lines = meaningful.prefix(15).map { pattern -> String in
             let days = pattern.days.map { ", over \($0) days" } ?? ""
             return "- \(pattern.sentence)\(days)"
         }

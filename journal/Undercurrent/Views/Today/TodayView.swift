@@ -345,6 +345,7 @@ struct TodayView: View {
         let calendar = Calendar.current
         let days = (0..<14).reversed().compactMap { calendar.date(byAdding: .day, value: -$0, to: calendar.startOfDay(for: .now)) }
         let byDay = Dictionary(grouping: entries) { calendar.startOfDay(for: $0.createdAt) }
+        let allDays = JournalDay.all(from: entries)
         return Card {
             HStack {
                 Eyebrow("Last two weeks")
@@ -354,16 +355,25 @@ struct TodayView: View {
             HStack(spacing: 0) {
                 ForEach(days, id: \.self) { day in
                     let moods = (byDay[day] ?? []).compactMap(\.mood)
-                    VStack(spacing: 6) {
-                        Circle()
-                            .fill(moods.isEmpty ? Color.clear : Palette.feeling(PatternFinder.mean(moods)))
-                            .overlay(Circle().strokeBorder(moods.isEmpty ? Palette.line : .clear, lineWidth: 1))
-                            .frame(width: 14, height: 14)
-                        Text(day.stamp("EEEEE"))
-                            .font(.system(.caption2, weight: .medium))
-                            .foregroundStyle(calendar.isDateInToday(day) ? Palette.ink : Palette.ink3)
+                    let key = Energy.day(day)
+                    // Tap a day to read it whole.
+                    NavigationLink {
+                        DayPager(days: allDays, start: key)
+                    } label: {
+                        VStack(spacing: 6) {
+                            Circle()
+                                .fill(moods.isEmpty ? Color.clear : Palette.feeling(PatternFinder.mean(moods)))
+                                .overlay(Circle().strokeBorder(moods.isEmpty ? Palette.line : .clear, lineWidth: 1))
+                                .frame(width: 14, height: 14)
+                            Text(day.stamp("EEEEE"))
+                                .font(.system(.caption2, weight: .medium))
+                                .foregroundStyle(calendar.isDateInToday(day) ? Palette.ink : Palette.ink3)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .contentShape(Rectangle())
                     }
-                    .frame(maxWidth: .infinity)
+                    .buttonStyle(.plain)
+                    .disabled(!allDays.contains { $0.day == key })
                 }
             }
         }

@@ -177,6 +177,7 @@ final class Intelligence {
         let entries = (try? context.fetch(FetchDescriptor<Entry>(sortBy: [SortDescriptor(\.createdAt)]))) ?? []
         let learned = feedback(in: context)
         let patterns = PatternFinder.find(in: entries, feedback: learned)
+        let days = allDays(in: context)
         var summary = PatternFinder.summary(of: patterns)
         var writtenBy = "device"
 
@@ -188,7 +189,10 @@ final class Intelligence {
                     user: Prompts.connectionsRequest(patterns: patterns, stats: PeriodStats(entries: entries),
                                                      entries: entries, profile: profile(in: context),
                                                      feedback: learned.prompt,
-                                                     health: HealthDashboard.shared.health),
+                                                     health: HealthDashboard.shared.health,
+                                                     dayTable: dayTable(days),
+                                                     recentWriting: recentWriting(days),
+                                                     trends: trends(days)),
                     schema: Prompts.connectionsSchema,
                     effort: "high")
                 summary = draft.summary
@@ -269,7 +273,9 @@ final class Intelligence {
                                                     childReflections: children, previous: previous,
                                                     insights: insights, stats: stats, profile: profile(in: context),
                                                     feedback: feedback(in: context).prompt,
-                                                    health: HealthDashboard.shared.health),
+                                                    health: HealthDashboard.shared.health,
+                                                    dayTable: period == .week || period == .month ? ""
+                                                        : dayTable(allDays(in: context).filter { interval.contains($0.date) })),
                     schema: Prompts.reflectionSchema,
                     effort: "high")
                 writtenBy = "claude"
